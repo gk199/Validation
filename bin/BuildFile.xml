@@ -5,5 +5,9 @@
   <bin file="rates.cxx" name="rates.exe"/>
   <bin file="draw_l1analysis.cxx" name="draw_l1analysis.exe"/>
   <bin file="l1jetanalysis.cxx" name="l1jetanalysis.exe"/>
+  <bin file="l1egFinegrainAnalysis.cxx" name="l1egFinegrainAnalysis.exe">
+    <use name="boost"/>
+    <use name="boost_program_options"/>
+  </bin>
 </environment>
 <flags CXXFLAGS="-Wall -Werror -g"/>
