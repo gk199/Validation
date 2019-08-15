@@ -1,6 +1,7 @@
 <use name="root"/>
 <use name="rootinteractive"/>
 <environment>
+  <bin file="llp_analysis.cxx" name="llp_analysis.exe"/>
   <bin file="draw_rates.cxx" name="draw_rates.exe"/>
   <bin file="rates.cxx" name="rates.exe"/>
   <bin file="draw_l1analysis.cxx" name="draw_l1analysis.exe"/>
