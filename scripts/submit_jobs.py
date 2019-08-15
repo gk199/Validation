@@ -76,17 +76,17 @@ ARGS = PARSER.parse_args()
 # check environment setup
 check_setup()
 
-FILE = file(ARGS.lumimask)
-GOOD_RUN_STRING = FILE.read()
-GOOD_RUN_DATA = json.loads(GOOD_RUN_STRING)
-if(ARGS.globaltag):
-    CONDITIONS = ARGS.globaltag
-if(ARGS.caloparams):
-    CALOSTAGE2PARAMS = ARGS.caloparams   
-if len(GOOD_RUN_DATA) != 1:
-    sys.exit("Only running on a single run at a time is supported.")
-RUN = GOOD_RUN_DATA.keys()[0]
-print RUN
+#FILE = file(ARGS.lumimask)
+#GOOD_RUN_STRING = FILE.read()
+#GOOD_RUN_DATA = json.loads(GOOD_RUN_STRING)
+#if(ARGS.globaltag):
+#    CONDITIONS = ARGS.globaltag
+#if(ARGS.caloparams):
+#    CALOSTAGE2PARAMS = ARGS.caloparams   
+#if len(GOOD_RUN_DATA) != 1:
+#    sys.exit("Only running on a single run at a time is supported.")
+#RUN = GOOD_RUN_DATA.keys()[0]
+#print RUN
 # generate configs both for default and new conditions
 #for jobtype in ['def', 'new_cond']:
 if ARGS.newtag>0:
@@ -95,7 +95,7 @@ if ARGS.newtag>0:
 for jobtype in COND_LIST:
     tmpfile = 'submit_tmp.py'
     crab_submit_script = open(tmpfile, 'w')
-    crab_submit_script.write("RUN = " + str(RUN) + '\n')
+#    crab_submit_script.write("RUN = " + str(RUN) + '\n')
     if jobtype == 'def':
         crab_submit_script.write("NEWCONDITIONS = False\n")
     else:
@@ -106,7 +106,7 @@ for jobtype in COND_LIST:
     crab_submit_script.close()
     
     # concatenate crab submission file with template
-    filename = 'submit_run_' + str(RUN) + '_' + jobtype + '.py'
+    filename = 'submit_run_' + 'MCrun' + '_' + jobtype + '.py'
     command = "cat submit_tmp.py ntuple_submit_template.py > " + filename
     os.system(command)
     os.remove(tmpfile)
