@@ -22,22 +22,9 @@
 #include "L1Trigger/L1TNtuples/interface/L1AnalysisRecoVertexDataFormat.h"
 #include "L1Trigger/L1TNtuples/interface/L1AnalysisCaloTPDataFormat.h"
 #include "L1Trigger/L1TNtuples/interface/L1AnalysisGeneratorDataFormat.h"
+#include "L1Trigger/L1TNtuples/interface/HcalTPCoordMapUtils.h"
 
-double phiVal(int iphi)
-{
-
-  double phiBins = 72.;
-
-  double phivl;
-  phivl = double(iphi) * (2. * TMath::Pi() / phiBins);
-
-  if (iphi > 36)
-    phivl -= 2. * TMath::Pi();
-
-  return phivl;
-}
-
-void fgBitAnalysis(const std::string &inputFileDirectory, double hcal_l1_dR);
+void fgBitAnalysis(const std::string &inputFileDirectory);
 void fgBitGenAnalysis(const std::string &inputFileDirectory, double genThresh, double shortThresh, double longThresh, double offset, double slope, double coneSize);
 void energyRatioAnalysis(const std::string &inputFileDirectory, int energy, double genThresh, double energyFracCut, double shortThresh, double longThresh, double offset, double slope, double coneSize, bool pileup);
 // void energyRatioAnalysis(const std::string &inputFileDirectory, double genThresh, double shortThresh, double longThresh, double offset, double slope, double coneSize);
@@ -55,7 +42,7 @@ int main(int argc, char *argv[])
 
   po::options_description desc("Allowed Program Options");
   desc.add_options()("help", "produce help messages")
-    ("input", po::value<std::string>(&ntuplePath)->default_value("privNtuplesRun3/"), "Path with input files")
+    ("input", po::value<std::string>(&ntuplePath)->default_value(""), "Path with input files")
     ("energy", po::value<std::vector<int>>(&energies)->multitoken()->default_value(defaultEnergies, "30 50 70 100 150 300"), "vector of sample energies")
     ("genThresh", po::value<double>(&genThresh)->default_value(3.0), "Generator Particle Threshold")
     ("energyFracCut", po::value<double>(&eFC)->default_value(99.0), "maximum dE/E")
@@ -82,7 +69,7 @@ int main(int argc, char *argv[])
   std::map<int, std::string> modeFlags = {{0, ""}, {1, "short,"}, {2, "long,"}, {3, "offset,"}, {4, "slope,"}};
 
   if (runZee)
-    fgBitGenAnalysis(ntuplePath, genThresh, bitShortThresh, bitLongthresh, bitOffset, bitSlope, coneSize);
+    fgBitAnalysis(ntuplePath);
 
   else
   {
@@ -694,17 +681,12 @@ void fgBitGenAnalysis(const std::string &inputFileDirectory, double genThresh, d
   eff_denE->Write();
   outfile->Close();
 }
-void fgBitAnalysis(const std::string &inputFileDirectory, double hcal_l1_dR)
+void fgBitAnalysis(const std::string &inputFileDirectory)
 {
   std::string inputFileZ(inputFileDirectory);
-  inputFileZ += "/L1Ntuple_zee.root";
+  inputFileZ += "/L1Ntuple_Zee.root";
 
-  std::string inputFileQ(inputFileDirectory);
-  inputFileQ += "/L1Ntuple_qcd.root";
-
-  std::string outputFilename = "l1egfinegrain_";
-  outputFilename += std::to_string(int(hcal_l1_dR));
-  outputFilename += ".root";
+  std::string outputFilename = "l1egfinegrain.root";
 
   TFile *outfile = TFile::Open(outputFilename.c_str(), "recreate");
 
@@ -719,15 +701,6 @@ void fgBitAnalysis(const std::string &inputFileDirectory, double hcal_l1_dR)
   TChain *treeL1GenZ = new TChain("l1GeneratorTree/L1GenTree");
   treeL1GenZ->Add(inputFileZ.c_str());
 
-  TChain *treeL1emuQ = new TChain("l1UpgradeEmuTree/L1UpgradeTree");
-  treeL1emuQ->Add(inputFileQ.c_str());
-
-  TChain *treeL1TPemuQ = new TChain("l1CaloTowerEmuTree/L1CaloTowerTree");
-  treeL1TPemuQ->Add(inputFileQ.c_str());
-
-  TChain *treeL1GenQ = new TChain("l1GeneratorTree/L1GenTree");
-  treeL1GenQ->Add(inputFileQ.c_str());
-
   L1Analysis::L1AnalysisL1UpgradeDataFormat *l1emuZ_ = new L1Analysis::L1AnalysisL1UpgradeDataFormat();
   treeL1emuZ->SetBranchAddress("L1Upgrade", &l1emuZ_);
 
@@ -737,16 +710,6 @@ void fgBitAnalysis(const std::string &inputFileDirectory, double hcal_l1_dR)
   // add generator level tree to check mc truth
   L1Analysis::L1AnalysisGeneratorDataFormat *l1GenZ_ = new L1Analysis::L1AnalysisGeneratorDataFormat();
   treeL1GenZ->SetBranchAddress("Generator", &l1GenZ_);
-
-  L1Analysis::L1AnalysisL1UpgradeDataFormat *l1emuQ_ = new L1Analysis::L1AnalysisL1UpgradeDataFormat();
-  treeL1emuQ->SetBranchAddress("L1Upgrade", &l1emuQ_);
-
-  L1Analysis::L1AnalysisCaloTPDataFormat *l1TPemuQ_ = new L1Analysis::L1AnalysisCaloTPDataFormat();
-  treeL1TPemuQ->SetBranchAddress("CaloTP", &l1TPemuQ_);
-
-  // add generator level tree to check mc truth
-  // L1Analysis::L1AnalysisGeneratorDataFormat *l1GenQ_ = new L1Analysis::L1AnalysisGeneratorDataFormat();
-  // treeL1GenQ->SetBranchAddress("Generator", &l1GenQ_);
 
   Long64_t nentries;
   nentries = treeL1emuZ->GetEntries();
@@ -775,17 +738,18 @@ void fgBitAnalysis(const std::string &inputFileDirectory, double hcal_l1_dR)
       // only look at eg with abs(ieta) > 28 and et > 3 GeV
       if (abs(l1emuZ_->egIEta[i]) <= 28 or l1emuZ_->egEt[i] <= 3.0)
         continue;
+
       double minL1GenDR = 999;
       int genIdx = -1;
       // Loop over gen particles to find a gen level electron
-      // with a Z parent
+      // with a Z parent matched to the L1 particle
       for (int g = 0; g < l1GenZ_->nPart; g++)
       {
         if (abs(l1GenZ_->partId[g]) != 11) // make sure it's an electron..
           continue;
         if (abs(l1GenZ_->partParent[g]) != 23) // make sure parent is Z
           continue;
-        if (!l1GenZ_->partFromHard[g]) // from hard scatter process (only for efficiencies?)
+        if (!l1GenZ_->partIsHard[g]) // from hard scatter process (only for efficiencies?)
           continue;
 
         double dR = deltaR(l1emuZ_->egEta[i], l1emuZ_->egPhi[i], l1GenZ_->partEta[g], l1GenZ_->partPhi[g]);
@@ -811,9 +775,9 @@ void fgBitAnalysis(const std::string &inputFileDirectory, double hcal_l1_dR)
         if (l1TPemuZ_->hcalTPet[j] <= 0.5 or abs(l1TPemuZ_->hcalTPieta[j]) <= 28)
           continue;
 
-        double dR = deltaR(l1emuZ_->egEta[i], l1emuZ_->egPhi[i], l1TPemuZ_->hcalTPieta[j], l1TPemuZ_->hcalTPCaliphi[j]);
+        double dR = deltaR(l1emuZ_->egEta[i], l1emuZ_->egPhi[i], etaVal(l1TPemuZ_->hcalTPieta[j] ), phiVal(l1TPemuZ_->hcalTPCaliphi[j] ) );
         // double dR = deltaR(l1emuZ_->egEta[i], l1emuZ_->egPhi[i], hcalEta, hcalPhi);
-        if (dR <= hcal_l1_dR)
+        if (dR <= 0.2)
         {
           emfbit = emfbit or l1TPemuZ_->hcalTPfineGrain[j];
         }
@@ -823,7 +787,7 @@ void fgBitAnalysis(const std::string &inputFileDirectory, double hcal_l1_dR)
         }
       }
 
-      if (genIdx >= 0) // relax to see what is going on?
+      if (genIdx >= 0) // if the particle is matched to a gen particle??
       {
         minDrL1eHcalTP->Fill(minL1hcalDR);
       }
@@ -839,46 +803,46 @@ void fgBitAnalysis(const std::string &inputFileDirectory, double hcal_l1_dR)
     }
   } // finish zee sample loop
 
-  TH1F *fake_num = new TH1F("num_fake", "", 100, 0, 200);
-  TH1F *fake_den = new TH1F("den_fake", "", 100, 0, 200);
+  // TH1F *fake_num = new TH1F("num_fake", "", 100, 0, 200);
+  // TH1F *fake_den = new TH1F("den_fake", "", 100, 0, 200);
 
-  // qcd sample loop
-  nentries = treeL1emuQ->GetEntries();
-  for (Long64_t jentry = 0; jentry < nentries; jentry++)
-  {
-    if ((jentry % 1000) == 0)
-      std::cout << "Done " << jentry << " events of qcd " << nentries << std::endl;
+  // // qcd sample loop
+  // nentries = treeL1emuQ->GetEntries();
+  // for (Long64_t jentry = 0; jentry < nentries; jentry++)
+  // {
+  //   if ((jentry % 1000) == 0)
+  //     std::cout << "Done " << jentry << " events of qcd " << nentries << std::endl;
 
-    treeL1TPemuQ->GetEntry(jentry);
-    treeL1emuQ->GetEntry(jentry);
-    // treeL1GenQ->GetEntry(jentry);
+  //   treeL1TPemuQ->GetEntry(jentry);
+  //   treeL1emuQ->GetEntry(jentry);
+  //   // treeL1GenQ->GetEntry(jentry);
 
-    for (int i = 0; i < l1emuQ_->nEGs; i++)
-    {
-      if (abs(l1emuQ_->egIEta[i]) <= 28 or l1emuQ_->egEt[i] <= 3.0)
-        continue;
+  //   for (int i = 0; i < l1emuQ_->nEGs; i++)
+  //   {
+  //     if (abs(l1emuQ_->egIEta[i]) <= 28 or l1emuQ_->egEt[i] <= 3.0)
+  //       continue;
 
-      fake_den->Fill(l1emuQ_->egEt[i]);
+  //     fake_den->Fill(l1emuQ_->egEt[i]);
 
-      bool emfbitQ = false;
+  //     bool emfbitQ = false;
 
-      for (int j = 0; j < l1TPemuQ_->nHCALTP; j++)
-      {
-        if (l1TPemuQ_->hcalTPet[j] <= 0.5 or abs(l1TPemuQ_->hcalTPieta[j]) <= 28)
-          continue;
+  //     for (int j = 0; j < l1TPemuQ_->nHCALTP; j++)
+  //     {
+  //       if (l1TPemuQ_->hcalTPet[j] <= 0.5 or abs(l1TPemuQ_->hcalTPieta[j]) <= 28)
+  //         continue;
 
-        double dR = deltaR(l1emuQ_->egEta[i], l1emuQ_->egPhi[i], l1TPemuQ_->hcalTPieta[j], l1TPemuQ_->hcalTPCaliphi[j]);
-        if (dR < hcal_l1_dR)
-        {
-          emfbitQ = emfbitQ or l1TPemuQ_->hcalTPfineGrain[j]; // if any are true, emfbit stays true
-        }
-      }
-      if (emfbitQ)
-      {
-        fake_num->Fill(l1emuQ_->egEt[i]);
-      }
-    }
-  }
+  //       double dR = deltaR(l1emuQ_->egEta[i], l1emuQ_->egPhi[i], l1TPemuQ_->hcalTPieta[j], l1TPemuQ_->hcalTPCaliphi[j]);
+  //       if (dR < hcal_l1_dR)
+  //       {
+  //         emfbitQ = emfbitQ or l1TPemuQ_->hcalTPfineGrain[j]; // if any are true, emfbit stays true
+  //       }
+  //     }
+  //     if (emfbitQ)
+  //     {
+  //       fake_num->Fill(l1emuQ_->egEt[i]);
+  //     }
+  //   } // finish qcd l1egamma loop
+  // } // finish qcd sample loop
 
   //
   outfile->cd();
@@ -888,6 +852,6 @@ void fgBitAnalysis(const std::string &inputFileDirectory, double hcal_l1_dR)
   eff_den->Write();
   purity_num->Write();
   purity_den->Write();
-  fake_num->Write();
-  fake_den->Write();
+  // fake_num->Write();
+  // fake_den->Write();
 }
