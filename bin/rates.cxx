@@ -75,7 +75,7 @@ bool isGoodLumiSection(int lumiBlock)
 
 void rates(bool newConditions, const std::string& inputFileDirectory){
   
-  bool hwOn = true;   //are we using data from hardware? (upgrade trigger had to be running!!!)
+  bool hwOn = false;   //are we using data from hardware? (upgrade trigger had to be running!!!)
   bool emuOn = true;  //are we using data from emulator?
 
   if (hwOn==false && emuOn==false){
@@ -216,6 +216,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F* quadJetRates_emu = new TH1F("quadJetRates_emu", axR.c_str(), nJetBins, jetLo, jetHi);
   TH1F* singleEgRates_emu = new TH1F("singleEgRates_emu", axR.c_str(), nEgBins, egLo, egHi);
   TH1F* doubleEgRates_emu = new TH1F("doubleEgRates_emu", axR.c_str(), nEgBins, egLo, egHi);
+  TH1F* singleEgRatesHBHE_emu = new TH1F("singleEgRatesHBHE_emu", axR.c_str(), nEgBins, egLo, egHi);
+  TH1F* singleEgRatesHF_emu = new TH1F("singleEgRatesHF_emu", axR.c_str(), nEgBins, egLo, egHi);
   TH1F* singleTauRates_emu = new TH1F("singleTauRates_emu", axR.c_str(), nTauBins, tauLo, tauHi);
   TH1F* doubleTauRates_emu = new TH1F("doubleTauRates_emu", axR.c_str(), nTauBins, tauLo, tauHi);
   TH1F* singleISOEgRates_emu = new TH1F("singleISOEgRates_emu", axR.c_str(), nEgBins, egLo, egHi);
@@ -294,11 +296,13 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       
       double egEt_1 = 0;
       double egEt_2 = 0;
+      double egIEta_1 = 0;
       //EG pt's are not given in descending order...bx?
       for (UInt_t c=0; c<l1emu_->nEGs; c++){
         if (l1emu_->egEt[c] > egEt_1){
           egEt_2 = egEt_1;
           egEt_1 = l1emu_->egEt[c];
+	  egIEta_1 = l1emu_->egTowerIEta[c];
         }
         else if (l1emu_->egEt[c] <= egEt_1 && l1emu_->egEt[c] > egEt_2){
           egEt_2 = l1emu_->egEt[c];
@@ -377,6 +381,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
              
       for(int bin=0; bin<nEgBins; bin++){
         if( (egEt_1) >= egLo + (bin*egBinWidth) ) singleEgRates_emu->Fill(egLo+(bin*egBinWidth));  //GeV
+        if( ((egEt_1) >= egLo + (bin*egBinWidth)) and egIEta_1 <= 28) singleEgRatesHBHE_emu->Fill(egLo+(bin*egBinWidth));  //GeV
+        if( ((egEt_1) >= egLo + (bin*egBinWidth)) and egIEta_1 > 28 ) singleEgRatesHF_emu->Fill(egLo+(bin*egBinWidth));  //GeV
       } 
 
       for(int bin=0; bin<nEgBins; bin++){
