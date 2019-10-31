@@ -23,14 +23,16 @@ int main()
   // default, then new conditions
   std::vector<std::string> filenames = {"rates_def.root", "rates_new_cond.root"};
   std::vector<std::string> rateTypes = {"singleJet", "doubleJet", "tripleJet", "quadJet",
-					"singleEg", "singleISOEg", "doubleEg", "doubleISOEg",
+					// "singleEg", "singleISOEg", "doubleEg", "doubleISOEg",
+					"singleEg", "doubleEg", "singleEgHBHE", "singleEgHF",
 					"singleTau", "singleISOTau", "doubleTau", "doubleISOTau",
 					"htSum", "etSum", "metSum", "metHFSum"};
   std::map<std::string, int> histColor;
   histColor["singleJet"] = histColor["singleEg"] = histColor["singleTau"] = histColor["etSum"] = histColor["metSum"] = kRed;
-  histColor["doubleJet"] = histColor["singleISOEg"] = histColor["singleISOTau"] = histColor["htSum"] = histColor["metHFSum"] = kBlue;
+  // histColor["doubleJet"] = histColor["singleISOEg"] = histColor["singleISOTau"] = histColor["htSum"] = histColor["metHFSum"] = kBlue;
+  histColor["doubleJet"] = histColor["singleEgHBHE"] = histColor["singleISOTau"] = histColor["htSum"] = histColor["metHFSum"] = kBlue;
   histColor["tripleJet"] = histColor["doubleEg"] = histColor["doubleTau"] = kGreen;
-  histColor["quadJet"] = histColor["doubleISOEg"] = histColor["doubleISOTau"] = kBlack;
+  histColor["quadJet"] = histColor["singleEgHF"] = histColor["doubleISOTau"] = kBlack;
 
   std::map<std::string, TH1F*> rateHists_def;
   std::map<std::string, TH1F*> rateHists_new_cond;
@@ -47,14 +49,14 @@ int main()
     histName += "Rates_emu";
     histNameHw += "Rates_hw";
     rateHists_def[rateType] = dynamic_cast<TH1F*>(files.at(0)->Get(histName.c_str()));
-    rateHists_hw[rateType] = dynamic_cast<TH1F*>(files.at(0)->Get(histNameHw.c_str()));
+    if (includeHW) rateHists_hw[rateType] = dynamic_cast<TH1F*>(files.at(0)->Get(histNameHw.c_str()));
     rateHists_new_cond[rateType] = dynamic_cast<TH1F*>(files.at(1)->Get(histName.c_str())); 
     rateHists_def[rateType]->Rebin(rebinFactor);
-    rateHists_hw[rateType]->Rebin(rebinFactor);
+    if (includeHW) rateHists_hw[rateType]->Rebin(rebinFactor);
     rateHists_new_cond[rateType]->Rebin(rebinFactor);
 
     rateHists_def[rateType]->SetLineColor(histColor[rateType]);
-    rateHists_hw[rateType]->SetLineColor(histColor[rateType]);
+    if (includeHW) rateHists_hw[rateType]->SetLineColor(histColor[rateType]);
     rateHists_new_cond[rateType]->SetLineColor(histColor[rateType]);
     TString name(rateHists_new_cond[rateType]->GetName());
     name += "_ratio";
@@ -75,7 +77,8 @@ int main()
   for(auto pair : rateHists_def) pair.second->SetLineStyle(kDotted);
 
   std::vector<std::string> jetPlots = {"singleJet", "doubleJet", "tripleJet", "quadJet"};
-  std::vector<std::string> egPlots = {"singleEg", "singleISOEg", "doubleEg", "doubleISOEg"};
+  // std::vector<std::string> egPlots = {"singleEg", "singleISOEg", "doubleEg", "doubleISOEg"};
+  std::vector<std::string> egPlots = {"singleEg", "singleEgHBHE", "doubleEg", "singleEgHF"};
   std::vector<std::string> tauPlots = {"singleTau", "singleISOTau", "doubleTau", "doubleISOTau"};
   std::vector<std::string> scalarSumPlots = {"etSum", "htSum"};
   std::vector<std::string> vectorSumPlots = {"metSum", "metHFSum"};
@@ -111,7 +114,7 @@ int main()
       if(includeHW) rateHists_hw[hist]->Draw("hist same");
       rateHists_new_cond[hist]->Draw("hist same");
       TString name(rateHists_def[hist]->GetName());
-      TString nameHw(rateHists_hw[hist]->GetName());
+      if (includeHW) TString nameHw(rateHists_hw[hist]->GetName());
       leg->AddEntry(rateHists_def[hist], name + " (current)", "L");
       if(includeHW) leg->AddEntry(rateHists_hw[hist], name + " (hw)", "L");
       leg->AddEntry(rateHists_new_cond[hist], name + " (new)", "L"); 

@@ -12,7 +12,7 @@
 #include "L1Trigger/L1TNtuples/interface/L1AnalysisL1UpgradeDataFormat.h"
 #include "L1Trigger/L1TNtuples/interface/L1AnalysisRecoVertexDataFormat.h"
 #include "L1Trigger/L1TNtuples/interface/L1AnalysisCaloTPDataFormat.h"
-
+#include "L1Trigger/L1TNtuples/interface/HcalTPCoordMapUtils.h"
 
 /* TODO: put errors in rates...
 creates the the rates and distributions for l1 trigger objects
@@ -59,6 +59,25 @@ int main(int argc, char *argv[])
   rates(newConditions, ntuplePath);
 
   return 0;
+}
+
+double deltaPhi(double phi1, double phi2)
+{
+  double result = phi1 - phi2;
+  if (fabs(result) > 9999)
+    return result;
+  while (result > TMath::Pi())
+    result -= 2 * TMath::Pi();
+  while (result <= -TMath::Pi())
+    result += 2 * TMath::Pi();
+  return result;
+}
+
+double deltaR(double eta1, double phi1, double eta2, double phi2)
+{
+  double deta = eta1 - eta2;
+  double dphi = deltaPhi(phi1, phi2);
+  return sqrt(deta * deta + dphi * dphi);
 }
 
 // only need to edit this section if good run JSON
@@ -215,8 +234,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F* tripleJetRates_emu = new TH1F("tripleJetRates_emu", axR.c_str(), nJetBins, jetLo, jetHi);
   TH1F* quadJetRates_emu = new TH1F("quadJetRates_emu", axR.c_str(), nJetBins, jetLo, jetHi);
   TH1F* singleEgRates_emu = new TH1F("singleEgRates_emu", axR.c_str(), nEgBins, egLo, egHi);
-  TH1F* singleEgHBHERates_emu = new TH1F("singleEgHBHERates_emu", axR.c_str(), nEgBins, egLo, egHi);
-  TH1F* singleEgHFRates_emu = new TH1F("singleEgHFRates_emu", axR.c_str(), nEgBins, egLo, egHi);
+  TH1F* singleEgRatesHBHE_emu = new TH1F("singleEgRatesHBHE_emu", axR.c_str(), nEgBins, egLo, egHi);
+  TH1F* singleEgRatesHF_emu = new TH1F("singleEgRatesHF_emu", axR.c_str(), nEgBins, egLo, egHi);
   TH1F* doubleEgRates_emu = new TH1F("doubleEgRates_emu", axR.c_str(), nEgBins, egLo, egHi);
   TH1F* singleTauRates_emu = new TH1F("singleTauRates_emu", axR.c_str(), nTauBins, tauLo, tauHi);
   TH1F* doubleTauRates_emu = new TH1F("doubleTauRates_emu", axR.c_str(), nTauBins, tauLo, tauHi);
@@ -296,13 +315,25 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       
       double egEt_1 = 0;
       double egEt_2 = 0;
-      double egIEta_1 = 0;
+      double egEta_1 = 0;
+      bool emfbit = false;
       //EG pt's are not given in descending order...bx?
       for (UInt_t c=0; c<l1emu_->nEGs; c++){
+	if (l1emu_->egTowerIEta[c] > 28){
+	  for (int t=0; t<l1TPemu_->nHCALTP; t++){
+	    if (l1TPemu_->hcalTPet[t] <= 0.5 or abs(l1TPemu_->hcalTPieta[t]) <= 28) continue;
+	    double dR = deltaR(l1emu_->egEta[c], l1emu_->egPhi[c], etaVal(l1TPemu_->hcalTPieta[t] ), phiVal(l1TPemu_->hcalTPCaliphi[t] ));
+	    if (dR <= 0.2)
+	      {
+		emfbit = emfbit or l1TPemu_->hcalTPfineGrain[t];
+	      }
+	  }
+	  if (!emfbit) continue; // this should skip to the next eg
+	}
         if (l1emu_->egEt[c] > egEt_1){
           egEt_2 = egEt_1;
           egEt_1 = l1emu_->egEt[c];
-	  egIEta_1 = l1emu_->egTowerIEta[c];
+	  egEta_1
         }
         else if (l1emu_->egEt[c] <= egEt_1 && l1emu_->egEt[c] > egEt_2){
           egEt_2 = l1emu_->egEt[c];
@@ -381,8 +412,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
              
       for(int bin=0; bin<nEgBins; bin++){
         if( (egEt_1) >= egLo + (bin*egBinWidth) ) singleEgRates_emu->Fill(egLo+(bin*egBinWidth));  //GeV
-        if( ((egEt_1) >= egLo + (bin*egBinWidth)) and egIEta_1 <= 28) singleEgHBHERates_emu->Fill(egLo+(bin*egBinWidth));  //GeV
-        if( ((egEt_1) >= egLo + (bin*egBinWidth)) and egIEta_1 > 28 ) singleEgHFRates_emu->Fill(egLo+(bin*egBinWidth));  //GeV
       } 
 
       for(int bin=0; bin<nEgBins; bin++){
@@ -632,8 +661,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     tripleJetRates_emu->Scale(norm);
     quadJetRates_emu->Scale(norm);
     singleEgRates_emu->Scale(norm);
-    singleEgHBHERates_emu->Scale(norm);
-    singleEgHFRates_emu->Scale(norm);
     doubleEgRates_emu->Scale(norm);
     singleTauRates_emu->Scale(norm);
     doubleTauRates_emu->Scale(norm);
@@ -657,8 +684,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     tripleJetRates_emu->Write();
     quadJetRates_emu->Write();
     singleEgRates_emu->Write();
-    singleEgHBHERates_emu->Write();
-    singleEgHFRates_emu->Write();
     doubleEgRates_emu->Write();
     singleTauRates_emu->Write();
     doubleTauRates_emu->Write();
