@@ -602,7 +602,6 @@ void fgBitGenAnalysis(const std::string &inputFileDirectory)
       if (l1GenZ_->partE[g] < 3.0)
         continue;
 
-      eff_den->Fill(l1GenZ_->partPt[g]);
       int matchedTPs = 0;
       double minGenTPdR = 999.;
       bool emfbit = false;
@@ -652,7 +651,8 @@ void fgBitGenAnalysis(const std::string &inputFileDirectory)
 
       minGenETPdR->Fill(minGenTPdR);
       if (matchedTPs > 0)
-      {
+      {	      
+	eff_den->Fill(l1GenZ_->partPt[g]);
         nMatchedWithTP++;
         // energyRatioE->Fill(longSum / shortSum);
         // shortEnergyE->Fill(shortSum);
@@ -706,10 +706,10 @@ void fgBitAnalysis(const std::string &inputFileDirectory)
   treeL1GenZ->Add(inputFileZ.c_str());
 
   TChain *treeL1emuQ = new TChain("l1UpgradeEmuTree/L1UpgradeTree");
-  treeL1emuZ->Add(inputFileQ.c_str());
+  treeL1emuQ->Add(inputFileQ.c_str());
 
   TChain *treeL1TPemuQ = new TChain("l1CaloTowerEmuTree/L1CaloTowerTree");
-  treeL1TPemuZ->Add(inputFileQ.c_str());
+  treeL1TPemuQ->Add(inputFileQ.c_str());
 
   // TChain *treeL1GenZ = new TChain("l1GeneratorTree/L1GenTree");
   // treeL1GenZ->Add(inputFileZ.c_str());
@@ -743,6 +743,8 @@ void fgBitAnalysis(const std::string &inputFileDirectory)
   TH1F *purity_num = new TH1F("numPur", "", 100, 0, 200);
   TH1F *purity_den = new TH1F("denPur", "", 100, 0, 200);
 
+  TH1F *numEffL1 = new TH1F("numEffL1","",150,0,150);
+  TH1F *denEffL1 = new TH1F("denEffL1","",150,0,150);
   // TH1F *mistag_num = new TH1F("numMiss", "", 100, 0 ,200);
   // TH1F *mistag_den = new TH1F("denMiss", "", 100, 0 , 200);
   
@@ -756,10 +758,41 @@ void fgBitAnalysis(const std::string &inputFileDirectory)
     treeL1emuZ->GetEntry(jentry);
     treeL1GenZ->GetEntry(jentry);
 
+    for (int genIt = 0 ; genIt < l1GenZ_->nPart; ++genIt)
+      {
+	if (fabs(l1GenZ_->partEta[genIt]) < 2.9)
+          continue;
+        if (fabs(l1GenZ_->partEta[genIt]) > 5.1)
+          continue;
+        if (abs(l1GenZ_->partId[genIt]) != 11) // make sure it's an electron..
+          continue;
+        if (abs(l1GenZ_->partParent[genIt]) != 23) // make sure parent is Z
+          continue;
+        if (!l1GenZ_->partIsHard[genIt]) // from hard scatter process (only for efficiencies?)
+          continue;
+	if(l1GenZ_->partPt[genIt] < 3.0)
+	  continue;
+	denEffL1->Fill(l1GenZ_->partPt[genIt]);
+	
+	int matched = 0;
+	for (int l1it = 0; l1it < l1emuZ_->nEGs; l1it++)
+	  {
+	    if (abs(l1emuZ_->egTowerIEta[l1it]) <= 28 or l1emuZ_->egEt[l1it] < 3.0)
+	      continue;
+
+	    double dR = deltaR(l1emuZ_->egEta[l1it], l1emuZ_->egPhi[l1it], l1GenZ_->partEta[genIt], l1GenZ_->partPhi[genIt]);
+
+	    if (dR < 0.2)
+	      matched++;
+	  }
+	if (matched > 0)
+	  numEffL1->Fill(l1GenZ_->partPt[genIt]);
+      }
+
     for (int i = 0; i < l1emuZ_->nEGs; i++)
     {
       // only look at eg with abs(ieta) > 28 and et > 3 GeV
-      if (abs(l1emuZ_->egTowerIEta[i]) <= 28 or l1emuZ_->egEt[i] <= 3.0)
+      if (abs(l1emuZ_->egTowerIEta[i]) <= 28 or l1emuZ_->egEt[i] < 3.0)
         continue;
 
       double minL1GenDR = 999;
@@ -778,6 +811,8 @@ void fgBitAnalysis(const std::string &inputFileDirectory)
           continue;
         if (!l1GenZ_->partIsHard[g]) // from hard scatter process (only for efficiencies?)
           continue;
+	if (l1GenZ_->partPt[g] < 3.0)
+	  continue;
 
         double dR = deltaR(l1emuZ_->egEta[i], l1emuZ_->egPhi[i], l1GenZ_->partEta[g], l1GenZ_->partPhi[g]);
         if (dR < minL1GenDR)
@@ -799,7 +834,7 @@ void fgBitAnalysis(const std::string &inputFileDirectory)
       bool emfbit = false;
       for (int j = 0; j < l1TPemuZ_->nHCALTP; j++)
       {
-        if (l1TPemuZ_->hcalTPet[j] <= 5.0 or abs(l1TPemuZ_->hcalTPieta[j]) <= 28)
+        if (l1TPemuZ_->hcalTPet[j] <= 0.5 or abs(l1TPemuZ_->hcalTPieta[j]) <= 28)
           continue;
 
         double dR = deltaR(l1emuZ_->egEta[i], l1emuZ_->egPhi[i], etaVal(l1TPemuZ_->hcalTPieta[j] ), phiVal(l1TPemuZ_->hcalTPCaliphi[j] ) );
@@ -846,7 +881,7 @@ void fgBitAnalysis(const std::string &inputFileDirectory)
 
     for (int i = 0; i < l1emuQ_->nEGs; i++)
     {
-      if (abs(l1emuQ_->egIEta[i]) <= 28 or l1emuQ_->egEt[i] <= 3.0)
+      if (abs(l1emuQ_->egTowerIEta[i]) <= 28 or l1emuQ_->egEt[i] < 3.0)
         continue;
 
       fake_den->Fill(l1emuQ_->egEt[i]);
@@ -855,11 +890,11 @@ void fgBitAnalysis(const std::string &inputFileDirectory)
 
       for (int j = 0; j < l1TPemuQ_->nHCALTP; j++)
       {
-        if (l1TPemuQ_->hcalTPet[j] <= 5.0 or abs(l1TPemuQ_->hcalTPieta[j]) <= 28)
+        if (l1TPemuQ_->hcalTPet[j] <= 0.5 or abs(l1TPemuQ_->hcalTPieta[j]) <= 28)
           continue;
 
-        double dR = deltaR(l1emuQ_->egEta[i], l1emuQ_->egPhi[i], l1TPemuQ_->hcalTPieta[j], l1TPemuQ_->hcalTPCaliphi[j]);
-        if (dR < hcal_l1_dR)
+        double dR = deltaR(l1emuQ_->egEta[i], l1emuQ_->egPhi[i], etaVal(l1TPemuQ_->hcalTPieta[j]), phiVal(l1TPemuQ_->hcalTPCaliphi[j]));
+        if (dR < 0.2)
         {
           emfbitQ = emfbitQ or l1TPemuQ_->hcalTPfineGrain[j]; // if any are true, emfbit stays true
         }
@@ -878,6 +913,8 @@ void fgBitAnalysis(const std::string &inputFileDirectory)
   eff_den->Write();
   purity_num->Write();
   purity_den->Write();
-  // fake_num->Write();
-  // fake_den->Write();
+  fake_num->Write();
+  fake_den->Write();
+  numEffL1->Write();
+  denEffL1->Write();
 }
