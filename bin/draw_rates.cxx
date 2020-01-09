@@ -108,13 +108,16 @@ int main()
     TLegend *leg = new TLegend(0.55, 0.9 - 0.1*iplot.second.size(), 0.95, 0.93);
     for(auto hist : iplot.second) {
       rateHists_def[hist]->Draw("hist same");
+      rateHists_def[hist]->GetYaxis()->SetRangeUser(10.01, 100000000); // setting the range of the Y axis to show low rates           
       if(includeHW) rateHists_hw[hist]->Draw("hist same");
       rateHists_new_cond[hist]->Draw("hist same");
+      rateHists_new_cond[hist]->GetYaxis()->SetRangeUser(10.01, 100000000); // setting the range of the Y axis to show low rates
       TString name(rateHists_def[hist]->GetName());
       TString nameHw(rateHists_hw[hist]->GetName());
-      leg->AddEntry(rateHists_def[hist], name + " (current)", "L");
+      //      leg->AddEntry(rateHists_def[hist], name + " (current)", "L");
       if(includeHW) leg->AddEntry(rateHists_hw[hist], name + " (hw)", "L");
-      leg->AddEntry(rateHists_new_cond[hist], name + " (new)", "L"); 
+      //      leg->AddEntry(rateHists_new_cond[hist], name + " (new)", "L"); 
+      leg->AddEntry(rateHists_new_cond[hist], name + " (current)", "L");
     }
     leg->SetBorderSize(0);
     leg->Draw();
