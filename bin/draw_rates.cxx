@@ -114,10 +114,9 @@ int main()
       rateHists_new_cond[hist]->GetYaxis()->SetRangeUser(10.01, 100000000); // setting the range of the Y axis to show low rates
       TString name(rateHists_def[hist]->GetName());
       TString nameHw(rateHists_hw[hist]->GetName());
-      //      leg->AddEntry(rateHists_def[hist], name + " (current)", "L");
+      leg->AddEntry(rateHists_def[hist], name + " (current)", "L");
       if(includeHW) leg->AddEntry(rateHists_hw[hist], name + " (hw)", "L");
-      //      leg->AddEntry(rateHists_new_cond[hist], name + " (new)", "L"); 
-      leg->AddEntry(rateHists_new_cond[hist], name + " (current)", "L");
+      leg->AddEntry(rateHists_new_cond[hist], name + " (new)", "L"); 
     }
     leg->SetBorderSize(0);
     leg->Draw();
