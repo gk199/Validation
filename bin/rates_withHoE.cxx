@@ -106,6 +106,9 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     treeL1hw->Add(inputFile.c_str());
   }
   TChain * treeL1Towemu = new TChain("l1CaloTowerEmuTree/L1CaloTowerTree");
+  if (emuOn){
+    treeL1Towemu->Add(inputFile.c_str());
+  }
   TChain * eventTree = new TChain("l1EventTree/L1EventTree");
   eventTree->Add(inputFile.c_str());
 
@@ -275,6 +278,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     if (emuOn){
 
       treeL1TPemu->GetEntry(jentry);
+      treeL1Towemu->GetEntry(jentry);
       double tpEt(0.);
       
       for(int i=0; i < l1TPemu_->nHCALTP; i++){
@@ -372,8 +376,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       int minTowerForHOvE = maxTowerBarrel+1;
       int maxTowerForHOvE = maxTowerEndcap;
       uint nJetemu(0);
-      nJetemu = l1emu_->nJets;
       double towEtemu(0), towHademu(0), towEmemu(0), towEtaemu(0), towPhiemu(0), nTowemu(0);
+      nTowemu = l1Towemu_->nTower;
+      nJetemu = l1emu_->nJets;
+      //std::cout << "nTower emu = " << nTowemu << " and nJet emu = " << nJetemu << std::endl;
       std::map<const TString, std::vector<double> > hadVariablesAllJets;
       std::map<const TString, std::vector<double> > emVariablesAllJets;
       for(uint jetIt=0; jetIt<nJetemu; jetIt++){
@@ -422,10 +428,21 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	emVariablesAllJets["H9OvE9"].push_back(seedTower9x9Em);
       }
 
-      //      std::cout<<"H3 = " << (hadVariablesAllJets["H3OvE3"][0])<<std::endl;
-      //      std::cout<<"E3 = " << (emVariablesAllJets["H3OvE3"][0])<<std::endl;
-      //      std::cout<<"H3/E3 = " << (hadVariablesAllJets["H3OvE3"][0])/(emVariablesAllJets["H3OvE3"][0])<<std::endl;
-      //      std::cout<<"length He = " << (hadVariablesAllJets["H3OvE3"]).size() <<std::endl;
+      // testing H/E and printing out quantities
+      /*
+      if (l1emu_->nJets > 0 )
+	{
+	  std::cout<<"Jet loop, printing H/E = (hadVariablesAllJets[\"H3OvE3\"][i])/(emVariablesAllJets[\"H3OvE3\"][i]) for each jet i"<<std::endl;
+	  std::cout<<"number of jets = " << l1emu_->nJets << std::endl;
+	  for (int i=0; i<l1emu_->nJets; i++)
+	    {
+	      std::cout<<"jet number = " << i << std::endl;
+	      std::cout<<"H3 = " << (hadVariablesAllJets["H3OvE3"][i])<<std::endl;
+	      std::cout<<"E3 = " << (emVariablesAllJets["H3OvE3"][i])<<std::endl;
+	      std::cout<<"H3/E3 = " << (hadVariablesAllJets["H3OvE3"][i])/(emVariablesAllJets["H3OvE3"][i])<<std::endl;
+	    }
+	}
+      */
 
       for(int bin=0; bin<nJetBins; bin++){
         if( ((hadVariablesAllJets["H3OvE3"][0])/(emVariablesAllJets["H3OvE3"][0]) > 0.9) && ( (jetEt_1) >= jetLo + (bin*jetBinWidth) ) ) singleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
