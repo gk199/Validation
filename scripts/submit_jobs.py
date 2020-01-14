@@ -46,8 +46,13 @@ def generate_ntuple_config(configtype, newtag, caloparams):
     cmd += '--conditions=' + CONDITIONS + ' '
     # run re-emulation including re-emulation of HCAL TPs
     cmd += '--customise=L1Trigger/Configuration/customiseReEmul.L1TReEmulFromRAWsimHcalTP '
+    # cmd += '--customise=L1Trigger/Configuration/customiseReEmul.L1TReEmulFromRAW '
+    # cmd += '--customise=L1Trigger/Configuration/customiseReEmul.L1TReEmulMCFromRAW '
+    # cmd += '--customise=L1Trigger/Configuration/customiseReEmul.L1TReEmulFromRAWCalouGT '
+    # cmd += '--customise=L1Trigger/Configuration/customiseReEmul.L1TReEmulMCFromRAWSimHcalTP ' # added based on Matthew's instructions
     # include emulated quantities in L1Ntuple
     cmd += '--customise=L1Trigger/L1TNtuples/customiseL1Ntuple.L1NtupleRAWEMU '
+    #cmd += '--customise=L1Trigger/L1TNtuples/customiseL1Ntuple.L1NtupleRAWEMUGEN_MC ' # added based on Matthew's instructions
     # use correct CaloStage2Params; should only change if Layer2 calibration changes
     if(caloparams):
         cmd += '--customise=L1Trigger/Configuration/customiseSettings.L1TSettingsToCaloParams_' + CALOSTAGE2PARAMS + ' '
