@@ -268,7 +268,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 
   TH1D * hJetEt = new TH1D("jetET",";ET;",100,0,1000);
 
-  TH1F * mhit3 = new TH1F("mhit3","Multiplicity of 2ns delayed cells above 3 GeV",1000,-0.5,5000);
+  TH1F * mhit3 = new TH1F("mhit3","Multiplicity of 2ns delayed cells above 3 GeV",100,0,120);
 
   /////////////////////////////////
   // loop through all the entries//
@@ -391,65 +391,67 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       std::map<const TString, std::vector<double> > TimingVariablesAllJets;
       std::map<const TString, std::vector<double> > DepthVariablesAllJets;
       double mult3GeV2ns(0);
-      // loop over L1 jets and then loop over HCAL TPs
+      // loop over L1 jets
       for(uint jetIt=0; jetIt<nJetemu; jetIt++){
 	hJetEt->Fill(l1emu_->jetEt[jetIt]);
 	seedTowerIPhi = l1emu_->jetTowerIPhi[jetIt];
 	seedTowerIEta = l1emu_->jetTowerIEta[jetIt];
-	// loop over HCAL TPs
-	for (int HcalTPIt = 0; HcalTPIt < nCaloTPemu; HcalTPIt++){
-	  tpEtaemu = l1CaloTPemu_->hcalTPieta[HcalTPIt];
-          tpPhiemu = l1CaloTPemu_->hcalTPiphi[HcalTPIt];
-          tpEtemu = l1CaloTPemu_->hcalTPet[HcalTPIt];
-	  nDepth = l1CaloTPemu_->hcalTPnDepths[HcalTPIt];
-	  // loop over HCAL depths
-	  for (int depthIt = 0; depthIt < nDepth; depthIt++){
-	    // count multiplicity of layers given a timing and energy threshold
-	    // depth layers (4 in HB, 7 in HE)
-	    hcalDepth1 = l1CaloTPemu_->hcalTPDepth1[depthIt];
-	    hcalDepth2 = l1CaloTPemu_->hcalTPDepth2[depthIt];
-	    hcalDepth3 = l1CaloTPemu_->hcalTPDepth3[depthIt];
-	    hcalDepth4 = l1CaloTPemu_->hcalTPDepth4[depthIt];
-	    hcalDepth5 = l1CaloTPemu_->hcalTPDepth5[depthIt];
-	    hcalDepth6 = l1CaloTPemu_->hcalTPDepth6[depthIt];
-            hcalDepth7 = l1CaloTPemu_->hcalTPDepth7[depthIt];
-	    // timing info for each layer, in 25 ns with resolution 0.5 ns
-            hcalTiming1 = l1CaloTPemu_->hcalTPtiming1[depthIt];
-            hcalTiming2 = l1CaloTPemu_->hcalTPtiming2[depthIt];
-            hcalTiming3 = l1CaloTPemu_->hcalTPtiming3[depthIt];
-            hcalTiming4 = l1CaloTPemu_->hcalTPtiming4[depthIt];
-            hcalTiming5 = l1CaloTPemu_->hcalTPtiming5[depthIt];
-            hcalTiming6 = l1CaloTPemu_->hcalTPtiming6[depthIt];
-            hcalTiming7 = l1CaloTPemu_->hcalTPtiming7[depthIt];
-	    
-	    if (hcalDepth1 > 3 && hcalTiming1 > 2){
-	      mult3GeV2ns += 1; 
-	    }
-	    if (hcalDepth2 > 3 && hcalTiming2 > 2){
-	      mult3GeV2ns += 1;
-	    }
-	    if (hcalDepth3 > 3 && hcalTiming3 > 2){
-	      mult3GeV2ns += 1;
-            }
-	    if (hcalDepth4 > 3 && hcalTiming4 > 2){
-	      mult3GeV2ns += 1;
-	    }
-	    if (hcalDepth5 > 3 && hcalTiming5 > 2){
-	      mult3GeV2ns += 1;
-            }
-	    if (hcalDepth6 > 3 && hcalTiming6 > 2){
-	      mult3GeV2ns += 1;
-            }
-	    if (hcalDepth7 > 3 && hcalTiming7 > 2){
-	      mult3GeV2ns += 1;
-	    }
-	  }
-	}
-	// after L1 jets loop, HCAL depth, and HCAL TP loops reset the multiplicity counter                                                        
-	std::cout << "multiplicity = " << mult3GeV2ns << std::endl;
+      }
+      // loop over HCAL TPs
+      for (int HcalTPIt = 0; HcalTPIt < nCaloTPemu; HcalTPIt++){
+        tpEtaemu = l1CaloTPemu_->hcalTPieta[HcalTPIt];
+        tpPhiemu = l1CaloTPemu_->hcalTPiphi[HcalTPIt];
+        tpEtemu = l1CaloTPemu_->hcalTPet[HcalTPIt];
+        nDepth = l1CaloTPemu_->hcalTPnDepths[HcalTPIt];
+	// Energy deposited in each depth layer for every HCAL TP (4 in HB, 7 in HE)            
+	//	  DepthVariablesAllJets[HcalTPIt] = l1CaloTPemu_->hcalTPDepth1[HcalTPIt];
+        hcalDepth1 = l1CaloTPemu_->hcalTPDepth1[HcalTPIt];
+        hcalDepth2 = l1CaloTPemu_->hcalTPDepth2[HcalTPIt];
+        hcalDepth3 = l1CaloTPemu_->hcalTPDepth3[HcalTPIt];
+        hcalDepth4 = l1CaloTPemu_->hcalTPDepth4[HcalTPIt];
+        hcalDepth5 = l1CaloTPemu_->hcalTPDepth5[HcalTPIt];
+        hcalDepth6 = l1CaloTPemu_->hcalTPDepth6[HcalTPIt];
+        hcalDepth7 = l1CaloTPemu_->hcalTPDepth7[HcalTPIt];
+        // timing info for each layer, in 25 ns with resolution 0.5 ns                                                                       
+        //	  TimingVariablesAllJets[HcalTPIt] = l1CaloTPemu_->hcalTPtiming1[HcalTPIt];
+        hcalTiming1 = l1CaloTPemu_->hcalTPtiming1[HcalTPIt];
+        hcalTiming2 = l1CaloTPemu_->hcalTPtiming2[HcalTPIt];
+        hcalTiming3 = l1CaloTPemu_->hcalTPtiming3[HcalTPIt];
+        hcalTiming4 = l1CaloTPemu_->hcalTPtiming4[HcalTPIt];
+        hcalTiming5 = l1CaloTPemu_->hcalTPtiming5[HcalTPIt];
+        hcalTiming6 = l1CaloTPemu_->hcalTPtiming6[HcalTPIt];
+        hcalTiming7 = l1CaloTPemu_->hcalTPtiming7[HcalTPIt];
+        // loop over HCAL depths
+        //	  for (int depthIt = 0; depthIt < nDepth; depthIt++){
+          // count multiplicity of layers given a timing and energy threshold
+          
+          if (hcalDepth1 > 3 && hcalTiming1 > 2){
+            mult3GeV2ns += 1; 
+          }
+          if (hcalDepth2 > 3 && hcalTiming2 > 2){
+            mult3GeV2ns += 1;
+          }
+          if (hcalDepth3 > 3 && hcalTiming3 > 2){
+            mult3GeV2ns += 1;
+          }
+          if (hcalDepth4 > 3 && hcalTiming4 > 2){
+            mult3GeV2ns += 1;
+          }
+          if (hcalDepth5 > 3 && hcalTiming5 > 2){
+            mult3GeV2ns += 1;
+          }
+          if (hcalDepth6 > 3 && hcalTiming6 > 2){
+            mult3GeV2ns += 1;
+          }
+          if (hcalDepth7 > 3 && hcalTiming7 > 2){
+            mult3GeV2ns += 1;
+          }
+        }
+	// after HCAL depth, and HCAL TP loops reset the multiplicity counter   
+	//	std::cout << "multiplicity = " << mult3GeV2ns << std::endl;
 	mhit3->Fill(mult3GeV2ns);
 	mult3GeV2ns = 0;
-      }
+
 
       // for each bin fill according to whether our object has a larger corresponding energy
       for(int bin=0; bin<nJetBins; bin++){
