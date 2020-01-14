@@ -17,5 +17,5 @@ The script that submit CRAB jobs is called `submit_jobs.py`. Its required argume
 Follow this twiki on how to use the Rates scripts:
 [HCAL Days L1 Rates workshop](https://twiki.cern.ch/twiki/bin/view/Sandbox/L1TriggerAtHCALdays2019#HCAL_conditions_impact_at_L1_rat)
 
-bin/rates_withHoE.cxx has the code to study the effects of adding a H/E requirement on the jet (single, double, triple, quad) rates, and can be compared against the default rates from rates_original.cxx.
+`bin/rates_withHoE.cxx` has the code to study the effects of adding a H/E requirement on the jet (single, double, triple, quad) rates, and can be compared against the default rates from `rates_original.cxx`.
 
