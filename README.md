@@ -26,4 +26,6 @@ To run on a LLP MC sample, list the sample in submit_jobs.py, and then run with 
 ```
 ./scripts/submit_jobs.py -o T2_CH_CERN -n NO_EXEC
 ```
-Instructions from the HCAL Days L1 Rates workshop are here: [https://twiki.cern.ch/twiki/bin/view/Sandbox/L1TriggerAtHCALdays2019]. 
+Instructions from the HCAL Days L1 Rates workshop are here
+
+[https://twiki.cern.ch/twiki/bin/view/Sandbox/L1TriggerAtHCALdays2019]
