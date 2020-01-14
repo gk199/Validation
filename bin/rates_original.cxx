@@ -13,7 +13,6 @@
 #include "L1Trigger/L1TNtuples/interface/L1AnalysisRecoVertexDataFormat.h"
 #include "L1Trigger/L1TNtuples/interface/L1AnalysisCaloTPDataFormat.h"
 #include "L1Trigger/L1TNtuples/interface/L1AnalysisL1CaloTowerDataFormat.h"
-#include "L1Trigger/L1TNtuples/interface/L1AnalysisCaloTPDataFormat.h"
 
 
 /* TODO: put errors in rates...
@@ -107,14 +106,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   if (hwOn){
     treeL1hw->Add(inputFile.c_str());
   }
-  TChain * treeL1Towemu = new TChain("l1CaloTowerEmuTree/L1CaloTowerTree");
-  if (emuOn){
-    treeL1Towemu->Add(inputFile.c_str());
-  }
-  TChain * treeL1CaloTPemu = new TChain("l1CaloTowerEmuTree/L1CaloTowerTree");
-  if (emuOn){
-    treeL1CaloTPemu->Add(inputFile.c_str());
-  }
   TChain * eventTree = new TChain("l1EventTree/L1EventTree");
   eventTree->Add(inputFile.c_str());
 
@@ -139,10 +130,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   treeL1emu->SetBranchAddress("L1Upgrade", &l1emu_);
   L1Analysis::L1AnalysisL1UpgradeDataFormat    *l1hw_ = new L1Analysis::L1AnalysisL1UpgradeDataFormat();
   treeL1hw->SetBranchAddress("L1Upgrade", &l1hw_);
-  L1Analysis::L1AnalysisL1CaloTowerDataFormat     *l1Towemu_ = new L1Analysis::L1AnalysisL1CaloTowerDataFormat();
-  treeL1Towemu->SetBranchAddress("L1CaloTower", &l1Towemu_);
-  L1Analysis::L1AnalysisCaloTPDataFormat     *l1CaloTPemu_ = new L1Analysis::L1AnalysisCaloTPDataFormat();
-  treeL1CaloTPemu->SetBranchAddress("CaloTP", &l1CaloTPemu_);
   L1Analysis::L1AnalysisEventDataFormat    *event_ = new L1Analysis::L1AnalysisEventDataFormat();
   eventTree->SetBranchAddress("Event", &event_);
   // L1Analysis::L1AnalysisRecoVertexDataFormat    *vtx_ = new L1Analysis::L1AnalysisRecoVertexDataFormat();
@@ -266,10 +253,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F* hcalTP_hw = new TH1F("hcalTP_hw", ";TP E_{T}; # Entries", nTpBins, tpLo, tpHi);
   TH1F* ecalTP_hw = new TH1F("ecalTP_hw", ";TP E_{T}; # Entries", nTpBins, tpLo, tpHi);
 
-  TH1D * hJetEt = new TH1D("jetET",";ET;",100,0,1000);
-
-  TH1F * mhit3 = new TH1F("mhit3","Multiplicity of 2ns delayed cells above 3 GeV",1000,-0.5,5000);
-
   /////////////////////////////////
   // loop through all the entries//
   /////////////////////////////////
@@ -287,8 +270,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     if (emuOn){
 
       treeL1TPemu->GetEntry(jentry);
-      treeL1Towemu->GetEntry(jentry);
-      treeL1CaloTPemu->GetEntry(jentry);
       double tpEt(0.);
       
       for(int i=0; i < l1TPemu_->nHCALTP; i++){
@@ -376,79 +357,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
           if( l1emu_->sumType[c] == L1Analysis::kMissingEt ) metSum = l1emu_->sumEt[c];
 	  if( l1emu_->sumType[c] == L1Analysis::kMissingEtHF ) metHFSum = l1emu_->sumEt[c];
           if( l1emu_->sumType[c] == L1Analysis::kMissingHt ) mhtSum = l1emu_->sumEt[c];
-      }
-
-      int seedTowerIEta(-1);
-      int seedTowerIPhi(-1);
-      int nDepth(-1);
-      double nCaloTPemu(0), tpEtaemu(0), tpPhiemu(0), tpEtemu(0);
-      double hcalDepth1(0), hcalDepth2(0), hcalDepth3(0), hcalDepth4(0), hcalDepth5(0), hcalDepth6(0), hcalDepth7(0);
-      double hcalTiming1(0), hcalTiming2(0), hcalTiming3(0), hcalTiming4(0), hcalTiming5(0), hcalTiming6(0), hcalTiming7(0);
-      uint nJetemu(0);
-      nCaloTPemu = l1CaloTPemu_->nHCALTP;
-      //      nDepth = l1CaloTPemu_->hcalTPnDepths;
-      nJetemu = l1emu_->nJets;
-      std::map<const TString, std::vector<double> > TimingVariablesAllJets;
-      std::map<const TString, std::vector<double> > DepthVariablesAllJets;
-      double mult3GeV2ns(0);
-      // loop over L1 jets and then loop over HCAL TPs
-      for(uint jetIt=0; jetIt<nJetemu; jetIt++){
-	hJetEt->Fill(l1emu_->jetEt[jetIt]);
-	seedTowerIPhi = l1emu_->jetTowerIPhi[jetIt];
-	seedTowerIEta = l1emu_->jetTowerIEta[jetIt];
-	// loop over HCAL TPs
-	for (int HcalTPIt = 0; HcalTPIt < nCaloTPemu; HcalTPIt++){
-	  tpEtaemu = l1CaloTPemu_->hcalTPieta[HcalTPIt];
-          tpPhiemu = l1CaloTPemu_->hcalTPiphi[HcalTPIt];
-          tpEtemu = l1CaloTPemu_->hcalTPet[HcalTPIt];
-	  nDepth = l1CaloTPemu_->hcalTPnDepths[HcalTPIt];
-	  // loop over HCAL depths
-	  for (int depthIt = 0; depthIt < nDepth; depthIt++){
-	    // count multiplicity of layers given a timing and energy threshold
-	    // depth layers (4 in HB, 7 in HE)
-	    hcalDepth1 = l1CaloTPemu_->hcalTPDepth1[depthIt];
-	    hcalDepth2 = l1CaloTPemu_->hcalTPDepth2[depthIt];
-	    hcalDepth3 = l1CaloTPemu_->hcalTPDepth3[depthIt];
-	    hcalDepth4 = l1CaloTPemu_->hcalTPDepth4[depthIt];
-	    hcalDepth5 = l1CaloTPemu_->hcalTPDepth5[depthIt];
-	    hcalDepth6 = l1CaloTPemu_->hcalTPDepth6[depthIt];
-            hcalDepth7 = l1CaloTPemu_->hcalTPDepth7[depthIt];
-	    // timing info for each layer, in 25 ns with resolution 0.5 ns
-            hcalTiming1 = l1CaloTPemu_->hcalTPtiming1[depthIt];
-            hcalTiming2 = l1CaloTPemu_->hcalTPtiming2[depthIt];
-            hcalTiming3 = l1CaloTPemu_->hcalTPtiming3[depthIt];
-            hcalTiming4 = l1CaloTPemu_->hcalTPtiming4[depthIt];
-            hcalTiming5 = l1CaloTPemu_->hcalTPtiming5[depthIt];
-            hcalTiming6 = l1CaloTPemu_->hcalTPtiming6[depthIt];
-            hcalTiming7 = l1CaloTPemu_->hcalTPtiming7[depthIt];
-	    
-	    if (hcalDepth1 > 3 && hcalTiming1 > 2){
-	      mult3GeV2ns += 1; 
-	    }
-	    if (hcalDepth2 > 3 && hcalTiming2 > 2){
-	      mult3GeV2ns += 1;
-	    }
-	    if (hcalDepth3 > 3 && hcalTiming3 > 2){
-	      mult3GeV2ns += 1;
-            }
-	    if (hcalDepth4 > 3 && hcalTiming4 > 2){
-	      mult3GeV2ns += 1;
-	    }
-	    if (hcalDepth5 > 3 && hcalTiming5 > 2){
-	      mult3GeV2ns += 1;
-            }
-	    if (hcalDepth6 > 3 && hcalTiming6 > 2){
-	      mult3GeV2ns += 1;
-            }
-	    if (hcalDepth7 > 3 && hcalTiming7 > 2){
-	      mult3GeV2ns += 1;
-	    }
-	  }
-	}
-	// after L1 jets loop, HCAL depth, and HCAL TP loops reset the multiplicity counter                                                        
-	std::cout << "multiplicity = " << mult3GeV2ns << std::endl;
-	mhit3->Fill(mult3GeV2ns);
-	mult3GeV2ns = 0;
       }
 
       // for each bin fill according to whether our object has a larger corresponding energy
@@ -731,7 +639,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     etSumRates_emu->Scale(norm);
     metSumRates_emu->Scale(norm);
     metHFSumRates_emu->Scale(norm);
-    mhit3->Scale(norm);
 
     //set the errors for the rates
     //want error -> error * sqrt(norm) ?
@@ -755,7 +662,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     etSumRates_emu->Write();
     metSumRates_emu->Write();
     metHFSumRates_emu->Write();
-    mhit3->Write();
   }
 
   if (hwOn){
