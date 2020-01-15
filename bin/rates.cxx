@@ -268,7 +268,9 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 
   TH1D * hJetEt = new TH1D("jetET",";ET;",100,0,1000);
 
-  TH1F * mhit3 = new TH1F("mhit3","Multiplicity of 2ns delayed cells above 3 GeV",100,0,120);
+  TH1F * dt3GeV2nsMult_emu = new TH1F("dt3GeV2nsMult_emu","Multiplicity of 2ns delayed cells above 3 GeV",100,0,120);
+  TH1F * dt3GeV5nsMult_emu = new TH1F("dt3GeV5nsMult_emu","Multiplicity of 5ns delayed cells above 3 GeV",100,0,120);
+
 
   /////////////////////////////////
   // loop through all the entries//
@@ -390,7 +392,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       nJetemu = l1emu_->nJets;
       std::map<const TString, std::vector<double> > TimingVariablesAllJets;
       std::map<const TString, std::vector<double> > DepthVariablesAllJets;
-      double mult3GeV2ns(0);
+      double mult3GeV2ns(0), mult3GeV5ns(0);
       // loop over L1 jets
       for(uint jetIt=0; jetIt<nJetemu; jetIt++){
 	hJetEt->Fill(l1emu_->jetEt[jetIt]);
@@ -426,31 +428,54 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
           // count multiplicity of layers given a timing and energy threshold
           
           if (hcalDepth1 > 3 && hcalTiming1 > 2){
-            mult3GeV2ns += 1; 
+            mult3GeV2ns += 1;
+	    if (hcalTiming1 > 5 ){
+	      mult3GeV5ns += 1;
+	    }
           }
           if (hcalDepth2 > 3 && hcalTiming2 > 2){
             mult3GeV2ns += 1;
+	    if (hcalTiming1 > 5){
+	      mult3GeV5ns += 1;
+	    } 
           }
           if (hcalDepth3 > 3 && hcalTiming3 > 2){
             mult3GeV2ns += 1;
+	    if (hcalTiming1 > 5){
+	      mult3GeV5ns += 1;
+	    } 
           }
           if (hcalDepth4 > 3 && hcalTiming4 > 2){
             mult3GeV2ns += 1;
+	    if (hcalTiming1 > 5){
+	      mult3GeV5ns += 1;
+	    } 
           }
           if (hcalDepth5 > 3 && hcalTiming5 > 2){
             mult3GeV2ns += 1;
+	    if (hcalTiming1 > 5){
+	      mult3GeV5ns += 1;
+	    } 
           }
           if (hcalDepth6 > 3 && hcalTiming6 > 2){
             mult3GeV2ns += 1;
+	    if (hcalTiming1 > 5){
+	      mult3GeV5ns += 1;
+	    } 
           }
           if (hcalDepth7 > 3 && hcalTiming7 > 2){
             mult3GeV2ns += 1;
+	    if (hcalTiming1 > 5){
+	      mult3GeV5ns += 1;
+	    } 
           }
         }
 	// after HCAL depth, and HCAL TP loops reset the multiplicity counter   
 	//	std::cout << "multiplicity = " << mult3GeV2ns << std::endl;
-	mhit3->Fill(mult3GeV2ns);
+	dt3GeV2nsMult_emu->Fill(mult3GeV2ns);
+	dt3GeV5nsMult_emu->Fill(mult3GeV5ns);
 	mult3GeV2ns = 0;
+	mult3GeV5ns = 0;
 
 
       // for each bin fill according to whether our object has a larger corresponding energy
@@ -733,7 +758,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     etSumRates_emu->Scale(norm);
     metSumRates_emu->Scale(norm);
     metHFSumRates_emu->Scale(norm);
-    mhit3->Scale(norm);
+    dt3GeV2nsMult_emu->Scale(norm);
+    dt3GeV5nsMult_emu->Scale(norm);
 
     //set the errors for the rates
     //want error -> error * sqrt(norm) ?
@@ -757,7 +783,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     etSumRates_emu->Write();
     metSumRates_emu->Write();
     metHFSumRates_emu->Write();
-    mhit3->Write();
+    dt3GeV2nsMult_emu->Write();
+    dt3GeV5nsMult_emu->Write();
   }
 
   if (hwOn){

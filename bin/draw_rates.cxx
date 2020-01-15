@@ -9,7 +9,7 @@
 #include <map>
 #include <string>
 #include <vector>
-
+#include <iostream>
 
 int main()
 {
@@ -21,14 +21,20 @@ int main()
   gROOT->ForceStyle();
 
   // default, then new conditions
-  std::vector<std::string> filenames = {"rates_def.root", "rates_new_cond.root"};
+  // files for L1 rates
+  //  std::vector<std::string> filenames = {"rates_def.root", "rates_new_cond.root"};
+  std::vector<std::string> filenames = {"rates_new_cond_QCD.root", "rates_new_cond_pl1000.root"};
   std::vector<std::string> rateTypes = {"singleJet", "doubleJet", "tripleJet", "quadJet",
-					"singleEg", "singleISOEg", "doubleEg", "doubleISOEg",
+				        "singleEg", "singleISOEg", "doubleEg", "doubleISOEg",
 					"singleTau", "singleISOTau", "doubleTau", "doubleISOTau",
 					"htSum", "etSum", "metSum", "metHFSum"};
+  // files for multiplicity overlay plots
+  std::vector<std::string> mult_filenames = {"rates_new_cond_pl10000.root", "rates_new_cond_pl1000.root", "rates_new_cond_pl500.root", "rates_new_cond_QCD.root"};
+  std::vector<std::string> multTypes = {"dt3GeV2ns","dt3GeV5ns"};
+
   std::map<std::string, int> histColor;
-  histColor["singleJet"] = histColor["singleEg"] = histColor["singleTau"] = histColor["etSum"] = histColor["metSum"] = kRed;
-  histColor["doubleJet"] = histColor["singleISOEg"] = histColor["singleISOTau"] = histColor["htSum"] = histColor["metHFSum"] = kBlue;
+  histColor["singleJet"] = histColor["singleEg"] = histColor["singleTau"] = histColor["etSum"] = histColor["metSum"] = histColor["dt3GeV2ns"] = kRed;
+  histColor["doubleJet"] = histColor["singleISOEg"] = histColor["singleISOTau"] = histColor["htSum"] = histColor["metHFSum"] = histColor["dt3GeV5ns"] = kBlue;
   histColor["tripleJet"] = histColor["doubleEg"] = histColor["doubleTau"] = kGreen;
   histColor["quadJet"] = histColor["doubleISOEg"] = histColor["doubleISOTau"] = kBlack;
 
@@ -37,10 +43,18 @@ int main()
   std::map<std::string, TH1F*> rateHists_hw;
   std::map<std::string, TH1F*> rateHistsRatio;
   
+  std::map<std::string, TH1F*> multHists_QCD;
+  std::map<std::string, TH1F*> multHists_LLP10000;
+  std::map<std::string, TH1F*> multHists_LLP1000;
+  std::map<std::string, TH1F*> multHists_LLP500;
+  std::map<std::string, TH1F*> multHistsRatio;
+  std::map<std::string, TH1F*> multHists_hw;
+
   std::vector<TFile*> files;
   for(auto file : filenames) {
     files.push_back(TFile::Open(file.c_str()));
   }
+  // making rate plots for current and new conditions
   for(auto rateType : rateTypes) {
     std::string histName(rateType);
     std::string histNameHw(histName);
@@ -70,16 +84,52 @@ int main()
     rateHistsRatio[rateType]->SetMaximum(1.4);    
     rateHistsRatio[rateType]->SetLineWidth(2);    
   }
+
+  // opening the files for multiplicity plots     
+  std::vector<TFile*> mult_files;
+  for(auto file : mult_filenames) {
+    mult_files.push_back(TFile::Open(file.c_str()));
+  }
+  for(auto multType : multTypes) {
+    std::string histName(multType);
+    std::string histNameHw(histName);
+    histName += "Mult_emu";
+    //    histNameHw += "Mult_hw";
+    multHists_QCD[multType]  = dynamic_cast<TH1F*>(mult_files.at(3)->Get(histName.c_str()));
+    //    multHists_hw[multType]  = dynamic_cast<TH1F*>(mult_files.at(3)->Get(histNameHw.c_str()));
+    multHists_LLP10000[multType] = dynamic_cast<TH1F*>(mult_files.at(0)->Get(histName.c_str()));
+    multHists_LLP1000[multType] = dynamic_cast<TH1F*>(mult_files.at(1)->Get(histName.c_str()));
+    multHists_LLP500[multType] = dynamic_cast<TH1F*>(mult_files.at(2)->Get(histName.c_str()));
+    
+    multHists_QCD[multType]->Rebin(rebinFactor);
+    multHists_LLP10000[multType]->Rebin(rebinFactor);
+    multHists_LLP10000[multType]->Rebin(rebinFactor);
+    multHists_LLP10000[multType]->Rebin(rebinFactor);
+
+    multHists_QCD[multType]->SetLineColor(histColor[multType]);
+    //    multHists_hw[multType]->SetLineColor(histColor[multType]);
+    multHists_LLP10000[multType]->SetLineColor(histColor[multType]);
+    multHists_LLP1000[multType]->SetLineColor(histColor[multType]);
+    multHists_LLP500[multType]->SetLineColor(histColor[multType]);
+  }
+
   for(auto pair : rateHists_new_cond) pair.second->SetLineWidth(2);
   for(auto pair : rateHists_hw) pair.second->SetLineStyle(kDashed);
   for(auto pair : rateHists_def) pair.second->SetLineStyle(kDotted);
+
+  for(auto pair : multHists_LLP10000) pair.second->SetLineWidth(2);
+  for(auto pair : multHists_LLP1000) pair.second->SetLineWidth(2);
+  for(auto pair : multHists_LLP500) pair.second->SetLineWidth(2);
+  //  for(auto pair : multHists_hw) pair.second->SetLineStyle(kDashed);
+  for(auto pair : multHists_QCD) pair.second->SetLineStyle(kDotted); // analogous to rateHist_def
 
   std::vector<std::string> jetPlots = {"singleJet", "doubleJet", "tripleJet", "quadJet"};
   std::vector<std::string> egPlots = {"singleEg", "singleISOEg", "doubleEg", "doubleISOEg"};
   std::vector<std::string> tauPlots = {"singleTau", "singleISOTau", "doubleTau", "doubleISOTau"};
   std::vector<std::string> scalarSumPlots = {"etSum", "htSum"};
   std::vector<std::string> vectorSumPlots = {"metSum", "metHFSum"};
-
+  std::vector<std::string> multPlots = {"dt3GeV2ns","dt3GeV5ns"}; // multiplicity plot types
+ 
   std::vector<TCanvas*> canvases;
   std::vector<TPad*> pad1;
   std::vector<TPad*> pad2;
@@ -90,8 +140,11 @@ int main()
   plots["scalarSum"] = scalarSumPlots;
   plots["vectorSum"] = vectorSumPlots;
 
-  for(auto iplot : plots) {
+  std::map<std::string, std::vector<std::string> > mult_plots;
+  mult_plots["mult"] = multPlots;
 
+  // looping through all plot collections (jets, eg, tau, scalar, vector)
+  for(auto iplot : plots) {
     canvases.push_back(new TCanvas);
     canvases.back()->SetWindowSize(canvases.back()->GetWw(), 1.3*canvases.back()->GetWh());
     pad1.push_back(new TPad("pad1", "pad1", 0, 0.3, 1, 1));
@@ -108,10 +161,13 @@ int main()
     TLegend *leg = new TLegend(0.55, 0.9 - 0.1*iplot.second.size(), 0.95, 0.93);
     for(auto hist : iplot.second) {
       rateHists_def[hist]->Draw("hist same");
+      rateHists_def[hist]->GetYaxis()->SetRangeUser(10.01, 100000000); // setting the range of the Y axis to show low rates
       if(includeHW) rateHists_hw[hist]->Draw("hist same");
       rateHists_new_cond[hist]->Draw("hist same");
+      rateHists_def[hist]->GetYaxis()->SetRangeUser(10.01, 100000000); // setting the range of the Y axis to show low rates
       TString name(rateHists_def[hist]->GetName());
       TString nameHw(rateHists_hw[hist]->GetName());
+      std::cout << name << std::endl;
       leg->AddEntry(rateHists_def[hist], name + " (current)", "L");
       if(includeHW) leg->AddEntry(rateHists_hw[hist], name + " (hw)", "L");
       leg->AddEntry(rateHists_new_cond[hist], name + " (new)", "L"); 
@@ -129,6 +185,40 @@ int main()
 
     if(includeHW) canvases.back()->Print(Form("plots/%sRates_hw.pdf", iplot.first.c_str()));
     else canvases.back()->Print(Form("plots/%sRates_emu.pdf", iplot.first.c_str()));
+  }
+
+  // multiplicity plot loop
+  for (auto iplot : mult_plots){
+
+    canvases.push_back(new TCanvas);
+    canvases.back()->SetWindowSize(canvases.back()->GetWw(), 1.3*canvases.back()->GetWh());
+    pad1.push_back(new TPad("pad1", "pad1", 0, 0.3, 1, 1));
+    pad1.back()->SetLogy();
+    pad1.back()->SetGrid();
+    pad1.back()->Draw();
+    pad2.push_back(new TPad("pad2", "pad2", 0, 0, 1, 0.3));
+    pad2.back()->SetGrid();
+    pad2.back()->Draw();
+    
+    pad1.back()->cd();
+
+    multHists_QCD[iplot.second.front()]->Draw("hist");
+
+    TLegend *leg = new TLegend(0.55, 0.9 - 0.1*iplot.second.size(), 0.95, 0.93);
+    for (auto hist : iplot.second) {
+      multHists_QCD[hist]->Draw("hist same");
+      multHists_LLP1000[hist]->Draw("hist same");
+      TString name(multHists_QCD[hist]->GetName());
+      std::cout << name << std::endl;
+      leg->AddEntry(multHists_QCD[hist], name + " (QCD)", "L");
+      leg->AddEntry(multHists_LLP1000[hist], name + " (LLP)", "L");
+    }
+    leg->SetBorderSize(0);
+    leg->Draw();
+    
+    pad2.back()->cd();
+
+    canvases.back()->Print(Form("plots/%sMult_emu.pdf", iplot.first.c_str()));
   }
 
   return 0;
