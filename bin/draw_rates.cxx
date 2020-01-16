@@ -134,7 +134,23 @@ int main()
   std::vector<std::string> multPlots3GeV = {"dt3GeV1ns","dt3GeV2ns","dt3GeV3ns","dt3GeV4ns","dt3GeV5ns"};
   std::vector<std::string> multPlots2GeV = {"dt2GeV1ns","dt2GeV2ns","dt2GeV3ns","dt2GeV4ns","dt2GeV5ns"};
   std::vector<std::string> multPlots1GeV = {"dt1GeV1ns","dt1GeV2ns","dt1GeV3ns","dt1GeV4ns","dt1GeV5ns"}; 
- 
+  // used for overlays
+  std::vector<std::string> o31 = {"dt3GeV1ns"};
+  std::vector<std::string> o32 = {"dt3GeV2ns"};
+  std::vector<std::string> o33 = {"dt3GeV3ns"};
+  std::vector<std::string> o34 = {"dt3GeV4ns"};
+  std::vector<std::string> o35 = {"dt3GeV5ns"};
+  std::vector<std::string> o21 = {"dt2GeV1ns"};
+  std::vector<std::string> o22 = {"dt2GeV2ns"};
+  std::vector<std::string> o23 = {"dt2GeV3ns"};
+  std::vector<std::string> o24 = {"dt2GeV4ns"};
+  std::vector<std::string> o25 = {"dt2GeV5ns"};
+  std::vector<std::string> o11 = {"dt1GeV1ns"};
+  std::vector<std::string> o12 = {"dt1GeV2ns"};
+  std::vector<std::string> o13 = {"dt1GeV3ns"};
+  std::vector<std::string> o14 = {"dt1GeV4ns"};
+  std::vector<std::string> o15 = {"dt1GeV5ns"};
+
   std::vector<TCanvas*> canvases;
   std::vector<TPad*> pad1;
   std::vector<TPad*> pad2;
@@ -149,6 +165,23 @@ int main()
   mult_plots["mult3"] = multPlots3GeV;
   mult_plots["mult2"] = multPlots2GeV;
   mult_plots["mult1"] = multPlots1GeV;
+
+  std::map<std::string, std::vector<std::string> > overlays;
+  overlays["3GeV1ns"] = o31;
+  overlays["3GeV2ns"] = o32;
+  overlays["3GeV3ns"] = o33;
+  overlays["3GeV4ns"] = o34;
+  overlays["3GeV5ns"] = o35;
+  overlays["2GeV1ns"] = o21;
+  overlays["2GeV2ns"] = o22;
+  overlays["2GeV3ns"] = o23;
+  overlays["2GeV4ns"] = o24;
+  overlays["2GeV5ns"] = o25;
+  overlays["1GeV1ns"] = o11;
+  overlays["1GeV2ns"] = o12;
+  overlays["1GeV3ns"] = o13;
+  overlays["1GeV4ns"] = o14;
+  overlays["1GeV5ns"] = o15;
 
   // looping through all plot collections (jets, eg, tau, scalar, vector)
   for(auto iplot : plots) {
@@ -319,5 +352,36 @@ int main()
     canvases.back()->Print(Form("plots/%sMult_emu_LLP500.pdf", iplot.first.c_str()));
   }
 
+  // overlay LLP and QCD at a single energy / timing cut value
+  for (auto iplot : overlays ) {
+    canvases.push_back(new TCanvas);
+    canvases.back()->SetWindowSize(canvases.back()->GetWw(), 1.3*canvases.back()->GetWh());
+    pad1.push_back(new TPad("pad1", "pad1", 0, 0.3, 1, 1));
+    pad1.back()->SetGrid();
+    pad1.back()->Draw();
+    pad1.back()->cd();
+    multHists_QCD[iplot.second.front()]->Draw("hist");
+    TLegend *leg = new TLegend(0.55, 0.9 - 0.1*iplot.second.size(), 0.95, 0.93);
+    for (auto hist : iplot.second){
+      multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1000000);
+      multHists_QCD[hist]->SetLineColor(kBlack);
+      multHists_QCD[hist]->Draw("hist same");
+      multHists_LLP500[hist]->SetLineColor(kBlue);
+      multHists_LLP500[hist]->Draw("hist same");
+      multHists_LLP1000[hist]->SetLineColor(kGreen);
+      multHists_LLP1000[hist]->Draw("hist same");
+      multHists_LLP10000[hist]->SetLineColor(kRed);
+      multHists_LLP10000[hist]->Draw("hist same");
+      TString name (multHists_QCD[hist]->GetName());
+      leg->AddEntry(multHists_QCD[hist],"QCD", "L");
+      leg->AddEntry(multHists_LLP500[hist],"LLP, pl=0.5m", "L");
+      leg->AddEntry(multHists_LLP1000[hist], "LLP, pl=1m", "L");
+      leg->AddEntry(multHists_LLP10000[hist], "LLP, pl=10m", "L");
+      multHists_QCD[hist]->SetTitle("Multiplicity Overlay of QCD and LLPs at " + name(2,4) + " and " + name(6,3));
+    }
+    leg->SetBorderSize(0);
+    leg->Draw();
+    canvases.back()->Print(Form("plots/%sOverlay.pdf", iplot.first.c_str()));
+  }
   return 0;
 }
