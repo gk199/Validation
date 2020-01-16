@@ -25,18 +25,19 @@ int main()
   //  std::vector<std::string> filenames = {"rates_def.root", "rates_new_cond.root"};
   std::vector<std::string> filenames = {"rates_new_cond_QCD.root", "rates_new_cond_pl1000.root"};
   std::vector<std::string> rateTypes = {"singleJet", "doubleJet", "tripleJet", "quadJet",
-				        "singleEg", "singleISOEg", "doubleEg", "doubleISOEg",
+					"singleEg", "singleISOEg", "doubleEg", "doubleISOEg",
 					"singleTau", "singleISOTau", "doubleTau", "doubleISOTau",
 					"htSum", "etSum", "metSum", "metHFSum"};
   // files for multiplicity overlay plots
   std::vector<std::string> mult_filenames = {"rates_new_cond_pl10000.root", "rates_new_cond_pl1000.root", "rates_new_cond_pl500.root", "rates_new_cond_QCD.root"};
-  std::vector<std::string> multTypes = {"dt3GeV2ns","dt3GeV5ns"};
+  std::vector<std::string> multTypes = {"dt3GeV1ns","dt3GeV2ns","dt3GeV3ns","dt3GeV4ns","dt3GeV5ns","dt2GeV1ns","dt2GeV2ns","dt2GeV3ns","dt2GeV4ns","dt2GeV5ns","dt1GeV1ns","dt1GeV2ns","dt1GeV3ns","dt1GeV4ns","dt1GeV5ns"};
 
   std::map<std::string, int> histColor;
-  histColor["singleJet"] = histColor["singleEg"] = histColor["singleTau"] = histColor["etSum"] = histColor["metSum"] = histColor["dt3GeV2ns"] = kRed;
-  histColor["doubleJet"] = histColor["singleISOEg"] = histColor["singleISOTau"] = histColor["htSum"] = histColor["metHFSum"] = histColor["dt3GeV5ns"] = kBlue;
-  histColor["tripleJet"] = histColor["doubleEg"] = histColor["doubleTau"] = kGreen;
-  histColor["quadJet"] = histColor["doubleISOEg"] = histColor["doubleISOTau"] = kBlack;
+  histColor["singleJet"] = histColor["singleEg"] = histColor["singleTau"] = histColor["etSum"] = histColor["metSum"] = histColor["dt3GeV1ns"] = histColor["dt2GeV1ns"] = histColor["dt1GeV1ns"] = kRed;
+  histColor["doubleJet"] = histColor["singleISOEg"] = histColor["singleISOTau"] = histColor["htSum"] = histColor["metHFSum"] = histColor["dt3GeV2ns"] = histColor["dt2GeV2ns"] = histColor["dt1GeV2ns"] = kBlue;
+  histColor["tripleJet"] = histColor["doubleEg"] = histColor["doubleTau"] = histColor["dt3GeV3ns"] = histColor["dt2GeV3ns"] = histColor["dt1GeV3ns"] = kGreen;
+  histColor["quadJet"] = histColor["doubleISOEg"] = histColor["doubleISOTau"] = histColor["dt3GeV4ns"] = histColor["dt2GeV4ns"] = histColor["dt1GeV4ns"] = kBlack;
+  histColor["dt3GeV5ns"] = histColor["dt2GeV5ns"] = histColor["dt1GeV5ns"] = kCyan;
 
   std::map<std::string, TH1F*> rateHists_def;
   std::map<std::string, TH1F*> rateHists_new_cond;
@@ -121,14 +122,18 @@ int main()
   for(auto pair : multHists_LLP1000) pair.second->SetLineWidth(2);
   for(auto pair : multHists_LLP500) pair.second->SetLineWidth(2);
   //  for(auto pair : multHists_hw) pair.second->SetLineStyle(kDashed);
-  for(auto pair : multHists_QCD) pair.second->SetLineStyle(kDotted); // analogous to rateHist_def
+  //  for(auto pair : multHists_QCD) pair.second->SetLineStyle(kDotted); // analogous to rateHist_def
+  for(auto pair : multHists_QCD) pair.second->SetLineWidth(2);
 
   std::vector<std::string> jetPlots = {"singleJet", "doubleJet", "tripleJet", "quadJet"};
   std::vector<std::string> egPlots = {"singleEg", "singleISOEg", "doubleEg", "doubleISOEg"};
   std::vector<std::string> tauPlots = {"singleTau", "singleISOTau", "doubleTau", "doubleISOTau"};
   std::vector<std::string> scalarSumPlots = {"etSum", "htSum"};
   std::vector<std::string> vectorSumPlots = {"metSum", "metHFSum"};
-  std::vector<std::string> multPlots = {"dt3GeV2ns","dt3GeV5ns"}; // multiplicity plot types
+  // multiplicity plot types 
+  std::vector<std::string> multPlots3GeV = {"dt3GeV1ns","dt3GeV2ns","dt3GeV3ns","dt3GeV4ns","dt3GeV5ns"};
+  std::vector<std::string> multPlots2GeV = {"dt2GeV1ns","dt2GeV2ns","dt2GeV3ns","dt2GeV4ns","dt2GeV5ns"};
+  std::vector<std::string> multPlots1GeV = {"dt1GeV1ns","dt1GeV2ns","dt1GeV3ns","dt1GeV4ns","dt1GeV5ns"}; 
  
   std::vector<TCanvas*> canvases;
   std::vector<TPad*> pad1;
@@ -141,7 +146,9 @@ int main()
   plots["vectorSum"] = vectorSumPlots;
 
   std::map<std::string, std::vector<std::string> > mult_plots;
-  mult_plots["mult"] = multPlots;
+  mult_plots["mult3"] = multPlots3GeV;
+  mult_plots["mult2"] = multPlots2GeV;
+  mult_plots["mult1"] = multPlots1GeV;
 
   // looping through all plot collections (jets, eg, tau, scalar, vector)
   for(auto iplot : plots) {
@@ -184,41 +191,132 @@ int main()
     }
 
     if(includeHW) canvases.back()->Print(Form("plots/%sRates_hw.pdf", iplot.first.c_str()));
-    else canvases.back()->Print(Form("plots/%sRates_emu.pdf", iplot.first.c_str()));
+    //    else canvases.back()->Print(Form("plots/%sRates_emu.pdf", iplot.first.c_str()));
   }
 
   // multiplicity plot loop
+  // QCD
   for (auto iplot : mult_plots){
-
     canvases.push_back(new TCanvas);
     canvases.back()->SetWindowSize(canvases.back()->GetWw(), 1.3*canvases.back()->GetWh());
-    pad1.push_back(new TPad("pad1", "pad1", 0, 0.3, 1, 1));
-    pad1.back()->SetLogy();
+    pad1.push_back(new TPad("pad1", "pad1", 0, 0.15, 1, 1));
+    //    pad1.back()->SetLogy();
     pad1.back()->SetGrid();
     pad1.back()->Draw();
-    pad2.push_back(new TPad("pad2", "pad2", 0, 0, 1, 0.3));
-    pad2.back()->SetGrid();
-    pad2.back()->Draw();
-    
     pad1.back()->cd();
-
     multHists_QCD[iplot.second.front()]->Draw("hist");
-
-    TLegend *leg = new TLegend(0.55, 0.9 - 0.1*iplot.second.size(), 0.95, 0.93);
+    TLegend *leg = new TLegend(0.65, 1.1 - 0.1*iplot.second.size(), 0.95, 0.93);
     for (auto hist : iplot.second) {
+      multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,2500000);
+      // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV
+      if ((hist == "dt2GeV1ns") || (hist == "dt2GeV2ns") || (hist == "dt2GeV3ns") || (hist == "dt2GeV4ns") || (hist == "dt2GeV5ns")){
+	multHists_QCD[hist]->Rebin(rebinFactor*2);
+      }
+      // rebin histograms for 1 GeV energy cut, as the x-axis extends further here
+      if ((hist == "dt1GeV1ns") || (hist == "dt1GeV2ns") || (hist == "dt1GeV3ns") || (hist == "dt1GeV4ns") || (hist == "dt1GeV5ns")){
+        multHists_QCD[hist]->Rebin(rebinFactor*4);
+      }
       multHists_QCD[hist]->Draw("hist same");
-      multHists_LLP1000[hist]->Draw("hist same");
       TString name(multHists_QCD[hist]->GetName());
-      std::cout << name << std::endl;
-      leg->AddEntry(multHists_QCD[hist], name + " (QCD)", "L");
-      leg->AddEntry(multHists_LLP1000[hist], name + " (LLP)", "L");
+      leg->AddEntry(multHists_QCD[hist], name(2,7) + " (QCD)", "L");
+      multHists_QCD[hist]->SetTitle("Multiplicity for QCD, timing scan at " + name(2,4));
     }
     leg->SetBorderSize(0);
     leg->Draw();
-    
-    pad2.back()->cd();
+    canvases.back()->Print(Form("plots/%sMult_emu_QCD.pdf", iplot.first.c_str()));
+  }
 
-    canvases.back()->Print(Form("plots/%sMult_emu.pdf", iplot.first.c_str()));
+  // LLP 10000
+  for (auto iplot : mult_plots){
+    canvases.push_back(new TCanvas);
+    canvases.back()->SetWindowSize(canvases.back()->GetWw(), 1.3*canvases.back()->GetWh());
+    pad1.push_back(new TPad("pad1", "pad1", 0, 0.15, 1, 1));
+    //    pad1.back()->SetLogy();
+    pad1.back()->SetGrid();
+    pad1.back()->Draw();
+    pad1.back()->cd();
+    multHists_LLP10000[iplot.second.front()]->Draw("hist");
+    TLegend *leg = new TLegend(0.65, 1.1 - 0.1*iplot.second.size(), 0.95, 0.93);
+    for (auto hist : iplot.second) {
+      multHists_LLP10000[hist]->GetYaxis()->SetRangeUser(0,2500000);
+      // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV                                                                                                                            
+      if ((hist == "dt2GeV1ns") || (hist == "dt2GeV2ns") || (hist == "dt2GeV3ns") || (hist == "dt2GeV4ns") || (hist == "dt2GeV5ns")){
+        multHists_LLP10000[hist]->Rebin(rebinFactor*2);
+      }
+      // rebin histograms for 1 GeV energy cut, as the x-axis extends further here                                                                                                           
+      if ((hist == "dt1GeV1ns") || (hist == "dt1GeV2ns") || (hist == "dt1GeV3ns") || (hist == "dt1GeV4ns") || (hist == "dt1GeV5ns")){
+        multHists_LLP10000[hist]->Rebin(rebinFactor*4);
+      }
+      multHists_LLP10000[hist]->Draw("hist same");
+      TString name(multHists_QCD[hist]->GetName());
+      leg->AddEntry(multHists_LLP10000[hist], name(2,7) + " (LLP, pl=10m)", "L");
+      multHists_LLP10000[hist]->SetTitle("Multiplicity for LLP pl=10m, timing scan at " + name(2,4));
+    }
+    leg->SetBorderSize(0);
+    leg->Draw();
+    canvases.back()->Print(Form("plots/%sMult_emu_LLP10000.pdf", iplot.first.c_str()));
+  }
+
+  // LLP 1000
+  for (auto iplot : mult_plots){
+    canvases.push_back(new TCanvas);
+    canvases.back()->SetWindowSize(canvases.back()->GetWw(), 1.3*canvases.back()->GetWh());
+    pad1.push_back(new TPad("pad1", "pad1", 0, 0.15, 1, 1));
+    //    pad1.back()->SetLogy();
+    pad1.back()->SetGrid();
+    pad1.back()->Draw();
+    pad1.back()->cd();
+    multHists_LLP1000[iplot.second.front()]->Draw("hist");
+    TLegend *leg = new TLegend(0.65, 1.1 - 0.1*iplot.second.size(), 0.95, 0.93);
+    for (auto hist : iplot.second) {
+      multHists_LLP1000[hist]->GetYaxis()->SetRangeUser(0,2500000);
+      // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV
+      if ((hist == "dt2GeV1ns") || (hist == "dt2GeV2ns") || (hist == "dt2GeV3ns") || (hist == "dt2GeV4ns") || (hist == "dt2GeV5ns")){
+        multHists_LLP1000[hist]->Rebin(rebinFactor*2);
+      }
+      // rebin histograms for 1 GeV energy cut, as the x-axis extends further here
+      if ((hist == "dt1GeV1ns") || (hist == "dt1GeV2ns") || (hist == "dt1GeV3ns") || (hist == "dt1GeV4ns") || (hist == "dt1GeV5ns")){
+        multHists_LLP1000[hist]->Rebin(rebinFactor*4);
+      }
+      multHists_LLP1000[hist]->Draw("hist same");
+      TString name(multHists_QCD[hist]->GetName());
+      leg->AddEntry(multHists_LLP1000[hist], name(2,7) + " (LLP, pl=1m)", "L");
+      multHists_LLP1000[hist]->SetTitle("Multiplicity for LLP pl=1m, timing scan at " + name(2,4));
+    }
+    leg->SetBorderSize(0);
+    leg->Draw();
+    canvases.back()->Print(Form("plots/%sMult_emu_LLP1000.pdf", iplot.first.c_str()));
+  }
+
+  // LLP 500                                                                
+  for (auto iplot : mult_plots){
+    canvases.push_back(new TCanvas);
+    canvases.back()->SetWindowSize(canvases.back()->GetWw(), 1.3*canvases.back()->GetWh());
+    pad1.push_back(new TPad("pad1", "pad1", 0, 0.15, 1, 1));
+    //    pad1.back()->SetLogy();
+    pad1.back()->SetGrid();
+    pad1.back()->Draw();
+    pad1.back()->cd();
+    multHists_LLP500[iplot.second.front()]->Draw("hist");
+    TLegend *leg = new TLegend(0.65, 1.1 - 0.1*iplot.second.size(), 0.95, 0.93);
+    for (auto hist : iplot.second) {
+      multHists_LLP500[hist]->GetYaxis()->SetRangeUser(0,2500000);
+      // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV
+      if ((hist == "dt2GeV1ns") || (hist == "dt2GeV2ns") || (hist == "dt2GeV3ns") || (hist == "dt2GeV4ns") || (hist == "dt2GeV5ns")){
+        multHists_LLP500[hist]->Rebin(rebinFactor*2);
+      }
+      // rebin histograms for 1 GeV energy cut, as the x-axis extends further here
+      if ((hist == "dt1GeV1ns") || (hist == "dt1GeV2ns") || (hist == "dt1GeV3ns") || (hist == "dt1GeV4ns") || (hist == "dt1GeV5ns")){
+        multHists_LLP500[hist]->Rebin(rebinFactor*4);
+      }
+      multHists_LLP500[hist]->Draw("hist same");
+      TString name(multHists_QCD[hist]->GetName());
+      leg->AddEntry(multHists_LLP500[hist], name(2,7) + " (LLP, pl=0.5m)", "L");
+      multHists_LLP500[hist]->SetTitle("Multiplicity for LLP pl=0.5m, timing scan at " + name(2,4));
+    }
+    leg->SetBorderSize(0);
+    leg->Draw();
+    canvases.back()->Print(Form("plots/%sMult_emu_LLP500.pdf", iplot.first.c_str()));
   }
 
   return 0;
