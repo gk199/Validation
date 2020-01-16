@@ -223,7 +223,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 
   std::string axR = ";Threshold E_{T} (GeV);rate (Hz)";
   std::string axD = ";E_{T} (GeV);events/bin";
-  std::string mult = ";Number of Events;Multiplicity";
+  std::string mult = ";Multiplicity;Number of Entries";
 
   //make histos
   TH1F* singleJetRates_emu = new TH1F("singleJetRates_emu", axR.c_str(), nJetBins, jetLo, jetHi);
@@ -271,23 +271,23 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1D * hJetEt = new TH1D("jetET",";ET;",100,0,1000);
 
   // 3 GeV energy cuts, scanning time cuts
-  TH1F * dt3GeV1nsMult_emu = new TH1F("dt3GeV1nsMult_emu","Multiplicity of 1ns delayed cells above 3 GeV;Number of Events;Multiplicity",120,0,120);
-  TH1F * dt3GeV2nsMult_emu = new TH1F("dt3GeV2nsMult_emu","Multiplicity of 2ns delayed cells above 3 GeV;Number of Events;Multiplicity",120,0,120);
-  TH1F * dt3GeV3nsMult_emu = new TH1F("dt3GeV3nsMult_emu","Multiplicity of 3ns delayed cells above 3 GeV;Number of Events;Multiplicity",120,0,120);
-  TH1F * dt3GeV4nsMult_emu = new TH1F("dt3GeV4nsMult_emu","Multiplicity of 4ns delayed cells above 3 GeV;Number of Events;Multiplicity",120,0,120);
-  TH1F * dt3GeV5nsMult_emu = new TH1F("dt3GeV5nsMult_emu","Multiplicity of 5ns delayed cells above 3 GeV;Number of Events;Multiplicity",120,0,120);
+  TH1F * dt3GeV1nsMult_emu = new TH1F("dt3GeV1nsMult_emu","Multiplicity of 1ns delayed cells above 3 GeV;Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV2nsMult_emu = new TH1F("dt3GeV2nsMult_emu","Multiplicity of 2ns delayed cells above 3 GeV;Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV3nsMult_emu = new TH1F("dt3GeV3nsMult_emu","Multiplicity of 3ns delayed cells above 3 GeV;Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV4nsMult_emu = new TH1F("dt3GeV4nsMult_emu","Multiplicity of 4ns delayed cells above 3 GeV;Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV5nsMult_emu = new TH1F("dt3GeV5nsMult_emu","Multiplicity of 5ns delayed cells above 3 GeV;Multiplicity;Number of Entries",120,0,120);
   // 2 GeV energy cuts, scanning time cut
-  TH1F * dt2GeV1nsMult_emu = new TH1F("dt2GeV1nsMult_emu","Multiplicity of 1ns delayed cells above 2 GeV;Number of Events;Multiplicity",200,0,200);
-  TH1F * dt2GeV2nsMult_emu = new TH1F("dt2GeV2nsMult_emu","Multiplicity of 2ns delayed cells above 2 GeV;Number of Events;Multiplicity",200,0,200);
-  TH1F * dt2GeV3nsMult_emu = new TH1F("dt2GeV3nsMult_emu","Multiplicity of 3ns delayed cells above 2 GeV;Number of Events;Multiplicity",200,0,200);
-  TH1F * dt2GeV4nsMult_emu = new TH1F("dt2GeV4nsMult_emu","Multiplicity of 4ns delayed cells above 2 GeV;Number of Events;Multiplicity",200,0,200);
-  TH1F * dt2GeV5nsMult_emu = new TH1F("dt2GeV5nsMult_emu","Multiplicity of 5ns delayed cells above 2 GeV;Number of Events;Multiplicity",200,0,200);
+  TH1F * dt2GeV1nsMult_emu = new TH1F("dt2GeV1nsMult_emu","Multiplicity of 1ns delayed cells above 2 GeV;Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV2nsMult_emu = new TH1F("dt2GeV2nsMult_emu","Multiplicity of 2ns delayed cells above 2 GeV;Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV3nsMult_emu = new TH1F("dt2GeV3nsMult_emu","Multiplicity of 3ns delayed cells above 2 GeV;Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV4nsMult_emu = new TH1F("dt2GeV4nsMult_emu","Multiplicity of 4ns delayed cells above 2 GeV;Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV5nsMult_emu = new TH1F("dt2GeV5nsMult_emu","Multiplicity of 5ns delayed cells above 2 GeV;Multiplicity;Number of Entries",200,0,200);
   // 1 GeV energy cuts, scanning time cuts
-  TH1F * dt1GeV1nsMult_emu = new TH1F("dt1GeV1nsMult_emu","Multiplicity of 1ns delayed cells above 1 GeV;Number of Events;Multiplicity",400,0,400);
-  TH1F * dt1GeV2nsMult_emu = new TH1F("dt1GeV2nsMult_emu","Multiplicity of 2ns delayed cells above 1 GeV;Number of Events;Multiplicity",400,0,400);
-  TH1F * dt1GeV3nsMult_emu = new TH1F("dt1GeV3nsMult_emu","Multiplicity of 3ns delayed cells above 1 GeV;Number of Events;Multiplicity",400,0,400);
-  TH1F * dt1GeV4nsMult_emu = new TH1F("dt1GeV4nsMult_emu","Multiplicity of 4ns delayed cells above 1 GeV;Number of Events;Multiplicity",400,0,400);
-  TH1F * dt1GeV5nsMult_emu = new TH1F("dt1GeV5nsMult_emu","Multiplicity of 5ns delayed cells above 1 GeV;Number of Events;Multiplicity",400,0,400);
+  TH1F * dt1GeV1nsMult_emu = new TH1F("dt1GeV1nsMult_emu","Multiplicity of 1ns delayed cells above 1 GeV;Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV2nsMult_emu = new TH1F("dt1GeV2nsMult_emu","Multiplicity of 2ns delayed cells above 1 GeV;Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV3nsMult_emu = new TH1F("dt1GeV3nsMult_emu","Multiplicity of 3ns delayed cells above 1 GeV;Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV4nsMult_emu = new TH1F("dt1GeV4nsMult_emu","Multiplicity of 4ns delayed cells above 1 GeV;Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV5nsMult_emu = new TH1F("dt1GeV5nsMult_emu","Multiplicity of 5ns delayed cells above 1 GeV;Multiplicity;Number of Entries",400,0,400);
 
   /////////////////////////////////
   // loop through all the entries//
