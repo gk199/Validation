@@ -162,9 +162,9 @@ int main()
   plots["vectorSum"] = vectorSumPlots;
 
   std::map<std::string, std::vector<std::string> > mult_plots;
-  mult_plots["mult3"] = multPlots3GeV;
-  mult_plots["mult2"] = multPlots2GeV;
-  mult_plots["mult1"] = multPlots1GeV;
+  mult_plots["3GeV_timescan"] = multPlots3GeV;
+  mult_plots["2GeV_timescan"] = multPlots2GeV;
+  mult_plots["1GeV_timescan"] = multPlots1GeV;
 
   std::map<std::string, std::vector<std::string> > overlays;
   overlays["3GeV1ns"] = o31;
@@ -231,8 +231,8 @@ int main()
   // QCD
   for (auto iplot : mult_plots){
     canvases.push_back(new TCanvas);
-    canvases.back()->SetWindowSize(canvases.back()->GetWw(), 1.3*canvases.back()->GetWh());
-    pad1.push_back(new TPad("pad1", "pad1", 0, 0.15, 1, 1));
+    canvases.back()->SetWindowSize(canvases.back()->GetWw(), canvases.back()->GetWh());
+    pad1.push_back(new TPad("pad1", "pad1", 0, 0, 1, 1));
     //    pad1.back()->SetLogy();
     pad1.back()->SetGrid();
     pad1.back()->Draw();
@@ -251,19 +251,25 @@ int main()
       }
       multHists_QCD[hist]->Draw("hist same");
       TString name(multHists_QCD[hist]->GetName());
-      leg->AddEntry(multHists_QCD[hist], name(2,7) + " (QCD)", "L");
+      leg->AddEntry(multHists_QCD[hist], name(6,3) + " ", "L");
       multHists_QCD[hist]->SetTitle("Multiplicity for QCD, timing scan at " + name(2,4));
+      multHists_QCD[hist]->GetXaxis()->SetLabelSize(0.03);
+      multHists_QCD[hist]->GetYaxis()->SetLabelSize(0.03);
+      multHists_QCD[hist]->GetXaxis()->SetTitleSize(0.04);
+      multHists_QCD[hist]->GetYaxis()->SetTitleSize(0.04);
+      multHists_QCD[hist]->GetXaxis()->SetTitleOffset(1.2);
+      multHists_QCD[hist]->GetYaxis()->SetTitleOffset(1.5);
     }
     leg->SetBorderSize(0);
     leg->Draw();
-    canvases.back()->Print(Form("plots/%sMult_emu_QCD.pdf", iplot.first.c_str()));
+    canvases.back()->Print(Form("plots/%s_Mult_emu_QCD.pdf", iplot.first.c_str()));
   }
 
   // LLP 10000
   for (auto iplot : mult_plots){
     canvases.push_back(new TCanvas);
-    canvases.back()->SetWindowSize(canvases.back()->GetWw(), 1.3*canvases.back()->GetWh());
-    pad1.push_back(new TPad("pad1", "pad1", 0, 0.15, 1, 1));
+    canvases.back()->SetWindowSize(canvases.back()->GetWw(), canvases.back()->GetWh());
+    pad1.push_back(new TPad("pad1", "pad1", 0, 0, 1, 1));
     //    pad1.back()->SetLogy();
     pad1.back()->SetGrid();
     pad1.back()->Draw();
@@ -281,20 +287,26 @@ int main()
         multHists_LLP10000[hist]->Rebin(rebinFactor*4);
       }
       multHists_LLP10000[hist]->Draw("hist same");
-      TString name(multHists_QCD[hist]->GetName());
-      leg->AddEntry(multHists_LLP10000[hist], name(2,7) + " (LLP, pl=10m)", "L");
+      TString name(multHists_LLP10000[hist]->GetName());
+      leg->AddEntry(multHists_LLP10000[hist], name(6,3) + " ", "L");
       multHists_LLP10000[hist]->SetTitle("Multiplicity for LLP pl=10m, timing scan at " + name(2,4));
+      multHists_LLP10000[hist]->GetXaxis()->SetLabelSize(0.03);
+      multHists_LLP10000[hist]->GetYaxis()->SetLabelSize(0.03);
+      multHists_LLP10000[hist]->GetXaxis()->SetTitleSize(0.04);
+      multHists_LLP10000[hist]->GetYaxis()->SetTitleSize(0.04);
+      multHists_LLP10000[hist]->GetXaxis()->SetTitleOffset(1.2);
+      multHists_LLP10000[hist]->GetYaxis()->SetTitleOffset(1.5);
     }
     leg->SetBorderSize(0);
     leg->Draw();
-    canvases.back()->Print(Form("plots/%sMult_emu_LLP10000.pdf", iplot.first.c_str()));
+    canvases.back()->Print(Form("plots/%s_Mult_emu_LLP10000.pdf", iplot.first.c_str()));
   }
 
   // LLP 1000
   for (auto iplot : mult_plots){
     canvases.push_back(new TCanvas);
-    canvases.back()->SetWindowSize(canvases.back()->GetWw(), 1.3*canvases.back()->GetWh());
-    pad1.push_back(new TPad("pad1", "pad1", 0, 0.15, 1, 1));
+    canvases.back()->SetWindowSize(canvases.back()->GetWw(), canvases.back()->GetWh());
+    pad1.push_back(new TPad("pad1", "pad1", 0, 0, 1, 1));
     //    pad1.back()->SetLogy();
     pad1.back()->SetGrid();
     pad1.back()->Draw();
@@ -312,20 +324,26 @@ int main()
         multHists_LLP1000[hist]->Rebin(rebinFactor*4);
       }
       multHists_LLP1000[hist]->Draw("hist same");
-      TString name(multHists_QCD[hist]->GetName());
-      leg->AddEntry(multHists_LLP1000[hist], name(2,7) + " (LLP, pl=1m)", "L");
+      TString name(multHists_LLP1000[hist]->GetName());
+      leg->AddEntry(multHists_LLP1000[hist], name(6,3) + " ", "L");
       multHists_LLP1000[hist]->SetTitle("Multiplicity for LLP pl=1m, timing scan at " + name(2,4));
+      multHists_LLP1000[hist]->GetXaxis()->SetLabelSize(0.03);
+      multHists_LLP1000[hist]->GetYaxis()->SetLabelSize(0.03);
+      multHists_LLP1000[hist]->GetXaxis()->SetTitleSize(0.04);
+      multHists_LLP1000[hist]->GetYaxis()->SetTitleSize(0.04);
+      multHists_LLP1000[hist]->GetXaxis()->SetTitleOffset(1.2);
+      multHists_LLP1000[hist]->GetYaxis()->SetTitleOffset(1.5);
     }
     leg->SetBorderSize(0);
     leg->Draw();
-    canvases.back()->Print(Form("plots/%sMult_emu_LLP1000.pdf", iplot.first.c_str()));
+    canvases.back()->Print(Form("plots/%s_Mult_emu_LLP1000.pdf", iplot.first.c_str()));
   }
 
   // LLP 500                                                                
   for (auto iplot : mult_plots){
     canvases.push_back(new TCanvas);
-    canvases.back()->SetWindowSize(canvases.back()->GetWw(), 1.3*canvases.back()->GetWh());
-    pad1.push_back(new TPad("pad1", "pad1", 0, 0.15, 1, 1));
+    canvases.back()->SetWindowSize(canvases.back()->GetWw(), canvases.back()->GetWh());
+    pad1.push_back(new TPad("pad1", "pad1", 0, 0, 1, 1));
     //    pad1.back()->SetLogy();
     pad1.back()->SetGrid();
     pad1.back()->Draw();
@@ -343,27 +361,35 @@ int main()
         multHists_LLP500[hist]->Rebin(rebinFactor*4);
       }
       multHists_LLP500[hist]->Draw("hist same");
-      TString name(multHists_QCD[hist]->GetName());
-      leg->AddEntry(multHists_LLP500[hist], name(2,7) + " (LLP, pl=0.5m)", "L");
+      TString name(multHists_LLP500[hist]->GetName());
+      leg->AddEntry(multHists_LLP500[hist], name(6,3) + " ", "L");
       multHists_LLP500[hist]->SetTitle("Multiplicity for LLP pl=0.5m, timing scan at " + name(2,4));
+      multHists_LLP500[hist]->GetXaxis()->SetLabelSize(0.03);
+      multHists_LLP500[hist]->GetYaxis()->SetLabelSize(0.03);
+      multHists_LLP500[hist]->GetXaxis()->SetTitleSize(0.04);
+      multHists_LLP500[hist]->GetYaxis()->SetTitleSize(0.04);
+      multHists_LLP500[hist]->GetXaxis()->SetTitleOffset(1.2);
+      multHists_LLP500[hist]->GetYaxis()->SetTitleOffset(1.5);
     }
     leg->SetBorderSize(0);
     leg->Draw();
-    canvases.back()->Print(Form("plots/%sMult_emu_LLP500.pdf", iplot.first.c_str()));
+    canvases.back()->Print(Form("plots/%s_Mult_emu_LLP500.pdf", iplot.first.c_str()));
   }
 
   // overlay LLP and QCD at a single energy / timing cut value
   for (auto iplot : overlays ) {
     canvases.push_back(new TCanvas);
-    canvases.back()->SetWindowSize(canvases.back()->GetWw(), 1.3*canvases.back()->GetWh());
-    pad1.push_back(new TPad("pad1", "pad1", 0, 0.3, 1, 1));
+    canvases.back()->SetWindowSize(canvases.back()->GetWw(), canvases.back()->GetWh());
+    pad1.push_back(new TPad("pad1", "pad1", 0, 0, 1, 1));
     pad1.back()->SetGrid();
     pad1.back()->Draw();
     pad1.back()->cd();
     multHists_QCD[iplot.second.front()]->Draw("hist");
-    TLegend *leg = new TLegend(0.55, 0.9 - 0.1*iplot.second.size(), 0.95, 0.93);
+    TLegend *leg = new TLegend(0.55, 0.7 - 0.1*iplot.second.size(), 0.95, 0.93);
+    double yMax = 0;
     for (auto hist : iplot.second){
-      multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1000000);
+      yMax = multHists_QCD[hist]->GetMaximum();
+      multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,yMax*1.2);
       multHists_QCD[hist]->SetLineColor(kBlack);
       multHists_QCD[hist]->Draw("hist same");
       multHists_LLP500[hist]->SetLineColor(kBlue);
@@ -378,6 +404,12 @@ int main()
       leg->AddEntry(multHists_LLP1000[hist], "LLP, pl=1m", "L");
       leg->AddEntry(multHists_LLP10000[hist], "LLP, pl=10m", "L");
       multHists_QCD[hist]->SetTitle("Multiplicity Overlay of QCD and LLPs at " + name(2,4) + " and " + name(6,3));
+      multHists_QCD[hist]->GetXaxis()->SetLabelSize(0.03);
+      multHists_QCD[hist]->GetYaxis()->SetLabelSize(0.03);
+      multHists_QCD[hist]->GetXaxis()->SetTitleSize(0.04);
+      multHists_QCD[hist]->GetYaxis()->SetTitleSize(0.04);
+      multHists_QCD[hist]->GetXaxis()->SetTitleOffset(1.2);
+      multHists_QCD[hist]->GetYaxis()->SetTitleOffset(1.5);
     }
     leg->SetBorderSize(0);
     leg->Draw();
