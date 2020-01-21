@@ -30,14 +30,14 @@ int main()
 					"htSum", "etSum", "metSum", "metHFSum"};
   // files for multiplicity overlay plots
   std::vector<std::string> mult_filenames = {"rates_new_cond_pl10000.root", "rates_new_cond_pl1000.root", "rates_new_cond_pl500.root", "rates_new_cond_QCD.root"};
-  std::vector<std::string> multTypes = {"dt3GeV1ns","dt3GeV2ns","dt3GeV3ns","dt3GeV4ns","dt3GeV5ns","dt2GeV1ns","dt2GeV2ns","dt2GeV3ns","dt2GeV4ns","dt2GeV5ns","dt1GeV1ns","dt1GeV2ns","dt1GeV3ns","dt1GeV4ns","dt1GeV5ns"};
+  std::vector<std::string> multTypes = {"dt3GeV1ns","dt3GeV2ns","dt3GeV3ns","dt3GeV4ns","dt3GeV5ns","dt3GeV1nsHE","dt3GeV2nsHE","dt3GeV3nsHE","dt3GeV4nsHE","dt3GeV5nsHE","dt3GeV1nsHB","dt3GeV2nsHB","dt3GeV3nsHB","dt3GeV4nsHB","dt3GeV5nsHB","dt2GeV1ns","dt2GeV2ns","dt2GeV3ns","dt2GeV4ns","dt2GeV5ns","dt2GeV1nsHE","dt2GeV2nsHE","dt2GeV3nsHE","dt2GeV4nsHE","dt2GeV5nsHE","dt2GeV1nsHB","dt2GeV2nsHB","dt2GeV3nsHB","dt2GeV4nsHB","dt2GeV5nsHB","dt1GeV1ns","dt1GeV2ns","dt1GeV3ns","dt1GeV4ns","dt1GeV5ns","dt1GeV1nsHE","dt1GeV2nsHE","dt1GeV3nsHE","dt1GeV4nsHE","dt1GeV5nsHE","dt1GeV1nsHB","dt1GeV2nsHB","dt1GeV3nsHB","dt1GeV4nsHB","dt1GeV5nsHB"};
 
   std::map<std::string, int> histColor;
-  histColor["singleJet"] = histColor["singleEg"] = histColor["singleTau"] = histColor["etSum"] = histColor["metSum"] = histColor["dt3GeV1ns"] = histColor["dt2GeV1ns"] = histColor["dt1GeV1ns"] = kRed;
-  histColor["doubleJet"] = histColor["singleISOEg"] = histColor["singleISOTau"] = histColor["htSum"] = histColor["metHFSum"] = histColor["dt3GeV2ns"] = histColor["dt2GeV2ns"] = histColor["dt1GeV2ns"] = kBlue;
-  histColor["tripleJet"] = histColor["doubleEg"] = histColor["doubleTau"] = histColor["dt3GeV3ns"] = histColor["dt2GeV3ns"] = histColor["dt1GeV3ns"] = kGreen;
-  histColor["quadJet"] = histColor["doubleISOEg"] = histColor["doubleISOTau"] = histColor["dt3GeV4ns"] = histColor["dt2GeV4ns"] = histColor["dt1GeV4ns"] = kBlack;
-  histColor["dt3GeV5ns"] = histColor["dt2GeV5ns"] = histColor["dt1GeV5ns"] = kCyan;
+  histColor["singleJet"] = histColor["singleEg"] = histColor["singleTau"] = histColor["etSum"] = histColor["metSum"] = histColor["dt3GeV1ns"] = histColor["dt3GeV1nsHE"] =histColor["dt3GeV1nsHB"] = histColor["dt2GeV1ns"] = histColor["dt2GeV1nsHE"] = histColor["dt2GeV1nsHB"] = histColor["dt1GeV1ns"] = histColor["dt1GeV1nsHE"] = histColor["dt1GeV1nsHB"] = kRed;
+  histColor["doubleJet"] = histColor["singleISOEg"] = histColor["singleISOTau"] = histColor["htSum"] = histColor["metHFSum"] = histColor["dt3GeV2ns"] = histColor["dt3GeV2nsHE"] = histColor["dt3GeV2nsHB"] = histColor["dt2GeV2ns"] = histColor["dt2GeV2nsHE"] = histColor["dt2GeV2nsHB"] = histColor["dt1GeV2ns"] = histColor["dt1GeV2nsHE"] = histColor["dt1GeV2nsHB"] = kBlue;
+  histColor["tripleJet"] = histColor["doubleEg"] = histColor["doubleTau"] = histColor["dt3GeV3ns"] = histColor["dt3GeV3nsHE"] = histColor["dt3GeV3nsHB"] = histColor["dt2GeV3ns"] = histColor["dt1GeV3ns"] =histColor["dt2GeV3nsHE"] = histColor["dt1GeV3nsHE"] = histColor["dt2GeV3nsHB"] = histColor["dt1GeV3nsHB"] = kGreen;
+  histColor["quadJet"] = histColor["doubleISOEg"] = histColor["doubleISOTau"] = histColor["dt3GeV4ns"] = histColor["dt3GeV4nsHE"] = histColor["dt3GeV4nsHB"] = histColor["dt2GeV4ns"] = histColor["dt1GeV4ns"] = histColor["dt2GeV4nsHE"] = histColor["dt1GeV4nsHE"] = histColor["dt2GeV4nsHB"] = histColor["dt1GeV4nsHB"] = kBlack;
+  histColor["dt3GeV5ns"] = histColor["dt3GeV5nsHE"] = histColor["dt3GeV5nsHB"] = histColor["dt2GeV5ns"] = histColor["dt1GeV5ns"]  = histColor["dt2GeV5nsHE"] = histColor["dt1GeV5nsHE"] = histColor["dt2GeV5nsHB"] = histColor["dt1GeV5nsHB"] = kCyan;
 
   std::map<std::string, TH1F*> rateHists_def;
   std::map<std::string, TH1F*> rateHists_new_cond;
@@ -132,24 +132,60 @@ int main()
   std::vector<std::string> vectorSumPlots = {"metSum", "metHFSum"};
   // multiplicity plot types 
   std::vector<std::string> multPlots3GeV = {"dt3GeV1ns","dt3GeV2ns","dt3GeV3ns","dt3GeV4ns","dt3GeV5ns"};
+  std::vector<std::string> multPlots3GeVHE = {"dt3GeV1nsHE","dt3GeV2nsHE","dt3GeV3nsHE","dt3GeV4nsHE","dt3GeV5nsHE"};
+  std::vector<std::string> multPlots3GeVHB = {"dt3GeV1nsHB","dt3GeV2nsHB","dt3GeV3nsHB","dt3GeV4nsHB","dt3GeV5nsHB"};
   std::vector<std::string> multPlots2GeV = {"dt2GeV1ns","dt2GeV2ns","dt2GeV3ns","dt2GeV4ns","dt2GeV5ns"};
+  std::vector<std::string> multPlots2GeVHE = {"dt2GeV1nsHE","dt2GeV2nsHE","dt2GeV3nsHE","dt2GeV4nsHE","dt2GeV5nsHE"};
+  std::vector<std::string> multPlots2GeVHB = {"dt2GeV1nsHB","dt2GeV2nsHB","dt2GeV3nsHB","dt2GeV4nsHB","dt2GeV5nsHB"};
   std::vector<std::string> multPlots1GeV = {"dt1GeV1ns","dt1GeV2ns","dt1GeV3ns","dt1GeV4ns","dt1GeV5ns"}; 
+  std::vector<std::string> multPlots1GeVHE = {"dt1GeV1nsHE","dt1GeV2nsHE","dt1GeV3nsHE","dt1GeV4nsHE","dt1GeV5nsHE"};
+  std::vector<std::string> multPlots1GeVHB = {"dt1GeV1nsHB","dt1GeV2nsHB","dt1GeV3nsHB","dt1GeV4nsHB","dt1GeV5nsHB"};
   // used for overlays
   std::vector<std::string> o31 = {"dt3GeV1ns"};
   std::vector<std::string> o32 = {"dt3GeV2ns"};
   std::vector<std::string> o33 = {"dt3GeV3ns"};
   std::vector<std::string> o34 = {"dt3GeV4ns"};
   std::vector<std::string> o35 = {"dt3GeV5ns"};
+  std::vector<std::string> o31e = {"dt3GeV1nsHE"};
+  std::vector<std::string> o32e = {"dt3GeV2nsHE"};
+  std::vector<std::string> o33e = {"dt3GeV3nsHE"};
+  std::vector<std::string> o34e = {"dt3GeV4nsHE"};
+  std::vector<std::string> o35e = {"dt3GeV5nsHE"};
+  std::vector<std::string> o31b = {"dt3GeV1nsHB"};
+  std::vector<std::string> o32b = {"dt3GeV2nsHB"};
+  std::vector<std::string> o33b = {"dt3GeV3nsHB"};
+  std::vector<std::string> o34b = {"dt3GeV4nsHB"};
+  std::vector<std::string> o35b = {"dt3GeV5nsHB"};
   std::vector<std::string> o21 = {"dt2GeV1ns"};
   std::vector<std::string> o22 = {"dt2GeV2ns"};
   std::vector<std::string> o23 = {"dt2GeV3ns"};
   std::vector<std::string> o24 = {"dt2GeV4ns"};
   std::vector<std::string> o25 = {"dt2GeV5ns"};
+  std::vector<std::string> o21e = {"dt2GeV1nsHE"};
+  std::vector<std::string> o22e = {"dt2GeV2nsHE"};
+  std::vector<std::string> o23e = {"dt2GeV3nsHE"};
+  std::vector<std::string> o24e = {"dt2GeV4nsHE"};
+  std::vector<std::string> o25e = {"dt2GeV5nsHE"};
+  std::vector<std::string> o21b = {"dt2GeV1nsHB"};
+  std::vector<std::string> o22b = {"dt2GeV2nsHB"};
+  std::vector<std::string> o23b = {"dt2GeV3nsHB"};
+  std::vector<std::string> o24b = {"dt2GeV4nsHB"};
+  std::vector<std::string> o25b = {"dt2GeV5nsHB"};
   std::vector<std::string> o11 = {"dt1GeV1ns"};
   std::vector<std::string> o12 = {"dt1GeV2ns"};
   std::vector<std::string> o13 = {"dt1GeV3ns"};
   std::vector<std::string> o14 = {"dt1GeV4ns"};
   std::vector<std::string> o15 = {"dt1GeV5ns"};
+  std::vector<std::string> o11e = {"dt1GeV1nsHE"};
+  std::vector<std::string> o12e = {"dt1GeV2nsHE"};
+  std::vector<std::string> o13e = {"dt1GeV3nsHE"};
+  std::vector<std::string> o14e = {"dt1GeV4nsHE"};
+  std::vector<std::string> o15e = {"dt1GeV5nsHE"};
+  std::vector<std::string> o11b = {"dt1GeV1nsHB"};
+  std::vector<std::string> o12b = {"dt1GeV2nsHB"};
+  std::vector<std::string> o13b = {"dt1GeV3nsHB"};
+  std::vector<std::string> o14b = {"dt1GeV4nsHB"};
+  std::vector<std::string> o15b = {"dt1GeV5nsHB"};
 
   std::vector<TCanvas*> canvases;
   std::vector<TPad*> pad1;
@@ -163,8 +199,14 @@ int main()
 
   std::map<std::string, std::vector<std::string> > mult_plots;
   mult_plots["3GeV_timescan"] = multPlots3GeV;
+  mult_plots["3GeV_timescanHE"] = multPlots3GeVHE;
+  mult_plots["3GeV_timescanHB"]= multPlots3GeVHB;
   mult_plots["2GeV_timescan"] = multPlots2GeV;
-  mult_plots["1GeV_timescan"] = multPlots1GeV;
+  mult_plots["2GeV_timescanHE"] = multPlots2GeVHE;
+  mult_plots["2GeV_timescanHB"]= multPlots2GeVHB;
+  mult_plots["1GeV_timescan"] = multPlots1GeV;  
+  mult_plots["1GeV_timescanHE"] = multPlots1GeVHE;
+  mult_plots["1GeV_timescanHB"]= multPlots1GeVHB;
 
   std::map<std::string, std::vector<std::string> > overlays;
   overlays["3GeV1ns"] = o31;
@@ -172,16 +214,46 @@ int main()
   overlays["3GeV3ns"] = o33;
   overlays["3GeV4ns"] = o34;
   overlays["3GeV5ns"] = o35;
+  overlays["3GeV1nsHE"] = o31e;
+  overlays["3GeV2nsHE"] = o32e;
+  overlays["3GeV3nsHE"] = o33e;
+  overlays["3GeV4nsHE"] = o34e;
+  overlays["3GeV5nsHE"] = o35e;
+  overlays["3GeV1nsHB"] = o31b;
+  overlays["3GeV2nsHB"] = o32b;
+  overlays["3GeV3nsHB"] = o33b;
+  overlays["3GeV4nsHB"] = o34b;
+  overlays["3GeV5nsHB"] = o35b;
   overlays["2GeV1ns"] = o21;
   overlays["2GeV2ns"] = o22;
   overlays["2GeV3ns"] = o23;
   overlays["2GeV4ns"] = o24;
   overlays["2GeV5ns"] = o25;
+  overlays["2GeV1nsHE"] = o21e;
+  overlays["2GeV2nsHE"] = o22e;
+  overlays["2GeV3nsHE"] = o23e;
+  overlays["2GeV4nsHE"] = o24e;
+  overlays["2GeV5nsHE"] = o25e;
+  overlays["2GeV1nsHB"] = o21b;
+  overlays["2GeV2nsHB"] = o22b;
+  overlays["2GeV3nsHB"] = o23b;
+  overlays["2GeV4nsHB"] = o24b;
+  overlays["2GeV5nsHB"] = o25b;
   overlays["1GeV1ns"] = o11;
   overlays["1GeV2ns"] = o12;
   overlays["1GeV3ns"] = o13;
   overlays["1GeV4ns"] = o14;
   overlays["1GeV5ns"] = o15;
+  overlays["1GeV1nsHE"] = o11e;
+  overlays["1GeV2nsHE"] = o12e;
+  overlays["1GeV3nsHE"] = o13e;
+  overlays["1GeV4nsHE"] = o14e;
+  overlays["1GeV5nsHE"] = o15e;
+  overlays["1GeV1nsHB"] = o11b;
+  overlays["1GeV2nsHB"] = o12b;
+  overlays["1GeV3nsHB"] = o13b;
+  overlays["1GeV4nsHB"] = o14b;
+  overlays["1GeV5nsHB"] = o15b;
 
   // looping through all plot collections (jets, eg, tau, scalar, vector)
   for(auto iplot : plots) {
@@ -242,17 +314,20 @@ int main()
     for (auto hist : iplot.second) {
       multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,2500000);
       // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV
-      if ((hist == "dt2GeV1ns") || (hist == "dt2GeV2ns") || (hist == "dt2GeV3ns") || (hist == "dt2GeV4ns") || (hist == "dt2GeV5ns")){
+      if ((hist == "dt2GeV1ns") || (hist == "dt2GeV2ns") || (hist == "dt2GeV3ns") || (hist == "dt2GeV4ns") || (hist == "dt2GeV5ns") || (hist == "dt2GeV1nsHE") || (hist == "dt2GeV2nsHE") || (hist == "dt2GeV3nsHE") || (hist == "dt2GeV4nsHE") || (hist == "dt2GeV5nsHE") || (hist == "dt2GeV1nsHB") || (hist == "dt2GeV2nsHB") || (hist == "dt2GeV3nsHB") || (hist == "dt2GeV4nsHB") || (hist == "dt2GeV5nsHB")){
 	multHists_QCD[hist]->Rebin(rebinFactor*2);
       }
       // rebin histograms for 1 GeV energy cut, as the x-axis extends further here
-      if ((hist == "dt1GeV1ns") || (hist == "dt1GeV2ns") || (hist == "dt1GeV3ns") || (hist == "dt1GeV4ns") || (hist == "dt1GeV5ns")){
+      if ((hist == "dt1GeV1ns") || (hist == "dt1GeV2ns") || (hist == "dt1GeV3ns") || (hist == "dt1GeV4ns") || (hist == "dt1GeV5ns") || (hist == "dt1GeV1nsHE") || (hist == "dt1GeV2nsHE") || (hist == "dt1GeV3nsHE") || (hist == "dt1GeV4nsHE") || (hist == "dt1GeV5nsHE") || (hist == "dt1GeV1nsHB") || (hist == "dt1GeV2nsHB") || (hist == "dt1GeV3nsHB") || (hist == "dt1GeV4nsHB") || (hist == "dt1GeV5nsHB")){
         multHists_QCD[hist]->Rebin(rebinFactor*4);
       }
       multHists_QCD[hist]->Draw("hist same");
       TString name(multHists_QCD[hist]->GetName());
       leg->AddEntry(multHists_QCD[hist], name(6,3) + " ", "L");
       multHists_QCD[hist]->SetTitle("Multiplicity for QCD, timing scan at " + name(2,4));
+      if ( name(9,2) == "HE" || name(9,2) == "HB" ){
+        multHists_QCD[hist]->SetTitle("Multiplicity for QCD, timing scan at " + name(2,4) + " in " + name(9,2));
+      }
       multHists_QCD[hist]->GetXaxis()->SetLabelSize(0.03);
       multHists_QCD[hist]->GetYaxis()->SetLabelSize(0.03);
       multHists_QCD[hist]->GetXaxis()->SetTitleSize(0.04);
@@ -278,18 +353,22 @@ int main()
     TLegend *leg = new TLegend(0.65, 1.1 - 0.1*iplot.second.size(), 0.95, 0.93);
     for (auto hist : iplot.second) {
       multHists_LLP10000[hist]->GetYaxis()->SetRangeUser(0,2500000);
-      // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV                                                                                                                            
-      if ((hist == "dt2GeV1ns") || (hist == "dt2GeV2ns") || (hist == "dt2GeV3ns") || (hist == "dt2GeV4ns") || (hist == "dt2GeV5ns")){
+      // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV                                
+      if ((hist == "dt2GeV1ns") || (hist == "dt2GeV2ns") || (hist == "dt2GeV3ns") || (hist == "dt2GeV4ns") || (hist == "dt2GeV5ns") || (hist == "dt2GeV1nsHE") || (hist == "dt2GeV2nsHE") || (hist == "dt2GeV3nsHE") || (hist == "dt2GeV4nsHE") || (hist == "dt2GeV5nsHE") || (hist == "dt2GeV1nsHB") || (hist == "dt2GeV2nsHB") || (hist == "dt2GeV3nsHB") || (hist == "dt2GeV4nsHB") || (hist == "dt2GeV5nsHB")){
         multHists_LLP10000[hist]->Rebin(rebinFactor*2);
       }
       // rebin histograms for 1 GeV energy cut, as the x-axis extends further here                                                                                                           
-      if ((hist == "dt1GeV1ns") || (hist == "dt1GeV2ns") || (hist == "dt1GeV3ns") || (hist == "dt1GeV4ns") || (hist == "dt1GeV5ns")){
+      if ((hist == "dt1GeV1ns") || (hist == "dt1GeV2ns") || (hist == "dt1GeV3ns") || (hist == "dt1GeV4ns") || (hist == "dt1GeV5ns") || (hist == "dt1GeV1nsHE") || (hist == "dt1GeV2nsHE") || (hist == "dt1GeV3nsHE") || (hist == "dt1GeV4nsHE") || (hist == "dt1GeV5nsHE") || (hist == "dt1GeV1nsHB") || (hist == "dt1GeV2nsHB") || (hist == "dt1GeV3nsHB") || (hist == "dt1GeV4nsHB") || (hist == "dt1GeV5nsHB")){
         multHists_LLP10000[hist]->Rebin(rebinFactor*4);
       }
       multHists_LLP10000[hist]->Draw("hist same");
       TString name(multHists_LLP10000[hist]->GetName());
+      std::cout << name << std::endl;
       leg->AddEntry(multHists_LLP10000[hist], name(6,3) + " ", "L");
-      multHists_LLP10000[hist]->SetTitle("Multiplicity for LLP pl=10m, timing scan at " + name(2,4));
+      multHists_LLP10000[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=10m, timing scan at " + name(2,4));
+      if ( name(9,2) == "HE" || name(9,2) == "HB" ){
+	multHists_LLP10000[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=10m, timing scan at " + name(2,4) + " in " + name(9,2));
+      }
       multHists_LLP10000[hist]->GetXaxis()->SetLabelSize(0.03);
       multHists_LLP10000[hist]->GetYaxis()->SetLabelSize(0.03);
       multHists_LLP10000[hist]->GetXaxis()->SetTitleSize(0.04);
@@ -316,17 +395,20 @@ int main()
     for (auto hist : iplot.second) {
       multHists_LLP1000[hist]->GetYaxis()->SetRangeUser(0,2500000);
       // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV
-      if ((hist == "dt2GeV1ns") || (hist == "dt2GeV2ns") || (hist == "dt2GeV3ns") || (hist == "dt2GeV4ns") || (hist == "dt2GeV5ns")){
+      if ((hist == "dt2GeV1ns") || (hist == "dt2GeV2ns") || (hist == "dt2GeV3ns") || (hist == "dt2GeV4ns") || (hist == "dt2GeV5ns") || (hist == "dt2GeV1nsHE") || (hist == "dt2GeV2nsHE") || (hist == "dt2GeV3nsHE") || (hist == "dt2GeV4nsHE") || (hist == "dt2GeV5nsHE") || (hist == "dt2GeV1nsHB") || (hist == "dt2GeV2nsHB") || (hist == "dt2GeV3nsHB") || (hist == "dt2GeV4nsHB") || (hist == "dt2GeV5nsHB")){
         multHists_LLP1000[hist]->Rebin(rebinFactor*2);
       }
       // rebin histograms for 1 GeV energy cut, as the x-axis extends further here
-      if ((hist == "dt1GeV1ns") || (hist == "dt1GeV2ns") || (hist == "dt1GeV3ns") || (hist == "dt1GeV4ns") || (hist == "dt1GeV5ns")){
+      if ((hist == "dt1GeV1ns") || (hist == "dt1GeV2ns") || (hist == "dt1GeV3ns") || (hist == "dt1GeV4ns") || (hist == "dt1GeV5ns") || (hist == "dt1GeV1nsHE") || (hist == "dt1GeV2nsHE") || (hist == "dt1GeV3nsHE") || (hist == "dt1GeV4nsHE") || (hist == "dt1GeV5nsHE") || (hist == "dt1GeV1nsHB") || (hist == "dt1GeV2nsHB") || (hist == "dt1GeV3nsHB") || (hist == "dt1GeV4nsHB") || (hist == "dt1GeV5nsHB")){
         multHists_LLP1000[hist]->Rebin(rebinFactor*4);
       }
       multHists_LLP1000[hist]->Draw("hist same");
       TString name(multHists_LLP1000[hist]->GetName());
       leg->AddEntry(multHists_LLP1000[hist], name(6,3) + " ", "L");
-      multHists_LLP1000[hist]->SetTitle("Multiplicity for LLP pl=1m, timing scan at " + name(2,4));
+      multHists_LLP1000[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=1m, timing scan at " + name(2,4));
+      if ( name(9,2) == "HE" || name(9,2) == "HB" ){
+        multHists_LLP1000[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=1m, timing scan at " + name(2,4) + " in " + name(9,2));
+      }
       multHists_LLP1000[hist]->GetXaxis()->SetLabelSize(0.03);
       multHists_LLP1000[hist]->GetYaxis()->SetLabelSize(0.03);
       multHists_LLP1000[hist]->GetXaxis()->SetTitleSize(0.04);
@@ -353,17 +435,20 @@ int main()
     for (auto hist : iplot.second) {
       multHists_LLP500[hist]->GetYaxis()->SetRangeUser(0,2500000);
       // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV
-      if ((hist == "dt2GeV1ns") || (hist == "dt2GeV2ns") || (hist == "dt2GeV3ns") || (hist == "dt2GeV4ns") || (hist == "dt2GeV5ns")){
+      if ((hist == "dt2GeV1ns") || (hist == "dt2GeV2ns") || (hist == "dt2GeV3ns") || (hist == "dt2GeV4ns") || (hist == "dt2GeV5ns") || (hist == "dt2GeV1nsHE") || (hist == "dt2GeV2nsHE") || (hist == "dt2GeV3nsHE") || (hist == "dt2GeV4nsHE") || (hist == "dt2GeV5nsHE") || (hist == "dt2GeV1nsHB") || (hist == "dt2GeV2nsHB") || (hist == "dt2GeV3nsHB") || (hist == "dt2GeV4nsHB") || (hist == "dt2GeV5nsHB")){
         multHists_LLP500[hist]->Rebin(rebinFactor*2);
       }
       // rebin histograms for 1 GeV energy cut, as the x-axis extends further here
-      if ((hist == "dt1GeV1ns") || (hist == "dt1GeV2ns") || (hist == "dt1GeV3ns") || (hist == "dt1GeV4ns") || (hist == "dt1GeV5ns")){
+      if ((hist == "dt1GeV1ns") || (hist == "dt1GeV2ns") || (hist == "dt1GeV3ns") || (hist == "dt1GeV4ns") || (hist == "dt1GeV5ns") || (hist == "dt1GeV1nsHE") || (hist == "dt1GeV2nsHE") || (hist == "dt1GeV3nsHE") || (hist == "dt1GeV4nsHE") || (hist == "dt1GeV5nsHE") || (hist == "dt1GeV1nsHB") || (hist == "dt1GeV2nsHB") || (hist == "dt1GeV3nsHB") || (hist == "dt1GeV4nsHB") || (hist == "dt1GeV5nsHB")){
         multHists_LLP500[hist]->Rebin(rebinFactor*4);
       }
       multHists_LLP500[hist]->Draw("hist same");
       TString name(multHists_LLP500[hist]->GetName());
       leg->AddEntry(multHists_LLP500[hist], name(6,3) + " ", "L");
-      multHists_LLP500[hist]->SetTitle("Multiplicity for LLP pl=0.5m, timing scan at " + name(2,4));
+      multHists_LLP500[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=0.5m, timing scan at " + name(2,4));
+      if ( name(9,2) == "HE" || name(9,2) == "HB" ){
+        multHists_LLP500[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=0.5m, timing scan at " + name(2,4) + " in region " + name(9,2));
+      }
       multHists_LLP500[hist]->GetXaxis()->SetLabelSize(0.03);
       multHists_LLP500[hist]->GetYaxis()->SetLabelSize(0.03);
       multHists_LLP500[hist]->GetXaxis()->SetTitleSize(0.04);
@@ -400,10 +485,13 @@ int main()
       multHists_LLP10000[hist]->Draw("hist same");
       TString name (multHists_QCD[hist]->GetName());
       leg->AddEntry(multHists_QCD[hist],"QCD", "L");
-      leg->AddEntry(multHists_LLP500[hist],"LLP, pl=0.5m", "L");
-      leg->AddEntry(multHists_LLP1000[hist], "LLP, pl=1m", "L");
-      leg->AddEntry(multHists_LLP10000[hist], "LLP, pl=10m", "L");
+      leg->AddEntry(multHists_LLP500[hist],"LLP, c#scale[1.2]{#tau}=0.5m", "L");
+      leg->AddEntry(multHists_LLP1000[hist], "LLP, c#scale[1.2]{#tau}=1m", "L");
+      leg->AddEntry(multHists_LLP10000[hist], "LLP, c#scale[1.2]{#tau}=10m", "L");
       multHists_QCD[hist]->SetTitle("Multiplicity Overlay of QCD and LLPs at " + name(2,4) + " and " + name(6,3));
+      if ( name(9,2) == "HE" || name(9,2) == "HB" ){
+        multHists_QCD[hist]->SetTitle("Multiplicity Overlay of QCD and LLPs at " + name(2,4) + " and " + name(6,3) + " in " + name(9,2));
+      }
       multHists_QCD[hist]->GetXaxis()->SetLabelSize(0.03);
       multHists_QCD[hist]->GetYaxis()->SetLabelSize(0.03);
       multHists_QCD[hist]->GetXaxis()->SetTitleSize(0.04);
