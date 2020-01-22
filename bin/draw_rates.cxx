@@ -34,7 +34,7 @@ int main()
   std::vector<std::string> mult_filenames = {"rates_new_cond_pl10000.root", "rates_new_cond_pl1000.root", "rates_new_cond_pl500.root", "rates_new_cond_QCD.root"};
   std::vector<std::string> multTypes = {"dt3GeV1ns","dt3GeV2ns","dt3GeV3ns","dt3GeV4ns","dt3GeV5ns","dt3GeV1nsHE","dt3GeV2nsHE","dt3GeV3nsHE","dt3GeV4nsHE","dt3GeV5nsHE","dt3GeV1nsHB","dt3GeV2nsHB","dt3GeV3nsHB","dt3GeV4nsHB","dt3GeV5nsHB","dt2GeV1ns","dt2GeV2ns","dt2GeV3ns","dt2GeV4ns","dt2GeV5ns","dt2GeV1nsHE","dt2GeV2nsHE","dt2GeV3nsHE","dt2GeV4nsHE","dt2GeV5nsHE","dt2GeV1nsHB","dt2GeV2nsHB","dt2GeV3nsHB","dt2GeV4nsHB","dt2GeV5nsHB","dt1GeV1ns","dt1GeV2ns","dt1GeV3ns","dt1GeV4ns","dt1GeV5ns","dt1GeV1nsHE","dt1GeV2nsHE","dt1GeV3nsHE","dt1GeV4nsHE","dt1GeV5nsHE","dt1GeV1nsHB","dt1GeV2nsHB","dt1GeV3nsHB","dt1GeV4nsHB","dt1GeV5nsHB"};
 
-  std::vector<std::string> EDepthTypes = {"Energy_Depth"};
+  std::vector<std::string> EDepthTypes = {"Energy_Depth","Timing_Depth","Energy_DepthHE","Timing_DepthHE","Energy_DepthHB","Timing_DepthHB"};
 
   std::map<std::string, int> histColor;
   histColor["singleJet"] = histColor["singleEg"] = histColor["singleTau"] = histColor["etSum"] = histColor["metSum"] = histColor["dt3GeV1ns"] = histColor["dt3GeV1nsHE"] =histColor["dt3GeV1nsHB"] = histColor["dt2GeV1ns"] = histColor["dt2GeV1nsHE"] = histColor["dt2GeV1nsHB"] = histColor["dt1GeV1ns"] = histColor["dt1GeV1nsHE"] = histColor["dt1GeV1nsHB"] = histColor["Energy_Depth"] = kRed;
@@ -133,8 +133,8 @@ int main()
 
     energy_depth_QCD[EDepthType]->Rebin(rebinFactor);
     energy_depth_LLP10000[EDepthType]->Rebin(rebinFactor);
-    energy_depth_LLP10000[EDepthType]->Rebin(rebinFactor);
-    energy_depth_LLP10000[EDepthType]->Rebin(rebinFactor);
+    energy_depth_LLP1000[EDepthType]->Rebin(rebinFactor);
+    energy_depth_LLP500[EDepthType]->Rebin(rebinFactor);
 
     energy_depth_QCD[EDepthType]->SetLineColor(histColor[EDepthType]);
     energy_depth_LLP10000[EDepthType]->SetLineColor(histColor[EDepthType]);
@@ -171,7 +171,7 @@ int main()
   // used for overlays
   std::vector<std::string> overlays = {"dt3GeV1ns","dt3GeV2ns","dt3GeV3ns","dt3GeV4ns", "dt3GeV5ns","dt3GeV1nsHE","dt3GeV2nsHE","dt3GeV3nsHE","dt3GeV4nsHE","dt3GeV5nsHE","dt3GeV1nsHB","dt3GeV2nsHB","dt3GeV3nsHB","dt3GeV4nsHB","dt3GeV5nsHB","dt2GeV1ns","dt2GeV2ns","dt2GeV3ns","dt2GeV4ns","dt2GeV5ns","dt2GeV1nsHE","dt2GeV2nsHE","dt2GeV3nsHE","dt2GeV4nsHE","dt2GeV5nsHE","dt2GeV1nsHB","dt2GeV2nsHB","dt2GeV3nsHB","dt2GeV4nsHB","dt2GeV5nsHB","dt1GeV1ns","dt1GeV2ns","dt1GeV3ns","dt1GeV4ns","dt1GeV5ns","dt1GeV1nsHE","dt1GeV2nsHE","dt1GeV3nsHE","dt1GeV4nsHE","dt1GeV5nsHE","dt1GeV1nsHB","dt1GeV2nsHB","dt1GeV3nsHB","dt1GeV4nsHB","dt1GeV5nsHB"};
 
-  std::vector<std::string> EDepth = {"Energy_Depth"};
+  std::vector<std::string> EDepth = {"Energy_Depth","Timing_Depth","Energy_DepthHE","Timing_DepthHE","Energy_DepthHB","Timing_DepthHB"};
 
   std::vector<TCanvas*> canvases;
   std::vector<TPad*> pad1;
@@ -455,9 +455,11 @@ int main()
     pad1.back()->Draw();
     pad1.back()->cd();
     TH1D *energy_profile_QCD = energy_depth_QCD[hist]->ProfileX();
-    energy_profile_QCD->SetMaximum(1);
+    if (hist.substr(0,6) =="Energy") {
+      energy_profile_QCD->SetMaximum(1);
+    }
     energy_profile_QCD->Draw("ehist");
-    canvases.back()->Print(Form("plots/Energy_Depth_QCD.pdf"));
+    canvases.back()->Print(Form("plots/%s_QCD.pdf", hist.c_str()));
   }
   for (auto hist : EDepth ) {
     canvases.push_back(new TCanvas);
@@ -467,9 +469,11 @@ int main()
     pad1.back()->Draw();
     pad1.back()->cd();
     TH1D *energy_profile_LLP500 = energy_depth_LLP500[hist]->ProfileX();
-    energy_profile_LLP500->SetMaximum(1);
+    if (hist.substr(0,6) =="Energy") {
+      energy_profile_LLP500->SetMaximum(1);
+    }
     energy_profile_LLP500->Draw("ehist");
-    canvases.back()->Print(Form("plots/Energy_Depth_LLP500.pdf"));
+    canvases.back()->Print(Form("plots/%s_LLP500.pdf", hist.c_str()));
   }
   for (auto hist : EDepth ) {
     canvases.push_back(new TCanvas);
@@ -479,9 +483,11 @@ int main()
     pad1.back()->Draw();
     pad1.back()->cd();
     TH1D *energy_profile_LLP1000 = energy_depth_LLP1000[hist]->ProfileX();
-    energy_profile_LLP1000->SetMaximum(1);
+    if (hist.substr(0,6) =="Energy") {
+      energy_profile_LLP1000->SetMaximum(1);
+    }
     energy_profile_LLP1000->Draw("ehist");
-    canvases.back()->Print(Form("plots/Energy_Depth_LLP1000.pdf"));
+    canvases.back()->Print(Form("plots/%s_LLP1000.pdf", hist.c_str()));
   }
   for (auto hist : EDepth ) {
     canvases.push_back(new TCanvas);
@@ -490,11 +496,43 @@ int main()
     pad1.back()->SetGrid();
     pad1.back()->Draw();
     pad1.back()->cd();
-    //    energy_depth_LLP10000[hist]->Draw("hist");
     TH1D *energy_profile_LLP10000 = energy_depth_LLP10000[hist]->ProfileX();
-    energy_profile_LLP10000->SetMaximum(1);
+    if (hist.substr(0,6) == "Energy") {
+      energy_profile_LLP10000->SetMaximum(1);
+    }
     energy_profile_LLP10000->Draw("ehist");
-    canvases.back()->Print(Form("plots/Energy_Depth_LLP10000.pdf"));
+    canvases.back()->Print(Form("plots/%s_LLP10000.pdf", hist.c_str()));
+  }
+  for (auto hist : EDepth ) {
+    canvases.push_back(new TCanvas);
+    canvases.back()->SetWindowSize(canvases.back()->GetWw(), canvases.back()->GetWh());
+    pad1.push_back(new TPad("pad1", "pad1", 0, 0, 1, 1));
+    pad1.back()->SetGrid();
+    pad1.back()->Draw();
+    pad1.back()->cd();
+    TH1D *energy_profile_QCD = energy_depth_QCD[hist]->ProfileX();
+    TH1D *energy_profile_LLP500 = energy_depth_LLP500[hist]->ProfileX();
+    TH1D *energy_profile_LLP1000 = energy_depth_LLP1000[hist]->ProfileX();
+    TH1D *energy_profile_LLP10000 = energy_depth_LLP10000[hist]->ProfileX();
+    if (hist.substr(0,6) =="Energy") {
+      energy_profile_QCD->SetMaximum(1);
+    }
+    energy_profile_QCD->SetLineColor(kBlack);
+    energy_profile_LLP500->SetLineColor(kBlue);
+    energy_profile_LLP1000->SetLineColor(kGreen);
+    energy_profile_LLP10000->SetLineColor(kRed);
+    energy_profile_QCD->Draw("ehist");
+    energy_profile_LLP500->Draw("ehist same");
+    energy_profile_LLP1000->Draw("ehist same");
+    energy_profile_LLP10000->Draw("ehist same");
+    TLegend *leg = new TLegend(0.55, 0.6, 0.95, 0.93);
+    leg->AddEntry(energy_profile_QCD,"QCD","L");
+    leg->AddEntry(energy_profile_LLP500,"LLP, c#scale[1.2]{#tau}=0.5m", "L");
+    leg->AddEntry(energy_profile_LLP1000, "LLP, c#scale[1.2]{#tau}=1m", "L");
+    leg->AddEntry(energy_profile_LLP10000, "LLP, c#scale[1.2]{#tau}=10m", "L");
+    leg->SetBorderSize(0);
+    leg->Draw();
+    canvases.back()->Print(Form("plots/%s_overlay.pdf", hist.c_str()));
   }
   return 0;
 }
