@@ -141,6 +141,8 @@ int main()
   std::vector<std::string> multPlots1GeVHE = {"dt1GeV1nsHE","dt1GeV2nsHE","dt1GeV3nsHE","dt1GeV4nsHE","dt1GeV5nsHE"};
   std::vector<std::string> multPlots1GeVHB = {"dt1GeV1nsHB","dt1GeV2nsHB","dt1GeV3nsHB","dt1GeV4nsHB","dt1GeV5nsHB"};
   // used for overlays
+  std::vector<std::string> overlays = {"dt3GeV1ns","dt3GeV2ns","dt3GeV3ns","dt3GeV4ns", "dt3GeV5ns","dt3GeV1nsHE","dt3GeV2nsHE","dt3GeV3nsHE","dt3GeV4nsHE","dt3GeV5nsHE","dt3GeV1nsHB","dt3GeV2nsHB","dt3GeV3nsHB","dt3GeV4nsHB","dt3GeV5nsHB","dt2GeV1ns","dt2GeV2ns","dt2GeV3ns","dt2GeV4ns","dt2GeV5ns","dt2GeV1nsHE","dt2GeV2nsHE","dt2GeV3nsHE","dt2GeV4nsHE","dt2GeV5nsHE","dt2GeV1nsHB","dt2GeV2nsHB","dt2GeV3nsHB","dt2GeV4nsHB","dt2GeV5nsHB","dt1GeV1ns","dt1GeV2ns","dt1GeV3ns","dt1GeV4ns","dt1GeV5ns","dt1GeV1nsHE","dt1GeV2nsHE","dt1GeV3nsHE","dt1GeV4nsHE","dt1GeV5nsHE","dt1GeV1nsHB","dt1GeV2nsHB","dt1GeV3nsHB","dt1GeV4nsHB","dt1GeV5nsHB"};
+  /*
   std::vector<std::string> o31 = {"dt3GeV1ns"};
   std::vector<std::string> o32 = {"dt3GeV2ns"};
   std::vector<std::string> o33 = {"dt3GeV3ns"};
@@ -186,6 +188,7 @@ int main()
   std::vector<std::string> o13b = {"dt1GeV3nsHB"};
   std::vector<std::string> o14b = {"dt1GeV4nsHB"};
   std::vector<std::string> o15b = {"dt1GeV5nsHB"};
+  */
 
   std::vector<TCanvas*> canvases;
   std::vector<TPad*> pad1;
@@ -208,6 +211,8 @@ int main()
   mult_plots["1GeV_timescanHE"] = multPlots1GeVHE;
   mult_plots["1GeV_timescanHB"]= multPlots1GeVHB;
 
+
+/*
   std::map<std::string, std::vector<std::string> > overlays;
   overlays["3GeV1ns"] = o31;
   overlays["3GeV2ns"] = o32;
@@ -254,6 +259,7 @@ int main()
   overlays["1GeV3nsHB"] = o13b;
   overlays["1GeV4nsHB"] = o14b;
   overlays["1GeV5nsHB"] = o15b;
+*/
 
   // looping through all plot collections (jets, eg, tau, scalar, vector)
   for(auto iplot : plots) {
@@ -309,16 +315,16 @@ int main()
     pad1.back()->SetGrid();
     pad1.back()->Draw();
     pad1.back()->cd();
-    multHists_QCD[iplot.second.front()]->Draw("hist");
+    multHists_QCD[iplot.second.front()]->Draw("hist"); // associative array is list of pairs, access by first entry. Second is actual name / value to access
     TLegend *leg = new TLegend(0.65, 1.1 - 0.1*iplot.second.size(), 0.95, 0.93);
     for (auto hist : iplot.second) {
       multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,2500000);
       // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV
-      if ((hist == "dt2GeV1ns") || (hist == "dt2GeV2ns") || (hist == "dt2GeV3ns") || (hist == "dt2GeV4ns") || (hist == "dt2GeV5ns") || (hist == "dt2GeV1nsHE") || (hist == "dt2GeV2nsHE") || (hist == "dt2GeV3nsHE") || (hist == "dt2GeV4nsHE") || (hist == "dt2GeV5nsHE") || (hist == "dt2GeV1nsHB") || (hist == "dt2GeV2nsHB") || (hist == "dt2GeV3nsHB") || (hist == "dt2GeV4nsHB") || (hist == "dt2GeV5nsHB")){
+      if (hist.substr(0,3) == "dt2") {
 	multHists_QCD[hist]->Rebin(rebinFactor*2);
       }
       // rebin histograms for 1 GeV energy cut, as the x-axis extends further here
-      if ((hist == "dt1GeV1ns") || (hist == "dt1GeV2ns") || (hist == "dt1GeV3ns") || (hist == "dt1GeV4ns") || (hist == "dt1GeV5ns") || (hist == "dt1GeV1nsHE") || (hist == "dt1GeV2nsHE") || (hist == "dt1GeV3nsHE") || (hist == "dt1GeV4nsHE") || (hist == "dt1GeV5nsHE") || (hist == "dt1GeV1nsHB") || (hist == "dt1GeV2nsHB") || (hist == "dt1GeV3nsHB") || (hist == "dt1GeV4nsHB") || (hist == "dt1GeV5nsHB")){
+      if (hist.substr(0,3) == "dt1") {
         multHists_QCD[hist]->Rebin(rebinFactor*4);
       }
       multHists_QCD[hist]->Draw("hist same");
@@ -354,11 +360,11 @@ int main()
     for (auto hist : iplot.second) {
       multHists_LLP10000[hist]->GetYaxis()->SetRangeUser(0,2500000);
       // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV                                
-      if ((hist == "dt2GeV1ns") || (hist == "dt2GeV2ns") || (hist == "dt2GeV3ns") || (hist == "dt2GeV4ns") || (hist == "dt2GeV5ns") || (hist == "dt2GeV1nsHE") || (hist == "dt2GeV2nsHE") || (hist == "dt2GeV3nsHE") || (hist == "dt2GeV4nsHE") || (hist == "dt2GeV5nsHE") || (hist == "dt2GeV1nsHB") || (hist == "dt2GeV2nsHB") || (hist == "dt2GeV3nsHB") || (hist == "dt2GeV4nsHB") || (hist == "dt2GeV5nsHB")){
+      if (hist.substr(0,3) == "dt2") {
         multHists_LLP10000[hist]->Rebin(rebinFactor*2);
       }
-      // rebin histograms for 1 GeV energy cut, as the x-axis extends further here                                                                                                           
-      if ((hist == "dt1GeV1ns") || (hist == "dt1GeV2ns") || (hist == "dt1GeV3ns") || (hist == "dt1GeV4ns") || (hist == "dt1GeV5ns") || (hist == "dt1GeV1nsHE") || (hist == "dt1GeV2nsHE") || (hist == "dt1GeV3nsHE") || (hist == "dt1GeV4nsHE") || (hist == "dt1GeV5nsHE") || (hist == "dt1GeV1nsHB") || (hist == "dt1GeV2nsHB") || (hist == "dt1GeV3nsHB") || (hist == "dt1GeV4nsHB") || (hist == "dt1GeV5nsHB")){
+      // rebin histograms for 1 GeV energy cut, as the x-axis extends further here                       
+      if (hist.substr(0,3) == "dt1") {
         multHists_LLP10000[hist]->Rebin(rebinFactor*4);
       }
       multHists_LLP10000[hist]->Draw("hist same");
@@ -435,11 +441,11 @@ int main()
     for (auto hist : iplot.second) {
       multHists_LLP500[hist]->GetYaxis()->SetRangeUser(0,2500000);
       // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV
-      if ((hist == "dt2GeV1ns") || (hist == "dt2GeV2ns") || (hist == "dt2GeV3ns") || (hist == "dt2GeV4ns") || (hist == "dt2GeV5ns") || (hist == "dt2GeV1nsHE") || (hist == "dt2GeV2nsHE") || (hist == "dt2GeV3nsHE") || (hist == "dt2GeV4nsHE") || (hist == "dt2GeV5nsHE") || (hist == "dt2GeV1nsHB") || (hist == "dt2GeV2nsHB") || (hist == "dt2GeV3nsHB") || (hist == "dt2GeV4nsHB") || (hist == "dt2GeV5nsHB")){
+      if ( hist.substr(0,3) == "dt2" ) {
         multHists_LLP500[hist]->Rebin(rebinFactor*2);
       }
       // rebin histograms for 1 GeV energy cut, as the x-axis extends further here
-      if ((hist == "dt1GeV1ns") || (hist == "dt1GeV2ns") || (hist == "dt1GeV3ns") || (hist == "dt1GeV4ns") || (hist == "dt1GeV5ns") || (hist == "dt1GeV1nsHE") || (hist == "dt1GeV2nsHE") || (hist == "dt1GeV3nsHE") || (hist == "dt1GeV4nsHE") || (hist == "dt1GeV5nsHE") || (hist == "dt1GeV1nsHB") || (hist == "dt1GeV2nsHB") || (hist == "dt1GeV3nsHB") || (hist == "dt1GeV4nsHB") || (hist == "dt1GeV5nsHB")){
+      if ( hist.substr(0,3) =="dt1" ) {
         multHists_LLP500[hist]->Rebin(rebinFactor*4);
       }
       multHists_LLP500[hist]->Draw("hist same");
@@ -462,17 +468,18 @@ int main()
   }
 
   // overlay LLP and QCD at a single energy / timing cut value
-  for (auto iplot : overlays ) {
+  for (auto hist : overlays ) {
     canvases.push_back(new TCanvas);
     canvases.back()->SetWindowSize(canvases.back()->GetWw(), canvases.back()->GetWh());
     pad1.push_back(new TPad("pad1", "pad1", 0, 0, 1, 1));
     pad1.back()->SetGrid();
     pad1.back()->Draw();
     pad1.back()->cd();
-    multHists_QCD[iplot.second.front()]->Draw("hist");
-    TLegend *leg = new TLegend(0.55, 0.7 - 0.1*iplot.second.size(), 0.95, 0.93);
+    multHists_QCD[hist]->Draw("hist");
+    //    multHists_QCD[iplot.second.front()]->Draw("hist");
+    TLegend *leg = new TLegend(0.55, 0.6, 0.95, 0.93);
     double yMax = 0;
-    for (auto hist : iplot.second){
+    //    for (auto hist : iplot.second){
       yMax = multHists_QCD[hist]->GetMaximum();
       multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,yMax*1.2);
       multHists_QCD[hist]->SetLineColor(kBlack);
@@ -498,10 +505,10 @@ int main()
       multHists_QCD[hist]->GetYaxis()->SetTitleSize(0.04);
       multHists_QCD[hist]->GetXaxis()->SetTitleOffset(1.2);
       multHists_QCD[hist]->GetYaxis()->SetTitleOffset(1.5);
-    }
+      //    }
     leg->SetBorderSize(0);
     leg->Draw();
-    canvases.back()->Print(Form("plots/%sOverlay.pdf", iplot.first.c_str()));
+    canvases.back()->Print(Form("plots/%sOverlay.pdf", hist.c_str()));
   }
   return 0;
 }
