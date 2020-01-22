@@ -2,6 +2,8 @@
 
 #include "TCanvas.h"
 #include "TH1.h"
+#include "TH2.h"
+#include "TProfile.h"
 #include "TFile.h"
 #include "TLegend.h"
 #include "TROOT.h"
@@ -32,8 +34,10 @@ int main()
   std::vector<std::string> mult_filenames = {"rates_new_cond_pl10000.root", "rates_new_cond_pl1000.root", "rates_new_cond_pl500.root", "rates_new_cond_QCD.root"};
   std::vector<std::string> multTypes = {"dt3GeV1ns","dt3GeV2ns","dt3GeV3ns","dt3GeV4ns","dt3GeV5ns","dt3GeV1nsHE","dt3GeV2nsHE","dt3GeV3nsHE","dt3GeV4nsHE","dt3GeV5nsHE","dt3GeV1nsHB","dt3GeV2nsHB","dt3GeV3nsHB","dt3GeV4nsHB","dt3GeV5nsHB","dt2GeV1ns","dt2GeV2ns","dt2GeV3ns","dt2GeV4ns","dt2GeV5ns","dt2GeV1nsHE","dt2GeV2nsHE","dt2GeV3nsHE","dt2GeV4nsHE","dt2GeV5nsHE","dt2GeV1nsHB","dt2GeV2nsHB","dt2GeV3nsHB","dt2GeV4nsHB","dt2GeV5nsHB","dt1GeV1ns","dt1GeV2ns","dt1GeV3ns","dt1GeV4ns","dt1GeV5ns","dt1GeV1nsHE","dt1GeV2nsHE","dt1GeV3nsHE","dt1GeV4nsHE","dt1GeV5nsHE","dt1GeV1nsHB","dt1GeV2nsHB","dt1GeV3nsHB","dt1GeV4nsHB","dt1GeV5nsHB"};
 
+  std::vector<std::string> EDepthTypes = {"Energy_Depth"};
+
   std::map<std::string, int> histColor;
-  histColor["singleJet"] = histColor["singleEg"] = histColor["singleTau"] = histColor["etSum"] = histColor["metSum"] = histColor["dt3GeV1ns"] = histColor["dt3GeV1nsHE"] =histColor["dt3GeV1nsHB"] = histColor["dt2GeV1ns"] = histColor["dt2GeV1nsHE"] = histColor["dt2GeV1nsHB"] = histColor["dt1GeV1ns"] = histColor["dt1GeV1nsHE"] = histColor["dt1GeV1nsHB"] = kRed;
+  histColor["singleJet"] = histColor["singleEg"] = histColor["singleTau"] = histColor["etSum"] = histColor["metSum"] = histColor["dt3GeV1ns"] = histColor["dt3GeV1nsHE"] =histColor["dt3GeV1nsHB"] = histColor["dt2GeV1ns"] = histColor["dt2GeV1nsHE"] = histColor["dt2GeV1nsHB"] = histColor["dt1GeV1ns"] = histColor["dt1GeV1nsHE"] = histColor["dt1GeV1nsHB"] = histColor["Energy_Depth"] = kRed;
   histColor["doubleJet"] = histColor["singleISOEg"] = histColor["singleISOTau"] = histColor["htSum"] = histColor["metHFSum"] = histColor["dt3GeV2ns"] = histColor["dt3GeV2nsHE"] = histColor["dt3GeV2nsHB"] = histColor["dt2GeV2ns"] = histColor["dt2GeV2nsHE"] = histColor["dt2GeV2nsHB"] = histColor["dt1GeV2ns"] = histColor["dt1GeV2nsHE"] = histColor["dt1GeV2nsHB"] = kBlue;
   histColor["tripleJet"] = histColor["doubleEg"] = histColor["doubleTau"] = histColor["dt3GeV3ns"] = histColor["dt3GeV3nsHE"] = histColor["dt3GeV3nsHB"] = histColor["dt2GeV3ns"] = histColor["dt1GeV3ns"] =histColor["dt2GeV3nsHE"] = histColor["dt1GeV3nsHE"] = histColor["dt2GeV3nsHB"] = histColor["dt1GeV3nsHB"] = kGreen;
   histColor["quadJet"] = histColor["doubleISOEg"] = histColor["doubleISOTau"] = histColor["dt3GeV4ns"] = histColor["dt3GeV4nsHE"] = histColor["dt3GeV4nsHB"] = histColor["dt2GeV4ns"] = histColor["dt1GeV4ns"] = histColor["dt2GeV4nsHE"] = histColor["dt1GeV4nsHE"] = histColor["dt2GeV4nsHB"] = histColor["dt1GeV4nsHB"] = kBlack;
@@ -50,6 +54,11 @@ int main()
   std::map<std::string, TH1F*> multHists_LLP500;
   std::map<std::string, TH1F*> multHistsRatio;
   std::map<std::string, TH1F*> multHists_hw;
+
+  std::map<std::string, TH2F*> energy_depth_QCD;
+  std::map<std::string, TH2F*> energy_depth_LLP10000;
+  std::map<std::string, TH2F*> energy_depth_LLP1000;
+  std::map<std::string, TH2F*> energy_depth_LLP500;
 
   std::vector<TFile*> files;
   for(auto file : filenames) {
@@ -114,6 +123,25 @@ int main()
     multHists_LLP500[multType]->SetLineColor(histColor[multType]);
   }
 
+  for(auto EDepthType : EDepthTypes) {
+    std::string histName(EDepthType);
+    std::string histNameHw(histName);
+    energy_depth_QCD[EDepthType]  = dynamic_cast<TH2F*>(mult_files.at(3)->Get(histName.c_str()));
+    energy_depth_LLP10000[EDepthType] = dynamic_cast<TH2F*>(mult_files.at(0)->Get(histName.c_str()));
+    energy_depth_LLP1000[EDepthType] = dynamic_cast<TH2F*>(mult_files.at(1)->Get(histName.c_str()));
+    energy_depth_LLP500[EDepthType] = dynamic_cast<TH2F*>(mult_files.at(2)->Get(histName.c_str()));
+
+    energy_depth_QCD[EDepthType]->Rebin(rebinFactor);
+    energy_depth_LLP10000[EDepthType]->Rebin(rebinFactor);
+    energy_depth_LLP10000[EDepthType]->Rebin(rebinFactor);
+    energy_depth_LLP10000[EDepthType]->Rebin(rebinFactor);
+
+    energy_depth_QCD[EDepthType]->SetLineColor(histColor[EDepthType]);
+    energy_depth_LLP10000[EDepthType]->SetLineColor(histColor[EDepthType]);
+    energy_depth_LLP1000[EDepthType]->SetLineColor(histColor[EDepthType]);
+    energy_depth_LLP500[EDepthType]->SetLineColor(histColor[EDepthType]);
+  }
+
   for(auto pair : rateHists_new_cond) pair.second->SetLineWidth(2);
   for(auto pair : rateHists_hw) pair.second->SetLineStyle(kDashed);
   for(auto pair : rateHists_def) pair.second->SetLineStyle(kDotted);
@@ -142,6 +170,8 @@ int main()
   std::vector<std::string> multPlots1GeVHB = {"dt1GeV1nsHB","dt1GeV2nsHB","dt1GeV3nsHB","dt1GeV4nsHB","dt1GeV5nsHB"};
   // used for overlays
   std::vector<std::string> overlays = {"dt3GeV1ns","dt3GeV2ns","dt3GeV3ns","dt3GeV4ns", "dt3GeV5ns","dt3GeV1nsHE","dt3GeV2nsHE","dt3GeV3nsHE","dt3GeV4nsHE","dt3GeV5nsHE","dt3GeV1nsHB","dt3GeV2nsHB","dt3GeV3nsHB","dt3GeV4nsHB","dt3GeV5nsHB","dt2GeV1ns","dt2GeV2ns","dt2GeV3ns","dt2GeV4ns","dt2GeV5ns","dt2GeV1nsHE","dt2GeV2nsHE","dt2GeV3nsHE","dt2GeV4nsHE","dt2GeV5nsHE","dt2GeV1nsHB","dt2GeV2nsHB","dt2GeV3nsHB","dt2GeV4nsHB","dt2GeV5nsHB","dt1GeV1ns","dt1GeV2ns","dt1GeV3ns","dt1GeV4ns","dt1GeV5ns","dt1GeV1nsHE","dt1GeV2nsHE","dt1GeV3nsHE","dt1GeV4nsHE","dt1GeV5nsHE","dt1GeV1nsHB","dt1GeV2nsHB","dt1GeV3nsHB","dt1GeV4nsHB","dt1GeV5nsHB"};
+
+  std::vector<std::string> EDepth = {"Energy_Depth"};
 
   std::vector<TCanvas*> canvases;
   std::vector<TPad*> pad1;
@@ -416,6 +446,55 @@ int main()
     leg->SetBorderSize(0);
     leg->Draw();
     canvases.back()->Print(Form("plots/%sOverlay.pdf", hist.substr(2).c_str()));
+  }
+  for (auto hist : EDepth ) {
+    canvases.push_back(new TCanvas);
+    canvases.back()->SetWindowSize(canvases.back()->GetWw(), canvases.back()->GetWh());
+    pad1.push_back(new TPad("pad1", "pad1", 0, 0, 1, 1));
+    pad1.back()->SetGrid();
+    pad1.back()->Draw();
+    pad1.back()->cd();
+    TH1D *energy_profile_QCD = energy_depth_QCD[hist]->ProfileX();
+    energy_profile_QCD->SetMaximum(1);
+    energy_profile_QCD->Draw("ehist");
+    canvases.back()->Print(Form("plots/Energy_Depth_QCD.pdf"));
+  }
+  for (auto hist : EDepth ) {
+    canvases.push_back(new TCanvas);
+    canvases.back()->SetWindowSize(canvases.back()->GetWw(), canvases.back()->GetWh());
+    pad1.push_back(new TPad("pad1", "pad1", 0, 0, 1, 1));
+    pad1.back()->SetGrid();
+    pad1.back()->Draw();
+    pad1.back()->cd();
+    TH1D *energy_profile_LLP500 = energy_depth_LLP500[hist]->ProfileX();
+    energy_profile_LLP500->SetMaximum(1);
+    energy_profile_LLP500->Draw("ehist");
+    canvases.back()->Print(Form("plots/Energy_Depth_LLP500.pdf"));
+  }
+  for (auto hist : EDepth ) {
+    canvases.push_back(new TCanvas);
+    canvases.back()->SetWindowSize(canvases.back()->GetWw(), canvases.back()->GetWh());
+    pad1.push_back(new TPad("pad1", "pad1", 0, 0, 1, 1));
+    pad1.back()->SetGrid();
+    pad1.back()->Draw();
+    pad1.back()->cd();
+    TH1D *energy_profile_LLP1000 = energy_depth_LLP1000[hist]->ProfileX();
+    energy_profile_LLP1000->SetMaximum(1);
+    energy_profile_LLP1000->Draw("ehist");
+    canvases.back()->Print(Form("plots/Energy_Depth_LLP1000.pdf"));
+  }
+  for (auto hist : EDepth ) {
+    canvases.push_back(new TCanvas);
+    canvases.back()->SetWindowSize(canvases.back()->GetWw(), canvases.back()->GetWh());
+    pad1.push_back(new TPad("pad1", "pad1", 0, 0, 1, 1));
+    pad1.back()->SetGrid();
+    pad1.back()->Draw();
+    pad1.back()->cd();
+    //    energy_depth_LLP10000[hist]->Draw("hist");
+    TH1D *energy_profile_LLP10000 = energy_depth_LLP10000[hist]->ProfileX();
+    energy_profile_LLP10000->SetMaximum(1);
+    energy_profile_LLP10000->Draw("ehist");
+    canvases.back()->Print(Form("plots/Energy_Depth_LLP10000.pdf"));
   }
   return 0;
 }

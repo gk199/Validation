@@ -329,8 +329,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F * dt1GeV4nsHBMult_emu = new TH1F("dt1GeV4nsHBMult_emu","Multiplicity of 4ns delayed cells above 1 GeV (HB);Multiplicity;Number of Entries",50,0,50);
   TH1F * dt1GeV5nsHBMult_emu = new TH1F("dt1GeV5nsHBMult_emu","Multiplicity of 5ns delayed cells above 1 GeV (HB);Multiplicity;Number of Entries",50,0,50);
   // making TH2F for the energy depth plots
-  TH2F * frac_depth_inc = new TH2F("Energy_Depth", "TP Energy Fraction vs. Depth", 8, -0.5, 7.5, 60, 0, 1.2);
-
+  TH2F * Energy_Depth = new TH2F("Energy_Depth", "TP Energy Fraction vs. Depth", 8, -0.5, 7.5, 60, 0, 1.2);
+  TH2F * Timing_Depth = new TH2F("Timing_Depth", "TP Timing Value vs. Depth", 8, -0.5, 7.5, 60, 0, 1.2);
 
   /////////////////////////////////
   // loop through all the entries//
@@ -486,9 +486,18 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	  hcalTPdepth[5] = l1CaloTPemu_->hcalTPDepth6[HcalTPIt];
 	  hcalTPdepth[6] = l1CaloTPemu_->hcalTPDepth7[HcalTPIt];
 
-	  for (int i = 0; i < 7; i++){
-	    frac_depth_inc->Fill(i,hcalTPdepth[i]/tpEtemu);
+	  /*
+	  if (tpEtaemu == 19){
+	    std::cout << "energy depths at each layer" << std::endl;
+	    std::cout << hcalTPdepth[0] << std::endl;
+	    std::cout << hcalTPdepth[1] << std::endl;
+	    std::cout << hcalTPdepth[2] << std::endl;
+	    std::cout << hcalTPdepth[3] << std::endl;
+	    std::cout << hcalTPdepth[4] << std::endl;
+	    std::cout << hcalTPdepth[5] << std::endl;
+	    std::cout << hcalTPdepth[6] << std::endl;
 	  }
+	  */
 
 	  // timing info for each layer, in 25 ns with resolution 0.5 ns 
 	  hcalTPtiming[0] = l1CaloTPemu_->hcalTPtiming1[HcalTPIt];
@@ -498,6 +507,11 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	  hcalTPtiming[4] = l1CaloTPemu_->hcalTPtiming5[HcalTPIt];
 	  hcalTPtiming[5] = l1CaloTPemu_->hcalTPtiming6[HcalTPIt];
 	  hcalTPtiming[6] = l1CaloTPemu_->hcalTPtiming7[HcalTPIt];
+
+          for (int i = 0; i < 7; i++){
+            Energy_Depth->Fill(i+1,hcalTPdepth[i]/tpEtemu); // normalized by total energy in event so is fractional energy in each layer
+	    Timing_Depth->Fill(i+1,hcalTPtiming[i]); // raw timing value in each layer
+          }
 
 	  // loop over HCAL depths for every HCAL TP
 	  for (int depthIt = 0; depthIt < nDepth-1; depthIt++){
@@ -1024,7 +1038,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     dt1GeV4nsHBMult_emu->Scale(norm);
     dt1GeV5nsHBMult_emu->Scale(norm);
 
-    frac_depth_inc->Scale(norm);
+    Energy_Depth->Scale(norm);
+    Timing_Depth->Scale(norm);
 
     //set the errors for the rates
     //want error -> error * sqrt(norm) ?
@@ -1097,7 +1112,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     dt1GeV4nsHBMult_emu->Write();
     dt1GeV5nsHBMult_emu->Write();
 
-    frac_depth_inc->Write();
+    Energy_Depth->Write();
+    Timing_Depth->Write();
   }
 
   if (hwOn){
