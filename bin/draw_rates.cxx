@@ -188,7 +188,6 @@ int main()
       rateHists_def[hist]->GetYaxis()->SetRangeUser(10.01, 100000000); // setting the range of the Y axis to show low rates
       TString name(rateHists_def[hist]->GetName());
       TString nameHw(rateHists_hw[hist]->GetName());
-      std::cout << name << std::endl;
       leg->AddEntry(rateHists_def[hist], name + " (current)", "L");
       if(includeHW) leg->AddEntry(rateHists_hw[hist], name + " (hw)", "L");
       leg->AddEntry(rateHists_new_cond[hist], name + " (new)", "L"); 
@@ -222,6 +221,7 @@ int main()
     TLegend *leg = new TLegend(0.65, 1.1 - 0.1*iplot.second.size(), 0.95, 0.93);
     for (auto hist : iplot.second) {
       multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,2500000);
+      /*
       // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV
       if (hist.substr(0,3) == "dt2") {
 	multHists_QCD[hist]->Rebin(rebinFactor*2);
@@ -230,6 +230,7 @@ int main()
       if (hist.substr(0,3) == "dt1") {
         multHists_QCD[hist]->Rebin(rebinFactor*4);
       }
+      */
       multHists_QCD[hist]->Draw("hist same");
       TString name(multHists_QCD[hist]->GetName());
       leg->AddEntry(multHists_QCD[hist], name(6,3) + " ", "L");
@@ -262,6 +263,7 @@ int main()
     TLegend *leg = new TLegend(0.65, 1.1 - 0.1*iplot.second.size(), 0.95, 0.93);
     for (auto hist : iplot.second) {
       multHists_LLP10000[hist]->GetYaxis()->SetRangeUser(0,2500000);
+      /*
       // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV                                
       if (hist.substr(0,3) == "dt2") {
         multHists_LLP10000[hist]->Rebin(rebinFactor*2);
@@ -270,9 +272,9 @@ int main()
       if (hist.substr(0,3) == "dt1") {
         multHists_LLP10000[hist]->Rebin(rebinFactor*4);
       }
+      */
       multHists_LLP10000[hist]->Draw("hist same");
       TString name(multHists_LLP10000[hist]->GetName());
-      std::cout << name << std::endl;
       leg->AddEntry(multHists_LLP10000[hist], name(6,3) + " ", "L");
       multHists_LLP10000[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=10m, timing scan at " + name(2,4));
       if ( name(9,2) == "HE" || name(9,2) == "HB" ){
@@ -303,6 +305,7 @@ int main()
     TLegend *leg = new TLegend(0.65, 1.1 - 0.1*iplot.second.size(), 0.95, 0.93);
     for (auto hist : iplot.second) {
       multHists_LLP1000[hist]->GetYaxis()->SetRangeUser(0,2500000);
+      /*
       // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV
       if ( hist.substr(0,3) == "dt2" ) {
         multHists_LLP1000[hist]->Rebin(rebinFactor*2);
@@ -311,6 +314,7 @@ int main()
       if ( hist.substr(0,3) == "dt1" ) {
         multHists_LLP1000[hist]->Rebin(rebinFactor*4);
       }
+      */
       multHists_LLP1000[hist]->Draw("hist same");
       TString name(multHists_LLP1000[hist]->GetName());
       leg->AddEntry(multHists_LLP1000[hist], name(6,3) + " ", "L");
@@ -343,6 +347,7 @@ int main()
     TLegend *leg = new TLegend(0.65, 1.1 - 0.1*iplot.second.size(), 0.95, 0.93);
     for (auto hist : iplot.second) {
       multHists_LLP500[hist]->GetYaxis()->SetRangeUser(0,2500000);
+      /*
       // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV
       if ( hist.substr(0,3) == "dt2" ) {
         multHists_LLP500[hist]->Rebin(rebinFactor*2);
@@ -351,6 +356,7 @@ int main()
       if ( hist.substr(0,3) =="dt1" ) {
         multHists_LLP500[hist]->Rebin(rebinFactor*4);
       }
+      */
       multHists_LLP500[hist]->Draw("hist same");
       TString name(multHists_LLP500[hist]->GetName());
       leg->AddEntry(multHists_LLP500[hist], name(6,3) + " ", "L");
@@ -409,7 +415,7 @@ int main()
     multHists_QCD[hist]->GetYaxis()->SetTitleOffset(1.5);
     leg->SetBorderSize(0);
     leg->Draw();
-    canvases.back()->Print(Form("plots/%sOverlay.pdf", hist.c_str()));
+    canvases.back()->Print(Form("plots/%sOverlay.pdf", hist.substr(2).c_str()));
   }
   return 0;
 }
