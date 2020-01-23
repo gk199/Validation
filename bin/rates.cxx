@@ -339,6 +339,9 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F * Ratio_Depth = new TH1F("Ratio_Depth", "Ratio of First 2 HCAL Layers to E_{T};Ratio;Number of Events", 50,0,1);
   TH1F * Ratio_DepthHE = new TH1F("Ratio_DepthHE", "Ratio of First 2 HCAL Layers to E_{T} in HE;Ratio;Number of Events", 50,0,1);
   TH1F * Ratio_DepthHB = new TH1F("Ratio_DepthHB", "Ratio of First 2 HCAL Layers to E_{T} in HB;Ratio;Number of Events", 50,0,1);
+  TH1F * Ratio_Depth_Jets = new TH1F("Ratio_Depth_Jets", "Ratio of First 2 HCAL Layers to E_{T}, matched w/Jets;Ratio;Number of Events", 50,0,1);
+  TH1F * Ratio_DepthHE_Jets = new TH1F("Ratio_DepthHE_Jets", "Ratio of First 2 HCAL Layers to E_{T} in HE, matched w/Jets;Ratio;Number of Events", 50,0,1);
+  TH1F * Ratio_DepthHB_Jets = new TH1F("Ratio_DepthHB_Jets", "Ratio of First 2 HCAL Layers to E_{T} in HB, matched w/Jets;Ratio;Number of Events", 50,0,1);
 
   /////////////////////////////////
   // loop through all the entries//
@@ -542,12 +545,12 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
             }
           }
 
-	  Ratio_Depth->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / tpEtemu);
+	  Ratio_Depth_Jets->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / tpEtemu);
 	  if (abs(tpEtaemu) < 16) {
-	    Ratio_DepthHB->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / tpEtemu);
+	    Ratio_DepthHB_Jets->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / tpEtemu);
 	  }
 	  if (abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29 ) {
-	    Ratio_DepthHE->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / tpEtemu);
+	    Ratio_DepthHE_Jets->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / tpEtemu);
           }
 	} // closing HCAL TP loop
       } // closing L1 Jets loop
@@ -574,6 +577,14 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	hcalTPtiming[4] = l1CaloTPemu_->hcalTPtiming5[HcalTPIt];
 	hcalTPtiming[5] = l1CaloTPemu_->hcalTPtiming6[HcalTPIt];
 	hcalTPtiming[6] = l1CaloTPemu_->hcalTPtiming7[HcalTPIt];
+
+	Ratio_Depth->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / tpEtemu);
+	if (abs(tpEtaemu) < 16) {
+	  Ratio_DepthHB->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / tpEtemu);
+	}
+	if (abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29 ) {
+	  Ratio_DepthHE->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / tpEtemu);
+	}
 
 	// loop over HCAL depths for every HCAL TP
         for (int depthIt = 0; depthIt < nDepth-1; depthIt++){
@@ -1108,6 +1119,9 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     Ratio_Depth->Scale(norm);
     Ratio_DepthHE->Scale(norm);
     Ratio_DepthHB->Scale(norm);
+    Ratio_Depth_Jets->Scale(norm);
+    Ratio_DepthHE_Jets->Scale(norm);
+    Ratio_DepthHB_Jets->Scale(norm);
 
     //set the errors for the rates
     //want error -> error * sqrt(norm) ?
@@ -1189,7 +1203,9 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     Ratio_Depth->Write();
     Ratio_DepthHE->Write();
     Ratio_DepthHB->Write();
-
+    Ratio_Depth_Jets->Write();
+    Ratio_DepthHE_Jets->Write();
+    Ratio_DepthHB_Jets->Write();
   }
 
   if (hwOn){
