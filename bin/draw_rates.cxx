@@ -36,7 +36,7 @@ int main()
 
   std::vector<std::string> EDepthTypes = {"Energy_Depth","Timing_Depth","Energy_DepthHE","Timing_DepthHE","Energy_DepthHB","Timing_DepthHB"};
 
-  std::vector<std::string> RatioTypes = {"Ratio_Depth", "Ratio_DepthHE", "Ratio_DepthHB"};
+  std::vector<std::string> RatioTypes = {"Ratio_Depth", "Ratio_DepthHE", "Ratio_DepthHB","Ratio_Depth_Jets", "Ratio_DepthHE_Jets", "Ratio_DepthHB_Jets"};
 
   std::map<std::string, int> histColor;
   histColor["singleJet"] = histColor["singleEg"] = histColor["singleTau"] = histColor["etSum"] = histColor["metSum"] = histColor["dt3GeV1ns"] = histColor["dt3GeV1nsHE"] =histColor["dt3GeV1nsHB"] = histColor["dt2GeV1ns"] = histColor["dt2GeV1nsHE"] = histColor["dt2GeV1nsHB"] = histColor["dt1GeV1ns"] = histColor["dt1GeV1nsHE"] = histColor["dt1GeV1nsHB"] = kRed;
@@ -199,7 +199,7 @@ int main()
   std::vector<std::string> multPlots1GeVHE = {"dt1GeV1nsHE","dt1GeV2nsHE","dt1GeV3nsHE","dt1GeV4nsHE","dt1GeV5nsHE"};
   std::vector<std::string> multPlots1GeVHB = {"dt1GeV1nsHB","dt1GeV2nsHB","dt1GeV3nsHB","dt1GeV4nsHB","dt1GeV5nsHB"};
   // used for overlays
-  std::vector<std::string> overlays = {"dt3GeV1ns","dt3GeV2ns","dt3GeV3ns","dt3GeV4ns", "dt3GeV5ns","dt3GeV1nsHE","dt3GeV2nsHE","dt3GeV3nsHE","dt3GeV4nsHE","dt3GeV5nsHE","dt3GeV1nsHB","dt3GeV2nsHB","dt3GeV3nsHB","dt3GeV4nsHB","dt3GeV5nsHB","dt2GeV1ns","dt2GeV2ns","dt2GeV3ns","dt2GeV4ns","dt2GeV5ns","dt2GeV1nsHE","dt2GeV2nsHE","dt2GeV3nsHE","dt2GeV4nsHE","dt2GeV5nsHE","dt2GeV1nsHB","dt2GeV2nsHB","dt2GeV3nsHB","dt2GeV4nsHB","dt2GeV5nsHB","dt1GeV1ns","dt1GeV2ns","dt1GeV3ns","dt1GeV4ns","dt1GeV5ns","dt1GeV1nsHE","dt1GeV2nsHE","dt1GeV3nsHE","dt1GeV4nsHE","dt1GeV5nsHE","dt1GeV1nsHB","dt1GeV2nsHB","dt1GeV3nsHB","dt1GeV4nsHB","dt1GeV5nsHB", "Ratio_Depth", "Ratio_DepthHE", "Ratio_DepthHB"};
+  std::vector<std::string> overlays = {"dt3GeV1ns","dt3GeV2ns","dt3GeV3ns","dt3GeV4ns", "dt3GeV5ns","dt3GeV1nsHE","dt3GeV2nsHE","dt3GeV3nsHE","dt3GeV4nsHE","dt3GeV5nsHE","dt3GeV1nsHB","dt3GeV2nsHB","dt3GeV3nsHB","dt3GeV4nsHB","dt3GeV5nsHB","dt2GeV1ns","dt2GeV2ns","dt2GeV3ns","dt2GeV4ns","dt2GeV5ns","dt2GeV1nsHE","dt2GeV2nsHE","dt2GeV3nsHE","dt2GeV4nsHE","dt2GeV5nsHE","dt2GeV1nsHB","dt2GeV2nsHB","dt2GeV3nsHB","dt2GeV4nsHB","dt2GeV5nsHB","dt1GeV1ns","dt1GeV2ns","dt1GeV3ns","dt1GeV4ns","dt1GeV5ns","dt1GeV1nsHE","dt1GeV2nsHE","dt1GeV3nsHE","dt1GeV4nsHE","dt1GeV5nsHE","dt1GeV1nsHB","dt1GeV2nsHB","dt1GeV3nsHB","dt1GeV4nsHB","dt1GeV5nsHB", "Ratio_Depth", "Ratio_DepthHE", "Ratio_DepthHB", "Ratio_Depth_Jets", "Ratio_DepthHE_Jets", "Ratio_DepthHB_Jets"};
 
   std::vector<TCanvas*> canvases;
   std::vector<TPad*> pad1;
@@ -279,7 +279,6 @@ int main()
     TLegend *leg = new TLegend(0.65, 1.1 - 0.1*iplot.second.size(), 0.95, 0.93);
     for (auto hist : iplot.second) {
       multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,2500000);
-      /*
       // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV
       if (hist.substr(0,3) == "dt2") {
 	multHists_QCD[hist]->Rebin(rebinFactor*2);
@@ -288,7 +287,6 @@ int main()
       if (hist.substr(0,3) == "dt1") {
         multHists_QCD[hist]->Rebin(rebinFactor*4);
       }
-      */
       multHists_QCD[hist]->Draw("hist same");
       TString name(multHists_QCD[hist]->GetName());
       leg->AddEntry(multHists_QCD[hist], name(6,3) + " ", "L");
@@ -321,7 +319,6 @@ int main()
     TLegend *leg = new TLegend(0.65, 1.1 - 0.1*iplot.second.size(), 0.95, 0.93);
     for (auto hist : iplot.second) {
       multHists_LLP10000[hist]->GetYaxis()->SetRangeUser(0,2500000);
-      /*
       // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV                                
       if (hist.substr(0,3) == "dt2") {
         multHists_LLP10000[hist]->Rebin(rebinFactor*2);
@@ -330,7 +327,6 @@ int main()
       if (hist.substr(0,3) == "dt1") {
         multHists_LLP10000[hist]->Rebin(rebinFactor*4);
       }
-      */
       multHists_LLP10000[hist]->Draw("hist same");
       TString name(multHists_LLP10000[hist]->GetName());
       leg->AddEntry(multHists_LLP10000[hist], name(6,3) + " ", "L");
@@ -363,7 +359,6 @@ int main()
     TLegend *leg = new TLegend(0.65, 1.1 - 0.1*iplot.second.size(), 0.95, 0.93);
     for (auto hist : iplot.second) {
       multHists_LLP1000[hist]->GetYaxis()->SetRangeUser(0,2500000);
-      /*
       // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV
       if ( hist.substr(0,3) == "dt2" ) {
         multHists_LLP1000[hist]->Rebin(rebinFactor*2);
@@ -372,7 +367,6 @@ int main()
       if ( hist.substr(0,3) == "dt1" ) {
         multHists_LLP1000[hist]->Rebin(rebinFactor*4);
       }
-      */
       multHists_LLP1000[hist]->Draw("hist same");
       TString name(multHists_LLP1000[hist]->GetName());
       leg->AddEntry(multHists_LLP1000[hist], name(6,3) + " ", "L");
@@ -405,7 +399,6 @@ int main()
     TLegend *leg = new TLegend(0.65, 1.1 - 0.1*iplot.second.size(), 0.95, 0.93);
     for (auto hist : iplot.second) {
       multHists_LLP500[hist]->GetYaxis()->SetRangeUser(0,2500000);
-      /*
       // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV
       if ( hist.substr(0,3) == "dt2" ) {
         multHists_LLP500[hist]->Rebin(rebinFactor*2);
@@ -414,7 +407,6 @@ int main()
       if ( hist.substr(0,3) =="dt1" ) {
         multHists_LLP500[hist]->Rebin(rebinFactor*4);
       }
-      */
       multHists_LLP500[hist]->Draw("hist same");
       TString name(multHists_LLP500[hist]->GetName());
       leg->AddEntry(multHists_LLP500[hist], name(6,3) + " ", "L");
@@ -466,7 +458,7 @@ int main()
       multHists_QCD[hist]->SetTitle("Multiplicity Overlay of QCD and LLPs at " + name(2,4) + " and " + name(6,3) + " in " + name(9,2));
     }
     if (name(0,5) == "Ratio" ) {
-      multHists_QCD[hist]->SetTitle("Ratio of First 2 HCAL Layers to E_{T} " + name(11,2));
+      multHists_QCD[hist]->SetTitle("Ratio of First 2 HCAL Layers to E_{T} " + name(11,7));
     }
     multHists_QCD[hist]->GetXaxis()->SetLabelSize(0.03);
     multHists_QCD[hist]->GetYaxis()->SetLabelSize(0.03);
@@ -489,21 +481,21 @@ int main()
     if (hist.substr(0,6) =="Energy") {
       energy_profile_QCD_overlay[hist]->SetMaximum(1);
     }
+    TLegend *leg = new TLegend(0.55, 0.6, 0.95, 0.93);
     energy_profile_QCD_overlay[hist]->SetLineColor(kBlack);
     energy_profile_QCD_overlay[hist]->Draw("ehist");
     energy_profile_LLP500_overlay[hist]->SetLineColor(kBlue);
-    energy_profile_LLP500_overlay[hist]->Draw("ehist same");
+    energy_profile_LLP500_overlay[hist]->Draw("ehist SAME");
     energy_profile_LLP1000_overlay[hist]->SetLineColor(kGreen);
-    energy_profile_LLP1000_overlay[hist]->Draw("ehist same");
+    energy_profile_LLP1000_overlay[hist]->Draw("ehist SAME");
     energy_profile_LLP10000_overlay[hist]->SetLineColor(kRed);
-    energy_profile_LLP10000_overlay[hist]->Draw("ehist same");
-    TLegend *leg = new TLegend(0.55, 0.6, 0.95, 0.93);
+    energy_profile_LLP10000_overlay[hist]->Draw("ehist SAME");
     leg->AddEntry(energy_profile_QCD_overlay[hist],"QCD","L");
     leg->AddEntry(energy_profile_LLP500_overlay[hist],"LLP, c#scale[1.2]{#tau}=0.5m", "L");
     leg->AddEntry(energy_profile_LLP1000_overlay[hist], "LLP, c#scale[1.2]{#tau}=1m", "L");
     leg->AddEntry(energy_profile_LLP10000_overlay[hist], "LLP, c#scale[1.2]{#tau}=10m", "L");
     leg->SetBorderSize(0);
-    leg->Draw();
+    leg->Draw("same");
     canvases.back()->Print(Form("plots/%s_LLPQCD_overlay.pdf", hist.c_str()));
   }
 
@@ -514,12 +506,13 @@ int main()
     pad1.back()->SetGrid();
     pad1.back()->Draw();
     pad1.back()->cd();
+    TH1D *energy_profile_QCD = energy_depth_QCD[hist]->ProfileX();
     if (hist.substr(0,6) =="Energy") {
-      energy_profile_QCD_overlay[hist]->SetMaximum(1);
+      energy_profile_QCD->SetMaximum(1);
     }
-    energy_profile_QCD_overlay[hist]->SetLineColor(kBlack);
-    energy_profile_QCD_overlay[hist]->Draw("ehist");
-    energy_profile_QCD_overlay[hist]->SetTitle("TP Energy Fraction vs. Depth for QCD");
+    energy_profile_QCD->SetLineColor(kBlack);
+    energy_profile_QCD->Draw("ehist");
+    energy_profile_QCD->SetTitle("TP Energy Fraction vs. Depth for QCD");
     canvases.back()->Print(Form("plots/%s_QCD.pdf", hist.c_str()));
   }
   for (auto hist : EDepthTypes ) {
