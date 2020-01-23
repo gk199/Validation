@@ -335,7 +335,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH2F * Timing_DepthHE = new TH2F("Timing_DepthHE", "TP Timing Value vs. Depth in HE;HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5, 60, 0, 30);
   TH2F * Energy_DepthHB = new TH2F("Energy_DepthHB", "TP Energy Fraction vs. Depth in HB;HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 1.2);
   TH2F * Timing_DepthHB = new TH2F("Timing_DepthHB", "TP Timing Value vs. Depth in HB;HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5, 60, 0, 30);
+
   TH1F * Ratio_Depth = new TH1F("Ratio_Depth", "Ratio of First 2 HCAL Layers to E_{T};Ratio;Number of Events", 50,0,1);
+  TH1F * Ratio_DepthHE = new TH1F("Ratio_DepthHE", "Ratio of First 2 HCAL Layers to E_{T} in HE;Ratio;Number of Events", 50,0,1);
+  TH1F * Ratio_DepthHB = new TH1F("Ratio_DepthHB", "Ratio of First 2 HCAL Layers to E_{T} in HB;Ratio;Number of Events", 50,0,1);
 
   /////////////////////////////////
   // loop through all the entries//
@@ -492,8 +495,9 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	  hcalTPdepth[6] = l1CaloTPemu_->hcalTPDepth7[HcalTPIt];
 
 	  /*
-	  if (tpEtaemu == 19){
-	    std::cout << "energy depths at each layer" << std::endl;
+	  if (tpEtaemu == 19 || tpEtaemu == 5){
+	    std::cout << "energy depths at each layer for ieta = " << tpEtaemu << std::endl;
+	    std::cout << "total energy for this TP = " << tpEtemu << std::endl;
 	    std::cout << hcalTPdepth[0] << std::endl;
 	    std::cout << hcalTPdepth[1] << std::endl;
 	    std::cout << hcalTPdepth[2] << std::endl;
@@ -503,7 +507,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	    std::cout << hcalTPdepth[6] << std::endl;
 	  }
 	  */
-
+	 
 	  // timing info for each layer, in 25 ns with resolution 0.5 ns 
 	  hcalTPtiming[0] = l1CaloTPemu_->hcalTPtiming1[HcalTPIt];
 	  hcalTPtiming[1] = l1CaloTPemu_->hcalTPtiming2[HcalTPIt];
@@ -526,7 +530,14 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	      Timing_DepthHE->Fill(i+1,hcalTPtiming[i]);
             }
           }
+
 	  Ratio_Depth->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / tpEtemu);
+	  if (abs(tpEtaemu) < 16) {
+	    Ratio_DepthHB->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / tpEtemu);
+	  }
+	  if (abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29 ) {
+	    Ratio_DepthHE->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / tpEtemu);
+          }
 
 	  // loop over HCAL depths for every HCAL TP
 	  for (int depthIt = 0; depthIt < nDepth-1; depthIt++){
@@ -1060,6 +1071,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     Energy_DepthHB->Scale(norm);
     Timing_DepthHB->Scale(norm);
     Ratio_Depth->Scale(norm);
+    Ratio_DepthHE->Scale(norm);
+    Ratio_DepthHB->Scale(norm);
 
     //set the errors for the rates
     //want error -> error * sqrt(norm) ?
@@ -1139,6 +1152,9 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     Energy_DepthHE->Write();
     Timing_DepthHE->Write();
     Ratio_Depth->Write();
+    Ratio_DepthHE->Write();
+    Ratio_DepthHB->Write();
+
   }
 
   if (hwOn){
