@@ -36,6 +36,8 @@ int main()
 
   std::vector<std::string> EDepthTypes = {"Energy_Depth","Timing_Depth","Energy_DepthHE","Timing_DepthHE","Energy_DepthHB","Timing_DepthHB"};
 
+  std::vector<std::string> RatioTypes = {"Ratio_Depth", "Ratio_DepthHE", "Ratio_DepthHB"};
+
   std::map<std::string, int> histColor;
   histColor["singleJet"] = histColor["singleEg"] = histColor["singleTau"] = histColor["etSum"] = histColor["metSum"] = histColor["dt3GeV1ns"] = histColor["dt3GeV1nsHE"] =histColor["dt3GeV1nsHB"] = histColor["dt2GeV1ns"] = histColor["dt2GeV1nsHE"] = histColor["dt2GeV1nsHB"] = histColor["dt1GeV1ns"] = histColor["dt1GeV1nsHE"] = histColor["dt1GeV1nsHB"] = kRed;
   histColor["doubleJet"] = histColor["singleISOEg"] = histColor["singleISOTau"] = histColor["htSum"] = histColor["metHFSum"] = histColor["dt3GeV2ns"] = histColor["dt3GeV2nsHE"] = histColor["dt3GeV2nsHB"] = histColor["dt2GeV2ns"] = histColor["dt2GeV2nsHE"] = histColor["dt2GeV2nsHB"] = histColor["dt1GeV2ns"] = histColor["dt1GeV2nsHE"] = histColor["dt1GeV2nsHB"] = kBlue;
@@ -59,6 +61,11 @@ int main()
   std::map<std::string, TH2F*> energy_depth_LLP10000;
   std::map<std::string, TH2F*> energy_depth_LLP1000;
   std::map<std::string, TH2F*> energy_depth_LLP500;
+
+  std::map<std::string, TH2F*> ratio_depth_QCD;
+  std::map<std::string, TH2F*> ratio_depth_LLP10000;
+  std::map<std::string, TH2F*> ratio_depth_LLP1000;
+  std::map<std::string, TH2F*> ratio_depth_LLP500;
 
   TH1D* energy_profile_QCD;
   TH1D* energy_profile_LLP500;
@@ -147,6 +154,25 @@ int main()
     energy_depth_LLP500[EDepthType]->SetLineColor(histColor[EDepthType]);
   }
 
+  for(auto RDepthType : RatioTypes) {
+    std::string histName(RDepthType);
+    std::string histNameHw(histName);
+    multHists_QCD[RDepthType]  = dynamic_cast<TH1F*>(mult_files.at(3)->Get(histName.c_str()));
+    multHists_LLP10000[RDepthType] = dynamic_cast<TH1F*>(mult_files.at(0)->Get(histName.c_str()));
+    multHists_LLP1000[RDepthType] = dynamic_cast<TH1F*>(mult_files.at(1)->Get(histName.c_str()));
+    multHists_LLP500[RDepthType] = dynamic_cast<TH1F*>(mult_files.at(2)->Get(histName.c_str()));
+
+    multHists_QCD[RDepthType]->Rebin(rebinFactor);
+    multHists_LLP10000[RDepthType]->Rebin(rebinFactor);
+    multHists_LLP1000[RDepthType]->Rebin(rebinFactor);
+    multHists_LLP500[RDepthType]->Rebin(rebinFactor);
+
+    multHists_QCD[RDepthType]->SetLineColor(histColor[RDepthType]);
+    multHists_LLP10000[RDepthType]->SetLineColor(histColor[RDepthType]);
+    multHists_LLP1000[RDepthType]->SetLineColor(histColor[RDepthType]);
+    multHists_LLP500[RDepthType]->SetLineColor(histColor[RDepthType]);
+  }
+
   for(auto pair : rateHists_new_cond) pair.second->SetLineWidth(2);
   for(auto pair : rateHists_hw) pair.second->SetLineStyle(kDashed);
   for(auto pair : rateHists_def) pair.second->SetLineStyle(kDotted);
@@ -174,9 +200,11 @@ int main()
   std::vector<std::string> multPlots1GeVHE = {"dt1GeV1nsHE","dt1GeV2nsHE","dt1GeV3nsHE","dt1GeV4nsHE","dt1GeV5nsHE"};
   std::vector<std::string> multPlots1GeVHB = {"dt1GeV1nsHB","dt1GeV2nsHB","dt1GeV3nsHB","dt1GeV4nsHB","dt1GeV5nsHB"};
   // used for overlays
-  std::vector<std::string> overlays = {"dt3GeV1ns","dt3GeV2ns","dt3GeV3ns","dt3GeV4ns", "dt3GeV5ns","dt3GeV1nsHE","dt3GeV2nsHE","dt3GeV3nsHE","dt3GeV4nsHE","dt3GeV5nsHE","dt3GeV1nsHB","dt3GeV2nsHB","dt3GeV3nsHB","dt3GeV4nsHB","dt3GeV5nsHB","dt2GeV1ns","dt2GeV2ns","dt2GeV3ns","dt2GeV4ns","dt2GeV5ns","dt2GeV1nsHE","dt2GeV2nsHE","dt2GeV3nsHE","dt2GeV4nsHE","dt2GeV5nsHE","dt2GeV1nsHB","dt2GeV2nsHB","dt2GeV3nsHB","dt2GeV4nsHB","dt2GeV5nsHB","dt1GeV1ns","dt1GeV2ns","dt1GeV3ns","dt1GeV4ns","dt1GeV5ns","dt1GeV1nsHE","dt1GeV2nsHE","dt1GeV3nsHE","dt1GeV4nsHE","dt1GeV5nsHE","dt1GeV1nsHB","dt1GeV2nsHB","dt1GeV3nsHB","dt1GeV4nsHB","dt1GeV5nsHB"};
+  std::vector<std::string> overlays = {"dt3GeV1ns","dt3GeV2ns","dt3GeV3ns","dt3GeV4ns", "dt3GeV5ns","dt3GeV1nsHE","dt3GeV2nsHE","dt3GeV3nsHE","dt3GeV4nsHE","dt3GeV5nsHE","dt3GeV1nsHB","dt3GeV2nsHB","dt3GeV3nsHB","dt3GeV4nsHB","dt3GeV5nsHB","dt2GeV1ns","dt2GeV2ns","dt2GeV3ns","dt2GeV4ns","dt2GeV5ns","dt2GeV1nsHE","dt2GeV2nsHE","dt2GeV3nsHE","dt2GeV4nsHE","dt2GeV5nsHE","dt2GeV1nsHB","dt2GeV2nsHB","dt2GeV3nsHB","dt2GeV4nsHB","dt2GeV5nsHB","dt1GeV1ns","dt1GeV2ns","dt1GeV3ns","dt1GeV4ns","dt1GeV5ns","dt1GeV1nsHE","dt1GeV2nsHE","dt1GeV3nsHE","dt1GeV4nsHE","dt1GeV5nsHE","dt1GeV1nsHB","dt1GeV2nsHB","dt1GeV3nsHB","dt1GeV4nsHB","dt1GeV5nsHB", "Ratio_Depth", "Ratio_DepthHE", "Ratio_DepthHB"};
 
   std::vector<std::string> EDepth = {"Energy_Depth","Timing_Depth","Energy_DepthHE","Timing_DepthHE","Energy_DepthHB","Timing_DepthHB"};
+
+  //  std::vector<std::string> RDepth = {"Ratio_Depth", "Ratio_DepthHE", "Ratio_DepthHB"};
 
   std::vector<TCanvas*> canvases;
   std::vector<TPad*> pad1;
@@ -423,7 +451,7 @@ int main()
     //    multHists_QCD[iplot.second.front()]->Draw("hist");
     TLegend *leg = new TLegend(0.55, 0.6, 0.95, 0.93);
     double yMax = 0;
-    yMax = multHists_QCD[hist]->GetMaximum();
+    yMax = multHists_LLP1000[hist]->GetMaximum();
     multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,yMax*1.2);
     multHists_QCD[hist]->SetLineColor(kBlack);
     multHists_QCD[hist]->Draw("hist same");
@@ -442,6 +470,10 @@ int main()
     if ( name(9,2) == "HE" || name(9,2) == "HB" ){
       multHists_QCD[hist]->SetTitle("Multiplicity Overlay of QCD and LLPs at " + name(2,4) + " and " + name(6,3) + " in " + name(9,2));
     }
+    if (name(0,5) == "Ratio" ) {
+      multHists_QCD[hist]->SetTitle("Ratio of First 2 HCAL Layers to E_{T} " + name(11,2));
+    }
+    std::cout << name << std::endl;
     multHists_QCD[hist]->GetXaxis()->SetLabelSize(0.03);
     multHists_QCD[hist]->GetYaxis()->SetLabelSize(0.03);
     multHists_QCD[hist]->GetXaxis()->SetTitleSize(0.04);
