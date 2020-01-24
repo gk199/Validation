@@ -32,7 +32,8 @@ int main()
 					"htSum", "etSum", "metSum", "metHFSum"};
   // files for multiplicity overlay plots
   std::vector<std::string> mult_filenames = {"rates_new_cond_pl10000.root", "rates_new_cond_pl1000.root", "rates_new_cond_pl500.root", "rates_new_cond_QCD.root"};
-  std::vector<std::string> multTypes = {"dt3GeV1ns","dt3GeV2ns","dt3GeV3ns","dt3GeV4ns","dt3GeV5ns","dt3GeV1nsHE","dt3GeV2nsHE","dt3GeV3nsHE","dt3GeV4nsHE","dt3GeV5nsHE","dt3GeV1nsHB","dt3GeV2nsHB","dt3GeV3nsHB","dt3GeV4nsHB","dt3GeV5nsHB","dt2GeV1ns","dt2GeV2ns","dt2GeV3ns","dt2GeV4ns","dt2GeV5ns","dt2GeV1nsHE","dt2GeV2nsHE","dt2GeV3nsHE","dt2GeV4nsHE","dt2GeV5nsHE","dt2GeV1nsHB","dt2GeV2nsHB","dt2GeV3nsHB","dt2GeV4nsHB","dt2GeV5nsHB","dt1GeV1ns","dt1GeV2ns","dt1GeV3ns","dt1GeV4ns","dt1GeV5ns","dt1GeV1nsHE","dt1GeV2nsHE","dt1GeV3nsHE","dt1GeV4nsHE","dt1GeV5nsHE","dt1GeV1nsHB","dt1GeV2nsHB","dt1GeV3nsHB","dt1GeV4nsHB","dt1GeV5nsHB"};
+  // these are multiplicity files (used for timescan and overlay plots) as well as ratio type plots
+  std::vector<std::string> multTypes = {"dt3GeV1ns","dt3GeV2ns","dt3GeV3ns","dt3GeV4ns","dt3GeV5ns","dt3GeV1nsHE","dt3GeV2nsHE","dt3GeV3nsHE","dt3GeV4nsHE","dt3GeV5nsHE","dt3GeV1nsHB","dt3GeV2nsHB","dt3GeV3nsHB","dt3GeV4nsHB","dt3GeV5nsHB","dt2GeV1ns","dt2GeV2ns","dt2GeV3ns","dt2GeV4ns","dt2GeV5ns","dt2GeV1nsHE","dt2GeV2nsHE","dt2GeV3nsHE","dt2GeV4nsHE","dt2GeV5nsHE","dt2GeV1nsHB","dt2GeV2nsHB","dt2GeV3nsHB","dt2GeV4nsHB","dt2GeV5nsHB","dt1GeV1ns","dt1GeV2ns","dt1GeV3ns","dt1GeV4ns","dt1GeV5ns","dt1GeV1nsHE","dt1GeV2nsHE","dt1GeV3nsHE","dt1GeV4nsHE","dt1GeV5nsHE","dt1GeV1nsHB","dt1GeV2nsHB","dt1GeV3nsHB","dt1GeV4nsHB","dt1GeV5nsHB", "Ratio_Depth", "Ratio_DepthHE", "Ratio_DepthHB","Ratio_Depth_Jets", "Ratio_DepthHE_Jets", "Ratio_DepthHB_Jets"};
 
   std::vector<std::string> EDepthTypes = {"Energy_Depth","Timing_Depth","Energy_DepthHE","Timing_DepthHE","Energy_DepthHB","Timing_DepthHB"};
 
@@ -62,11 +63,6 @@ int main()
   std::map<std::string, TH2F*> energy_depth_LLP1000;
   std::map<std::string, TH2F*> energy_depth_LLP500;
 
-  std::map<std::string, TH2F*> ratio_depth_QCD;
-  std::map<std::string, TH2F*> ratio_depth_LLP10000;
-  std::map<std::string, TH2F*> ratio_depth_LLP1000;
-  std::map<std::string, TH2F*> ratio_depth_LLP500;
-
   std::map<std::string, TH1D*> energy_profile_QCD_overlay;
   std::map<std::string, TH1D*> energy_profile_LLP500_overlay;
   std::map<std::string, TH1D*> energy_profile_LLP1000_overlay;
@@ -76,7 +72,7 @@ int main()
   for(auto file : filenames) {
     files.push_back(TFile::Open(file.c_str()));
   }
-  // making rate plots for current and new conditions
+  // making rate plots for current and new conditions - filling histograms from the root files
   for(auto rateType : rateTypes) {
     std::string histName(rateType);
     std::string histNameHw(histName);
@@ -107,34 +103,34 @@ int main()
     rateHistsRatio[rateType]->SetLineWidth(2);    
   }
 
-  // opening the files for multiplicity plots     
   std::vector<TFile*> mult_files;
   for(auto file : mult_filenames) {
     mult_files.push_back(TFile::Open(file.c_str()));
   }
+  // opening the files for multiplicity and energy ratio plots - filling histograms from root files
   for(auto multType : multTypes) {
     std::string histName(multType);
     std::string histNameHw(histName);
-    histName += "Mult_emu";
-    //    histNameHw += "Mult_hw";
+    if (multType.substr(0,2) == "dt" ) {
+      histName += "Mult_emu"; // multiplicity plots all have this appended to name in histogram, example "dt3GeV2nsMult_emu". Ratio plots do not
+    }
     multHists_QCD[multType]  = dynamic_cast<TH1F*>(mult_files.at(3)->Get(histName.c_str()));
-    //    multHists_hw[multType]  = dynamic_cast<TH1F*>(mult_files.at(3)->Get(histNameHw.c_str()));
     multHists_LLP10000[multType] = dynamic_cast<TH1F*>(mult_files.at(0)->Get(histName.c_str()));
     multHists_LLP1000[multType] = dynamic_cast<TH1F*>(mult_files.at(1)->Get(histName.c_str()));
     multHists_LLP500[multType] = dynamic_cast<TH1F*>(mult_files.at(2)->Get(histName.c_str()));
     
     multHists_QCD[multType]->Rebin(rebinFactor);
     multHists_LLP10000[multType]->Rebin(rebinFactor);
-    multHists_LLP10000[multType]->Rebin(rebinFactor);
-    multHists_LLP10000[multType]->Rebin(rebinFactor);
+    multHists_LLP1000[multType]->Rebin(rebinFactor);
+    multHists_LLP500[multType]->Rebin(rebinFactor);
 
     multHists_QCD[multType]->SetLineColor(histColor[multType]);
-    //    multHists_hw[multType]->SetLineColor(histColor[multType]);
     multHists_LLP10000[multType]->SetLineColor(histColor[multType]);
     multHists_LLP1000[multType]->SetLineColor(histColor[multType]);
     multHists_LLP500[multType]->SetLineColor(histColor[multType]);
   }
 
+  // get histograms for energy depth similar for multiplicty. Done in separate loop because these are TH2F instead of TH1F
   for(auto EDepthType : EDepthTypes) {
     std::string histName(EDepthType);
     energy_depth_QCD[EDepthType]  = dynamic_cast<TH2F*>(mult_files.at(3)->Get(histName.c_str()));
@@ -142,6 +138,7 @@ int main()
     energy_depth_LLP1000[EDepthType] = dynamic_cast<TH2F*>(mult_files.at(1)->Get(histName.c_str()));
     energy_depth_LLP500[EDepthType] = dynamic_cast<TH2F*>(mult_files.at(2)->Get(histName.c_str()));
 
+    // project TH2F onto TH1D and then use these to plot
     energy_profile_QCD_overlay[EDepthType] = energy_depth_QCD[EDepthType]->ProfileX();
     energy_profile_LLP500_overlay[EDepthType] = energy_depth_LLP500[EDepthType]->ProfileX();
     energy_profile_LLP1000_overlay[EDepthType] = energy_depth_LLP1000[EDepthType]->ProfileX();
@@ -153,25 +150,6 @@ int main()
     energy_profile_LLP10000_overlay[EDepthType]->SetLineColor(kRed);
   }
 
-  for(auto RDepthType : RatioTypes) {
-    std::string histName(RDepthType);
-    std::string histNameHw(histName);
-    multHists_QCD[RDepthType]  = dynamic_cast<TH1F*>(mult_files.at(3)->Get(histName.c_str()));
-    multHists_LLP10000[RDepthType] = dynamic_cast<TH1F*>(mult_files.at(0)->Get(histName.c_str()));
-    multHists_LLP1000[RDepthType] = dynamic_cast<TH1F*>(mult_files.at(1)->Get(histName.c_str()));
-    multHists_LLP500[RDepthType] = dynamic_cast<TH1F*>(mult_files.at(2)->Get(histName.c_str()));
-
-    multHists_QCD[RDepthType]->Rebin(rebinFactor);
-    multHists_LLP10000[RDepthType]->Rebin(rebinFactor);
-    multHists_LLP1000[RDepthType]->Rebin(rebinFactor);
-    multHists_LLP500[RDepthType]->Rebin(rebinFactor);
-
-    multHists_QCD[RDepthType]->SetLineColor(histColor[RDepthType]);
-    multHists_LLP10000[RDepthType]->SetLineColor(histColor[RDepthType]);
-    multHists_LLP1000[RDepthType]->SetLineColor(histColor[RDepthType]);
-    multHists_LLP500[RDepthType]->SetLineColor(histColor[RDepthType]);
-  }
-
   for(auto pair : rateHists_new_cond) pair.second->SetLineWidth(2);
   for(auto pair : rateHists_hw) pair.second->SetLineStyle(kDashed);
   for(auto pair : rateHists_def) pair.second->SetLineStyle(kDotted);
@@ -179,10 +157,9 @@ int main()
   for(auto pair : multHists_LLP10000) pair.second->SetLineWidth(2);
   for(auto pair : multHists_LLP1000) pair.second->SetLineWidth(2);
   for(auto pair : multHists_LLP500) pair.second->SetLineWidth(2);
-  //  for(auto pair : multHists_hw) pair.second->SetLineStyle(kDashed);
-  //  for(auto pair : multHists_QCD) pair.second->SetLineStyle(kDotted); // analogous to rateHist_def
   for(auto pair : multHists_QCD) pair.second->SetLineWidth(2);
 
+  // jet, eg, tau, energy rate plot types
   std::vector<std::string> jetPlots = {"singleJet", "doubleJet", "tripleJet", "quadJet"};
   std::vector<std::string> egPlots = {"singleEg", "singleISOEg", "doubleEg", "doubleISOEg"};
   std::vector<std::string> tauPlots = {"singleTau", "singleISOTau", "doubleTau", "doubleISOTau"};
@@ -232,8 +209,7 @@ int main()
     pad1.back()->Draw();
     pad2.push_back(new TPad("pad2", "pad2", 0, 0, 1, 0.3));
     pad2.back()->SetGrid();
-    pad2.back()->Draw();
-    
+    pad2.back()->Draw();    
     pad1.back()->cd();
     
     rateHists_def[iplot.second.front()]->Draw("hist");
@@ -275,27 +251,28 @@ int main()
     pad1.back()->SetGrid();
     pad1.back()->Draw();
     pad1.back()->cd();
-    multHists_QCD[iplot.second.front()]->GetYaxis()->SetRangeUser(0,3400000);
-    multHists_QCD[iplot.second.front()]->Draw("hist"); // associative array is list of pairs, access by first entry. Second is actual name / value to access
     TLegend *leg = new TLegend(0.65, 1.1 - 0.1*iplot.second.size(), 0.95, 0.93);
-    for (auto hist : iplot.second) {
-      //      multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,3000000);
-      // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV
-      if (hist.substr(0,3) == "dt2") {
+    for (auto hist : iplot.second) { // associative array is list of pairs, access by first entry. Second is actual name / value to access
+      // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV. Don't do for HB
+      if (hist.substr(0,3) == "dt2" && hist.substr(9,2) != "HB") {
 	multHists_QCD[hist]->Rebin(rebinFactor*2);
       }
-      // rebin histograms for 1 GeV energy cut, as the x-axis extends further here
-      if (hist.substr(0,3) == "dt1") {
+      // rebin histograms for 1 GeV energy cut, as the x-axis extends further here. Don't do for barrel plots as the x axis is later restricted to smaller region
+      if (hist.substr(0,3) == "dt1" && hist.substr(9,2) != "HB") {
         multHists_QCD[hist]->Rebin(rebinFactor*4);
       }
+      int yMax = 0;
+      yMax = multHists_QCD[iplot.second.front()]->GetMaximum();
+      multHists_QCD[iplot.second.front()]->GetYaxis()->SetRangeUser(0,(yMax*1.4));
       multHists_QCD[hist]->Draw("hist same");
       TString name(multHists_QCD[hist]->GetName());
       leg->AddEntry(multHists_QCD[hist], name(6,3) + " ", "L");
       multHists_QCD[hist]->SetTitle("Multiplicity for QCD, timing scan at " + name(2,4));
+      multHists_QCD[hist]->GetYaxis()->CenterTitle(true);
       if ( name(9,2) == "HE" || name(9,2) == "HB" ){
         multHists_QCD[hist]->SetTitle("Multiplicity for QCD, timing scan at " + name(2,4) + " in " + name(9,2));
-	if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,150);
-        if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,100);
+	if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,100);
+        if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,70);
         if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,50);
       }
       multHists_QCD[hist]->GetXaxis()->SetLabelSize(0.03);
@@ -324,21 +301,22 @@ int main()
     for (auto hist : iplot.second) {
       multHists_LLP10000[hist]->GetYaxis()->SetRangeUser(0,3000000);
       // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV                                
-      if (hist.substr(0,3) == "dt2") {
+      if (hist.substr(0,3) == "dt2" && hist.substr(9,2) != "HB") {
         multHists_LLP10000[hist]->Rebin(rebinFactor*2);
       }
       // rebin histograms for 1 GeV energy cut, as the x-axis extends further here                       
-      if (hist.substr(0,3) == "dt1") {
+      if (hist.substr(0,3) == "dt1" && hist.substr(9,2) != "HB") {
         multHists_LLP10000[hist]->Rebin(rebinFactor*4);
       }
       multHists_LLP10000[hist]->Draw("hist same");
       TString name(multHists_LLP10000[hist]->GetName());
       leg->AddEntry(multHists_LLP10000[hist], name(6,3) + " ", "L");
       multHists_LLP10000[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=10m, timing scan at " + name(2,4));
+      multHists_LLP10000[hist]->GetYaxis()->CenterTitle(true);
       if ( name(9,2) == "HE" || name(9,2) == "HB" ){
 	multHists_LLP10000[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=10m, timing scan at " + name(2,4) + " in " + name(9,2));
-	if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_LLP10000[hist]->GetXaxis()->SetRangeUser(0,150);
-	if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_LLP10000[hist]->GetXaxis()->SetRangeUser(0,100);
+	if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_LLP10000[hist]->GetXaxis()->SetRangeUser(0,100);
+	if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_LLP10000[hist]->GetXaxis()->SetRangeUser(0,70);
 	if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_LLP10000[hist]->GetXaxis()->SetRangeUser(0,50);
       }
       multHists_LLP10000[hist]->GetXaxis()->SetLabelSize(0.03);
@@ -367,21 +345,22 @@ int main()
     for (auto hist : iplot.second) {
       multHists_LLP1000[hist]->GetYaxis()->SetRangeUser(0,3000000);
       // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV
-      if ( hist.substr(0,3) == "dt2" ) {
+      if ( hist.substr(0,3) == "dt2" && hist.substr(9,2) != "HB" ) {
         multHists_LLP1000[hist]->Rebin(rebinFactor*2);
       }
       // rebin histograms for 1 GeV energy cut, as the x-axis extends further here
-      if ( hist.substr(0,3) == "dt1" ) {
+      if ( hist.substr(0,3) == "dt1" && hist.substr(9,2) != "HB") {
         multHists_LLP1000[hist]->Rebin(rebinFactor*4);
       }
       multHists_LLP1000[hist]->Draw("hist same");
       TString name(multHists_LLP1000[hist]->GetName());
       leg->AddEntry(multHists_LLP1000[hist], name(6,3) + " ", "L");
       multHists_LLP1000[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=1m, timing scan at " + name(2,4));
+      multHists_LLP1000[hist]->GetYaxis()->CenterTitle(true);
       if ( name(9,2) == "HE" || name(9,2) == "HB" ){
         multHists_LLP1000[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=1m, timing scan at " + name(2,4) + " in " + name(9,2));
-	if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_LLP1000[hist]->GetXaxis()->SetRangeUser(0,150);
-        if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_LLP1000[hist]->GetXaxis()->SetRangeUser(0,100);
+	if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_LLP1000[hist]->GetXaxis()->SetRangeUser(0,100);
+        if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_LLP1000[hist]->GetXaxis()->SetRangeUser(0,70);
         if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_LLP1000[hist]->GetXaxis()->SetRangeUser(0,50);
       }
       multHists_LLP1000[hist]->GetXaxis()->SetLabelSize(0.03);
@@ -410,21 +389,22 @@ int main()
     for (auto hist : iplot.second) {
       multHists_LLP500[hist]->GetYaxis()->SetRangeUser(0,3400000);
       // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV
-      if ( hist.substr(0,3) == "dt2" ) {
+      if ( hist.substr(0,3) == "dt2" && hist.substr(9,2) != "HB" ) {
         multHists_LLP500[hist]->Rebin(rebinFactor*2);
       }
       // rebin histograms for 1 GeV energy cut, as the x-axis extends further here
-      if ( hist.substr(0,3) =="dt1" ) {
+      if ( hist.substr(0,3) =="dt1" && hist.substr(9,2) != "HB" ) {
         multHists_LLP500[hist]->Rebin(rebinFactor*4);
       }
       multHists_LLP500[hist]->Draw("hist same");
       TString name(multHists_LLP500[hist]->GetName());
       leg->AddEntry(multHists_LLP500[hist], name(6,3) + " ", "L");
       multHists_LLP500[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=0.5m, timing scan at " + name(2,4));
+      multHists_LLP500[hist]->GetYaxis()->CenterTitle(true);
       if ( name(9,2) == "HE" || name(9,2) == "HB" ){
         multHists_LLP500[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=0.5m, timing scan at " + name(2,4) + " in region " + name(9,2));
-	if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_LLP500[hist]->GetXaxis()->SetRangeUser(0,150);
-        if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_LLP500[hist]->GetXaxis()->SetRangeUser(0,100);
+	if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_LLP500[hist]->GetXaxis()->SetRangeUser(0,100);
+        if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_LLP500[hist]->GetXaxis()->SetRangeUser(0,70);
         if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_LLP500[hist]->GetXaxis()->SetRangeUser(0,50);
       }
       multHists_LLP500[hist]->GetXaxis()->SetLabelSize(0.03);
@@ -448,31 +428,34 @@ int main()
     pad1.back()->Draw();
     pad1.back()->cd();
     multHists_QCD[hist]->SetLineColor(kBlack);
-    //    double yMax = 0;
-    //    yMax = multHists_QCD[hist]->GetMaximum();
-    //    multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,yMax*1.2);
-    multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,3400000);
     TString name (multHists_QCD[hist]->GetName());
+    if (name(0,5) != "Ratio") {
+      int yMax = 0;
+      yMax = multHists_QCD[hist]->GetMaximum();
+      multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1.2*yMax);
+      if (name(6,3) == "1ns"){
+	multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1400000);
+      }
+    }
     multHists_QCD[hist]->SetFillStyle(3005);
     multHists_QCD[hist]->Draw("hist pfc");
-    //    multHists_QCD[iplot.second.front()]->Draw("hist");
     TLegend *leg = new TLegend(0.55, 0.6, 0.95, 0.93);
-    multHists_QCD[hist]->Draw("hist same");
     multHists_LLP500[hist]->SetLineColor(kBlue);
     multHists_LLP500[hist]->Draw("hist same");
     multHists_LLP1000[hist]->SetLineColor(kGreen);
     multHists_LLP1000[hist]->Draw("hist same");
     multHists_LLP10000[hist]->SetLineColor(kRed);
     multHists_LLP10000[hist]->Draw("hist same");
-    leg->AddEntry(multHists_QCD[hist],"QCD", "L");
+    leg->AddEntry(multHists_QCD[hist],"QCD", "F");
     leg->AddEntry(multHists_LLP500[hist],"LLP, c#scale[1.2]{#tau}=0.5m", "L");
     leg->AddEntry(multHists_LLP1000[hist], "LLP, c#scale[1.2]{#tau}=1m", "L");
     leg->AddEntry(multHists_LLP10000[hist], "LLP, c#scale[1.2]{#tau}=10m", "L");
     multHists_QCD[hist]->SetTitle("Multiplicity Overlay of QCD and LLPs at " + name(2,4) + " and " + name(6,3));
+    multHists_QCD[hist]->GetYaxis()->CenterTitle(true);
     if ( name(9,2) == "HE" || name(9,2) == "HB" ){
       multHists_QCD[hist]->SetTitle("Multiplicity Overlay of QCD and LLPs at " + name(2,4) + " and " + name(6,3) + " in " + name(9,2));
-      if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,150);
-      if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,100);
+      if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,100);
+      if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,70);
       if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,50);
     }
     if (name(0,5) == "Ratio" ) {
@@ -489,9 +472,7 @@ int main()
     canvases.back()->Print(Form("plots/%sOverlay.pdf", hist.substr(2).c_str()));
   }
 
-  std::vector<std::string> EDepth = {"Energy_Depth","Timing_Depth","Energy_DepthHE","Timing_DepthHE","Energy_DepthHB","Timing_DepthHB"};
-
-  for (auto hist : EDepth ) {
+  for (auto hist : EDepthTypes ) {
     canvases.push_back(new TCanvas);
     canvases.back()->SetWindowSize(canvases.back()->GetWw(), canvases.back()->GetWh());
     if (hist.substr(0,6) =="Energy") {
@@ -552,7 +533,6 @@ int main()
     energy_profile_QCD->Draw("ehist");
     energy_profile_QCD->SetTitle("TP Energy Fraction vs. Depth for QCD");
     canvases.back()->Print(Form("plots/%s_QCD.pdf", hist.c_str()));
-    //    canvases.back()->Print(Form("plots/%s_QCD.svg", hist.c_str()));
   }
   for (auto hist : EDepthTypes ) {
     canvases.push_back(new TCanvas);
@@ -570,7 +550,6 @@ int main()
     energy_profile_LLP500->Draw("ehist");
     energy_profile_LLP500->SetTitle("TP Energy Fraction vs. Depth for LLP c#scale[1.2]{#tau}=0.5m");
     canvases.back()->Print(Form("plots/%s_LLP500.pdf", hist.c_str()));
-    //    canvases.back()->Print(Form("plots/%s_LLP500.svg", hist.c_str()));
   }
   for (auto hist : EDepthTypes ) {
     canvases.push_back(new TCanvas);
@@ -588,7 +567,6 @@ int main()
     energy_profile_LLP1000->Draw("ehist");
     energy_profile_LLP1000->SetTitle("TP Energy Fraction vs. Depth for LLP c#scale[1.2]{#tau}=1m");
     canvases.back()->Print(Form("plots/%s_LLP1000.pdf", hist.c_str()));
-    //    canvases.back()->Print(Form("plots/%s_LLP1000.svg", hist.c_str()));
   }
   for (auto hist : EDepthTypes ) {
     canvases.push_back(new TCanvas);
@@ -606,7 +584,6 @@ int main()
     energy_profile_LLP10000->Draw("ehist");
     energy_profile_LLP10000->SetTitle("TP Energy Fraction vs. Depth for LLP c#scale[1.2]{#tau}=10m");
     canvases.back()->Print(Form("plots/%s_LLP10000.pdf", hist.c_str()));
-    //    canvases.back()->Print(Form("plots/%s_LLP10000.svg", hist.c_str()));
   }
   return 0;
 }
