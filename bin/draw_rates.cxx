@@ -275,10 +275,11 @@ int main()
     pad1.back()->SetGrid();
     pad1.back()->Draw();
     pad1.back()->cd();
+    multHists_QCD[iplot.second.front()]->GetYaxis()->SetRangeUser(0,3400000);
     multHists_QCD[iplot.second.front()]->Draw("hist"); // associative array is list of pairs, access by first entry. Second is actual name / value to access
     TLegend *leg = new TLegend(0.65, 1.1 - 0.1*iplot.second.size(), 0.95, 0.93);
     for (auto hist : iplot.second) {
-      multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,2500000);
+      //      multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,3000000);
       // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV
       if (hist.substr(0,3) == "dt2") {
 	multHists_QCD[hist]->Rebin(rebinFactor*2);
@@ -293,9 +294,9 @@ int main()
       multHists_QCD[hist]->SetTitle("Multiplicity for QCD, timing scan at " + name(2,4));
       if ( name(9,2) == "HE" || name(9,2) == "HB" ){
         multHists_QCD[hist]->SetTitle("Multiplicity for QCD, timing scan at " + name(2,4) + " in " + name(9,2));
-	if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRange(0,150);
-        if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRange(0,100);
-        if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRange(0,50);
+	if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,150);
+        if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,100);
+        if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,50);
       }
       multHists_QCD[hist]->GetXaxis()->SetLabelSize(0.03);
       multHists_QCD[hist]->GetYaxis()->SetLabelSize(0.03);
@@ -321,7 +322,7 @@ int main()
     multHists_LLP10000[iplot.second.front()]->Draw("hist");
     TLegend *leg = new TLegend(0.65, 1.1 - 0.1*iplot.second.size(), 0.95, 0.93);
     for (auto hist : iplot.second) {
-      multHists_LLP10000[hist]->GetYaxis()->SetRangeUser(0,2500000);
+      multHists_LLP10000[hist]->GetYaxis()->SetRangeUser(0,3000000);
       // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV                                
       if (hist.substr(0,3) == "dt2") {
         multHists_LLP10000[hist]->Rebin(rebinFactor*2);
@@ -336,9 +337,9 @@ int main()
       multHists_LLP10000[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=10m, timing scan at " + name(2,4));
       if ( name(9,2) == "HE" || name(9,2) == "HB" ){
 	multHists_LLP10000[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=10m, timing scan at " + name(2,4) + " in " + name(9,2));
-	if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_LLP10000[hist]->GetXaxis()->SetRange(0,150);
-	if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_LLP10000[hist]->GetXaxis()->SetRange(0,100);
-	if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_LLP10000[hist]->GetXaxis()->SetRange(0,50);
+	if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_LLP10000[hist]->GetXaxis()->SetRangeUser(0,150);
+	if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_LLP10000[hist]->GetXaxis()->SetRangeUser(0,100);
+	if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_LLP10000[hist]->GetXaxis()->SetRangeUser(0,50);
       }
       multHists_LLP10000[hist]->GetXaxis()->SetLabelSize(0.03);
       multHists_LLP10000[hist]->GetYaxis()->SetLabelSize(0.03);
@@ -364,7 +365,7 @@ int main()
     multHists_LLP1000[iplot.second.front()]->Draw("hist");
     TLegend *leg = new TLegend(0.65, 1.1 - 0.1*iplot.second.size(), 0.95, 0.93);
     for (auto hist : iplot.second) {
-      multHists_LLP1000[hist]->GetYaxis()->SetRangeUser(0,2500000);
+      multHists_LLP1000[hist]->GetYaxis()->SetRangeUser(0,3000000);
       // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV
       if ( hist.substr(0,3) == "dt2" ) {
         multHists_LLP1000[hist]->Rebin(rebinFactor*2);
@@ -379,9 +380,9 @@ int main()
       multHists_LLP1000[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=1m, timing scan at " + name(2,4));
       if ( name(9,2) == "HE" || name(9,2) == "HB" ){
         multHists_LLP1000[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=1m, timing scan at " + name(2,4) + " in " + name(9,2));
-	if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_LLP1000[hist]->GetXaxis()->SetRange(0,150);
-        if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_LLP1000[hist]->GetXaxis()->SetRange(0,100);
-        if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_LLP1000[hist]->GetXaxis()->SetRange(0,50);
+	if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_LLP1000[hist]->GetXaxis()->SetRangeUser(0,150);
+        if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_LLP1000[hist]->GetXaxis()->SetRangeUser(0,100);
+        if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_LLP1000[hist]->GetXaxis()->SetRangeUser(0,50);
       }
       multHists_LLP1000[hist]->GetXaxis()->SetLabelSize(0.03);
       multHists_LLP1000[hist]->GetYaxis()->SetLabelSize(0.03);
@@ -407,7 +408,7 @@ int main()
     multHists_LLP500[iplot.second.front()]->Draw("hist");
     TLegend *leg = new TLegend(0.65, 1.1 - 0.1*iplot.second.size(), 0.95, 0.93);
     for (auto hist : iplot.second) {
-      multHists_LLP500[hist]->GetYaxis()->SetRangeUser(0,2500000);
+      multHists_LLP500[hist]->GetYaxis()->SetRangeUser(0,3400000);
       // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV
       if ( hist.substr(0,3) == "dt2" ) {
         multHists_LLP500[hist]->Rebin(rebinFactor*2);
@@ -422,9 +423,9 @@ int main()
       multHists_LLP500[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=0.5m, timing scan at " + name(2,4));
       if ( name(9,2) == "HE" || name(9,2) == "HB" ){
         multHists_LLP500[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=0.5m, timing scan at " + name(2,4) + " in region " + name(9,2));
-	if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_LLP500[hist]->GetXaxis()->SetRange(0,150);
-        if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_LLP500[hist]->GetXaxis()->SetRange(0,100);
-        if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_LLP500[hist]->GetXaxis()->SetRange(0,50);
+	if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_LLP500[hist]->GetXaxis()->SetRangeUser(0,150);
+        if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_LLP500[hist]->GetXaxis()->SetRangeUser(0,100);
+        if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_LLP500[hist]->GetXaxis()->SetRangeUser(0,50);
       }
       multHists_LLP500[hist]->GetXaxis()->SetLabelSize(0.03);
       multHists_LLP500[hist]->GetYaxis()->SetLabelSize(0.03);
@@ -446,13 +447,16 @@ int main()
     pad1.back()->SetGrid();
     pad1.back()->Draw();
     pad1.back()->cd();
-    multHists_QCD[hist]->Draw("hist");
+    multHists_QCD[hist]->SetLineColor(kBlack);
+    //    double yMax = 0;
+    //    yMax = multHists_QCD[hist]->GetMaximum();
+    //    multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,yMax*1.2);
+    multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,3400000);
+    TString name (multHists_QCD[hist]->GetName());
+    multHists_QCD[hist]->SetFillStyle(3005);
+    multHists_QCD[hist]->Draw("hist pfc");
     //    multHists_QCD[iplot.second.front()]->Draw("hist");
     TLegend *leg = new TLegend(0.55, 0.6, 0.95, 0.93);
-    double yMax = 0;
-    yMax = multHists_LLP1000[hist]->GetMaximum();
-    multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,yMax*1.2);
-    multHists_QCD[hist]->SetLineColor(kBlack);
     multHists_QCD[hist]->Draw("hist same");
     multHists_LLP500[hist]->SetLineColor(kBlue);
     multHists_LLP500[hist]->Draw("hist same");
@@ -460,7 +464,6 @@ int main()
     multHists_LLP1000[hist]->Draw("hist same");
     multHists_LLP10000[hist]->SetLineColor(kRed);
     multHists_LLP10000[hist]->Draw("hist same");
-    TString name (multHists_QCD[hist]->GetName());
     leg->AddEntry(multHists_QCD[hist],"QCD", "L");
     leg->AddEntry(multHists_LLP500[hist],"LLP, c#scale[1.2]{#tau}=0.5m", "L");
     leg->AddEntry(multHists_LLP1000[hist], "LLP, c#scale[1.2]{#tau}=1m", "L");
@@ -468,9 +471,9 @@ int main()
     multHists_QCD[hist]->SetTitle("Multiplicity Overlay of QCD and LLPs at " + name(2,4) + " and " + name(6,3));
     if ( name(9,2) == "HE" || name(9,2) == "HB" ){
       multHists_QCD[hist]->SetTitle("Multiplicity Overlay of QCD and LLPs at " + name(2,4) + " and " + name(6,3) + " in " + name(9,2));
-      if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRange(0,150);
-      if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRange(0,100);
-      if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRange(0,50);
+      if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,150);
+      if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,100);
+      if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,50);
     }
     if (name(0,5) == "Ratio" ) {
       multHists_QCD[hist]->SetTitle("Ratio of First 2 HCAL Layers to E_{T} " + name(11,7));
