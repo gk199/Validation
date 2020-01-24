@@ -293,6 +293,9 @@ int main()
       multHists_QCD[hist]->SetTitle("Multiplicity for QCD, timing scan at " + name(2,4));
       if ( name(9,2) == "HE" || name(9,2) == "HB" ){
         multHists_QCD[hist]->SetTitle("Multiplicity for QCD, timing scan at " + name(2,4) + " in " + name(9,2));
+	if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRange(0,150);
+        if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRange(0,100);
+        if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRange(0,50);
       }
       multHists_QCD[hist]->GetXaxis()->SetLabelSize(0.03);
       multHists_QCD[hist]->GetYaxis()->SetLabelSize(0.03);
@@ -333,6 +336,9 @@ int main()
       multHists_LLP10000[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=10m, timing scan at " + name(2,4));
       if ( name(9,2) == "HE" || name(9,2) == "HB" ){
 	multHists_LLP10000[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=10m, timing scan at " + name(2,4) + " in " + name(9,2));
+	if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_LLP10000[hist]->GetXaxis()->SetRange(0,150);
+	if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_LLP10000[hist]->GetXaxis()->SetRange(0,100);
+	if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_LLP10000[hist]->GetXaxis()->SetRange(0,50);
       }
       multHists_LLP10000[hist]->GetXaxis()->SetLabelSize(0.03);
       multHists_LLP10000[hist]->GetYaxis()->SetLabelSize(0.03);
@@ -373,6 +379,9 @@ int main()
       multHists_LLP1000[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=1m, timing scan at " + name(2,4));
       if ( name(9,2) == "HE" || name(9,2) == "HB" ){
         multHists_LLP1000[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=1m, timing scan at " + name(2,4) + " in " + name(9,2));
+	if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_LLP1000[hist]->GetXaxis()->SetRange(0,150);
+        if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_LLP1000[hist]->GetXaxis()->SetRange(0,100);
+        if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_LLP1000[hist]->GetXaxis()->SetRange(0,50);
       }
       multHists_LLP1000[hist]->GetXaxis()->SetLabelSize(0.03);
       multHists_LLP1000[hist]->GetYaxis()->SetLabelSize(0.03);
@@ -413,6 +422,9 @@ int main()
       multHists_LLP500[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=0.5m, timing scan at " + name(2,4));
       if ( name(9,2) == "HE" || name(9,2) == "HB" ){
         multHists_LLP500[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=0.5m, timing scan at " + name(2,4) + " in region " + name(9,2));
+	if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_LLP500[hist]->GetXaxis()->SetRange(0,150);
+        if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_LLP500[hist]->GetXaxis()->SetRange(0,100);
+        if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_LLP500[hist]->GetXaxis()->SetRange(0,50);
       }
       multHists_LLP500[hist]->GetXaxis()->SetLabelSize(0.03);
       multHists_LLP500[hist]->GetYaxis()->SetLabelSize(0.03);
@@ -456,6 +468,9 @@ int main()
     multHists_QCD[hist]->SetTitle("Multiplicity Overlay of QCD and LLPs at " + name(2,4) + " and " + name(6,3));
     if ( name(9,2) == "HE" || name(9,2) == "HB" ){
       multHists_QCD[hist]->SetTitle("Multiplicity Overlay of QCD and LLPs at " + name(2,4) + " and " + name(6,3) + " in " + name(9,2));
+      if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRange(0,150);
+      if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRange(0,100);
+      if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRange(0,50);
     }
     if (name(0,5) == "Ratio" ) {
       multHists_QCD[hist]->SetTitle("Ratio of First 2 HCAL Layers to E_{T} " + name(11,7));
@@ -471,25 +486,43 @@ int main()
     canvases.back()->Print(Form("plots/%sOverlay.pdf", hist.substr(2).c_str()));
   }
 
-  for (auto hist : EDepthTypes ) {
+  std::vector<std::string> EDepth = {"Energy_Depth","Timing_Depth","Energy_DepthHE","Timing_DepthHE","Energy_DepthHB","Timing_DepthHB"};
+
+  for (auto hist : EDepth ) {
     canvases.push_back(new TCanvas);
     canvases.back()->SetWindowSize(canvases.back()->GetWw(), canvases.back()->GetWh());
-    pad1.push_back(new TPad("pad1", "pad1", 0, 0, 1, 1));
+    if (hist.substr(0,6) =="Energy") {
+      pad1.push_back(new TPad("pad1", "pad1", 0, 0, 1, 1));
+    }
+    if (hist.substr(0,6) =="Timing") { 
+      pad1.push_back(new TPad("pad2", "pad2", 0, 0, 1, 1));
+    }
+    //    pad1.push_back(new TPad("pad1", "pad1", 0, 0, 1, 1));
     pad1.back()->SetGrid();
     pad1.back()->Draw();
     pad1.back()->cd();
-    if (hist.substr(0,6) =="Energy") {
-      energy_profile_QCD_overlay[hist]->SetMaximum(1);
-    }
+    //    TH1D *energy_profile_QCD = energy_depth_QCD[hist]->ProfileX();
+    energy_profile_QCD_overlay[hist]->Draw("hist");
     TLegend *leg = new TLegend(0.55, 0.6, 0.95, 0.93);
+    if (hist.substr(0,6) =="Energy") {
+      energy_profile_QCD_overlay[hist]->GetYaxis()->SetRangeUser(0,1);
+    }
+    else energy_profile_QCD_overlay[hist]->GetYaxis()->SetRangeUser(0,11);
     energy_profile_QCD_overlay[hist]->SetLineColor(kBlack);
-    energy_profile_QCD_overlay[hist]->Draw("ehist");
+    energy_profile_QCD_overlay[hist]->SetDirectory(0);
+    energy_profile_QCD_overlay[hist]->Draw("ehist same");
+    //    TH1D *energy_profile_LLP500 = energy_depth_LLP500[hist]->ProfileX();
     energy_profile_LLP500_overlay[hist]->SetLineColor(kBlue);
-    energy_profile_LLP500_overlay[hist]->Draw("ehist SAME");
+    energy_profile_LLP500_overlay[hist]->SetDirectory(0);
+    energy_profile_LLP500_overlay[hist]->Draw("ehist same");
+    //    TH1D *energy_profile_LLP1000 = energy_depth_LLP1000[hist]->ProfileX();
     energy_profile_LLP1000_overlay[hist]->SetLineColor(kGreen);
-    energy_profile_LLP1000_overlay[hist]->Draw("ehist SAME");
+    energy_profile_LLP1000_overlay[hist]->SetDirectory(0);
+    energy_profile_LLP1000_overlay[hist]->Draw("ehist same");
+    //    TH1D *energy_profile_LLP10000 = energy_depth_LLP10000[hist]->ProfileX();
     energy_profile_LLP10000_overlay[hist]->SetLineColor(kRed);
-    energy_profile_LLP10000_overlay[hist]->Draw("ehist SAME");
+    energy_profile_LLP10000_overlay[hist]->SetDirectory(0);
+    energy_profile_LLP10000_overlay[hist]->Draw("ehist same");
     leg->AddEntry(energy_profile_QCD_overlay[hist],"QCD","L");
     leg->AddEntry(energy_profile_LLP500_overlay[hist],"LLP, c#scale[1.2]{#tau}=0.5m", "L");
     leg->AddEntry(energy_profile_LLP1000_overlay[hist], "LLP, c#scale[1.2]{#tau}=1m", "L");
@@ -497,6 +530,7 @@ int main()
     leg->SetBorderSize(0);
     leg->Draw("same");
     canvases.back()->Print(Form("plots/%s_LLPQCD_overlay.pdf", hist.c_str()));
+    //    canvases.back()->Print(Form("plots/%s_LLPQCD_overlay.svg", hist.c_str()));
   }
 
   for (auto hist : EDepthTypes ) {
@@ -510,10 +544,12 @@ int main()
     if (hist.substr(0,6) =="Energy") {
       energy_profile_QCD->SetMaximum(1);
     }
+    else energy_profile_QCD->GetYaxis()->SetRangeUser(0,11);
     energy_profile_QCD->SetLineColor(kBlack);
     energy_profile_QCD->Draw("ehist");
     energy_profile_QCD->SetTitle("TP Energy Fraction vs. Depth for QCD");
     canvases.back()->Print(Form("plots/%s_QCD.pdf", hist.c_str()));
+    //    canvases.back()->Print(Form("plots/%s_QCD.svg", hist.c_str()));
   }
   for (auto hist : EDepthTypes ) {
     canvases.push_back(new TCanvas);
@@ -526,10 +562,12 @@ int main()
     if (hist.substr(0,6) =="Energy") {
       energy_profile_LLP500->SetMaximum(1);
     }
+    else energy_profile_LLP500->GetYaxis()->SetRangeUser(0,11);
     energy_profile_LLP500->SetLineColor(kBlue);
     energy_profile_LLP500->Draw("ehist");
     energy_profile_LLP500->SetTitle("TP Energy Fraction vs. Depth for LLP c#scale[1.2]{#tau}=0.5m");
     canvases.back()->Print(Form("plots/%s_LLP500.pdf", hist.c_str()));
+    //    canvases.back()->Print(Form("plots/%s_LLP500.svg", hist.c_str()));
   }
   for (auto hist : EDepthTypes ) {
     canvases.push_back(new TCanvas);
@@ -542,10 +580,12 @@ int main()
     if (hist.substr(0,6) =="Energy") {
       energy_profile_LLP1000->SetMaximum(1);
     }
+    else energy_profile_LLP1000->GetYaxis()->SetRangeUser(0,11);
     energy_profile_LLP1000->SetLineColor(kGreen);
     energy_profile_LLP1000->Draw("ehist");
     energy_profile_LLP1000->SetTitle("TP Energy Fraction vs. Depth for LLP c#scale[1.2]{#tau}=1m");
     canvases.back()->Print(Form("plots/%s_LLP1000.pdf", hist.c_str()));
+    //    canvases.back()->Print(Form("plots/%s_LLP1000.svg", hist.c_str()));
   }
   for (auto hist : EDepthTypes ) {
     canvases.push_back(new TCanvas);
@@ -558,10 +598,12 @@ int main()
     if (hist.substr(0,6) == "Energy") {
       energy_profile_LLP10000->SetMaximum(1);
     }
+    else energy_profile_LLP10000->GetYaxis()->SetRangeUser(0,11);
     energy_profile_LLP10000->SetLineColor(kRed);
     energy_profile_LLP10000->Draw("ehist");
     energy_profile_LLP10000->SetTitle("TP Energy Fraction vs. Depth for LLP c#scale[1.2]{#tau}=10m");
     canvases.back()->Print(Form("plots/%s_LLP10000.pdf", hist.c_str()));
+    //    canvases.back()->Print(Form("plots/%s_LLP10000.svg", hist.c_str()));
   }
   return 0;
 }
