@@ -6,6 +6,9 @@
 #include "TTree.h"
 #include "TH1F.h"
 #include "TH2F.h"
+#include "TProfile.h"
+#include "TH1.h"
+#include "TH2.h"
 #include "TChain.h"
 #include <iostream>
 #include <fstream>
@@ -335,7 +338,14 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH2F * Timing_DepthHE = new TH2F("Timing_DepthHE", "TP Timing Value vs. Depth in HE;HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5, 60, 0, 30);
   TH2F * Energy_DepthHB = new TH2F("Energy_DepthHB", "TP Energy Fraction vs. Depth in HB;HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 1.2);
   TH2F * Timing_DepthHB = new TH2F("Timing_DepthHB", "TP Timing Value vs. Depth in HB;HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5, 60, 0, 30);
-
+  // making TH1D for the ProfileX() from the TH2F of energy_depth or timing_depth plots
+  TH1D * Energy_Depth_avg = new TH1D("Energy_Depth_avg", "TP Avg Energy Fraction vs. Depth;HCAL Depth;Energy Fraction", 8, -0.5, 7.5);
+  TH1D * Timing_Depth_avg = new TH1D("Timing_Depth_avg", "TP Avg Timing Value vs. Depth;HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5);
+  TH1D * Energy_DepthHE_avg = new TH1D("Energy_DepthHE_avg", "TP Avg Energy Fraction vs. Depth in HE;HCAL Depth;Energy Fraction", 8, -0.5, 7.5);
+  TH1D * Timing_DepthHE_avg = new TH1D("Timing_DepthHE_avg", "TP Avg Timing Value vs. Depth in HE;HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5);
+  TH1D * Energy_DepthHB_avg = new TH1D("Energy_DepthHB_avg", "TP Avg Energy Fraction vs. Depth in HB;HCAL Depth;Energy Fraction", 8, -0.5, 7.5);
+  TH1D * Timing_DepthHB_avg = new TH1D("Timing_DepthHB_avg", "TP Avg Timing Value vs. Depth in HB;HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5);
+  // Ratio of energy in HCAL depth layers
   TH1F * Ratio_Depth = new TH1F("Ratio_Depth", "Ratio of First 2 HCAL Layers to E_{T};Ratio;Number of Events", 50,0,1);
   TH1F * Ratio_DepthHE = new TH1F("Ratio_DepthHE", "Ratio of First 2 HCAL Layers to E_{T} in HE;Ratio;Number of Events", 50,0,1);
   TH1F * Ratio_DepthHB = new TH1F("Ratio_DepthHB", "Ratio of First 2 HCAL Layers to E_{T} in HB;Ratio;Number of Events", 50,0,1);
@@ -1061,6 +1071,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     etSumRates_emu->Scale(norm);
     metSumRates_emu->Scale(norm);
     metHFSumRates_emu->Scale(norm);
+    /*
     // 3 GeV
     dt3GeV1nsMult_emu->Scale(norm);
     dt3GeV2nsMult_emu->Scale(norm);
@@ -1109,7 +1120,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     dt1GeV3nsHBMult_emu->Scale(norm);
     dt1GeV4nsHBMult_emu->Scale(norm);
     dt1GeV5nsHBMult_emu->Scale(norm);
-
+    // energy and timing depth
     Energy_Depth->Scale(norm);
     Timing_Depth->Scale(norm);
     Energy_DepthHE->Scale(norm);
@@ -1122,6 +1133,15 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     Ratio_Depth_Jets->Scale(norm);
     Ratio_DepthHE_Jets->Scale(norm);
     Ratio_DepthHB_Jets->Scale(norm);
+    */
+
+    // TH1D as a ProfileX of the depth TH2F for timing and energy
+    Energy_Depth_avg = Energy_Depth->ProfileX();
+    Energy_DepthHE_avg = Energy_DepthHE->ProfileX();
+    Energy_DepthHB_avg = Energy_DepthHB->ProfileX();
+    Timing_Depth_avg = Timing_Depth->ProfileX();
+    Timing_DepthHE_avg = Timing_DepthHE->ProfileX();
+    Timing_DepthHB_avg = Timing_DepthHB->ProfileX();
 
     //set the errors for the rates
     //want error -> error * sqrt(norm) ?
@@ -1200,6 +1220,14 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     Timing_DepthHB->Write();
     Energy_DepthHE->Write();
     Timing_DepthHE->Write();
+
+    Energy_Depth_avg->Write();
+    Energy_DepthHE_avg->Write();
+    Energy_DepthHB_avg->Write();
+    Timing_Depth_avg->Write();
+    Timing_DepthHE_avg->Write();
+    Timing_DepthHB_avg->Write();
+
     Ratio_Depth->Write();
     Ratio_DepthHE->Write();
     Ratio_DepthHB->Write();
