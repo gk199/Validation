@@ -35,7 +35,7 @@ int main()
   // these are multiplicity files (used for timescan and overlay plots) as well as ratio type plots
   std::vector<std::string> multTypes = {"dt3GeV1ns","dt3GeV2ns","dt3GeV3ns","dt3GeV4ns","dt3GeV5ns","dt3GeV1nsHE","dt3GeV2nsHE","dt3GeV3nsHE","dt3GeV4nsHE","dt3GeV5nsHE","dt3GeV1nsHB","dt3GeV2nsHB","dt3GeV3nsHB","dt3GeV4nsHB","dt3GeV5nsHB","dt2GeV1ns","dt2GeV2ns","dt2GeV3ns","dt2GeV4ns","dt2GeV5ns","dt2GeV1nsHE","dt2GeV2nsHE","dt2GeV3nsHE","dt2GeV4nsHE","dt2GeV5nsHE","dt2GeV1nsHB","dt2GeV2nsHB","dt2GeV3nsHB","dt2GeV4nsHB","dt2GeV5nsHB","dt1GeV1ns","dt1GeV2ns","dt1GeV3ns","dt1GeV4ns","dt1GeV5ns","dt1GeV1nsHE","dt1GeV2nsHE","dt1GeV3nsHE","dt1GeV4nsHE","dt1GeV5nsHE","dt1GeV1nsHB","dt1GeV2nsHB","dt1GeV3nsHB","dt1GeV4nsHB","dt1GeV5nsHB", "Ratio_Depth", "Ratio_DepthHE", "Ratio_DepthHB","Ratio_Depth_Jets", "Ratio_DepthHE_Jets", "Ratio_DepthHB_Jets"};
 
-  std::vector<std::string> EDepthTypes = {"Energy_Depth","Timing_Depth","Energy_DepthHE","Timing_DepthHE","Energy_DepthHB","Timing_DepthHB"};
+  std::vector<std::string> EDepthTypes = {"Energy_Depth","Timing_Depth","Energy_DepthHE","Timing_DepthHE","Energy_DepthHB","Timing_DepthHB","Energy_Depth_HighE","Timing_Depth_HighE","Energy_DepthHE_HighE","Timing_DepthHE_HighE","Energy_DepthHB_HighE","Timing_DepthHB_HighE", "Energy_Depth_Jets","Timing_Depth_Jets","Energy_DepthHE_Jets","Timing_DepthHE_Jets","Energy_DepthHB_Jets","Timing_DepthHB_Jets","Energy_Depth_Jets_HighE","Timing_Depth_Jets_HighE","Energy_DepthHE_Jets_HighE","Timing_DepthHE_Jets_HighE","Energy_DepthHB_Jets_HighE","Timing_DepthHB_Jets_HighE"};
 
   std::vector<std::string> RatioTypes = {"Ratio_Depth", "Ratio_DepthHE", "Ratio_DepthHB","Ratio_Depth_Jets", "Ratio_DepthHE_Jets", "Ratio_DepthHB_Jets"};
 
@@ -487,8 +487,8 @@ int main()
     }
     if (hist.substr(0,6) == "Timing") {
       y1 = 0.15;
-      y2 = 0.50;
-      energy_profile_QCD->GetYaxis()->SetRangeUser(0,11);
+      y2 = 0.35;
+      energy_profile_QCD->GetYaxis()->SetRangeUser(0,12);
       energy_profile_QCD->GetYaxis()->SetTitle("Average Timing (ns)");
     }
     TLegend *leg = new TLegend(0.55, y1, 0.95, y2);
@@ -527,7 +527,7 @@ int main()
     if (hist.substr(0,6) =="Energy") {
       energy_profile_QCD->SetMaximum(1);
     }
-    else energy_profile_QCD->GetYaxis()->SetRangeUser(0,11);
+    else energy_profile_QCD->GetYaxis()->SetRangeUser(0,12);
     energy_profile_QCD->SetLineColor(kBlack);
     energy_profile_QCD->Draw("ehist");
     energy_profile_QCD->SetTitle("TP Energy Fraction vs. Depth for QCD");
@@ -544,7 +544,7 @@ int main()
     if (hist.substr(0,6) =="Energy") {
       energy_profile_LLP500->SetMaximum(1);
     }
-    else energy_profile_LLP500->GetYaxis()->SetRangeUser(0,11);
+    else energy_profile_LLP500->GetYaxis()->SetRangeUser(0,12);
     energy_profile_LLP500->SetLineColor(kBlue);
     energy_profile_LLP500->Draw("ehist");
     energy_profile_LLP500->SetTitle("TP Energy Fraction vs. Depth for LLP c#scale[1.2]{#tau}=0.5m");
@@ -561,7 +561,7 @@ int main()
     if (hist.substr(0,6) =="Energy") {
       energy_profile_LLP1000->SetMaximum(1);
     }
-    else energy_profile_LLP1000->GetYaxis()->SetRangeUser(0,11);
+    else energy_profile_LLP1000->GetYaxis()->SetRangeUser(0,12);
     energy_profile_LLP1000->SetLineColor(kGreen);
     energy_profile_LLP1000->Draw("ehist");
     energy_profile_LLP1000->SetTitle("TP Energy Fraction vs. Depth for LLP c#scale[1.2]{#tau}=1m");
@@ -578,7 +578,7 @@ int main()
     if (hist.substr(0,6) == "Energy") {
       energy_profile_LLP10000->SetMaximum(1);
     }
-    else energy_profile_LLP10000->GetYaxis()->SetRangeUser(0,11);
+    else energy_profile_LLP10000->GetYaxis()->SetRangeUser(0,12);
     energy_profile_LLP10000->SetLineColor(kRed);
     energy_profile_LLP10000->Draw("ehist");
     energy_profile_LLP10000->SetTitle("TP Energy Fraction vs. Depth for LLP c#scale[1.2]{#tau}=10m");
