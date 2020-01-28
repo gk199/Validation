@@ -263,11 +263,11 @@ int main()
     TLegend *leg = new TLegend(0.65, 1.1 - 0.1*iplot.second.size(), 0.95, 0.93);
     for (auto hist : iplot.second) { // associative array is list of pairs, access by first entry. Second is actual name / value to access
       // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV. Don't do for HB
-      if (hist.substr(0,3) == "dt2" && hist.substr(9,2) != "HB") {
+      if (hist.substr(0,3) == "dt2" && hist.substr(9,2) != "HB" && hist.substr(hist.length()-3) != "Jet") {
 	multHists_QCD[hist]->Rebin(rebinFactor*2);
       }
       // rebin histograms for 1 GeV energy cut, as the x-axis extends further here. Don't do for barrel plots as the x axis is later restricted to smaller region
-      if (hist.substr(0,3) == "dt1" && hist.substr(9,2) != "HB") {
+      if (hist.substr(0,3) == "dt1" && hist.substr(9,2) != "HB"  && hist.substr(hist.length()-3) != "Jet") {
         multHists_QCD[hist]->Rebin(rebinFactor*4);
       }
       int yMax = 0;
@@ -314,11 +314,11 @@ int main()
     TLegend *leg = new TLegend(0.65, 1.1 - 0.1*iplot.second.size(), 0.95, 0.93);
     for (auto hist : iplot.second) {
       // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV                                
-      if (hist.substr(0,3) == "dt2" && hist.substr(9,2) != "HB") {
+      if (hist.substr(0,3) == "dt2" && hist.substr(9,2) != "HB"  && hist.substr(hist.length()-3) != "Jet") {
         multHists_LLP10000[hist]->Rebin(rebinFactor*2);
       }
       // rebin histograms for 1 GeV energy cut, as the x-axis extends further here                       
-      if (hist.substr(0,3) == "dt1" && hist.substr(9,2) != "HB") {
+      if (hist.substr(0,3) == "dt1" && hist.substr(9,2) != "HB"  && hist.substr(hist.length()-3) != "Jet") {
         multHists_LLP10000[hist]->Rebin(rebinFactor*4);
       }
       int yMax = 0;
@@ -365,11 +365,11 @@ int main()
     TLegend *leg = new TLegend(0.65, 1.1 - 0.1*iplot.second.size(), 0.95, 0.93);
     for (auto hist : iplot.second) {
       // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV
-      if ( hist.substr(0,3) == "dt2" && hist.substr(9,2) != "HB" ) {
+      if ( hist.substr(0,3) == "dt2" && hist.substr(9,2) != "HB"  && hist.substr(hist.length()-3) != "Jet") {
         multHists_LLP1000[hist]->Rebin(rebinFactor*2);
       }
       // rebin histograms for 1 GeV energy cut, as the x-axis extends further here
-      if ( hist.substr(0,3) == "dt1" && hist.substr(9,2) != "HB") {
+      if ( hist.substr(0,3) == "dt1" && hist.substr(9,2) != "HB"  && hist.substr(hist.length()-3) != "Jet" ) {
         multHists_LLP1000[hist]->Rebin(rebinFactor*4);
       }
       int yMax = 0;
@@ -416,11 +416,11 @@ int main()
     TLegend *leg = new TLegend(0.65, 1.1 - 0.1*iplot.second.size(), 0.95, 0.93);
     for (auto hist : iplot.second) {
       // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV
-      if ( hist.substr(0,3) == "dt2" && hist.substr(9,2) != "HB" ) {
+      if ( hist.substr(0,3) == "dt2" && hist.substr(9,2) != "HB"  && hist.substr(hist.length()-3) != "Jet" ) {
         multHists_LLP500[hist]->Rebin(rebinFactor*2);
       }
       // rebin histograms for 1 GeV energy cut, as the x-axis extends further here
-      if ( hist.substr(0,3) =="dt1" && hist.substr(9,2) != "HB" ) {
+      if ( hist.substr(0,3) =="dt1" && hist.substr(9,2) != "HB" && hist.substr(hist.length()-3) != "Jet" ) {
         multHists_LLP500[hist]->Rebin(rebinFactor*4);
       }
       int yMax = 0;
