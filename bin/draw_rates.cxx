@@ -24,8 +24,8 @@ int main()
 
   // default, then new conditions
   // files for L1 rates
-  //  std::vector<std::string> filenames = {"rates_def.root", "rates_new_cond.root"};
-  std::vector<std::string> filenames = {"rates_new_cond_QCD.root", "rates_new_cond_pl1000.root"};
+  std::vector<std::string> filenames = {"rates_def_nugunTDC.root", "rates_new_cond_nugunTDC.root"};
+  //  std::vector<std::string> filenames = {"rates_new_cond_QCD.root", "rates_new_cond_pl1000.root"};
   std::vector<std::string> rateTypes = {"singleJet", "doubleJet", "tripleJet", "quadJet",
 					"singleEg", "singleISOEg", "doubleEg", "doubleISOEg",
 					"singleTau", "singleISOTau", "doubleTau", "doubleISOTau",
@@ -247,7 +247,7 @@ int main()
     }
 
     if(includeHW) canvases.back()->Print(Form("plots/%sRates_hw.pdf", iplot.first.c_str()));
-    //    else canvases.back()->Print(Form("plots/%sRates_emu.pdf", iplot.first.c_str()));
+    else canvases.back()->Print(Form("plots/%sRates_emu.pdf", iplot.first.c_str()));
   }
 
   // multiplicity plot loop
