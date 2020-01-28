@@ -227,7 +227,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 
   std::string axR = ";Threshold E_{T} (GeV);rate (Hz)";
   std::string axD = ";E_{T} (GeV);events/bin";
-  std::string mult = ";Multiplicity;Number of Entries";
+  std::string mult = ";Hit Multiplicity;Number of Entries";
 
   //make histos
   TH1F* singleJetRates_emu = new TH1F("singleJetRates_emu", axR.c_str(), nJetBins, jetLo, jetHi);
@@ -276,118 +276,118 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 
   // 3 GeV energy cuts, scanning time cuts
   // inclusive
-  TH1F * dt3GeV1nsMult_emu = new TH1F("dt3GeV1nsMult_emu","Multiplicity of 1ns delayed cells above 3 GeV (inclusive);Multiplicity;Number of Entries",120,0,120);
-  TH1F * dt3GeV2nsMult_emu = new TH1F("dt3GeV2nsMult_emu","Multiplicity of 2ns delayed cells above 3 GeV (inclusive);Multiplicity;Number of Entries",120,0,120);
-  TH1F * dt3GeV3nsMult_emu = new TH1F("dt3GeV3nsMult_emu","Multiplicity of 3ns delayed cells above 3 GeV (inclusive);Multiplicity;Number of Entries",120,0,120);
-  TH1F * dt3GeV4nsMult_emu = new TH1F("dt3GeV4nsMult_emu","Multiplicity of 4ns delayed cells above 3 GeV (inclusive);Multiplicity;Number of Entries",120,0,120);
-  TH1F * dt3GeV5nsMult_emu = new TH1F("dt3GeV5nsMult_emu","Multiplicity of 5ns delayed cells above 3 GeV (inclusive);Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV1nsMult_emu = new TH1F("dt3GeV1nsMult_emu","Multiplicity of 1ns delayed cells above 3 GeV (inclusive);Hit Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV2nsMult_emu = new TH1F("dt3GeV2nsMult_emu","Multiplicity of 2ns delayed cells above 3 GeV (inclusive);Hit Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV3nsMult_emu = new TH1F("dt3GeV3nsMult_emu","Multiplicity of 3ns delayed cells above 3 GeV (inclusive);Hit Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV4nsMult_emu = new TH1F("dt3GeV4nsMult_emu","Multiplicity of 4ns delayed cells above 3 GeV (inclusive);Hit Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV5nsMult_emu = new TH1F("dt3GeV5nsMult_emu","Multiplicity of 5ns delayed cells above 3 GeV (inclusive);Hit Multiplicity;Number of Entries",120,0,120);
   // HE
-  TH1F * dt3GeV1nsHEMult_emu = new TH1F("dt3GeV1nsHEMult_emu","Multiplicity of 1ns delayed cells above 3 GeV (HE);Multiplicity;Number of Entries",120,0,120);
-  TH1F * dt3GeV2nsHEMult_emu = new TH1F("dt3GeV2nsHEMult_emu","Multiplicity of 2ns delayed cells above 3 GeV (HE);Multiplicity;Number of Entries",120,0,120);
-  TH1F * dt3GeV3nsHEMult_emu = new TH1F("dt3GeV3nsHEMult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HE);Multiplicity;Number of Entries",120,0,120);
-  TH1F * dt3GeV4nsHEMult_emu = new TH1F("dt3GeV4nsHEMult_emu","Multiplicity of 4ns delayed cells above 3 GeV (HE);Multiplicity;Number of Entries",120,0,120);
-  TH1F * dt3GeV5nsHEMult_emu = new TH1F("dt3GeV5nsHEMult_emu","Multiplicity of 5ns delayed cells above 3 GeV (HE);Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV1nsHEMult_emu = new TH1F("dt3GeV1nsHEMult_emu","Multiplicity of 1ns delayed cells above 3 GeV (HE);Hit Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV2nsHEMult_emu = new TH1F("dt3GeV2nsHEMult_emu","Multiplicity of 2ns delayed cells above 3 GeV (HE);Hit Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV3nsHEMult_emu = new TH1F("dt3GeV3nsHEMult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HE);Hit Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV4nsHEMult_emu = new TH1F("dt3GeV4nsHEMult_emu","Multiplicity of 4ns delayed cells above 3 GeV (HE);Hit Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV5nsHEMult_emu = new TH1F("dt3GeV5nsHEMult_emu","Multiplicity of 5ns delayed cells above 3 GeV (HE);Hit Multiplicity;Number of Entries",120,0,120);
   // HB
-  TH1F * dt3GeV1nsHBMult_emu = new TH1F("dt3GeV1nsHBMult_emu","Multiplicity of 1ns delayed cells above 3 GeV (HB);Multiplicity;Number of Entries",120,0,120);
-  TH1F * dt3GeV2nsHBMult_emu = new TH1F("dt3GeV2nsHBMult_emu","Multiplicity of 2ns delayed cells above 3 GeV (HB);Multiplicity;Number of Entries",120,0,120);
-  TH1F * dt3GeV3nsHBMult_emu = new TH1F("dt3GeV3nsHBMult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HB);Multiplicity;Number of Entries",120,0,120);
-  TH1F * dt3GeV4nsHBMult_emu = new TH1F("dt3GeV4nsHBMult_emu","Multiplicity of 4ns delayed cells above 3 GeV (HB);Multiplicity;Number of Entries",120,0,120);
-  TH1F * dt3GeV5nsHBMult_emu = new TH1F("dt3GeV5nsHBMult_emu","Multiplicity of 5ns delayed cells above 3 GeV (HB);Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV1nsHBMult_emu = new TH1F("dt3GeV1nsHBMult_emu","Multiplicity of 1ns delayed cells above 3 GeV (HB);Hit Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV2nsHBMult_emu = new TH1F("dt3GeV2nsHBMult_emu","Multiplicity of 2ns delayed cells above 3 GeV (HB);Hit Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV3nsHBMult_emu = new TH1F("dt3GeV3nsHBMult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HB);Hit Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV4nsHBMult_emu = new TH1F("dt3GeV4nsHBMult_emu","Multiplicity of 4ns delayed cells above 3 GeV (HB);Hit Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV5nsHBMult_emu = new TH1F("dt3GeV5nsHBMult_emu","Multiplicity of 5ns delayed cells above 3 GeV (HB);Hit Multiplicity;Number of Entries",120,0,120);
   // for HCAL TP matched with L1 Jet
   // inclusive
-  TH1F * dt3GeV1nsJetMult_emu = new TH1F("dt3GeV1nsJetMult_emu","Multiplicity of 1ns delayed cells above 3 GeV (inclusive, match TP with L1Jet);Multiplicity;Number of Entries",120,0,120);
-  TH1F * dt3GeV2nsJetMult_emu = new TH1F("dt3GeV2nsJetMult_emu","Multiplicity of 2ns delayed cells above 3 GeV (inclusive, match TP with L1Jet);Multiplicity;Number of Entries",120,0,120);
-  TH1F * dt3GeV3nsJetMult_emu = new TH1F("dt3GeV3nsJetMult_emu","Multiplicity of 3ns delayed cells above 3 GeV (inclusive, match TP with L1Jet);Multiplicity;Number of Entries",120,0,120);
-  TH1F * dt3GeV4nsJetMult_emu = new TH1F("dt3GeV4nsJetMult_emu","Multiplicity of 4ns delayed cells above 3 GeV (inclusive, match TP with L1Jet);Multiplicity;Number of Entries",120,0,120);
-  TH1F * dt3GeV5nsJetMult_emu = new TH1F("dt3GeV5nsJetMult_emu","Multiplicity of 5ns delayed cells above 3 GeV (inclusive, match TP with L1Jet);Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV1nsJetMult_emu = new TH1F("dt3GeV1nsJetMult_emu","Multiplicity of 1ns delayed cells above 3 GeV (inclusive, match TP with L1Jet);Hit Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV2nsJetMult_emu = new TH1F("dt3GeV2nsJetMult_emu","Multiplicity of 2ns delayed cells above 3 GeV (inclusive, match TP with L1Jet);Hit Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV3nsJetMult_emu = new TH1F("dt3GeV3nsJetMult_emu","Multiplicity of 3ns delayed cells above 3 GeV (inclusive, match TP with L1Jet);Hit Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV4nsJetMult_emu = new TH1F("dt3GeV4nsJetMult_emu","Multiplicity of 4ns delayed cells above 3 GeV (inclusive, match TP with L1Jet);Hit Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV5nsJetMult_emu = new TH1F("dt3GeV5nsJetMult_emu","Multiplicity of 5ns delayed cells above 3 GeV (inclusive, match TP with L1Jet);Hit Multiplicity;Number of Entries",120,0,120);
   // HE
-  TH1F * dt3GeV1nsHEJetMult_emu = new TH1F("dt3GeV1nsHEJetMult_emu","Multiplicity of 1ns delayed cells above 3 GeV (HE, match TP with L1Jet);Multiplicity;Number of Entries",120,0,120);
-  TH1F * dt3GeV2nsHEJetMult_emu = new TH1F("dt3GeV2nsHEJetMult_emu","Multiplicity of 2ns delayed cells above 3 GeV (HE, match TP with L1Jet);Multiplicity;Number of Entries",120,0,120);
-  TH1F * dt3GeV3nsHEJetMult_emu = new TH1F("dt3GeV3nsHEJetMult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HE, match TP with L1Jet);Multiplicity;Number of Entries",120,0,120);
-  TH1F * dt3GeV4nsHEJetMult_emu = new TH1F("dt3GeV4nsHEJetMult_emu","Multiplicity of 4ns delayed cells above 3 GeV (HE, match TP with L1Jet);Multiplicity;Number of Entries",120,0,120);
-  TH1F * dt3GeV5nsHEJetMult_emu = new TH1F("dt3GeV5nsHEJetMult_emu","Multiplicity of 5ns delayed cells above 3 GeV (HE, match TP with L1Jet);Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV1nsHEJetMult_emu = new TH1F("dt3GeV1nsHEJetMult_emu","Multiplicity of 1ns delayed cells above 3 GeV (HE, match TP with L1Jet);Hit Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV2nsHEJetMult_emu = new TH1F("dt3GeV2nsHEJetMult_emu","Multiplicity of 2ns delayed cells above 3 GeV (HE, match TP with L1Jet);Hit Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV3nsHEJetMult_emu = new TH1F("dt3GeV3nsHEJetMult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HE, match TP with L1Jet);Hit Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV4nsHEJetMult_emu = new TH1F("dt3GeV4nsHEJetMult_emu","Multiplicity of 4ns delayed cells above 3 GeV (HE, match TP with L1Jet);Hit Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV5nsHEJetMult_emu = new TH1F("dt3GeV5nsHEJetMult_emu","Multiplicity of 5ns delayed cells above 3 GeV (HE, match TP with L1Jet);Hit Multiplicity;Number of Entries",120,0,120);
   // HB
-  TH1F * dt3GeV1nsHBJetMult_emu = new TH1F("dt3GeV1nsHBJetMult_emu","Multiplicity of 1ns delayed cells above 3 GeV (HB, match TP with L1Jet);Multiplicity;Number of Entries",120,0,120);
-  TH1F * dt3GeV2nsHBJetMult_emu = new TH1F("dt3GeV2nsHBJetMult_emu","Multiplicity of 2ns delayed cells above 3 GeV (HB, match TP with L1Jet);Multiplicity;Number of Entries",120,0,120);
-  TH1F * dt3GeV3nsHBJetMult_emu = new TH1F("dt3GeV3nsHBJetMult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HB, match TP with L1Jet);Multiplicity;Number of Entries",120,0,120);
-  TH1F * dt3GeV4nsHBJetMult_emu = new TH1F("dt3GeV4nsHBJetMult_emu","Multiplicity of 4ns delayed cells above 3 GeV (HB, match TP with L1Jet);Multiplicity;Number of Entries",120,0,120);
-  TH1F * dt3GeV5nsHBJetMult_emu = new TH1F("dt3GeV5nsHBJetMult_emu","Multiplicity of 5ns delayed cells above 3 GeV (HB, match TP with L1Jet);Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV1nsHBJetMult_emu = new TH1F("dt3GeV1nsHBJetMult_emu","Multiplicity of 1ns delayed cells above 3 GeV (HB, match TP with L1Jet);Hit Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV2nsHBJetMult_emu = new TH1F("dt3GeV2nsHBJetMult_emu","Multiplicity of 2ns delayed cells above 3 GeV (HB, match TP with L1Jet);Hit Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV3nsHBJetMult_emu = new TH1F("dt3GeV3nsHBJetMult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HB, match TP with L1Jet);Hit Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV4nsHBJetMult_emu = new TH1F("dt3GeV4nsHBJetMult_emu","Multiplicity of 4ns delayed cells above 3 GeV (HB, match TP with L1Jet);Hit Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV5nsHBJetMult_emu = new TH1F("dt3GeV5nsHBJetMult_emu","Multiplicity of 5ns delayed cells above 3 GeV (HB, match TP with L1Jet);Hit Multiplicity;Number of Entries",120,0,120);
   // 2 GeV energy cuts, scanning time cut
   // inclusive
-  TH1F * dt2GeV1nsMult_emu = new TH1F("dt2GeV1nsMult_emu","Multiplicity of 1ns delayed cells above 2 GeV (inclusive);Multiplicity;Number of Entries",200,0,200);
-  TH1F * dt2GeV2nsMult_emu = new TH1F("dt2GeV2nsMult_emu","Multiplicity of 2ns delayed cells above 2 GeV (inclusive);Multiplicity;Number of Entries",200,0,200);
-  TH1F * dt2GeV3nsMult_emu = new TH1F("dt2GeV3nsMult_emu","Multiplicity of 3ns delayed cells above 2 GeV (inclusive);Multiplicity;Number of Entries",200,0,200);
-  TH1F * dt2GeV4nsMult_emu = new TH1F("dt2GeV4nsMult_emu","Multiplicity of 4ns delayed cells above 2 GeV (inclusive);Multiplicity;Number of Entries",200,0,200);
-  TH1F * dt2GeV5nsMult_emu = new TH1F("dt2GeV5nsMult_emu","Multiplicity of 5ns delayed cells above 2 GeV (inclusive);Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV1nsMult_emu = new TH1F("dt2GeV1nsMult_emu","Multiplicity of 1ns delayed cells above 2 GeV (inclusive);Hit Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV2nsMult_emu = new TH1F("dt2GeV2nsMult_emu","Multiplicity of 2ns delayed cells above 2 GeV (inclusive);Hit Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV3nsMult_emu = new TH1F("dt2GeV3nsMult_emu","Multiplicity of 3ns delayed cells above 2 GeV (inclusive);Hit Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV4nsMult_emu = new TH1F("dt2GeV4nsMult_emu","Multiplicity of 4ns delayed cells above 2 GeV (inclusive);Hit Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV5nsMult_emu = new TH1F("dt2GeV5nsMult_emu","Multiplicity of 5ns delayed cells above 2 GeV (inclusive);Hit Multiplicity;Number of Entries",200,0,200);
   // HE
-  TH1F * dt2GeV1nsHEMult_emu = new TH1F("dt2GeV1nsHEMult_emu","Multiplicity of 1ns delayed cells above 2 GeV (HE);Multiplicity;Number of Entries",200,0,200);
-  TH1F * dt2GeV2nsHEMult_emu = new TH1F("dt2GeV2nsHEMult_emu","Multiplicity of 2ns delayed cells above 2 GeV (HE);Multiplicity;Number of Entries",200,0,200);
-  TH1F * dt2GeV3nsHEMult_emu = new TH1F("dt2GeV3nsHEMult_emu","Multiplicity of 3ns delayed cells above 2 GeV (HE);Multiplicity;Number of Entries",200,0,200);
-  TH1F * dt2GeV4nsHEMult_emu = new TH1F("dt2GeV4nsHEMult_emu","Multiplicity of 4ns delayed cells above 2 GeV (HE);Multiplicity;Number of Entries",200,0,200);
-  TH1F * dt2GeV5nsHEMult_emu = new TH1F("dt2GeV5nsHEMult_emu","Multiplicity of 5ns delayed cells above 2 GeV (HE);Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV1nsHEMult_emu = new TH1F("dt2GeV1nsHEMult_emu","Multiplicity of 1ns delayed cells above 2 GeV (HE);Hit Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV2nsHEMult_emu = new TH1F("dt2GeV2nsHEMult_emu","Multiplicity of 2ns delayed cells above 2 GeV (HE);Hit Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV3nsHEMult_emu = new TH1F("dt2GeV3nsHEMult_emu","Multiplicity of 3ns delayed cells above 2 GeV (HE);Hit Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV4nsHEMult_emu = new TH1F("dt2GeV4nsHEMult_emu","Multiplicity of 4ns delayed cells above 2 GeV (HE);Hit Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV5nsHEMult_emu = new TH1F("dt2GeV5nsHEMult_emu","Multiplicity of 5ns delayed cells above 2 GeV (HE);Hit Multiplicity;Number of Entries",200,0,200);
   // HB
-  TH1F * dt2GeV1nsHBMult_emu = new TH1F("dt2GeV1nsHBMult_emu","Multiplicity of 1ns delayed cells above 2 GeV (HB);Multiplicity;Number of Entries",200,0,200);
-  TH1F * dt2GeV2nsHBMult_emu = new TH1F("dt2GeV2nsHBMult_emu","Multiplicity of 2ns delayed cells above 2 GeV (HB);Multiplicity;Number of Entries",200,0,200);
-  TH1F * dt2GeV3nsHBMult_emu = new TH1F("dt2GeV3nsHBMult_emu","Multiplicity of 3ns delayed cells above 2 GeV (HB);Multiplicity;Number of Entries",200,0,200);
-  TH1F * dt2GeV4nsHBMult_emu = new TH1F("dt2GeV4nsHBMult_emu","Multiplicity of 4ns delayed cells above 2 GeV (HB);Multiplicity;Number of Entries",200,0,200);
-  TH1F * dt2GeV5nsHBMult_emu = new TH1F("dt2GeV5nsHBMult_emu","Multiplicity of 5ns delayed cells above 2 GeV (HB);Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV1nsHBMult_emu = new TH1F("dt2GeV1nsHBMult_emu","Multiplicity of 1ns delayed cells above 2 GeV (HB);Hit Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV2nsHBMult_emu = new TH1F("dt2GeV2nsHBMult_emu","Multiplicity of 2ns delayed cells above 2 GeV (HB);Hit Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV3nsHBMult_emu = new TH1F("dt2GeV3nsHBMult_emu","Multiplicity of 3ns delayed cells above 2 GeV (HB);Hit Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV4nsHBMult_emu = new TH1F("dt2GeV4nsHBMult_emu","Multiplicity of 4ns delayed cells above 2 GeV (HB);Hit Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV5nsHBMult_emu = new TH1F("dt2GeV5nsHBMult_emu","Multiplicity of 5ns delayed cells above 2 GeV (HB);Hit Multiplicity;Number of Entries",200,0,200);
   // for HCAL TP matched with L1 Jet
   // inclusive
-  TH1F * dt2GeV1nsJetMult_emu = new TH1F("dt2GeV1nsJetMult_emu","Multiplicity of 1ns delayed cells above 2 GeV (inclusive, match TP with L1Jet);Multiplicity;Number of Entries",200,0,200);
-  TH1F * dt2GeV2nsJetMult_emu = new TH1F("dt2GeV2nsJetMult_emu","Multiplicity of 2ns delayed cells above 2 GeV (inclusive, match TP with L1Jet);Multiplicity;Number of Entries",200,0,200);
-  TH1F * dt2GeV3nsJetMult_emu = new TH1F("dt2GeV3nsJetMult_emu","Multiplicity of 3ns delayed cells above 2 GeV (inclusive, match TP with L1Jet);Multiplicity;Number of Entries",200,0,200);
-  TH1F * dt2GeV4nsJetMult_emu = new TH1F("dt2GeV4nsJetMult_emu","Multiplicity of 4ns delayed cells above 2 GeV (inclusive, match TP with L1Jet);Multiplicity;Number of Entries",200,0,200);
-  TH1F * dt2GeV5nsJetMult_emu = new TH1F("dt2GeV5nsJetMult_emu","Multiplicity of 5ns delayed cells above 2 GeV (inclusive, match TP with L1Jet);Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV1nsJetMult_emu = new TH1F("dt2GeV1nsJetMult_emu","Multiplicity of 1ns delayed cells above 2 GeV (inclusive, match TP with L1Jet);Hit Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV2nsJetMult_emu = new TH1F("dt2GeV2nsJetMult_emu","Multiplicity of 2ns delayed cells above 2 GeV (inclusive, match TP with L1Jet);Hit Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV3nsJetMult_emu = new TH1F("dt2GeV3nsJetMult_emu","Multiplicity of 3ns delayed cells above 2 GeV (inclusive, match TP with L1Jet);Hit Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV4nsJetMult_emu = new TH1F("dt2GeV4nsJetMult_emu","Multiplicity of 4ns delayed cells above 2 GeV (inclusive, match TP with L1Jet);Hit Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV5nsJetMult_emu = new TH1F("dt2GeV5nsJetMult_emu","Multiplicity of 5ns delayed cells above 2 GeV (inclusive, match TP with L1Jet);Hit Multiplicity;Number of Entries",200,0,200);
   // HE
-  TH1F * dt2GeV1nsHEJetMult_emu = new TH1F("dt2GeV1nsHEJetMult_emu","Multiplicity of 1ns delayed cells above 2 GeV (HE, match TP with L1Jet);Multiplicity;Number of Entries",200,0,200);
-  TH1F * dt2GeV2nsHEJetMult_emu = new TH1F("dt2GeV2nsHEJetMult_emu","Multiplicity of 2ns delayed cells above 2 GeV (HE, match TP with L1Jet);Multiplicity;Number of Entries",200,0,200);
-  TH1F * dt2GeV3nsHEJetMult_emu = new TH1F("dt2GeV3nsHEJetMult_emu","Multiplicity of 3ns delayed cells above 2 GeV (HE, match TP with L1Jet);Multiplicity;Number of Entries",200,0,200);
-  TH1F * dt2GeV4nsHEJetMult_emu = new TH1F("dt2GeV4nsHEJetMult_emu","Multiplicity of 4ns delayed cells above 2 GeV (HE, match TP with L1Jet);Multiplicity;Number of Entries",200,0,200);
-  TH1F * dt2GeV5nsHEJetMult_emu = new TH1F("dt2GeV5nsHEJetMult_emu","Multiplicity of 5ns delayed cells above 2 GeV (HE, match TP with L1Jet);Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV1nsHEJetMult_emu = new TH1F("dt2GeV1nsHEJetMult_emu","Multiplicity of 1ns delayed cells above 2 GeV (HE, match TP with L1Jet);Hit Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV2nsHEJetMult_emu = new TH1F("dt2GeV2nsHEJetMult_emu","Multiplicity of 2ns delayed cells above 2 GeV (HE, match TP with L1Jet);Hit Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV3nsHEJetMult_emu = new TH1F("dt2GeV3nsHEJetMult_emu","Multiplicity of 3ns delayed cells above 2 GeV (HE, match TP with L1Jet);Hit Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV4nsHEJetMult_emu = new TH1F("dt2GeV4nsHEJetMult_emu","Multiplicity of 4ns delayed cells above 2 GeV (HE, match TP with L1Jet);Hit Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV5nsHEJetMult_emu = new TH1F("dt2GeV5nsHEJetMult_emu","Multiplicity of 5ns delayed cells above 2 GeV (HE, match TP with L1Jet);Hit Multiplicity;Number of Entries",200,0,200);
   // HB
-  TH1F * dt2GeV1nsHBJetMult_emu = new TH1F("dt2GeV1nsHBJetMult_emu","Multiplicity of 1ns delayed cells above 2 GeV (HB, match TP with L1Jet);Multiplicity;Number of Entries",200,0,200);
-  TH1F * dt2GeV2nsHBJetMult_emu = new TH1F("dt2GeV2nsHBJetMult_emu","Multiplicity of 2ns delayed cells above 2 GeV (HB, match TP with L1Jet);Multiplicity;Number of Entries",200,0,200);
-  TH1F * dt2GeV3nsHBJetMult_emu = new TH1F("dt2GeV3nsHBJetMult_emu","Multiplicity of 3ns delayed cells above 2 GeV (HB, match TP with L1Jet);Multiplicity;Number of Entries",200,0,200);
-  TH1F * dt2GeV4nsHBJetMult_emu = new TH1F("dt2GeV4nsHBJetMult_emu","Multiplicity of 4ns delayed cells above 2 GeV (HB, match TP with L1Jet);Multiplicity;Number of Entries",200,0,200);
-  TH1F * dt2GeV5nsHBJetMult_emu = new TH1F("dt2GeV5nsHBJetMult_emu","Multiplicity of 5ns delayed cells above 2 GeV (HB, match TP with L1Jet);Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV1nsHBJetMult_emu = new TH1F("dt2GeV1nsHBJetMult_emu","Multiplicity of 1ns delayed cells above 2 GeV (HB, match TP with L1Jet);Hit Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV2nsHBJetMult_emu = new TH1F("dt2GeV2nsHBJetMult_emu","Multiplicity of 2ns delayed cells above 2 GeV (HB, match TP with L1Jet);Hit Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV3nsHBJetMult_emu = new TH1F("dt2GeV3nsHBJetMult_emu","Multiplicity of 3ns delayed cells above 2 GeV (HB, match TP with L1Jet);Hit Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV4nsHBJetMult_emu = new TH1F("dt2GeV4nsHBJetMult_emu","Multiplicity of 4ns delayed cells above 2 GeV (HB, match TP with L1Jet);Hit Multiplicity;Number of Entries",200,0,200);
+  TH1F * dt2GeV5nsHBJetMult_emu = new TH1F("dt2GeV5nsHBJetMult_emu","Multiplicity of 5ns delayed cells above 2 GeV (HB, match TP with L1Jet);Hit Multiplicity;Number of Entries",200,0,200);
   // 1 GeV energy cuts, scanning time cuts
   // inclusive
-  TH1F * dt1GeV1nsMult_emu = new TH1F("dt1GeV1nsMult_emu","Multiplicity of 1ns delayed cells above 1 GeV (inclusive);Multiplicity;Number of Entries",400,0,400);
-  TH1F * dt1GeV2nsMult_emu = new TH1F("dt1GeV2nsMult_emu","Multiplicity of 2ns delayed cells above 1 GeV (inclusive);Multiplicity;Number of Entries",400,0,400);
-  TH1F * dt1GeV3nsMult_emu = new TH1F("dt1GeV3nsMult_emu","Multiplicity of 3ns delayed cells above 1 GeV (inclusive);Multiplicity;Number of Entries",400,0,400);
-  TH1F * dt1GeV4nsMult_emu = new TH1F("dt1GeV4nsMult_emu","Multiplicity of 4ns delayed cells above 1 GeV (inclusive);Multiplicity;Number of Entries",400,0,400);
-  TH1F * dt1GeV5nsMult_emu = new TH1F("dt1GeV5nsMult_emu","Multiplicity of 5ns delayed cells above 1 GeV (inclusive);Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV1nsMult_emu = new TH1F("dt1GeV1nsMult_emu","Multiplicity of 1ns delayed cells above 1 GeV (inclusive);Hit Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV2nsMult_emu = new TH1F("dt1GeV2nsMult_emu","Multiplicity of 2ns delayed cells above 1 GeV (inclusive);Hit Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV3nsMult_emu = new TH1F("dt1GeV3nsMult_emu","Multiplicity of 3ns delayed cells above 1 GeV (inclusive);Hit Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV4nsMult_emu = new TH1F("dt1GeV4nsMult_emu","Multiplicity of 4ns delayed cells above 1 GeV (inclusive);Hit Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV5nsMult_emu = new TH1F("dt1GeV5nsMult_emu","Multiplicity of 5ns delayed cells above 1 GeV (inclusive);Hit Multiplicity;Number of Entries",400,0,400);
   // HE
-  TH1F * dt1GeV1nsHEMult_emu = new TH1F("dt1GeV1nsHEMult_emu","Multiplicity of 1ns delayed cells above 1 GeV (HE);Multiplicity;Number of Entries",400,0,400);
-  TH1F * dt1GeV2nsHEMult_emu = new TH1F("dt1GeV2nsHEMult_emu","Multiplicity of 2ns delayed cells above 1 GeV (HE);Multiplicity;Number of Entries",400,0,400);
-  TH1F * dt1GeV3nsHEMult_emu = new TH1F("dt1GeV3nsHEMult_emu","Multiplicity of 3ns delayed cells above 1 GeV (HE);Multiplicity;Number of Entries",400,0,400);
-  TH1F * dt1GeV4nsHEMult_emu = new TH1F("dt1GeV4nsHEMult_emu","Multiplicity of 4ns delayed cells above 1 GeV (HE);Multiplicity;Number of Entries",400,0,400);
-  TH1F * dt1GeV5nsHEMult_emu = new TH1F("dt1GeV5nsHEMult_emu","Multiplicity of 5ns delayed cells above 1 GeV (HE);Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV1nsHEMult_emu = new TH1F("dt1GeV1nsHEMult_emu","Multiplicity of 1ns delayed cells above 1 GeV (HE);Hit Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV2nsHEMult_emu = new TH1F("dt1GeV2nsHEMult_emu","Multiplicity of 2ns delayed cells above 1 GeV (HE);Hit Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV3nsHEMult_emu = new TH1F("dt1GeV3nsHEMult_emu","Multiplicity of 3ns delayed cells above 1 GeV (HE);Hit Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV4nsHEMult_emu = new TH1F("dt1GeV4nsHEMult_emu","Multiplicity of 4ns delayed cells above 1 GeV (HE);Hit Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV5nsHEMult_emu = new TH1F("dt1GeV5nsHEMult_emu","Multiplicity of 5ns delayed cells above 1 GeV (HE);Hit Multiplicity;Number of Entries",400,0,400);
   // HB
-  TH1F * dt1GeV1nsHBMult_emu = new TH1F("dt1GeV1nsHBMult_emu","Multiplicity of 1ns delayed cells above 1 GeV (HB);Multiplicity;Number of Entries",400,0,400);
-  TH1F * dt1GeV2nsHBMult_emu = new TH1F("dt1GeV2nsHBMult_emu","Multiplicity of 2ns delayed cells above 1 GeV (HB);Multiplicity;Number of Entries",400,0,400);
-  TH1F * dt1GeV3nsHBMult_emu = new TH1F("dt1GeV3nsHBMult_emu","Multiplicity of 3ns delayed cells above 1 GeV (HB);Multiplicity;Number of Entries",400,0,400);
-  TH1F * dt1GeV4nsHBMult_emu = new TH1F("dt1GeV4nsHBMult_emu","Multiplicity of 4ns delayed cells above 1 GeV (HB);Multiplicity;Number of Entries",400,0,400);
-  TH1F * dt1GeV5nsHBMult_emu = new TH1F("dt1GeV5nsHBMult_emu","Multiplicity of 5ns delayed cells above 1 GeV (HB);Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV1nsHBMult_emu = new TH1F("dt1GeV1nsHBMult_emu","Multiplicity of 1ns delayed cells above 1 GeV (HB);Hit Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV2nsHBMult_emu = new TH1F("dt1GeV2nsHBMult_emu","Multiplicity of 2ns delayed cells above 1 GeV (HB);Hit Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV3nsHBMult_emu = new TH1F("dt1GeV3nsHBMult_emu","Multiplicity of 3ns delayed cells above 1 GeV (HB);Hit Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV4nsHBMult_emu = new TH1F("dt1GeV4nsHBMult_emu","Multiplicity of 4ns delayed cells above 1 GeV (HB);Hit Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV5nsHBMult_emu = new TH1F("dt1GeV5nsHBMult_emu","Multiplicity of 5ns delayed cells above 1 GeV (HB);Hit Multiplicity;Number of Entries",400,0,400);
   // for HCAL TP matched with L1 Jet
   // inclusive
-  TH1F * dt1GeV1nsJetMult_emu = new TH1F("dt1GeV1nsJetMult_emu","Multiplicity of 1ns delayed cells above 1 GeV (inclusive, match TP with L1Jet);Multiplicity;Number of Entries",400,0,400);
-  TH1F * dt1GeV2nsJetMult_emu = new TH1F("dt1GeV2nsJetMult_emu","Multiplicity of 2ns delayed cells above 1 GeV (inclusive, match TP with L1Jet);Multiplicity;Number of Entries",400,0,400);
-  TH1F * dt1GeV3nsJetMult_emu = new TH1F("dt1GeV3nsJetMult_emu","Multiplicity of 3ns delayed cells above 1 GeV (inclusive, match TP with L1Jet);Multiplicity;Number of Entries",400,0,400);
-  TH1F * dt1GeV4nsJetMult_emu = new TH1F("dt1GeV4nsJetMult_emu","Multiplicity of 4ns delayed cells above 1 GeV (inclusive, match TP with L1Jet);Multiplicity;Number of Entries",400,0,400);
-  TH1F * dt1GeV5nsJetMult_emu = new TH1F("dt1GeV5nsJetMult_emu","Multiplicity of 5ns delayed cells above 1 GeV (inclusive, match TP with L1Jet);Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV1nsJetMult_emu = new TH1F("dt1GeV1nsJetMult_emu","Multiplicity of 1ns delayed cells above 1 GeV (inclusive, match TP with L1Jet);Hit Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV2nsJetMult_emu = new TH1F("dt1GeV2nsJetMult_emu","Multiplicity of 2ns delayed cells above 1 GeV (inclusive, match TP with L1Jet);Hit Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV3nsJetMult_emu = new TH1F("dt1GeV3nsJetMult_emu","Multiplicity of 3ns delayed cells above 1 GeV (inclusive, match TP with L1Jet);Hit Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV4nsJetMult_emu = new TH1F("dt1GeV4nsJetMult_emu","Multiplicity of 4ns delayed cells above 1 GeV (inclusive, match TP with L1Jet);Hit Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV5nsJetMult_emu = new TH1F("dt1GeV5nsJetMult_emu","Multiplicity of 5ns delayed cells above 1 GeV (inclusive, match TP with L1Jet);Hit Multiplicity;Number of Entries",400,0,400);
   // HE
-  TH1F * dt1GeV1nsHEJetMult_emu = new TH1F("dt1GeV1nsHEJetMult_emu","Multiplicity of 1ns delayed cells above 1 GeV (HE, match TP with L1Jet);Multiplicity;Number of Entries",400,0,400);
-  TH1F * dt1GeV2nsHEJetMult_emu = new TH1F("dt1GeV2nsHEJetMult_emu","Multiplicity of 2ns delayed cells above 1 GeV (HE, match TP with L1Jet);Multiplicity;Number of Entries",400,0,400);
-  TH1F * dt1GeV3nsHEJetMult_emu = new TH1F("dt1GeV3nsHEJetMult_emu","Multiplicity of 3ns delayed cells above 1 GeV (HE, match TP with L1Jet);Multiplicity;Number of Entries",400,0,400);
-  TH1F * dt1GeV4nsHEJetMult_emu = new TH1F("dt1GeV4nsHEJetMult_emu","Multiplicity of 4ns delayed cells above 1 GeV (HE, match TP with L1Jet);Multiplicity;Number of Entries",400,0,400);
-  TH1F * dt1GeV5nsHEJetMult_emu = new TH1F("dt1GeV5nsHEJetMult_emu","Multiplicity of 5ns delayed cells above 1 GeV (HE, match TP with L1Jet);Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV1nsHEJetMult_emu = new TH1F("dt1GeV1nsHEJetMult_emu","Multiplicity of 1ns delayed cells above 1 GeV (HE, match TP with L1Jet);Hit Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV2nsHEJetMult_emu = new TH1F("dt1GeV2nsHEJetMult_emu","Multiplicity of 2ns delayed cells above 1 GeV (HE, match TP with L1Jet);Hit Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV3nsHEJetMult_emu = new TH1F("dt1GeV3nsHEJetMult_emu","Multiplicity of 3ns delayed cells above 1 GeV (HE, match TP with L1Jet);Hit Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV4nsHEJetMult_emu = new TH1F("dt1GeV4nsHEJetMult_emu","Multiplicity of 4ns delayed cells above 1 GeV (HE, match TP with L1Jet);Hit Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV5nsHEJetMult_emu = new TH1F("dt1GeV5nsHEJetMult_emu","Multiplicity of 5ns delayed cells above 1 GeV (HE, match TP with L1Jet);Hit Multiplicity;Number of Entries",400,0,400);
   // HB
-  TH1F * dt1GeV1nsHBJetMult_emu = new TH1F("dt1GeV1nsHBJetMult_emu","Multiplicity of 1ns delayed cells above 1 GeV (HB, match TP with L1Jet);Multiplicity;Number of Entries",400,0,400);
-  TH1F * dt1GeV2nsHBJetMult_emu = new TH1F("dt1GeV2nsHBJetMult_emu","Multiplicity of 2ns delayed cells above 1 GeV (HB, match TP with L1Jet);Multiplicity;Number of Entries",400,0,400);
-  TH1F * dt1GeV3nsHBJetMult_emu = new TH1F("dt1GeV3nsHBJetMult_emu","Multiplicity of 3ns delayed cells above 1 GeV (HB, match TP with L1Jet);Multiplicity;Number of Entries",400,0,400);
-  TH1F * dt1GeV4nsHBJetMult_emu = new TH1F("dt1GeV4nsHBJetMult_emu","Multiplicity of 4ns delayed cells above 1 GeV (HB, match TP with L1Jet);Multiplicity;Number of Entries",400,0,400);
-  TH1F * dt1GeV5nsHBJetMult_emu = new TH1F("dt1GeV5nsHBJetMult_emu","Multiplicity of 5ns delayed cells above 1 GeV (HB, match TP with L1Jet);Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV1nsHBJetMult_emu = new TH1F("dt1GeV1nsHBJetMult_emu","Multiplicity of 1ns delayed cells above 1 GeV (HB, match TP with L1Jet);Hit Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV2nsHBJetMult_emu = new TH1F("dt1GeV2nsHBJetMult_emu","Multiplicity of 2ns delayed cells above 1 GeV (HB, match TP with L1Jet);Hit Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV3nsHBJetMult_emu = new TH1F("dt1GeV3nsHBJetMult_emu","Multiplicity of 3ns delayed cells above 1 GeV (HB, match TP with L1Jet);Hit Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV4nsHBJetMult_emu = new TH1F("dt1GeV4nsHBJetMult_emu","Multiplicity of 4ns delayed cells above 1 GeV (HB, match TP with L1Jet);Hit Multiplicity;Number of Entries",400,0,400);
+  TH1F * dt1GeV5nsHBJetMult_emu = new TH1F("dt1GeV5nsHBJetMult_emu","Multiplicity of 5ns delayed cells above 1 GeV (HB, match TP with L1Jet);Hit Multiplicity;Number of Entries",400,0,400);
 
   // making TH2F for the energy depth plots
   TH2F * Energy_Depth = new TH2F("Energy_Depth", "TP Energy Fraction vs. Depth;HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 1.2);
@@ -397,12 +397,12 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH2F * Energy_DepthHB = new TH2F("Energy_DepthHB", "TP Energy Fraction vs. Depth in HB;HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 1.2);
   TH2F * Timing_DepthHB = new TH2F("Timing_DepthHB", "TP Timing Value vs. Depth in HB;HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5, 60, 0, 30);
   // making TH2F for the energy depth plots for high energy TPs
-  TH2F * Energy_Depth_HighE = new TH2F("Energy_Depth_HighE", "TP Energy Fraction vs. Depth for TP E_{T} > 5 GeV;HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 1.2);
-  TH2F * Timing_Depth_HighE = new TH2F("Timing_Depth_HighE", "TP Timing Value vs. Depth for TP E_{T} > 5 GeV;HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5, 60, 0, 30);
-  TH2F * Energy_DepthHE_HighE = new TH2F("Energy_DepthHE_HighE", "TP Energy Fraction vs. Depth in HE for TP E_{T} > 5 GeV;HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 1.2);
-  TH2F * Timing_DepthHE_HighE = new TH2F("Timing_DepthHE_HighE", "TP Timing Value vs. Depth in HE for TP E_{T} > 5 GeV;HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5, 60, 0, 30);
-  TH2F * Energy_DepthHB_HighE = new TH2F("Energy_DepthHB_HighE", "TP Energy Fraction vs. Depth in HB for TP E_{T} > 5 GeV;HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 1.2);
-  TH2F * Timing_DepthHB_HighE = new TH2F("Timing_DepthHB_HighE", "TP Timing Value vs. Depth in HB for TP E_{T} > 5 GeV;HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5, 60, 0, 30);
+  TH2F * Energy_Depth_HighE = new TH2F("Energy_Depth_HighE", "TP Energy Fraction vs. Depth for TP E_{T} > 10 GeV;HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 1.2);
+  //  TH2F * Timing_Depth_HighE = new TH2F("Timing_Depth_HighE", "TP Timing Value vs. Depth for TP E_{T} > 10 GeV;HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5, 60, 0, 30);
+  TH2F * Energy_DepthHE_HighE = new TH2F("Energy_DepthHE_HighE", "TP Energy Fraction vs. Depth in HE for TP E_{T} > 10 GeV;HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 1.2);
+  //  TH2F * Timing_DepthHE_HighE = new TH2F("Timing_DepthHE_HighE", "TP Timing Value vs. Depth in HE for TP E_{T} > 10 GeV;HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5, 60, 0, 30);
+  TH2F * Energy_DepthHB_HighE = new TH2F("Energy_DepthHB_HighE", "TP Energy Fraction vs. Depth in HB for TP E_{T} > 10 GeV;HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 1.2);
+  //  TH2F * Timing_DepthHB_HighE = new TH2F("Timing_DepthHB_HighE", "TP Timing Value vs. Depth in HB for TP E_{T} > 10 GeV;HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5, 60, 0, 30);
   // TH2F for energy depth, where matched to jets
   TH2F * Energy_Depth_Jets = new TH2F("Energy_Depth_Jets", "TP Energy Fraction vs. Depth (TP matched w/ L1 Jets);HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 1.2);
   TH2F * Timing_Depth_Jets = new TH2F("Timing_Depth_Jets", "TP Timing Value vs. Depth (TP matched w/ L1 Jets);HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5, 60, 0, 30);
@@ -411,12 +411,12 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH2F * Energy_DepthHB_Jets = new TH2F("Energy_DepthHB_Jets", "TP Energy Fraction vs. Depth in HB (TP matched w/ L1 Jets);HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 1.2);
   TH2F * Timing_DepthHB_Jets = new TH2F("Timing_DepthHB_Jets", "TP Timing Value vs. Depth in HB (TP matched w/ L1 Jets);HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5, 60, 0, 30);
   // TH2F for energy depth, where matched to jets for high energy TPs
-  TH2F * Energy_Depth_Jets_HighE = new TH2F("Energy_Depth_Jets_HighE", "TP Energy Fraction vs. Depth for TP E_{T} > 5 GeV (TP matched w/ L1 Jets);HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 1.2);
-  TH2F * Timing_Depth_Jets_HighE = new TH2F("Timing_Depth_Jets_HighE", "TP Timing Value vs. Depth for TP E_{T} > 5 GeV (TP matched w/ L1 Jets);HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5, 60, 0, 30);
-  TH2F * Energy_DepthHE_Jets_HighE = new TH2F("Energy_DepthHE_Jets_HighE", "TP Energy Fraction vs. Depth in HE for TP E_{T} > 5 GeV (TP matched w/ L1 Jets);HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 1.2);
-  TH2F * Timing_DepthHE_Jets_HighE = new TH2F("Timing_DepthHE_Jets_HighE", "TP Timing Value vs. Depth in HE for TP E_{T} > 5 GeV (TP matched w/ L1 Jets);HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5, 60, 0, 30);
-  TH2F * Energy_DepthHB_Jets_HighE = new TH2F("Energy_DepthHB_Jets_HighE", "TP Energy Fraction vs. Depth in HB for TP E_{T} > 5 GeV (TP matched w/ L1 Jets);HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 1.2);
-  TH2F * Timing_DepthHB_Jets_HighE = new TH2F("Timing_DepthHB_Jets_HighE", "TP Timing Value vs. Depth in HB for TP E_{T} > 5 GeV (TP matched w/ L1 Jets);HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5, 60, 0, 30);
+  TH2F * Energy_Depth_Jets_HighE = new TH2F("Energy_Depth_Jets_HighE", "TP Energy Fraction vs. Depth for TP E_{T} > 10 GeV (TP matched w/ L1 Jets);HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 1.2);
+  //  TH2F * Timing_Depth_Jets_HighE = new TH2F("Timing_Depth_Jets_HighE", "TP Timing Value vs. Depth for TP E_{T} > 10 GeV (TP matched w/ L1 Jets);HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5, 60, 0, 30);
+  TH2F * Energy_DepthHE_Jets_HighE = new TH2F("Energy_DepthHE_Jets_HighE", "TP Energy Fraction vs. Depth in HE for TP E_{T} > 10 GeV (TP matched w/ L1 Jets);HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 1.2);
+  //  TH2F * Timing_DepthHE_Jets_HighE = new TH2F("Timing_DepthHE_Jets_HighE", "TP Timing Value vs. Depth in HE for TP E_{T} > 10 GeV (TP matched w/ L1 Jets);HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5, 60, 0, 30);
+  TH2F * Energy_DepthHB_Jets_HighE = new TH2F("Energy_DepthHB_Jets_HighE", "TP Energy Fraction vs. Depth in HB for TP E_{T} > 10 GeV (TP matched w/ L1 Jets);HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 1.2);
+  //  TH2F * Timing_DepthHB_Jets_HighE = new TH2F("Timing_DepthHB_Jets_HighE", "TP Timing Value vs. Depth in HB for TP E_{T} > 10 GeV (TP matched w/ L1 Jets);HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5, 60, 0, 30);
   // making TH1D for the ProfileX() from the TH2F of energy_depth or timing_depth plots
   TH1D * Energy_Depth_avg = new TH1D("Energy_Depth_avg", "TP Avg Energy Fraction vs. Depth;HCAL Depth;Energy Fraction", 8, -0.5, 7.5);
   TH1D * Timing_Depth_avg = new TH1D("Timing_Depth_avg", "TP Avg Timing Value vs. Depth;HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5);
@@ -584,8 +584,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	hJetEt->Fill(l1emu_->jetEt[jetIt]); // these are already in order of highest E_T
 	seedTowerIPhi = l1emu_->jetTowerIPhi[jetIt];
 	seedTowerIEta = l1emu_->jetTowerIEta[jetIt];
-
-	// loop over HCAL TPs to find the highest energy one that matches with L1 Jet
+	
+	if (jetIt != 0 ) continue; // only do matching to the highest energy jet
+	if (l1emu_->jetEt[jetIt] < 20 ) continue; // require jet is greater than 20 GeV to attempt matching to HCAL TP
+	// loop over HCAL TPs to find ones that match with L1 Jet
 	double maxE = 0;
 	int maxE_HcalTPIt = 0;
 	int maxE_iEta = 50;
@@ -598,18 +600,18 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	  nDepth = l1CaloTPemu_->hcalTPnDepths[HcalTPIt];
 
 	  if (nDepth == 0) continue; // skipping events where depth = 0, since here timing = -1 and energy = 0 (invalid event)     
-
-	  // convert ieta, iphi to physical eta, phi
+	 
+	  // convert ieta, iphi to physical eta, phi for delta R matching to L1 Jet. From https://github.com/gk199/cms-hcal-debug/blob/PulseShape/plugins/HcalCompareUpgradeChains.cc#L915-L956
 	  double Jet_eta;
 	  double TP_eta;
 	  if (abs(seedTowerIEta) >= 24) {
-	    Jet_eta = .1695*seedTowerIEta + 1.9931*(seedTowerIEta/(abs(seedTowerIEta)));
+	    Jet_eta = .1695*seedTowerIEta - 1.9931*(seedTowerIEta/(abs(seedTowerIEta)));
 	  }
 	  else {
 	    Jet_eta = .0875*seedTowerIEta - 0.0489*(seedTowerIEta/(abs(seedTowerIEta)));
 	  }
           if (abs(tpEtaemu) >= 24) {
-            TP_eta = .1695*tpEtaemu + 1.9931*(tpEtaemu/(abs(tpEtaemu)));
+            TP_eta = .1695*tpEtaemu - 1.9931*(tpEtaemu/(abs(tpEtaemu)));
           }
           else {
             TP_eta = .0875*tpEtaemu - 0.0489*(tpEtaemu/(abs(tpEtaemu)));
@@ -633,220 +635,221 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	    maxE_iEta = l1CaloTPemu_->hcalTPieta[HcalTPIt];
 	    maxE_iPhi = l1CaloTPemu_->hcalTPiphi[HcalTPIt];
 	  }
-	} // closing the TP loop -- move if using more than 1 HCAL TP
-	// now we are in the L1 jet loop -- go through this four times, for most energetic jets
-	// only want to save depth and energy quantities for the max energy TP that has been matched to L1 Jets
-	// if using more than one HCAL TP, change maxE_HcalTPIt to HcalTPIt
-	if (maxE == 0) continue;
-	// Energy deposited in each depth layer for every HCAL TP (4 in HB, 7 in HE)  
-	hcalTPdepth[0] = l1CaloTPemu_->hcalTPDepth1[maxE_HcalTPIt];
-	hcalTPdepth[1] = l1CaloTPemu_->hcalTPDepth2[maxE_HcalTPIt];
-	hcalTPdepth[2] = l1CaloTPemu_->hcalTPDepth3[maxE_HcalTPIt];
-	hcalTPdepth[3] = l1CaloTPemu_->hcalTPDepth4[maxE_HcalTPIt];
-	hcalTPdepth[4] = l1CaloTPemu_->hcalTPDepth5[maxE_HcalTPIt];
-	hcalTPdepth[5] = l1CaloTPemu_->hcalTPDepth6[maxE_HcalTPIt];
-	hcalTPdepth[6] = l1CaloTPemu_->hcalTPDepth7[maxE_HcalTPIt];
-	// timing info for each layer, in 25 ns with resolution 0.5 ns 
-	hcalTPtiming[0] = l1CaloTPemu_->hcalTPtiming1[maxE_HcalTPIt];
-	hcalTPtiming[1] = l1CaloTPemu_->hcalTPtiming2[maxE_HcalTPIt];
-	hcalTPtiming[2] = l1CaloTPemu_->hcalTPtiming3[maxE_HcalTPIt];
-	hcalTPtiming[3] = l1CaloTPemu_->hcalTPtiming4[maxE_HcalTPIt];
-	hcalTPtiming[4] = l1CaloTPemu_->hcalTPtiming5[maxE_HcalTPIt];
-	hcalTPtiming[5] = l1CaloTPemu_->hcalTPtiming6[maxE_HcalTPIt];
-	hcalTPtiming[6] = l1CaloTPemu_->hcalTPtiming7[maxE_HcalTPIt];
+	  //	} // closing the TP loop -- move if using more than 1 HCAL TP
+	  // if using more than one HCAL TP, change maxE_HcalTPIt to HcalTPIt
+	  //	  if (maxE == 0) continue;
 
-	//	  /*
-	// print outs for confirming and troubleshooting energy depth
-	std::cout << "Info for when HCAL TPs are matched to L1 Jets with Delta R < 0.5 " << std::endl;
-	std::cout << "Jet iterator = " << jetIt << " and jet energy = " << l1emu_->jetEt[jetIt] << std::endl;
-	std::cout << "iPhi values = " << seedTowerIPhi << " and " << maxE_iPhi << std::endl;
-	std::cout << "iEta values = " << seedTowerIEta << " and " << maxE_iEta << std::endl;
-	std::cout << "HCAL TP iterator = " << maxE_HcalTPIt << " and TP energy = " << maxE << std::endl;
-	std::cout << hcalTPdepth[0] << ", " <<hcalTPdepth[1] << ", " << hcalTPdepth[2] << ", " << hcalTPdepth[3] << ", " << hcalTPdepth[4] << ", " << hcalTPdepth[5] << ", " << hcalTPdepth[6] << std::endl;
-	std::cout << " " << std::endl;
-	//	  */
-	
-	// filling energy and time plots for each of 7 HCAL depths. Using max energy and associated timing, depth, and ieta values from max energy TP
-	for (int i = 0; i < 7; i++){
-	  Energy_Depth_Jets->Fill(i+1,hcalTPdepth[i]/maxE); // normalized by total energy in event so is fractional energy in each layer
-	  Timing_Depth_Jets->Fill(i+1,hcalTPtiming[i]); // raw timing value in each layer
-	  if (maxE > 5 ) {
-	    Energy_Depth_Jets_HighE->Fill(i+1,hcalTPdepth[i]/maxE);
-	    Timing_Depth_Jets_HighE->Fill(i+1,hcalTPtiming[i]); 
-	  }
-	  if (abs(maxE_iEta) < 16) {
-	    Energy_DepthHB_Jets->Fill(i+1,hcalTPdepth[i]/maxE);
-	    Timing_DepthHB_Jets->Fill(i+1,hcalTPtiming[i]);
-	    if (maxE > 5 ) {
-	      Energy_DepthHB_Jets_HighE->Fill(i+1,hcalTPdepth[i]/maxE);
-	      Timing_DepthHB_Jets_HighE->Fill(i+1,hcalTPtiming[i]);
-	    }
-	  }
-	  if (abs(maxE_iEta) > 16 && abs(maxE_iEta) < 29 ) {
-	    Energy_DepthHE_Jets->Fill(i+1,hcalTPdepth[i]/maxE);
-	    Timing_DepthHE_Jets->Fill(i+1,hcalTPtiming[i]);
-	    if (maxE > 5 ) {
-	      Energy_DepthHE_Jets_HighE->Fill(i+1,hcalTPdepth[i]/maxE);
-	      Timing_DepthHE_Jets_HighE->Fill(i+1,hcalTPtiming[i]);
-	    }
-	  }
-	}
-	
-	Ratio_Depth_Jets->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / maxE);
-	if (abs(maxE_iEta) < 16) {
-	  Ratio_DepthHB_Jets->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / maxE);
-	}
-	if (abs(maxE_iEta) > 16 && abs(maxE_iEta) < 29 ) {
-	  Ratio_DepthHE_Jets->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / maxE);
-	}
+	  // Energy deposited in each depth layer for every HCAL TP (4 in HB, 7 in HE)  
+	  hcalTPdepth[0] = l1CaloTPemu_->hcalTPDepth1[HcalTPIt];
+	  hcalTPdepth[1] = l1CaloTPemu_->hcalTPDepth2[HcalTPIt];
+	  hcalTPdepth[2] = l1CaloTPemu_->hcalTPDepth3[HcalTPIt];
+	  hcalTPdepth[3] = l1CaloTPemu_->hcalTPDepth4[HcalTPIt];
+	  hcalTPdepth[4] = l1CaloTPemu_->hcalTPDepth5[HcalTPIt];
+	  hcalTPdepth[5] = l1CaloTPemu_->hcalTPDepth6[HcalTPIt];
+	  hcalTPdepth[6] = l1CaloTPemu_->hcalTPDepth7[HcalTPIt];
+	  // timing info for each layer, in 25 ns with resolution 0.5 ns 
+	  hcalTPtiming[0] = l1CaloTPemu_->hcalTPtiming1[HcalTPIt];
+	  hcalTPtiming[1] = l1CaloTPemu_->hcalTPtiming2[HcalTPIt];
+	  hcalTPtiming[2] = l1CaloTPemu_->hcalTPtiming3[HcalTPIt];
+	  hcalTPtiming[3] = l1CaloTPemu_->hcalTPtiming4[HcalTPIt];
+	  hcalTPtiming[4] = l1CaloTPemu_->hcalTPtiming5[HcalTPIt];
+	  hcalTPtiming[5] = l1CaloTPemu_->hcalTPtiming6[HcalTPIt];
+	  hcalTPtiming[6] = l1CaloTPemu_->hcalTPtiming7[HcalTPIt];
 
-	// loop over HCAL depths for every HCAL TP
-        for (int depthIt = 0; depthIt < 7; depthIt++){
-          // count multiplicity of layers given a timing and energy threshold   
-          // 3 GeV energy cut
-          if (hcalTPdepth[depthIt] > 3 && hcalTPtiming[depthIt] > 1){
-            mult3GeV1ns_Jets += 1;
-            if (hcalTPtiming[depthIt] > 2){
-	      mult3GeV2ns_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 3){
-		mult3GeV3ns_Jets += 1;
-		if (hcalTPtiming[depthIt] > 4){
-		  mult3GeV4ns_Jets += 1;
-		  if (hcalTPtiming[depthIt] > 5){
-		    mult3GeV5ns_Jets += 1;
+	  /*
+	  // print outs for confirming and troubleshooting energy depth
+	  std::cout << "Info for when HCAL TPs are matched to L1 Jets with Delta R < 0.5 " << std::endl;
+	  std::cout << "Jet iterator = " << jetIt << " and jet energy = " << l1emu_->jetEt[jetIt] << std::endl;
+	  std::cout << "iPhi values = " << seedTowerIPhi << " and " << maxE_iPhi << std::endl;
+	  std::cout << "iEta values = " << seedTowerIEta << " and " << maxE_iEta << std::endl;
+	  std::cout << "HCAL TP iterator = " << maxE_HcalTPIt << " and TP energy = " << maxE << std::endl;
+	  std::cout << hcalTPdepth[0] << ", " <<hcalTPdepth[1] << ", " << hcalTPdepth[2] << ", " << hcalTPdepth[3] << ", " << hcalTPdepth[4] << ", " << hcalTPdepth[5] << ", " << hcalTPdepth[6] << std::endl;
+	  std::cout << " " << std::endl;
+	  */
+	
+	  // filling energy and time plots for each of 7 HCAL depths.
+	  for (int i = 0; i < 7; i++){
+	    Energy_Depth_Jets->Fill(i+1,hcalTPdepth[i]/tpEtemu); // normalized by total energy in event so is fractional energy in each layer
+	    Timing_Depth_Jets->Fill(i+1,hcalTPtiming[i]); // raw timing value in each layer
+	    if (tpEtemu > 10 ) {
+	      Energy_Depth_Jets_HighE->Fill(i+1,hcalTPdepth[i]/tpEtemu); // restricting to high energy HCAL TPs
+	    }
+	    if (abs(tpEtaemu) < 16) {
+	      Energy_DepthHB_Jets->Fill(i+1,hcalTPdepth[i]/tpEtemu);
+	      Timing_DepthHB_Jets->Fill(i+1,hcalTPtiming[i]);
+	      if (tpEtemu > 10 ) {
+		Energy_DepthHB_Jets_HighE->Fill(i+1,hcalTPdepth[i]/tpEtemu);
+	      }
+	    }
+	    if (abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29 ) {
+	      Energy_DepthHE_Jets->Fill(i+1,hcalTPdepth[i]/tpEtemu);
+	      Timing_DepthHE_Jets->Fill(i+1,hcalTPtiming[i]);
+	      if (tpEtemu > 10 ) {
+		Energy_DepthHE_Jets_HighE->Fill(i+1,hcalTPdepth[i]/tpEtemu);
+	      }
+	    }
+	  }
+
+	  // Ratio of energy in first two HCAL layers to all HCAL layers. Only consider for high energy TPs > 10 GeV	
+	  if ( tpEtemu > 10 ) {
+	    Ratio_Depth_Jets->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / tpEtemu);
+	    if (abs(tpEtaemu) < 16) {
+	      Ratio_DepthHB_Jets->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / tpEtemu);
+	    }
+	    if (abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29 ) {
+	      Ratio_DepthHE_Jets->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / tpEtemu);
+	    }
+	  }
+	  
+	  // loop over HCAL depths for every HCAL TP
+	  for (int depthIt = 0; depthIt < 7; depthIt++){
+	    // count multiplicity of layers given a timing and energy threshold   
+	    // 3 GeV energy cut
+	    if (hcalTPdepth[depthIt] > 3 && hcalTPtiming[depthIt] > 1){
+	      mult3GeV1ns_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 2){
+		mult3GeV2ns_Jets += 1;
+		if (hcalTPtiming[depthIt] > 3){
+		  mult3GeV3ns_Jets += 1;
+		  if (hcalTPtiming[depthIt] > 4){
+		    mult3GeV4ns_Jets += 1;
+		    if (hcalTPtiming[depthIt] > 5){
+		      mult3GeV5ns_Jets += 1;
+		    }
 		  }
 		}
 	      }
 	    }
-	  }
-	  // 3 GeV HB HE regions
-	  if (hcalTPdepth[depthIt] > 3 && hcalTPtiming[depthIt] > 1 && abs(maxE_iEta) < 16){
-	    mult3GeV1nsHB_Jets += 1;
-	    if (hcalTPtiming[depthIt] > 2){
-	      mult3GeV2nsHB_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 3){
-		mult3GeV3nsHB_Jets += 1;
-		if (hcalTPtiming[depthIt] > 4){
-		  mult3GeV4nsHB_Jets += 1;
-		  if (hcalTPtiming[depthIt] > 5){
-		    mult3GeV5nsHB_Jets += 1;
+	    // 3 GeV HB HE regions
+	    if (hcalTPdepth[depthIt] > 3 && hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) < 16){
+	      mult3GeV1nsHB_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 2){
+		mult3GeV2nsHB_Jets += 1;
+		if (hcalTPtiming[depthIt] > 3){
+		  mult3GeV3nsHB_Jets += 1;
+		  if (hcalTPtiming[depthIt] > 4){
+		    mult3GeV4nsHB_Jets += 1;
+		    if (hcalTPtiming[depthIt] > 5){
+		      mult3GeV5nsHB_Jets += 1;
+		    }
 		  }
 		}
 	      }
 	    }
-	  }
-	  if (hcalTPdepth[depthIt] > 3 && hcalTPtiming[depthIt] > 1 && abs(maxE_iEta) > 16 && abs(maxE_iEta) < 29){
-	    mult3GeV1nsHE_Jets += 1;
-	    if (hcalTPtiming[depthIt] > 2){
-	      mult3GeV2nsHE_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 3){
-		mult3GeV3nsHE_Jets += 1;
-		if (hcalTPtiming[depthIt] > 4){
-		  mult3GeV4nsHE_Jets += 1;
-		  if (hcalTPtiming[depthIt] > 5){
-		    mult3GeV5nsHE_Jets += 1;
+	    if (hcalTPdepth[depthIt] > 3 && hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29){
+	      mult3GeV1nsHE_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 2){
+		mult3GeV2nsHE_Jets += 1;
+		if (hcalTPtiming[depthIt] > 3){
+		  mult3GeV3nsHE_Jets += 1;
+		  if (hcalTPtiming[depthIt] > 4){
+		    mult3GeV4nsHE_Jets += 1;
+		    if (hcalTPtiming[depthIt] > 5){
+		      mult3GeV5nsHE_Jets += 1;
+		    }
 		  }
 		}
 	      }
 	    }
-	  }
-	  // 2 GeV energy cut
-	  if (hcalTPdepth[depthIt] > 2 && hcalTPtiming[depthIt] > 1){
-	    mult2GeV1ns_Jets += 1;
-	    if (hcalTPtiming[depthIt] > 2){
-	      mult2GeV2ns_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 3){
-		mult2GeV3ns_Jets += 1;
-		if (hcalTPtiming[depthIt] > 4){
-		  mult2GeV4ns_Jets += 1;
-		  if (hcalTPtiming[depthIt] > 5){
-		    mult2GeV5ns_Jets += 1;
+	    // 2 GeV energy cut
+	    if (hcalTPdepth[depthIt] > 2 && hcalTPtiming[depthIt] > 1){
+	      mult2GeV1ns_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 2){
+		mult2GeV2ns_Jets += 1;
+		if (hcalTPtiming[depthIt] > 3){
+		  mult2GeV3ns_Jets += 1;
+		  if (hcalTPtiming[depthIt] > 4){
+		    mult2GeV4ns_Jets += 1;
+		    if (hcalTPtiming[depthIt] > 5){
+		      mult2GeV5ns_Jets += 1;
+		    }
 		  }
 		}
 	      }
 	    }
-	  }
-	  // 2 GeV HB HE regions                                
-	  if (hcalTPdepth[depthIt] > 2 && hcalTPtiming[depthIt] > 1 && abs(maxE_iEta) < 16){
-	    mult2GeV1nsHB_Jets += 1;
-	    if (hcalTPtiming[depthIt] > 2){
-	      mult2GeV2nsHB_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 3){
-		mult2GeV3nsHB_Jets += 1;
-		if (hcalTPtiming[depthIt] > 4){
-		  mult2GeV4nsHB_Jets += 1;
-		  if (hcalTPtiming[depthIt] > 5){
-		    mult2GeV5nsHB_Jets += 1;
+	    // 2 GeV HB HE regions                                
+	    if (hcalTPdepth[depthIt] > 2 && hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) < 16){
+	      mult2GeV1nsHB_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 2){
+		mult2GeV2nsHB_Jets += 1;
+		if (hcalTPtiming[depthIt] > 3){
+		  mult2GeV3nsHB_Jets += 1;
+		  if (hcalTPtiming[depthIt] > 4){
+		    mult2GeV4nsHB_Jets += 1;
+		    if (hcalTPtiming[depthIt] > 5){
+		      mult2GeV5nsHB_Jets += 1;
+		    }
 		  }
 		}
 	      }
 	    }
-	  }
-	  if (hcalTPdepth[depthIt] > 2 && hcalTPtiming[depthIt] > 1 && abs(maxE_iEta) > 16 && abs(maxE_iEta) < 29){
-	    mult2GeV1nsHE_Jets += 1;
-	    if (hcalTPtiming[depthIt] > 2){
-	      mult2GeV2nsHE_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 3){
-		mult2GeV3nsHE_Jets += 1;
-		if (hcalTPtiming[depthIt] > 4){
-		  mult2GeV4nsHE_Jets += 1;
-		  if (hcalTPtiming[depthIt] > 5){
-		    mult2GeV5nsHE_Jets += 1;
+	    if (hcalTPdepth[depthIt] > 2 && hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29){
+	      mult2GeV1nsHE_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 2){
+		mult2GeV2nsHE_Jets += 1;
+		if (hcalTPtiming[depthIt] > 3){
+		  mult2GeV3nsHE_Jets += 1;
+		  if (hcalTPtiming[depthIt] > 4){
+		    mult2GeV4nsHE_Jets += 1;
+		    if (hcalTPtiming[depthIt] > 5){
+		      mult2GeV5nsHE_Jets += 1;
+		    }
 		  }
 		}
 	      }
 	    }
-	  }
-	  // 1 GeV energy cut
-	  if (hcalTPdepth[depthIt] > 1 && hcalTPtiming[depthIt] > 1){
-	    mult1GeV1ns_Jets += 1;
-	    if (hcalTPtiming[depthIt] > 2){
-	      mult1GeV2ns_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 3){
-		mult1GeV3ns_Jets += 1;
-		if (hcalTPtiming[depthIt] > 4){
-		  mult1GeV4ns_Jets += 1;
-		  if (hcalTPtiming[depthIt] > 5){
-		    mult1GeV5ns_Jets += 1;
+	    // 1 GeV energy cut
+	    if (hcalTPdepth[depthIt] > 1 && hcalTPtiming[depthIt] > 1){
+	      mult1GeV1ns_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 2){
+		mult1GeV2ns_Jets += 1;
+		if (hcalTPtiming[depthIt] > 3){
+		  mult1GeV3ns_Jets += 1;
+		  if (hcalTPtiming[depthIt] > 4){
+		    mult1GeV4ns_Jets += 1;
+		    if (hcalTPtiming[depthIt] > 5){
+		      mult1GeV5ns_Jets += 1;
+		    }
 		  }
 		}
 	      }
 	    }
-	  }
-	  // 1 GeV HB HE regions                                                      
-	  if (hcalTPdepth[depthIt] > 1 && hcalTPtiming[depthIt] > 1 && abs(maxE_iEta) < 16){
-	    mult1GeV1nsHB_Jets += 1;
-	    if (hcalTPtiming[depthIt] > 2){
-	      mult1GeV2nsHB_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 3){
-		mult1GeV3nsHB_Jets += 1;
-		if (hcalTPtiming[depthIt] > 4){
-		  mult1GeV4nsHB_Jets += 1;
-		  if (hcalTPtiming[depthIt] > 5){
-		    mult1GeV5nsHB_Jets += 1;
+	    // 1 GeV HB HE regions                                                      
+	    if (hcalTPdepth[depthIt] > 1 && hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) < 16){
+	      mult1GeV1nsHB_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 2){
+		mult1GeV2nsHB_Jets += 1;
+		if (hcalTPtiming[depthIt] > 3){
+		  mult1GeV3nsHB_Jets += 1;
+		  if (hcalTPtiming[depthIt] > 4){
+		    mult1GeV4nsHB_Jets += 1;
+		    if (hcalTPtiming[depthIt] > 5){
+		      mult1GeV5nsHB_Jets += 1;
+		    }
 		  }
 		}
 	      }
 	    }
-	  }
-	  if (hcalTPdepth[depthIt] > 1 && hcalTPtiming[depthIt] > 1 && abs(maxE_iEta) > 16 && abs(maxE_iEta) < 29){
-	    mult1GeV1nsHE_Jets += 1;
-	    if (hcalTPtiming[depthIt] > 2){
-	      mult1GeV2nsHE_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 3){
-		mult1GeV3nsHE_Jets += 1;
-		if (hcalTPtiming[depthIt] > 4){
-		  mult1GeV4nsHE_Jets += 1;
-		  if (hcalTPtiming[depthIt] > 5){
-		    mult1GeV5nsHE_Jets += 1;
+	    if (hcalTPdepth[depthIt] > 1 && hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29){
+	      mult1GeV1nsHE_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 2){
+		mult1GeV2nsHE_Jets += 1;
+		if (hcalTPtiming[depthIt] > 3){
+		  mult1GeV3nsHE_Jets += 1;
+		  if (hcalTPtiming[depthIt] > 4){
+		    mult1GeV4nsHE_Jets += 1;
+		    if (hcalTPtiming[depthIt] > 5){
+		      mult1GeV5nsHE_Jets += 1;
+		    }
 		  }
 		}
 	      }
 	    }
-	  }
-	}// closing HCAL depths loop
+	  }// closing HCAL depths loop
+	} // closing HCAL TP loop (all TPs)
       } // closing L1 Jets loop
-      // after HCAL depth loop and L1 Jet loop fill histograms with multiplicity variables. Multiplicity counter reset on each loop iteration. These are for where HCAL TP is matched to the L1 Jet, choosing highest energy HCAL TP from all TPs within a DeltaR
+      // after HCAL depth loop and L1 Jet loop fill histograms with multiplicity variables. Multiplicity counter reset on each loop iteration. These are for where HCAL TP is matched to the L1 Jet
+
       // 3 GeV histograms
       dt3GeV1nsJetMult_emu->Fill(mult3GeV1ns_Jets);
       dt3GeV2nsJetMult_emu->Fill(mult3GeV2ns_Jets);
@@ -896,7 +899,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       dt1GeV4nsHBJetMult_emu->Fill(mult1GeV4nsHB_Jets);
       dt1GeV5nsHBJetMult_emu->Fill(mult1GeV5nsHB_Jets);
 
-
       // HCAL TP information when TPs are not matched to L1 Jets
       for (int HcalTPIt = 0; HcalTPIt < nCaloTPemu; HcalTPIt++){
 	tpEtaemu = l1CaloTPemu_->hcalTPieta[HcalTPIt]; // use for HB HE restrictions                                 
@@ -905,7 +907,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	nDepth = l1CaloTPemu_->hcalTPnDepths[HcalTPIt];
 	
 	if (nDepth == 0) continue; // skipping events where depth = 0, since here timing = -1 and energy = 0 (invalid event)
-	double totalE = 0;
+
 	// Energy deposited in each depth layer for every HCAL TP (4 in HB, 7 in HE)  
 	hcalTPdepth[0] = l1CaloTPemu_->hcalTPDepth1[HcalTPIt];
 	hcalTPdepth[1] = l1CaloTPemu_->hcalTPDepth2[HcalTPIt];
@@ -914,7 +916,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	hcalTPdepth[4] = l1CaloTPemu_->hcalTPDepth5[HcalTPIt];
 	hcalTPdepth[5] = l1CaloTPemu_->hcalTPDepth6[HcalTPIt];
 	hcalTPdepth[6] = l1CaloTPemu_->hcalTPDepth7[HcalTPIt];
-	totalE = hcalTPdepth[0]+hcalTPdepth[1]+hcalTPdepth[2]+hcalTPdepth[3]+hcalTPdepth[4]+hcalTPdepth[5]+hcalTPdepth[6];
 	// timing info for each layer, in 25 ns with resolution 0.5 ns 
 	hcalTPtiming[0] = l1CaloTPemu_->hcalTPtiming1[HcalTPIt];
 	hcalTPtiming[1] = l1CaloTPemu_->hcalTPtiming2[HcalTPIt];
@@ -928,34 +929,34 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	for (int i = 0; i < 7; i++){
 	  Energy_Depth->Fill(i+1,hcalTPdepth[i]/tpEtemu); // normalized by total energy in event so is fractional energy in each layer      
 	  Timing_Depth->Fill(i+1,hcalTPtiming[i]); // raw timing value in each layer  
-          if (tpEtemu > 5 ) {
-            Energy_Depth_HighE->Fill(i+1,hcalTPdepth[i]/tpEtemu);
-            Timing_Depth_HighE->Fill(i+1,hcalTPtiming[i]);
+          if (tpEtemu > 10 ) {
+            Energy_Depth_HighE->Fill(i+1,hcalTPdepth[i]/tpEtemu); // energy depth for high energy HCAL TPs
           }
 	  if (abs(tpEtaemu) < 16) {
 	    Energy_DepthHB->Fill(i+1,hcalTPdepth[i]/tpEtemu);
 	    Timing_DepthHB->Fill(i+1,hcalTPtiming[i]);
-	    if (tpEtemu > 5 ) {
+	    if (tpEtemu > 10 ) {
 	      Energy_DepthHB_HighE->Fill(i+1,hcalTPdepth[i]/tpEtemu);
-	      Timing_DepthHB_HighE->Fill(i+1,hcalTPtiming[i]);
 	    }
 	  }
 	  if (abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29 ) {
 	    Energy_DepthHE->Fill(i+1,hcalTPdepth[i]/tpEtemu);
 	    Timing_DepthHE->Fill(i+1,hcalTPtiming[i]);
-	    if (tpEtemu > 5 ) {
+	    if (tpEtemu > 10 ) {
 	      Energy_DepthHE_HighE->Fill(i+1,hcalTPdepth[i]/tpEtemu);
-	      Timing_DepthHE_HighE->Fill(i+1,hcalTPtiming[i]);
 	    }
 	  }
 	}
 
-	Ratio_Depth->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / tpEtemu);
-	if (abs(tpEtaemu) < 16) {
-	  Ratio_DepthHB->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / tpEtemu);
-	}
-	if (abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29 ) {
-	  Ratio_DepthHE->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / tpEtemu);
+	// ratio of energy in first two HCAL layers to total energy in HCAL, only for high energy TPs
+	if ( tpEtemu > 10 ) {
+	  Ratio_Depth->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / tpEtemu);
+	  if (abs(tpEtaemu) < 16) {
+	    Ratio_DepthHB->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / tpEtemu);
+	  }
+	  if (abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29 ) {
+	    Ratio_DepthHE->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / tpEtemu);
+	  }
 	}
 
 	// loop over HCAL depths for every HCAL TP
@@ -1222,10 +1223,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       for(int bin=0; bin<nMetHFSumBins; bin++){
         if( (metHFSum) >= metHFSumLo+(bin*metHFSumBinWidth) ) metHFSumRates_emu->Fill(metHFSumLo+(bin*metHFSumBinWidth)); //GeV           
       }
-
-
     }// closes if 'emuOn' is true
-
 
 
     //do routine for L1 hardware quantities
@@ -1242,7 +1240,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	tpEt = l1TPhw_->ecalTPet[i];
 	ecalTP_hw->Fill(tpEt);
       }
-
 
       treeL1hw->GetEntry(jentry);
       // get jetEt*, egEt*, tauEt, htSum, mhtSum, etSum, metSum
@@ -1404,9 +1401,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       for(int bin=0; bin<nMetHFSumBins; bin++){
         if( (metHFSum) >= metHFSumLo+(bin*metHFSumBinWidth) ) metHFSumRates_hw->Fill(metHFSumLo+(bin*metHFSumBinWidth)); //GeV           
       } 
-
     }// closes if 'hwOn' is true
-
   }// closes loop through events
 
   //  TFile g( outputFilename.c_str() , "new");
@@ -1641,11 +1636,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     Timing_DepthHE->Write();
 
     Energy_Depth_HighE->Write();
-    Timing_Depth_HighE->Write();
     Energy_DepthHB_HighE->Write();
-    Timing_DepthHB_HighE->Write();
     Energy_DepthHE_HighE->Write();
-    Timing_DepthHE_HighE->Write();
 
     Energy_Depth_Jets->Write();
     Timing_Depth_Jets->Write();
@@ -1655,11 +1647,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     Timing_DepthHE_Jets->Write();
 
     Energy_Depth_Jets_HighE->Write();
-    Timing_Depth_Jets_HighE->Write();
     Energy_DepthHB_Jets_HighE->Write();
-    Timing_DepthHB_Jets_HighE->Write();
     Energy_DepthHE_Jets_HighE->Write();
-    Timing_DepthHE_Jets_HighE->Write();
 
     Energy_Depth_avg->Write();
     Energy_DepthHE_avg->Write();
