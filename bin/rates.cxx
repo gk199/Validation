@@ -1158,19 +1158,19 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 
       // for each bin fill according to whether our object has a larger corresponding energy
       for(int bin=0; bin<nJetBins; bin++){
-        if( (jetEt_1) >= jetLo + (bin*jetBinWidth) ) singleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+        if( (jetEt_1) >= jetLo + (bin*jetBinWidth) && mult3GeV2ns_Jets > 3 ) singleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
       } 
 
       for(int bin=0; bin<nJetBins; bin++){
-        if( (jetEt_2) >= jetLo + (bin*jetBinWidth) ) doubleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+        if( (jetEt_2) >= jetLo + (bin*jetBinWidth) && mult3GeV2ns_Jets > 3 ) doubleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
       }  
 
       for(int bin=0; bin<nJetBins; bin++){
-        if( (jetEt_3) >= jetLo + (bin*jetBinWidth) ) tripleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+        if( (jetEt_3) >= jetLo + (bin*jetBinWidth) && mult3GeV2ns_Jets > 3 ) tripleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
       }  
 
       for(int bin=0; bin<nJetBins; bin++){
-        if( (jetEt_4) >= jetLo + (bin*jetBinWidth) ) quadJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+        if( (jetEt_4) >= jetLo + (bin*jetBinWidth) &&  mult3GeV2ns_Jets > 3 ) quadJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
       }  
              
       for(int bin=0; bin<nEgBins; bin++){
