@@ -584,7 +584,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	hJetEt->Fill(l1emu_->jetEt[jetIt]); // these are already in order of highest E_T
 	seedTowerIPhi = l1emu_->jetTowerIPhi[jetIt];
 	seedTowerIEta = l1emu_->jetTowerIEta[jetIt];
-	
+
 	if (jetIt != 0 ) continue; // only do matching to the highest energy jet
 	if (l1emu_->jetEt[jetIt] < 20 ) continue; // require jet is greater than 20 GeV to attempt matching to HCAL TP
 	// loop over HCAL TPs to find ones that match with L1 Jet
