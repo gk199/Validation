@@ -9,7 +9,7 @@
 #include <map>
 #include <string>
 #include <vector>
-
+#include <iostream>
 
 int main()
 {
@@ -128,7 +128,7 @@ int main()
     for(auto hist : iplot.second) {
       rateHistsRatio[hist]->Draw("hist same");
     }
-
+    std::cout << iplot.first.c_str() << std::endl;
     if(includeHW) canvases.back()->Print(Form("plots/%sRates_hw.pdf", iplot.first.c_str()));
     else canvases.back()->Print(Form("plots/%sRates_emu.pdf", iplot.first.c_str()));
   }
