@@ -439,6 +439,12 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F * Ratio_DepthHE_Jets = new TH1F("Ratio_DepthHE_Jets", "Ratio of First 2 HCAL Layers to E_{T} in HE, matched w/Jets;Ratio;Number of Events", 50,0,1);
   TH1F * Ratio_DepthHB_Jets = new TH1F("Ratio_DepthHB_Jets", "Ratio of First 2 HCAL Layers to E_{T} in HB, matched w/Jets;Ratio;Number of Events", 50,0,1);
 
+  // timing values for center of barrel
+  TH1F * centralTiming = new TH1F("centralTiming", "Time of arrival - TOF (central barrel iEta);Time (ns);Number of Events",50,-10,40);
+  // HCAL / ECAL+HCAL energy to check cut for rates plots
+  std::vector<TString> ratioStrings = {"HOvE","HOvE3","HOvE9","H3OvE3","H9OvE9"};
+  TH1F * HoverEtotal = new TH1F("HoverEtotal", "HCAL energy / HCAL+ECAL energy;H/E;Number of Events",50,0,1);
+
   /////////////////////////////////
   // loop through all the entries//
   /////////////////////////////////
@@ -578,12 +584,67 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       double mult1GeV1ns_Jets(0), mult1GeV2ns_Jets(0), mult1GeV3ns_Jets(0), mult1GeV4ns_Jets(0), mult1GeV5ns_Jets(0);
       double mult1GeV1nsHE_Jets(0), mult1GeV2nsHE_Jets(0), mult1GeV3nsHE_Jets(0), mult1GeV4nsHE_Jets(0), mult1GeV5nsHE_Jets(0);
       double mult1GeV1nsHB_Jets(0), mult1GeV2nsHB_Jets(0), mult1GeV3nsHB_Jets(0), mult1GeV4nsHB_Jets(0), mult1GeV5nsHB_Jets(0);
+      
+      // for H/E calculation 
+      std::map<const TString, std::vector<double> > hadVariablesAllJets;
+      std::map<const TString, std::vector<double> > emVariablesAllJets;
+      int maxTowerEndcap = 28;
+      int maxTowerBarrel = 16;
+      int minTowerForHOvE = maxTowerBarrel+1;
+      int maxTowerForHOvE = maxTowerEndcap;
+      double towEtemu(0), towHademu(0), towEmemu(0), towEtaemu(0), towPhiemu(0), nTowemu(0);
+      nTowemu = l1Towemu_->nTower;
 
       // loop over L1 jets, and only do first four (4 highest energy L1 jets from 4 leptons)
       for(uint jetIt=0; jetIt < nJetemu && jetIt < 4; jetIt++){
 	hJetEt->Fill(l1emu_->jetEt[jetIt]); // these are already in order of highest E_T
 	seedTowerIPhi = l1emu_->jetTowerIPhi[jetIt];
 	seedTowerIEta = l1emu_->jetTowerIEta[jetIt];
+
+	// calculate the HCAL / ECAL+HCAL energy to determine the cut for the jet rates plots. From Matthew's code
+	double seedTowerHad(0), seedTowerEm(0), seedTower3x3Em(0), seedTower3x3Had(0), seedTower9x9Em(0), seedTower9x9Had(0);
+	for (int towIt = 0; towIt < nTowemu; towIt++){
+	  towEtemu  = l1Towemu_->iet[towIt];
+	  towHademu = l1Towemu_->ihad[towIt];
+	  towEmemu  = l1Towemu_->iem[towIt];
+	  towEtaemu = l1Towemu_->ieta[towIt];
+	  towPhiemu = l1Towemu_->iphi[towIt];
+	  if (abs(towEtaemu) >= minTowerForHOvE && abs(towEtaemu) <= maxTowerForHOvE){
+	    if (towEtaemu == seedTowerIEta && towPhiemu == seedTowerIPhi){
+	      seedTowerHad = towHademu;
+	      seedTowerEm = towEmemu;
+	    }
+	    for (int iSeedTowerIEta = -4; iSeedTowerIEta <= 4; ++iSeedTowerIEta){
+	      for (int iSeedTowerIPhi = -4; iSeedTowerIPhi <= 4; ++iSeedTowerIPhi){
+		int wrappedIPhi = seedTowerIPhi+iSeedTowerIPhi;
+		if (wrappedIPhi > 72) wrappedIPhi -= 72;
+		if (wrappedIPhi < 0) wrappedIPhi += 72;
+		if (towEtaemu == seedTowerIEta+iSeedTowerIEta && towPhiemu == wrappedIPhi){
+		  seedTower9x9Em += towEmemu;
+		  seedTower9x9Had += towHademu;
+		  if (abs(iSeedTowerIPhi) <= 1 && abs(iSeedTowerIEta) <= 1){
+		    seedTower3x3Em += towEmemu;
+		    seedTower3x3Had += towHademu;
+		  }
+		}
+	      }
+	    }
+	  } // closing min max tower statement
+	} // closing seed tower loop
+	hadVariablesAllJets["HOvE"].push_back(seedTowerHad);
+	hadVariablesAllJets["HOvE3"].push_back(seedTowerHad);
+	hadVariablesAllJets["HOvE9"].push_back(seedTowerHad);
+	hadVariablesAllJets["H3OvE3"].push_back(seedTower3x3Had);
+	hadVariablesAllJets["H9OvE9"].push_back(seedTower9x9Had);
+
+	emVariablesAllJets["HOvE"].push_back(seedTowerEm);
+	emVariablesAllJets["HOvE3"].push_back(seedTower3x3Em);
+	emVariablesAllJets["HOvE9"].push_back(seedTower9x9Em);
+	emVariablesAllJets["H3OvE3"].push_back(seedTower3x3Em);
+	emVariablesAllJets["H9OvE9"].push_back(seedTower9x9Em);
+
+
+	// Still in the jets loop, now match HCAL TPs to L1 Jets for multiplicity studies
 
 	if (jetIt != 0 ) continue; // only do matching to the highest energy jet
 	if (l1emu_->jetEt[jetIt] < 20 ) continue; // require jet is greater than 20 GeV to attempt matching to HCAL TP
@@ -899,6 +960,9 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       dt1GeV4nsHBJetMult_emu->Fill(mult1GeV4nsHB_Jets);
       dt1GeV5nsHBJetMult_emu->Fill(mult1GeV5nsHB_Jets);
 
+      // H/E for the first jet information
+      HoverEtotal->Fill((hadVariablesAllJets["H3OvE3"][0])/(hadVariablesAllJets["H3OvE3"][0]+emVariablesAllJets["H3OvE3"][0]));
+
       // HCAL TP information when TPs are not matched to L1 Jets
       for (int HcalTPIt = 0; HcalTPIt < nCaloTPemu; HcalTPIt++){
 	tpEtaemu = l1CaloTPemu_->hcalTPieta[HcalTPIt]; // use for HB HE restrictions                                 
@@ -924,6 +988,12 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	hcalTPtiming[4] = l1CaloTPemu_->hcalTPtiming5[HcalTPIt];
 	hcalTPtiming[5] = l1CaloTPemu_->hcalTPtiming6[HcalTPIt];
 	hcalTPtiming[6] = l1CaloTPemu_->hcalTPtiming7[HcalTPIt];
+
+	for (int i = 0; i < 4; i++ ) {
+	  if (tpEtaemu == 1 && hcalTPtiming[i] > -0.5 ) {
+	    centralTiming->Fill(hcalTPtiming[i]-5.5);
+	  }
+	}
 
         // filling energy and time plots for each of 7 HCAL depths  
 	for (int i = 0; i < 7; i++){
@@ -1670,6 +1740,9 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     Ratio_Depth_Jets->Write();
     Ratio_DepthHE_Jets->Write();
     Ratio_DepthHB_Jets->Write();
+
+    centralTiming->Write();
+    HoverEtotal->Write();
   }
 
   if (hwOn){
