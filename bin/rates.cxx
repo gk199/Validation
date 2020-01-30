@@ -12,6 +12,7 @@
 #include "L1Trigger/L1TNtuples/interface/L1AnalysisL1UpgradeDataFormat.h"
 #include "L1Trigger/L1TNtuples/interface/L1AnalysisRecoVertexDataFormat.h"
 #include "L1Trigger/L1TNtuples/interface/L1AnalysisCaloTPDataFormat.h"
+#include "L1Trigger/L1TNtuples/interface/L1AnalysisL1CaloTowerDataFormat.h"
 
 /* TODO: put errors in rates...
 creates the the rates and distributions for l1 trigger objects
@@ -104,6 +105,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   if (hwOn){
     treeL1hw->Add(inputFile.c_str());
   }
+  TChain * treeL1Towemu = new TChain("l1CaloTowerEmuTree/L1CaloTowerTree");
+  if (emuOn){
+    treeL1Towemu->Add(inputFile.c_str());
+  }
   TChain * eventTree = new TChain("l1EventTree/L1EventTree");
   eventTree->Add(inputFile.c_str());
 
@@ -130,6 +135,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   treeL1hw->SetBranchAddress("L1Upgrade", &l1hw_);
   L1Analysis::L1AnalysisEventDataFormat    *event_ = new L1Analysis::L1AnalysisEventDataFormat();
   eventTree->SetBranchAddress("Event", &event_);
+  L1Analysis::L1AnalysisL1CaloTowerDataFormat     *l1Towemu_ = new L1Analysis::L1AnalysisL1CaloTowerDataFormat();
+  treeL1Towemu->SetBranchAddress("L1CaloTower", &l1Towemu_);
   // L1Analysis::L1AnalysisRecoVertexDataFormat    *vtx_ = new L1Analysis::L1AnalysisRecoVertexDataFormat();
   // vtxTree->SetBranchAddress("Vertex", &vtx_);
 
@@ -205,12 +212,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   float tpLo = 0.;
   float tpHi = 100.;
 
-  // H/E bins
-  //  int nHoEBins = 100;
-  //  float HoELo = 0.;
-  //  float HoEHi = 1; // H/E is a ratio of energy in HCAL to ECAL, so is maximized at 1
-  //  float HoESumBinWidth = (HoEHi - HoELo)/nHoEBins;
-
   std::string axR = ";Threshold E_{T} (GeV);rate (Hz)";
   std::string axD = ";E_{T} (GeV);events/bin";
 
@@ -232,8 +233,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F* etSumRates_emu = new TH1F("etSumRates_emu",axR.c_str(), nEtSumBins, etSumLo, etSumHi);
   TH1F* metSumRates_emu = new TH1F("metSumRates_emu",axR.c_str(), nMetSumBins, metSumLo, metSumHi); 
   TH1F* metHFSumRates_emu = new TH1F("metHFSumRates_emu",axR.c_str(), nMetHFSumBins, metHFSumLo, metHFSumHi); 
-  //  TH1F* lowHoERates_emu = new TH1F("lowHoERates_emu",axR.c_str(), nHoEBins, HoELo, HoEHi);
-  //  TH1F* highHoERates_emu = new TH1F("highHoERates_emu",axR.c_str(), nHoEBins, HoELo, HoEHi);
 
   TH1F* singleJetRates_hw = new TH1F("singleJetRates_hw", axR.c_str(), nJetBins, jetLo, jetHi);
   TH1F* doubleJetRates_hw = new TH1F("doubleJetRates_hw", axR.c_str(), nJetBins, jetLo, jetHi);
@@ -252,14 +251,17 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F* etSumRates_hw = new TH1F("etSumRates_hw",axR.c_str(), nEtSumBins, etSumLo, etSumHi);
   TH1F* metSumRates_hw = new TH1F("metSumRates_hw",axR.c_str(), nMetHFSumBins, metHFSumLo, metHFSumHi); 
   TH1F* metHFSumRates_hw = new TH1F("metHFSumRates_hw",axR.c_str(), nMetHFSumBins, metHFSumLo, metHFSumHi); 
-  //  TH1F* lowHoERates_hw = new TH1F("lowHoERates_hw",axR.c_str(), nHoEBins, HoELo, HoEHi);
-  //  TH1F* highHoERates_hw = new TH1F("highHoERates_hw",axR.c_str(), nHoEBins, HoELo, HoEHi);
 
   TH1F* hcalTP_emu = new TH1F("hcalTP_emu", ";TP E_{T}; # Entries", nTpBins, tpLo, tpHi);
   TH1F* ecalTP_emu = new TH1F("ecalTP_emu", ";TP E_{T}; # Entries", nTpBins, tpLo, tpHi);
 
   TH1F* hcalTP_hw = new TH1F("hcalTP_hw", ";TP E_{T}; # Entries", nTpBins, tpLo, tpHi);
   TH1F* ecalTP_hw = new TH1F("ecalTP_hw", ";TP E_{T}; # Entries", nTpBins, tpLo, tpHi);
+
+  TH1D * hJetEt = new TH1D("jetET",";ET;",100,0,1000);
+  std::vector<TString> ratioStrings = {"HOvE","HOvE3","HOvE9","H3OvE3","H9OvE9"};
+
+  TH1F* HovE_emu = new TH1F("HovE_emu", "H/E for Jets;H/E;# Entries", 200,0,60);
 
   /////////////////////////////////
   // loop through all the entries//
@@ -277,6 +279,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     if (emuOn){
 
       treeL1TPemu->GetEntry(jentry);
+      treeL1Towemu->GetEntry(jentry);
       double tpEt(0.);
       
       for(int i=0; i < l1TPemu_->nHCALTP; i++){
@@ -367,20 +370,81 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       }
 
       // for each bin fill according to whether our object has a larger corresponding energy
+      int seedTowerIEta(-1);
+      int seedTowerIPhi(-1);
+      int maxTowerEndcap = 28;
+      int maxTowerBarrel = 16;
+      int minTowerForHOvE = maxTowerBarrel+1;
+      int maxTowerForHOvE = maxTowerEndcap;
+      uint nJetemu(0);
+      double towEtemu(0), towHademu(0), towEmemu(0), towEtaemu(0), towPhiemu(0), nTowemu(0);
+      nTowemu = l1Towemu_->nTower;
+      nJetemu = l1emu_->nJets;
+      //std::cout << "nTower emu = " << nTowemu << " and nJet emu = " << nJetemu << std::endl;
+      std::map<const TString, std::vector<double> > hadVariablesAllJets;
+      std::map<const TString, std::vector<double> > emVariablesAllJets;
+      for(uint jetIt=0; jetIt<nJetemu; jetIt++){
+	hJetEt->Fill(l1emu_->jetEt[jetIt]);
+	seedTowerIPhi = l1emu_->jetTowerIPhi[jetIt];
+	seedTowerIEta = l1emu_->jetTowerIEta[jetIt];
+	double seedTowerHad(0), seedTowerEm(0), seedTower3x3Em(0), seedTower3x3Had(0), seedTower9x9Em(0), seedTower9x9Had(0);
+	for (int towIt = 0; towIt < nTowemu; towIt++){
+	  towEtemu  = l1Towemu_->iet[towIt];
+	  towHademu = l1Towemu_->ihad[towIt];
+	  towEmemu  = l1Towemu_->iem[towIt];
+	  towEtaemu = l1Towemu_->ieta[towIt];
+	  towPhiemu = l1Towemu_->iphi[towIt];
+	  if (abs(towEtaemu) >= minTowerForHOvE && abs(towEtaemu) <= maxTowerForHOvE){
+	    if (towEtaemu == seedTowerIEta && towPhiemu == seedTowerIPhi){
+	      seedTowerHad = towHademu;
+	      seedTowerEm = towEmemu;
+	    }
+	    for (int iSeedTowerIEta = -4; iSeedTowerIEta <= 4; ++iSeedTowerIEta){
+	      for (int iSeedTowerIPhi = -4; iSeedTowerIPhi <= 4; ++iSeedTowerIPhi){
+		int wrappedIPhi = seedTowerIPhi+iSeedTowerIPhi;
+		if (wrappedIPhi > 72) wrappedIPhi -= 72;
+		if (wrappedIPhi < 0) wrappedIPhi += 72;
+		if (towEtaemu == seedTowerIEta+iSeedTowerIEta && towPhiemu == wrappedIPhi){
+		  seedTower9x9Em += towEmemu;
+		  seedTower9x9Had += towHademu;
+		  if (abs(iSeedTowerIPhi) <= 1 && abs(iSeedTowerIEta) <= 1){
+		    seedTower3x3Em += towEmemu;
+		    seedTower3x3Had += towHademu;
+		  }
+		}
+	      }
+	    }
+	  } // closing min max tower statement
+	} // closing seed tower loop
+	hadVariablesAllJets["HOvE"].push_back(seedTowerHad);
+	hadVariablesAllJets["HOvE3"].push_back(seedTowerHad);
+	hadVariablesAllJets["HOvE9"].push_back(seedTowerHad);
+	hadVariablesAllJets["H3OvE3"].push_back(seedTower3x3Had);
+	hadVariablesAllJets["H9OvE9"].push_back(seedTower9x9Had);
+
+	emVariablesAllJets["HOvE"].push_back(seedTowerEm);
+	emVariablesAllJets["HOvE3"].push_back(seedTower3x3Em);
+	emVariablesAllJets["HOvE9"].push_back(seedTower9x9Em);
+	emVariablesAllJets["H3OvE3"].push_back(seedTower3x3Em);
+	emVariablesAllJets["H9OvE9"].push_back(seedTower9x9Em);
+      } // closing the jet loop
+
+      HovE_emu->Fill((hadVariablesAllJets["H3OvE3"][0])/(emVariablesAllJets["H3OvE3"][0]));
+
       for(int bin=0; bin<nJetBins; bin++){
-        if( (jetEt_1) >= jetLo + (bin*jetBinWidth) ) singleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+        if( ((hadVariablesAllJets["H3OvE3"][0])/(hadVariablesAllJets["H3OvE3"][0]+emVariablesAllJets["H3OvE3"][0]) > 0.9) && ( (jetEt_1) >= jetLo + (bin*jetBinWidth) ) ) singleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
       } 
 
       for(int bin=0; bin<nJetBins; bin++){
-        if( (jetEt_2) >= jetLo + (bin*jetBinWidth) ) doubleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+        if( ((hadVariablesAllJets["H3OvE3"][1])/(hadVariablesAllJets["H3OvE3"][1]+emVariablesAllJets["H3OvE3"][1]) > 0.9) && (jetEt_2) >= jetLo + (bin*jetBinWidth) ) doubleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
       }  
 
       for(int bin=0; bin<nJetBins; bin++){
-        if( (jetEt_3) >= jetLo + (bin*jetBinWidth) ) tripleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+        if( ((hadVariablesAllJets["H3OvE3"][2])/(hadVariablesAllJets["H3OvE3"][2]+emVariablesAllJets["H3OvE3"][2]) > 0.9) && (jetEt_3) >= jetLo + (bin*jetBinWidth) ) tripleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
       }  
 
       for(int bin=0; bin<nJetBins; bin++){
-        if( (jetEt_4) >= jetLo + (bin*jetBinWidth) ) quadJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+        if( ((hadVariablesAllJets["H3OvE3"][3])/(hadVariablesAllJets["H3OvE3"][3]+emVariablesAllJets["H3OvE3"][3]) > 0.9) && (jetEt_4) >= jetLo + (bin*jetBinWidth) ) quadJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
       }  
              
       for(int bin=0; bin<nEgBins; bin++){
@@ -669,6 +733,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     etSumRates_emu->Write();
     metSumRates_emu->Write();
     metHFSumRates_emu->Write();
+
+    HovE_emu->Write();
   }
 
   if (hwOn){
