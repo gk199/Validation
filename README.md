@@ -34,8 +34,8 @@ Follow this twiki on how to use the Rates scripts for more details:
 [HCAL Days L1 Rates workshop](https://twiki.cern.ch/twiki/bin/view/Sandbox/L1TriggerAtHCALdays2019#HCAL_conditions_impact_at_L1_rat)
 
 ## H/E Studies
-`bin/rates.cxx` has the code to study the effects of adding a H/E requirement on the jet (single, double, triple, quad) rates, and can be compared against the default rates from `rates_original.cxx`. H/E code is from Matthew Citron, and can be calculated from 1x1, 3x3, or 9x9 regions of the HCAL and ECAL. Plots of 1x1 and 3x3 H/E are made, and overlayed in `draw_rates.cxx'.
+`bin/rates.cxx` has the code to study the effects of adding a H/E requirement on the jet (single, double, triple, quad) rates, and can be compared against the default rates from `rates_original.cxx`. H/E code is from [Matthew Citron](https://github.com/mcitron/High-MET-studies/blob/hoeseed/doHOvEStudy.cxx#L300-L347), and can be calculated from 1x1, 3x3, or 9x9 regions of the HCAL and ECAL. Plots of 1x1 and 3x3 H/E are made, and overlayed in `draw_rates.cxx'.
 
 ## Rate Studies
-In `rates.cxx' jet, egamma, tau, energy, and MET rates are calculated. New conditions rates can be calculated by adding restrictions (as is done with jet rates and H/E) and then plotting the current (default) and new rates in `draw_rates.cxx'. In addition, the ratio between new and current (default) rates will be plotted.
+In `rates.cxx` jet, egamma, tau, energy, and MET rates are calculated. New conditions rates can be calculated by adding restrictions (as is done with jet rates and H/E) and then plotting the current (default) and new rates in `draw_rates.cxx`. In addition, the ratio between new and current (default) rates will be plotted.
 
