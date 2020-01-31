@@ -6,15 +6,11 @@ After setting up the L1Ntuple environment and compiling, issue the following:
 git clone git@github.com:cms-hcal-trigger/Validation.git HcalTrigger/Validation
 ```
 
-# HCAL conditions validation 
-Scripts for HCAL radiation damage correction validation.
-
+# HCAL Rates and H/E Studies
 The script that submit CRAB jobs is called `submit_jobs.py`. Its required arguments are a dataset name (-d) and the storage site for the output (-o). For example:
 ```
 ./scripts/submit_jobs.py -d /RelValNuGun/CMSSW_10_6_1_patch1-PU_106X_mcRun3_2021_realistic_v3_rsb-v2/GEN-SIM-DIGI-RAW -o T2_CH_CERN -n NO_EXEC
 ```
-
-# HCAL Rates and H/E Studies
 To run on a LLP MC sample, list the sample in `bin/submit_jobs.py`, and then run with (no dataset, lumimask required):
 ```
 ./scripts/submit_jobs.py -o T2_CH_CERN -n NO_EXEC
