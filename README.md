@@ -9,6 +9,7 @@ After compiling with the L1Ntuple environment and the upgrade timing and depth b
 ```
 git clone git@github.com:cms-hcal-trigger/Validation.git HcalTrigger/Validation
 ```
+To have timing and energy information in the HCAL depth layers, note that L1Ntuples will need to be processed in this directory with the inclusion of Georgia's upgrade HCAL TPs branch. L1Ntuples are made with `ntuple_maker_def.py`.
 
 # HCAL Rates and Multiplicity Studies
 The script that submit CRAB jobs is called `submit_jobs.py`. Its required arguments are a good run lumimask, a dataset name, the new HcalL1TriggerObjects tag, and the storage site for the output. For example:
@@ -24,7 +25,7 @@ This makes CMSSW config files (only need default ones for the current studies, n
 cmsRun ntuple_maker_def.py
 mv L1Ntuple.root def_dir/L1Ntuple_def.root
 ```
-And then compile and run the rates and plotting macros on this, referencing the correct directory where the L1Ntuple was moved to:
+To run on another MC sample, can simply edit its name in the `ntuple_maker_def.py' file listed under fileNames. Then compile and run the rates and plotting macros on this, referencing the correct directory where the L1Ntuple was moved to:
 ```
 USER_CXXFLAGS="-Wno-error=unused-but-set-variable" scram b
 rates.exe def def_dir/
@@ -32,3 +33,6 @@ draw_rates.exe
 ```
 Follow this twiki on how to use the Rates scripts for more details:
 [HCAL Days L1 Rates workshop](https://twiki.cern.ch/twiki/bin/view/Sandbox/L1TriggerAtHCALdays2019#HCAL_conditions_impact_at_L1_rat)
+
+## Multiplicity Studies with Timing and Energy Information
+With the inclusion of Georgia's upgrade HCAL TPs branch, HCAL timing (TDC) and energy (ACD) information are avaliable at every HCAL depth layer. Multiplicity calculations are done in `rates.cxx` for global counts and regional counts. The regional multiplicity counts are done in the region of a L1 Jet, by matching HCAL TPs within deltaR < 0.5 of the leading L1 Jet. `draw_rates.cxx` makes plots of multiplicity counts (global and regional) with a timescan, overlaying for QCD and multiple LLPs, and plots average energy and timing information per depth level, along with the ratio of energy deposited in 2 HCAL layers to total.
