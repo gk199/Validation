@@ -21,58 +21,77 @@ int main()
   gROOT->ForceStyle();
 
   // default, then new conditions
-  std::vector<std::string> filenames = {"rates_def.root", "rates_new_cond.root"};
+  std::vector<std::string> filenames = {"rates_def.root", "rates_new_cond.root","rates_new_cond_nugun_HoEdist.root"};
   std::vector<std::string> rateTypes = {"singleJet", "doubleJet", "tripleJet", "quadJet",
 					"singleEg", "singleISOEg", "doubleEg", "doubleISOEg",
 					"singleTau", "singleISOTau", "doubleTau", "doubleISOTau",
-					"htSum", "etSum", "metSum", "metHFSum"};
+					"htSum", "etSum", "metSum", "metHFSum","HovEtotal_1x1_emu","HovEtotal_3x3_emu"};
+  std::vector<std::string> HoEfilenames = {"rates_new_cond_nugun_HoEdist.root"}; // file where the H/E plots are for 1x1 and 3x3 calculations
+  std::vector<std::string> HoE = {"HovEtotal_1x1_emu","HovEtotal_3x3_emu"}; // histogram names for the H/E overlay plots, both done on neutrino gun in same file
+
   std::map<std::string, int> histColor;
   histColor["singleJet"] = histColor["singleEg"] = histColor["singleTau"] = histColor["etSum"] = histColor["metSum"] = kRed;
-  histColor["doubleJet"] = histColor["singleISOEg"] = histColor["singleISOTau"] = histColor["htSum"] = histColor["metHFSum"] = kBlue;
-  histColor["tripleJet"] = histColor["doubleEg"] = histColor["doubleTau"] = kGreen;
+  histColor["doubleJet"] = histColor["singleISOEg"] = histColor["singleISOTau"] = histColor["htSum"] = histColor["metHFSum"] = histColor["HovEtotal_1x1_emu"] = kBlue;
+  histColor["tripleJet"] = histColor["doubleEg"] = histColor["doubleTau"] = histColor["HovEtotal_3x3_emu"] = kGreen+1;
   histColor["quadJet"] = histColor["doubleISOEg"] = histColor["doubleISOTau"] = kBlack;
 
   std::map<std::string, TH1F*> rateHists_def;
   std::map<std::string, TH1F*> rateHists_new_cond;
   std::map<std::string, TH1F*> rateHists_hw;
   std::map<std::string, TH1F*> rateHistsRatio;
+  std::map<std::string, TH1F*> nugun_HoE;
   
   std::vector<TFile*> files;
   for(auto file : filenames) {
     files.push_back(TFile::Open(file.c_str()));
   }
+
   for(auto rateType : rateTypes) {
     std::string histName(rateType);
     std::string histNameHw(histName);
-    histName += "Rates_emu";
-    histNameHw += "Rates_hw";
-    rateHists_def[rateType] = dynamic_cast<TH1F*>(files.at(0)->Get(histName.c_str()));
-    rateHists_hw[rateType] = dynamic_cast<TH1F*>(files.at(0)->Get(histNameHw.c_str()));
-    rateHists_new_cond[rateType] = dynamic_cast<TH1F*>(files.at(1)->Get(histName.c_str())); 
-    rateHists_def[rateType]->Rebin(rebinFactor);
-    rateHists_hw[rateType]->Rebin(rebinFactor);
-    rateHists_new_cond[rateType]->Rebin(rebinFactor);
-
-    rateHists_def[rateType]->SetLineColor(histColor[rateType]);
-    rateHists_hw[rateType]->SetLineColor(histColor[rateType]);
-    rateHists_new_cond[rateType]->SetLineColor(histColor[rateType]);
-    TString name(rateHists_new_cond[rateType]->GetName());
-    name += "_ratio";
-    if(includeHW) {
-      rateHistsRatio[rateType] = dynamic_cast<TH1F*>(rateHists_def[rateType]->Clone(name));
-      rateHistsRatio[rateType]->Divide(rateHists_hw[rateType]);
+    
+    if (rateType.substr(0,4) == "HovE" ) {
+      std::cout << rateType << std::endl;
+      nugun_HoE[rateType] = dynamic_cast<TH1F*>(files.at(2)->Get(histName.c_str()));
+      std::cout << files.at(2)->Get(histName.c_str()) << std::endl;
+      nugun_HoE[rateType]->Rebin(rebinFactor);
+      nugun_HoE[rateType]->SetLineColor(histColor[rateType]);
     }
     else {
-      rateHistsRatio[rateType] = dynamic_cast<TH1F*>(rateHists_new_cond[rateType]->Clone(name));
-      rateHistsRatio[rateType]->Divide(rateHists_def[rateType]);
+      histName += "Rates_emu";
+      histNameHw += "Rates_hw";
+      rateHists_def[rateType] = dynamic_cast<TH1F*>(files.at(0)->Get(histName.c_str()));
+      rateHists_hw[rateType] = dynamic_cast<TH1F*>(files.at(0)->Get(histNameHw.c_str()));
+      rateHists_new_cond[rateType] = dynamic_cast<TH1F*>(files.at(1)->Get(histName.c_str())); 
+      std:: cout << files.at(1)->Get(histName.c_str()) << std::endl;
+      
+      rateHists_def[rateType]->Rebin(rebinFactor);
+      rateHists_hw[rateType]->Rebin(rebinFactor);
+      rateHists_new_cond[rateType]->Rebin(rebinFactor);
+      
+      rateHists_def[rateType]->SetLineColor(histColor[rateType]);
+      rateHists_hw[rateType]->SetLineColor(histColor[rateType]);
+      rateHists_new_cond[rateType]->SetLineColor(histColor[rateType]);
+      TString name(rateHists_new_cond[rateType]->GetName());
+      name += "_ratio";
+      if(includeHW) {
+	rateHistsRatio[rateType] = dynamic_cast<TH1F*>(rateHists_def[rateType]->Clone(name));
+	rateHistsRatio[rateType]->Divide(rateHists_hw[rateType]);
+      }
+      else {
+	rateHistsRatio[rateType] = dynamic_cast<TH1F*>(rateHists_new_cond[rateType]->Clone(name));
+	rateHistsRatio[rateType]->Divide(rateHists_def[rateType]);
+      }
+      rateHistsRatio[rateType]->SetMinimum(0.6);    
+      rateHistsRatio[rateType]->SetMaximum(1.4);    
+      rateHistsRatio[rateType]->SetLineWidth(2);    
     }
-    rateHistsRatio[rateType]->SetMinimum(0.6);    
-    rateHistsRatio[rateType]->SetMaximum(1.4);    
-    rateHistsRatio[rateType]->SetLineWidth(2);    
   }
+
   for(auto pair : rateHists_new_cond) pair.second->SetLineWidth(2);
   for(auto pair : rateHists_hw) pair.second->SetLineStyle(kDashed);
   for(auto pair : rateHists_def) pair.second->SetLineStyle(kDotted);
+  //  for(auto pair : nugun_HoE) pair.second->SetLineWidth(2);
 
   std::vector<std::string> jetPlots = {"singleJet", "doubleJet", "tripleJet", "quadJet"};
   std::vector<std::string> egPlots = {"singleEg", "singleISOEg", "doubleEg", "doubleISOEg"};
@@ -133,5 +152,22 @@ int main()
     else canvases.back()->Print(Form("plots/%sRates_emu.pdf", iplot.first.c_str()));
   }
 
+  canvases.push_back(new TCanvas);
+  canvases.back()->SetWindowSize(canvases.back()->GetWw(), 1.3*canvases.back()->GetWh());pad1.push_back(new TPad("pad1", "pad1", 0, 0.3, 1, 1));
+  pad1.back()->SetLogy();
+  //  pad1.back()->SetGrid();
+  pad1.back()->Draw();
+  pad1.back()->cd();
+  nugun_HoE["HovEtotal_3x3_emu"]->Draw("hist");
+  nugun_HoE["HovEtotal_1x1_emu"]->Draw("hist same");
+  TLegend *leg = new TLegend(0.2, 0.75, 0.45, 0.93);
+  leg->AddEntry(nugun_HoE["HovEtotal_1x1_emu"],  "H/E 1x1", "L");
+  leg->AddEntry(nugun_HoE["HovEtotal_3x3_emu"],  "H/E 3x3", "L");
+  leg->SetBorderSize(0);
+  leg->Draw();
+  nugun_HoE["HovEtotal_3x3_emu"]->GetYaxis()->CenterTitle(true);
+  nugun_HoE["HovEtotal_3x3_emu"]->SetTitle("HCAL / ECAL + HCAL Energy for Jets");
+  canvases.back()->Print("plots/HoE_emu.pdf");
+ 
   return 0;
 }

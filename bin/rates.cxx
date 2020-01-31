@@ -261,7 +261,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1D * hJetEt = new TH1D("jetET",";ET;",100,0,1000);
   std::vector<TString> ratioStrings = {"HOvE","HOvE3","HOvE9","H3OvE3","H9OvE9"};
 
-  TH1F* HovE_emu = new TH1F("HovE_emu", "H/E for Jets;H/E;# Entries", 200,0,60);
+  TH1F* HovEtotal_1x1_emu = new TH1F("HovEtotal_1x1_emu", "HCAL energy / ECAL+HCAL energy for Jets (1x1);H/E;# Entries", 50,0,1);
+  TH1F* HovEtotal_3x3_emu = new TH1F("HovEtotal_3x3_emu", "HCAL energy / ECAL+HCAL energy for Jets (3x3);H/E;# Entries", 50,0,1);
 
   /////////////////////////////////
   // loop through all the entries//
@@ -429,7 +430,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	emVariablesAllJets["H9OvE9"].push_back(seedTower9x9Em);
       } // closing the jet loop
 
-      HovE_emu->Fill((hadVariablesAllJets["H3OvE3"][0])/(emVariablesAllJets["H3OvE3"][0]));
+       HovEtotal_1x1_emu->Fill((hadVariablesAllJets["HOvE"][0])/(hadVariablesAllJets["HOvE"][0]+emVariablesAllJets["HOvE"][0]));
+       HovEtotal_3x3_emu->Fill((hadVariablesAllJets["H3OvE3"][0])/(hadVariablesAllJets["H3OvE3"][0]+emVariablesAllJets["H3OvE3"][0]));
 
       for(int bin=0; bin<nJetBins; bin++){
         if( ((hadVariablesAllJets["H3OvE3"][0])/(hadVariablesAllJets["H3OvE3"][0]+emVariablesAllJets["H3OvE3"][0]) > 0.9) && ( (jetEt_1) >= jetLo + (bin*jetBinWidth) ) ) singleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
@@ -734,7 +736,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     metSumRates_emu->Write();
     metHFSumRates_emu->Write();
 
-    HovE_emu->Write();
+    HovEtotal_1x1_emu->Write();
+    HovEtotal_3x3_emu->Write();
   }
 
   if (hwOn){
