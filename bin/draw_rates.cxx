@@ -26,7 +26,6 @@ int main()
 					"singleEg", "singleISOEg", "doubleEg", "doubleISOEg",
 					"singleTau", "singleISOTau", "doubleTau", "doubleISOTau",
 					"htSum", "etSum", "metSum", "metHFSum","HovEtotal_1x1_emu","HovEtotal_3x3_emu"};
-  std::vector<std::string> HoEfilenames = {"rates_new_cond_nugun_HoEdist.root"}; // file where the H/E plots are for 1x1 and 3x3 calculations
   std::vector<std::string> HoE = {"HovEtotal_1x1_emu","HovEtotal_3x3_emu"}; // histogram names for the H/E overlay plots, both done on neutrino gun in same file
 
   std::map<std::string, int> histColor;
@@ -91,7 +90,6 @@ int main()
   for(auto pair : rateHists_new_cond) pair.second->SetLineWidth(2);
   for(auto pair : rateHists_hw) pair.second->SetLineStyle(kDashed);
   for(auto pair : rateHists_def) pair.second->SetLineStyle(kDotted);
-  //  for(auto pair : nugun_HoE) pair.second->SetLineWidth(2);
 
   std::vector<std::string> jetPlots = {"singleJet", "doubleJet", "tripleJet", "quadJet"};
   std::vector<std::string> egPlots = {"singleEg", "singleISOEg", "doubleEg", "doubleISOEg"};
@@ -155,7 +153,6 @@ int main()
   canvases.push_back(new TCanvas);
   canvases.back()->SetWindowSize(canvases.back()->GetWw(), 1.3*canvases.back()->GetWh());pad1.push_back(new TPad("pad1", "pad1", 0, 0.3, 1, 1));
   pad1.back()->SetLogy();
-  //  pad1.back()->SetGrid();
   pad1.back()->Draw();
   pad1.back()->cd();
   nugun_HoE["HovEtotal_3x3_emu"]->Draw("hist");
