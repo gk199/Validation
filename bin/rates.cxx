@@ -388,7 +388,19 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F * dt1GeV3nsHBJetMult_emu = new TH1F("dt1GeV3nsHBJetMult_emu","Multiplicity of 3ns delayed cells above 1 GeV (HB, match TP with L1Jet);Hit Multiplicity;Number of Entries",400,0,400);
   TH1F * dt1GeV4nsHBJetMult_emu = new TH1F("dt1GeV4nsHBJetMult_emu","Multiplicity of 4ns delayed cells above 1 GeV (HB, match TP with L1Jet);Hit Multiplicity;Number of Entries",400,0,400);
   TH1F * dt1GeV5nsHBJetMult_emu = new TH1F("dt1GeV5nsHBJetMult_emu","Multiplicity of 5ns delayed cells above 1 GeV (HB, match TP with L1Jet);Hit Multiplicity;Number of Entries",400,0,400);
-
+  // HB by ieta regions to scan energy cuts. These are in barrel region, considering caloTowers of 4x4 in ieta, iphi, and using all same ieta values, with 2pi of iphi (4 total regions)
+  TH1F * dt1GeVcaloT1Mult_emu = new TH1F("dt1GeVcaloT1Mult_emu","Multiplicity of cells above 1 GeV, CaloTower 1 (iEta 1-4);Hit Multiplicity;Number of Entries",120,0,120); 
+  TH1F * dt1GeVcaloT2Mult_emu = new TH1F("dt1GeVcaloT2Mult_emu","Multiplicity of cells above 1 GeV, CaloTower 2 (iEta 5-8);Hit Multiplicity;Number of Entries",120,0,120); 
+  TH1F * dt1GeVcaloT3Mult_emu = new TH1F("dt1GeVcaloT3Mult_emu","Multiplicity of cells above 1 GeV, CaloTower 3 (iEta 9-12);Hit Multiplicity;Number of Entries",120,0,120); 
+  TH1F * dt1GeVcaloT4Mult_emu = new TH1F("dt1GeVcaloT4Mult_emu","Multiplicity of cells above 1 GeV, CaloTower 4 (iEta 13-16);Hit Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt2GeVcaloT1Mult_emu = new TH1F("dt2GeVcaloT1Mult_emu","Multiplicity of cells above 2 GeV, CaloTower 1 (iEta 1-4);Hit Multiplicity;Number of Entries",120,0,120);  
+  TH1F * dt2GeVcaloT2Mult_emu = new TH1F("dt2GeVcaloT2Mult_emu","Multiplicity of cells above 2 GeV, CaloTower 2 (iEta 5-8);Hit Multiplicity;Number of Entries",120,0,120);  
+  TH1F * dt2GeVcaloT3Mult_emu = new TH1F("dt2GeVcaloT3Mult_emu","Multiplicity of cells above 2 GeV, CaloTower 3 (iEta 9-12);Hit Multiplicity;Number of Entries",120,0,120); 
+  TH1F * dt2GeVcaloT4Mult_emu = new TH1F("dt2GeVcaloT4Mult_emu","Multiplicity of cells above 2 GeV, CaloTower 4 (iEta 13-16);Hit Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeVcaloT1Mult_emu = new TH1F("dt3GeVcaloT1Mult_emu","Multiplicity of cells above 3 GeV, CaloTower 1 (iEta 1-4);Hit Multiplicity;Number of Entries",120,0,120); 
+  TH1F * dt3GeVcaloT2Mult_emu = new TH1F("dt3GeVcaloT2Mult_emu","Multiplicity of cells above 3 GeV, CaloTower 2 (iEta 5-8);Hit Multiplicity;Number of Entries",120,0,120); 
+  TH1F * dt3GeVcaloT3Mult_emu = new TH1F("dt3GeVcaloT3Mult_emu","Multiplicity of cells above 3 GeV, CaloTower 3 (iEta 9-12);Hit Multiplicity;Number of Entries",120,0,120);  
+  TH1F * dt3GeVcaloT4Mult_emu = new TH1F("dt3GeVcaloT4Mult_emu","Multiplicity of cells above 3 GeV, CaloTower 4 (iEta 13-16);Hit Multiplicity;Number of Entries",120,0,120); 
   // making TH2F for the energy depth plots
   TH2F * Energy_Depth = new TH2F("Energy_Depth", "TP Energy Fraction vs. Depth;HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 1.2);
   TH2F * Timing_Depth = new TH2F("Timing_Depth", "TP Timing Value vs. Depth;HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5, 60, 0, 30);
@@ -432,7 +444,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F * Ratio_Depth_Jets = new TH1F("Ratio_Depth_Jets", "Ratio of First 2 HCAL Layers to E_{T}, matched w/Jets;Ratio;Number of Events", 50,0,1);
   TH1F * Ratio_DepthHE_Jets = new TH1F("Ratio_DepthHE_Jets", "Ratio of First 2 HCAL Layers to E_{T} in HE, matched w/Jets;Ratio;Number of Events", 50,0,1);
   TH1F * Ratio_DepthHB_Jets = new TH1F("Ratio_DepthHB_Jets", "Ratio of First 2 HCAL Layers to E_{T} in HB, matched w/Jets;Ratio;Number of Events", 50,0,1);
-
   // timing values for center of barrel
   TH1F * centralTiming = new TH1F("centralTiming", "Time of arrival - TOF (central barrel iEta);Time (ns);Number of Events",50,-10,40);
 
@@ -565,6 +576,11 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       double mult1GeV1ns(0), mult1GeV2ns(0), mult1GeV3ns(0), mult1GeV4ns(0), mult1GeV5ns(0);
       double mult1GeV1nsHE(0), mult1GeV2nsHE(0), mult1GeV3nsHE(0), mult1GeV4nsHE(0), mult1GeV5nsHE(0);
       double mult1GeV1nsHB(0), mult1GeV2nsHB(0), mult1GeV3nsHB(0), mult1GeV4nsHB(0), mult1GeV5nsHB(0);
+      // multiplicity for ieta regions of caloTowers (4x4 ieta iphi) in the barrel regions                                                                                                                               
+      double mult1GeVcaloT1(0), mult2GeVcaloT1(0), mult3GeVcaloT1(0); // abs(ieta) between 1-4                                                                                                                           
+      double mult1GeVcaloT2(0), mult2GeVcaloT2(0), mult3GeVcaloT2(0); // abs(ieta) between 5-8                                                                                                                           
+      double mult1GeVcaloT3(0), mult2GeVcaloT3(0), mult3GeVcaloT3(0); // abs(ieta) between 9-12                                                                                                                          
+      double mult1GeVcaloT4(0), mult2GeVcaloT4(0), mult3GeVcaloT4(0); // abs(ieta) between 13-16
       // multiplicity for when HCAL TP is matched with Jets
       double mult3GeV1ns_Jets(0), mult3GeV2ns_Jets(0), mult3GeV3ns_Jets(0), mult3GeV4ns_Jets(0), mult3GeV5ns_Jets(0);
       double mult3GeV1nsHE_Jets(0), mult3GeV2nsHE_Jets(0), mult3GeV3nsHE_Jets(0), mult3GeV4nsHE_Jets(0), mult3GeV5nsHE_Jets(0);
@@ -632,8 +648,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	    maxE_iEta = l1CaloTPemu_->hcalTPieta[HcalTPIt];
 	    maxE_iPhi = l1CaloTPemu_->hcalTPiphi[HcalTPIt];
 	  }
-	  //	} // closing the TP loop -- move if using more than 1 HCAL TP
-	  // if using more than one HCAL TP, change maxE_HcalTPIt to HcalTPIt
+	  //	} // closing the TP loop -- move if using more than 1 HCAL TP. This is used only when considering just the highest energy HCAL TP. Also, if using more than one HCAL TP, change maxE_HcalTPIt to HcalTPIt
 	  //	  if (maxE == 0) continue;
 
 	  // Energy deposited in each depth layer for every HCAL TP (4 in HB, 7 in HE)  
@@ -702,147 +717,78 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	  for (int depthIt = 0; depthIt < 7; depthIt++){
 	    // count multiplicity of layers given a timing and energy threshold   
 	    // 3 GeV energy cut
-	    if (hcalTPdepth[depthIt] > 3 && hcalTPtiming[depthIt] > 1){
-	      mult3GeV1ns_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 2){
-		mult3GeV2ns_Jets += 1;
-		if (hcalTPtiming[depthIt] > 3){
-		  mult3GeV3ns_Jets += 1;
-		  if (hcalTPtiming[depthIt] > 4){
-		    mult3GeV4ns_Jets += 1;
-		    if (hcalTPtiming[depthIt] > 5){
-		      mult3GeV5ns_Jets += 1;
-		    }
-		  }
-		}
+	    if (hcalTPdepth[depthIt] > 3 ){
+	      if (hcalTPtiming[depthIt] > 1) mult3GeV1ns_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 2) mult3GeV2ns_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 3) mult3GeV3ns_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 4) mult3GeV4ns_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 5) mult3GeV5ns_Jets += 1;
+	      // 3 GeV HB regions
+	      if (hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) < 16){
+		mult3GeV1nsHB_Jets += 1;
+		if (hcalTPtiming[depthIt] > 2) mult3GeV2nsHB_Jets += 1;
+		if (hcalTPtiming[depthIt] > 3) mult3GeV3nsHB_Jets += 1;
+		if (hcalTPtiming[depthIt] > 4) mult3GeV4nsHB_Jets += 1;
+		if (hcalTPtiming[depthIt] > 5) mult3GeV5nsHB_Jets += 1;
 	      }
-	    }
-	    // 3 GeV HB HE regions
-	    if (hcalTPdepth[depthIt] > 3 && hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) < 16){
-	      mult3GeV1nsHB_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 2){
-		mult3GeV2nsHB_Jets += 1;
-		if (hcalTPtiming[depthIt] > 3){
-		  mult3GeV3nsHB_Jets += 1;
-		  if (hcalTPtiming[depthIt] > 4){
-		    mult3GeV4nsHB_Jets += 1;
-		    if (hcalTPtiming[depthIt] > 5){
-		      mult3GeV5nsHB_Jets += 1;
-		    }
-		  }
-		}
+	      // 3 GeV H# regions
+	      if (hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29){
+		mult3GeV1nsHE_Jets += 1;
+		if (hcalTPtiming[depthIt] > 2) mult3GeV2nsHE_Jets += 1;
+		if (hcalTPtiming[depthIt] > 3) mult3GeV3nsHE_Jets += 1;
+		if (hcalTPtiming[depthIt] > 4) mult3GeV4nsHE_Jets += 1;
+		if (hcalTPtiming[depthIt] > 5) mult3GeV5nsHE_Jets += 1;
 	      }
-	    }
-	    if (hcalTPdepth[depthIt] > 3 && hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29){
-	      mult3GeV1nsHE_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 2){
-		mult3GeV2nsHE_Jets += 1;
-		if (hcalTPtiming[depthIt] > 3){
-		  mult3GeV3nsHE_Jets += 1;
-		  if (hcalTPtiming[depthIt] > 4){
-		    mult3GeV4nsHE_Jets += 1;
-		    if (hcalTPtiming[depthIt] > 5){
-		      mult3GeV5nsHE_Jets += 1;
-		    }
-		  }
-		}
-	      }
-	    }
+	    } // closing 3 GeV energy cut loop
 	    // 2 GeV energy cut
-	    if (hcalTPdepth[depthIt] > 2 && hcalTPtiming[depthIt] > 1){
-	      mult2GeV1ns_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 2){
-		mult2GeV2ns_Jets += 1;
-		if (hcalTPtiming[depthIt] > 3){
-		  mult2GeV3ns_Jets += 1;
-		  if (hcalTPtiming[depthIt] > 4){
-		    mult2GeV4ns_Jets += 1;
-		    if (hcalTPtiming[depthIt] > 5){
-		      mult2GeV5ns_Jets += 1;
-		    }
-		  }
-		}
+	    if (hcalTPdepth[depthIt] > 2){
+	      if (hcalTPtiming[depthIt] > 1) mult2GeV1ns_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 2) mult2GeV2ns_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 3) mult2GeV3ns_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 4) mult2GeV4ns_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 5) mult2GeV5ns_Jets += 1;
+	      // 2 GeV HB regions                                
+	      if (hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) < 16){
+		mult2GeV1nsHB_Jets += 1;
+		if (hcalTPtiming[depthIt] > 2) mult2GeV2nsHB_Jets += 1;
+		if (hcalTPtiming[depthIt] > 3) mult2GeV3nsHB_Jets += 1;
+		if (hcalTPtiming[depthIt] > 4) mult2GeV4nsHB_Jets += 1;
+		if (hcalTPtiming[depthIt] > 5) mult2GeV5nsHB_Jets += 1;
 	      }
-	    }
-	    // 2 GeV HB HE regions                                
-	    if (hcalTPdepth[depthIt] > 2 && hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) < 16){
-	      mult2GeV1nsHB_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 2){
-		mult2GeV2nsHB_Jets += 1;
-		if (hcalTPtiming[depthIt] > 3){
-		  mult2GeV3nsHB_Jets += 1;
-		  if (hcalTPtiming[depthIt] > 4){
-		    mult2GeV4nsHB_Jets += 1;
-		    if (hcalTPtiming[depthIt] > 5){
-		      mult2GeV5nsHB_Jets += 1;
-		    }
-		  }
-		}
+	      // 2 GeV HE regions
+	      if (hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29){
+		mult2GeV1nsHE_Jets += 1;
+		if (hcalTPtiming[depthIt] > 2) mult2GeV2nsHE_Jets += 1;
+		if (hcalTPtiming[depthIt] > 3) mult2GeV3nsHE_Jets += 1;
+		if (hcalTPtiming[depthIt] > 4) mult2GeV4nsHE_Jets += 1;
+		if (hcalTPtiming[depthIt] > 5) mult2GeV5nsHE_Jets += 1;
 	      }
-	    }
-	    if (hcalTPdepth[depthIt] > 2 && hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29){
-	      mult2GeV1nsHE_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 2){
-		mult2GeV2nsHE_Jets += 1;
-		if (hcalTPtiming[depthIt] > 3){
-		  mult2GeV3nsHE_Jets += 1;
-		  if (hcalTPtiming[depthIt] > 4){
-		    mult2GeV4nsHE_Jets += 1;
-		    if (hcalTPtiming[depthIt] > 5){
-		      mult2GeV5nsHE_Jets += 1;
-		    }
-		  }
-		}
-	      }
-	    }
+	    } // clsoing 2 GeV energy cut loop
 	    // 1 GeV energy cut
-	    if (hcalTPdepth[depthIt] > 1 && hcalTPtiming[depthIt] > 1){
-	      mult1GeV1ns_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 2){
-		mult1GeV2ns_Jets += 1;
-		if (hcalTPtiming[depthIt] > 3){
-		  mult1GeV3ns_Jets += 1;
-		  if (hcalTPtiming[depthIt] > 4){
-		    mult1GeV4ns_Jets += 1;
-		    if (hcalTPtiming[depthIt] > 5){
-		      mult1GeV5ns_Jets += 1;
-		    }
-		  }
-		}
+	    if (hcalTPdepth[depthIt] > 1){
+	      if (hcalTPtiming[depthIt] > 1) mult1GeV1ns_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 2) mult1GeV2ns_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 3) mult1GeV3ns_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 4) mult1GeV4ns_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 5) mult1GeV5ns_Jets += 1;
+	      // 1 GeV HB regions                                                      
+	      if (hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) < 16){
+		mult1GeV1nsHB_Jets += 1;
+		if (hcalTPtiming[depthIt] > 2) mult1GeV2nsHB_Jets += 1;
+		if (hcalTPtiming[depthIt] > 3) mult1GeV3nsHB_Jets += 1;
+		if (hcalTPtiming[depthIt] > 4) mult1GeV4nsHB_Jets += 1;
+		if (hcalTPtiming[depthIt] > 5) mult1GeV5nsHB_Jets += 1;
 	      }
-	    }
-	    // 1 GeV HB HE regions                                                      
-	    if (hcalTPdepth[depthIt] > 1 && hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) < 16){
-	      mult1GeV1nsHB_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 2){
-		mult1GeV2nsHB_Jets += 1;
-		if (hcalTPtiming[depthIt] > 3){
-		  mult1GeV3nsHB_Jets += 1;
-		  if (hcalTPtiming[depthIt] > 4){
-		    mult1GeV4nsHB_Jets += 1;
-		    if (hcalTPtiming[depthIt] > 5){
-		      mult1GeV5nsHB_Jets += 1;
-		    }
-		  }
-		}
+	      // 1 GeV HE regions
+	      if (hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29){
+		mult1GeV1nsHE_Jets += 1;
+		if (hcalTPtiming[depthIt] > 2) mult1GeV2nsHE_Jets += 1;
+		if (hcalTPtiming[depthIt] > 3) mult1GeV3nsHE_Jets += 1;
+		if (hcalTPtiming[depthIt] > 4) mult1GeV4nsHE_Jets += 1;
+		if (hcalTPtiming[depthIt] > 5) mult1GeV5nsHE_Jets += 1;
 	      }
-	    }
-	    if (hcalTPdepth[depthIt] > 1 && hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29){
-	      mult1GeV1nsHE_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 2){
-		mult1GeV2nsHE_Jets += 1;
-		if (hcalTPtiming[depthIt] > 3){
-		  mult1GeV3nsHE_Jets += 1;
-		  if (hcalTPtiming[depthIt] > 4){
-		    mult1GeV4nsHE_Jets += 1;
-		    if (hcalTPtiming[depthIt] > 5){
-		      mult1GeV5nsHE_Jets += 1;
-		    }
-		  }
-		}
-	      }
-	    }
-	  }// closing HCAL depths loop
+	    } // closing 1 GeV energy cut loop
+	  } // closing HCAL depths loop
 	} // closing HCAL TP loop (all TPs)
       } // closing L1 Jets loop
       // after HCAL depth loop and L1 Jet loop fill histograms with multiplicity variables. Multiplicity counter reset on each loop iteration. These are for where HCAL TP is matched to the L1 Jet
@@ -905,7 +851,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	nDepth = l1CaloTPemu_->hcalTPnDepths[HcalTPIt];
 	
        	if (nDepth == 0) continue; // skipping events where depth = 0, since here timing = -1 and energy = 0 (invalid event)
-
 	// Energy deposited in each depth layer for every HCAL TP (4 in HB, 7 in HE)  
 	hcalTPdepth[0] = l1CaloTPemu_->hcalTPDepth1[HcalTPIt];
 	hcalTPdepth[1] = l1CaloTPemu_->hcalTPDepth2[HcalTPIt];
@@ -967,146 +912,89 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
         for (int depthIt = 0; depthIt < nDepth-1; depthIt++){
           // count multiplicity of layers given a timing and energy threshold   
           // 3 GeV energy cut
-          if (hcalTPdepth[depthIt] > 3 && hcalTPtiming[depthIt] > 1){
-	    mult3GeV1ns += 1;
-	    if (hcalTPtiming[depthIt] > 2){
-	      mult3GeV2ns += 1;
-	      if (hcalTPtiming[depthIt] > 3){
-		mult3GeV3ns += 1;
-		if (hcalTPtiming[depthIt] > 4){
-		  mult3GeV4ns += 1;
-		  if (hcalTPtiming[depthIt] > 5){
-		    mult3GeV5ns += 1;
-		  }
-		}
-	      }
+          if (hcalTPdepth[depthIt] > 3){
+	    if (hcalTPtiming[depthIt] > 1) mult3GeV1ns += 1;
+	    if (hcalTPtiming[depthIt] > 2) mult3GeV2ns += 1;
+	    if (hcalTPtiming[depthIt] > 3) mult3GeV3ns += 1;
+	    if (hcalTPtiming[depthIt] > 4) mult3GeV4ns += 1;
+	    if (hcalTPtiming[depthIt] > 5) mult3GeV5ns += 1;
+	    // 3 GeV HB regions
+	    if (hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) < 16) {
+	      mult3GeV1nsHB += 1;
+	      if (hcalTPtiming[depthIt] > 2) mult3GeV2nsHB += 1;
+	      if (hcalTPtiming[depthIt] > 3) mult3GeV3nsHB += 1;
+	      if (hcalTPtiming[depthIt] > 4) mult3GeV4nsHB += 1;
+	      if (hcalTPtiming[depthIt] > 5) mult3GeV5nsHB += 1;
 	    }
-	  }
-	  // 3 GeV HB regions
-	  if (hcalTPdepth[depthIt] > 3 && hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) < 16) {
-	    mult3GeV1nsHB += 1;
-	    if (hcalTPtiming[depthIt] > 2){
-	      mult3GeV2nsHB += 1;
-	      if (hcalTPtiming[depthIt] > 3){
-		mult3GeV3nsHB += 1;
-		if (hcalTPtiming[depthIt] > 4){
-		  mult3GeV4nsHB += 1;
-		  if (hcalTPtiming[depthIt] > 5){
-		    mult3GeV5nsHB += 1;
-		  }
-		}
-	      }
+	    // 3 GeV HE regions
+	    if (hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29){
+	      mult3GeV1nsHE += 1;
+	      if (hcalTPtiming[depthIt] > 2) mult3GeV2nsHE += 1;
+	      if (hcalTPtiming[depthIt] > 3) mult3GeV3nsHE += 1;
+	      if (hcalTPtiming[depthIt] > 4) mult3GeV4nsHE += 1;
+	      if (hcalTPtiming[depthIt] > 5) mult3GeV5nsHE += 1;
 	    }
-	  }
-	  if (hcalTPdepth[depthIt] > 3 && hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29){
-	    mult3GeV1nsHE += 1;
-	    if (hcalTPtiming[depthIt] > 2){
-	      mult3GeV2nsHE += 1;
-	      if (hcalTPtiming[depthIt] > 3){
-		mult3GeV3nsHE += 1;
-		if (hcalTPtiming[depthIt] > 4){
-		  mult3GeV4nsHE += 1;
-		  if (hcalTPtiming[depthIt] > 5){
-		    mult3GeV5nsHE += 1;
-		  }
-		}
-	      }
-	    }
-	  }
+	    if (abs(tpEtaemu) < 5 ) mult3GeVcaloT1 += 1;
+	    if (abs(tpEtaemu) > 4 && abs(tpEtaemu) < 9 ) mult3GeVcaloT2 += 1;
+	    if (abs(tpEtaemu) > 8 && abs(tpEtaemu) < 13 ) mult3GeVcaloT3 += 1;
+	    if (abs(tpEtaemu) > 12 && abs(tpEtaemu) < 17 ) mult3GeVcaloT4 += 1;
+	  } // closing 3 GeV energy cut loop
 	  // 2 GeV energy cut
-	  if (hcalTPdepth[depthIt] > 2 && hcalTPtiming[depthIt] > 1){
-	    mult2GeV1ns += 1;
-	    if (hcalTPtiming[depthIt] > 2){
-	      mult2GeV2ns += 1;
-	      if (hcalTPtiming[depthIt] > 3){
-		mult2GeV3ns += 1;
-		if (hcalTPtiming[depthIt] > 4){
-		  mult2GeV4ns += 1;
-		  if (hcalTPtiming[depthIt] > 5){
-		    mult2GeV5ns += 1;
-		  }
-		}
-	      }
+	  if (hcalTPdepth[depthIt] > 2){
+	    if (hcalTPtiming[depthIt] > 1) mult2GeV1ns += 1;
+	    if (hcalTPtiming[depthIt] > 2) mult2GeV2ns += 1;
+	    if (hcalTPtiming[depthIt] > 3) mult2GeV3ns += 1;
+	    if (hcalTPtiming[depthIt] > 4) mult2GeV4ns += 1;
+	    if (hcalTPtiming[depthIt] > 5) mult2GeV5ns += 1;
+	    // 2 GeV HB regions                                
+	    if (hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) < 16){
+	      mult2GeV1nsHB += 1;
+	      if (hcalTPtiming[depthIt] > 2) mult2GeV2nsHB += 1;
+	      if (hcalTPtiming[depthIt] > 3) mult2GeV3nsHB += 1;
+	      if (hcalTPtiming[depthIt] > 4) mult2GeV4nsHB += 1;
+	      if (hcalTPtiming[depthIt] > 5) mult2GeV5nsHB += 1;
 	    }
-	  }
-	  // 2 GeV HB regions                                
-	  if (hcalTPdepth[depthIt] > 2 && hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) < 16){
-	    mult2GeV1nsHB += 1;
-	    if (hcalTPtiming[depthIt] > 2){
-	      mult2GeV2nsHB += 1;
-	      if (hcalTPtiming[depthIt] > 3){
-		mult2GeV3nsHB += 1;
-		if (hcalTPtiming[depthIt] > 4){
-		  mult2GeV4nsHB += 1;
-		  if (hcalTPtiming[depthIt] > 5){
-		    mult2GeV5nsHB += 1;
-		  }
-		}
-	      }
+	    // 2 GeV HE regions
+	    if (hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29){
+	      mult2GeV1nsHE += 1;
+	      if (hcalTPtiming[depthIt] > 2) mult2GeV2nsHE += 1;
+	      if (hcalTPtiming[depthIt] > 3) mult2GeV3nsHE += 1;
+	      if (hcalTPtiming[depthIt] > 4) mult2GeV4nsHE += 1;
+	      if (hcalTPtiming[depthIt] > 5) mult2GeV5nsHE += 1;
 	    }
-	  }
-	  if (hcalTPdepth[depthIt] > 2 && hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29){
-	    mult2GeV1nsHE += 1;
-	    if (hcalTPtiming[depthIt] > 2){
-	      mult2GeV2nsHE += 1;
-	      if (hcalTPtiming[depthIt] > 3){
-		mult2GeV3nsHE += 1;
-		if (hcalTPtiming[depthIt] > 4){
-		  mult2GeV4nsHE += 1;
-		  if (hcalTPtiming[depthIt] > 5){
-		    mult2GeV5nsHE += 1;
-		  }
-		}
-	      }
-	    }
-	  }
+	    if (abs(tpEtaemu) < 5 ) mult2GeVcaloT1 += 1;
+            if (abs(tpEtaemu) > 4 && abs(tpEtaemu) < 9 ) mult2GeVcaloT2 += 1;
+            if (abs(tpEtaemu) > 8 && abs(tpEtaemu) < 13 ) mult2GeVcaloT3 += 1;
+            if (abs(tpEtaemu) > 12 && abs(tpEtaemu) < 17 ) mult2GeVcaloT4 += 1;
+	  } // closing 2 GeV energy cut loop
 	  // 1 GeV energy cut
-	  if (hcalTPdepth[depthIt] > 1 && hcalTPtiming[depthIt] > 1){
-	    mult1GeV1ns += 1;
-	    if (hcalTPtiming[depthIt] > 2){
-	      mult1GeV2ns += 1;
-	      if (hcalTPtiming[depthIt] > 3){
-		mult1GeV3ns += 1;
-		if (hcalTPtiming[depthIt] > 4){
-		  mult1GeV4ns += 1;
-		  if (hcalTPtiming[depthIt] > 5){
-		    mult1GeV5ns += 1;
-		  }
-		}
-	      }
+	  if (hcalTPdepth[depthIt] > 1){
+	    if (hcalTPtiming[depthIt] > 1) mult1GeV1ns += 1;
+	    if (hcalTPtiming[depthIt] > 2) mult1GeV2ns += 1;
+	    if (hcalTPtiming[depthIt] > 3) mult1GeV3ns += 1;
+	    if (hcalTPtiming[depthIt] > 4) mult1GeV4ns += 1;
+	    if (hcalTPtiming[depthIt] > 5) mult1GeV5ns += 1;
+	    // 1 GeV HB regions                                                      
+	    if (hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) < 16){
+	      mult1GeV1nsHB += 1;
+	      if (hcalTPtiming[depthIt] > 2) mult1GeV2nsHB += 1;
+	      if (hcalTPtiming[depthIt] > 3) mult1GeV3nsHB += 1;
+	      if (hcalTPtiming[depthIt] > 4) mult1GeV4nsHB += 1;
+	      if (hcalTPtiming[depthIt] > 5) mult1GeV5nsHB += 1;
 	    }
-	  }
-	  // 1 GeV HB HE regions                                                      
-	  if (hcalTPdepth[depthIt] > 1 && hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) < 16){
-	    mult1GeV1nsHB += 1;
-	    if (hcalTPtiming[depthIt] > 2){
-	      mult1GeV2nsHB += 1;
-	      if (hcalTPtiming[depthIt] > 3){
-		mult1GeV3nsHB += 1;
-		if (hcalTPtiming[depthIt] > 4){
-		  mult1GeV4nsHB += 1;
-		  if (hcalTPtiming[depthIt] > 5){
-		    mult1GeV5nsHB += 1;
-		  }
-		}
-	      }
+	    // 1 GeV HE regions
+	    if (hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29){
+	      mult1GeV1nsHE += 1;
+	      if (hcalTPtiming[depthIt] > 2) mult1GeV2nsHE += 1;
+	      if (hcalTPtiming[depthIt] > 3) mult1GeV3nsHE += 1;
+	      if (hcalTPtiming[depthIt] > 4) mult1GeV4nsHE += 1;
+	      if (hcalTPtiming[depthIt] > 5) mult1GeV5nsHE += 1;
 	    }
-	  }
-	  if (hcalTPdepth[depthIt] > 1 && hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29){
-	    mult1GeV1nsHE += 1;
-	    if (hcalTPtiming[depthIt] > 2){
-	      mult1GeV2nsHE += 1;
-	      if (hcalTPtiming[depthIt] > 3){
-		mult1GeV3nsHE += 1;
-		if (hcalTPtiming[depthIt] > 4){
-		  mult1GeV4nsHE += 1;
-		  if (hcalTPtiming[depthIt] > 5){
-		    mult1GeV5nsHE += 1;
-		  }
-		}
-	      }
-	    }
-	  }
+	    if (abs(tpEtaemu) < 5 ) mult1GeVcaloT1 += 1;
+            if (abs(tpEtaemu) > 4 && abs(tpEtaemu) < 9 ) mult1GeVcaloT2 += 1;
+            if (abs(tpEtaemu) > 8 && abs(tpEtaemu) < 13 ) mult1GeVcaloT3 += 1;
+            if (abs(tpEtaemu) > 12 && abs(tpEtaemu) < 17 ) mult1GeVcaloT4 += 1;
+	  } // closing 1 GeV energy cut loop
 	} // closing HCAL depths loop
       } // closing HCAL TP loop
 
@@ -1159,6 +1047,19 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       dt1GeV3nsHBMult_emu->Fill(mult1GeV3nsHB);
       dt1GeV4nsHBMult_emu->Fill(mult1GeV4nsHB);
       dt1GeV5nsHBMult_emu->Fill(mult1GeV5nsHB);
+      // filling the ieta energy region scan histograms
+      dt1GeVcaloT1Mult_emu->Fill(mult1GeVcaloT1);
+      dt1GeVcaloT2Mult_emu->Fill(mult1GeVcaloT2);
+      dt1GeVcaloT3Mult_emu->Fill(mult1GeVcaloT3);
+      dt1GeVcaloT4Mult_emu->Fill(mult1GeVcaloT4);
+      dt2GeVcaloT1Mult_emu->Fill(mult2GeVcaloT1);
+      dt2GeVcaloT2Mult_emu->Fill(mult2GeVcaloT2);
+      dt2GeVcaloT3Mult_emu->Fill(mult2GeVcaloT3);
+      dt2GeVcaloT4Mult_emu->Fill(mult2GeVcaloT4);
+      dt3GeVcaloT1Mult_emu->Fill(mult3GeVcaloT1);
+      dt3GeVcaloT2Mult_emu->Fill(mult3GeVcaloT2);
+      dt3GeVcaloT3Mult_emu->Fill(mult3GeVcaloT3);
+      dt3GeVcaloT4Mult_emu->Fill(mult3GeVcaloT4);
 
       // for each bin fill according to whether our object has a larger corresponding energy
       for(int bin=0; bin<nJetBins; bin++){
@@ -1518,6 +1419,19 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     dt1GeV3nsHBMult_emu->Write();
     dt1GeV4nsHBMult_emu->Write();
     dt1GeV5nsHBMult_emu->Write();
+    // ieta energy scan
+    dt1GeVcaloT1Mult_emu->Write();
+    dt1GeVcaloT2Mult_emu->Write();
+    dt1GeVcaloT3Mult_emu->Write();
+    dt1GeVcaloT4Mult_emu->Write();
+    dt2GeVcaloT1Mult_emu->Write();
+    dt2GeVcaloT2Mult_emu->Write();
+    dt2GeVcaloT3Mult_emu->Write();
+    dt2GeVcaloT4Mult_emu->Write();
+    dt3GeVcaloT1Mult_emu->Write();
+    dt3GeVcaloT2Mult_emu->Write();
+    dt3GeVcaloT3Mult_emu->Write();
+    dt3GeVcaloT4Mult_emu->Write();
 
     // and for the multiplicity counter for HCAL TPs matched with L1 Jets
     // 3 GeV
