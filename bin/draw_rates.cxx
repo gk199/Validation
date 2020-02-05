@@ -33,9 +33,8 @@ int main()
   // files for multiplicity overlay plots
   std::vector<std::string> mult_filenames = {"rates_new_cond_pl10000.root", "rates_new_cond_pl1000.root", "rates_new_cond_pl500.root", "rates_new_cond_QCD.root"};
   // these are multiplicity files (used for timescan and overlay plots) as well as ratio type plts
-  std::vector<std::string> multTypes = {"dt3GeV1ns","dt3GeV2ns","dt3GeV3ns","dt3GeV4ns","dt3GeV5ns","dt3GeV1nsHE","dt3GeV2nsHE","dt3GeV3nsHE","dt3GeV4nsHE","dt3GeV5nsHE","dt3GeV1nsHB","dt3GeV2nsHB","dt3GeV3nsHB","dt3GeV4nsHB","dt3GeV5nsHB","dt2GeV1ns","dt2GeV2ns","dt2GeV3ns","dt2GeV4ns","dt2GeV5ns","dt2GeV1nsHE","dt2GeV2nsHE","dt2GeV3nsHE","dt2GeV4nsHE","dt2GeV5nsHE","dt2GeV1nsHB","dt2GeV2nsHB","dt2GeV3nsHB","dt2GeV4nsHB","dt2GeV5nsHB","dt1GeV1ns","dt1GeV2ns","dt1GeV3ns","dt1GeV4ns","dt1GeV5ns","dt1GeV1nsHE","dt1GeV2nsHE","dt1GeV3nsHE","dt1GeV4nsHE","dt1GeV5nsHE","dt1GeV1nsHB","dt1GeV2nsHB","dt1GeV3nsHB","dt1GeV4nsHB","dt1GeV5nsHB","dt3GeV1nsJet","dt3GeV2nsJet","dt3GeV3nsJet","dt3GeV4nsJet","dt3GeV5nsJet","dt3GeV1nsHEJet","dt3GeV2nsHEJet","dt3GeV3nsHEJet","dt3GeV4nsHEJet","dt3GeV5nsHEJet","dt3GeV1nsHBJet","dt3GeV2nsHBJet","dt3GeV3nsHBJet","dt3GeV4nsHBJet","dt3GeV5nsHBJet","dt2GeV1nsJet","dt2GeV2nsJet","dt2GeV3nsJet","dt2GeV4nsJet","dt2GeV5nsJet","dt2GeV1nsHEJet","dt2GeV2nsHEJet","dt2GeV3nsHEJet","dt2GeV4nsHEJet","dt2GeV5nsHEJet","dt2GeV1nsHBJet","dt2GeV2nsHBJet","dt2GeV3nsHBJet","dt2GeV4nsHBJet","dt2GeV5nsHBJet","dt1GeV1nsJet","dt1GeV2nsJet","dt1GeV3nsJet","dt1GeV4nsJet","dt1GeV5nsJet","dt1GeV1nsHEJet","dt1GeV2nsHEJet","dt1GeV3nsHEJet","dt1GeV4nsHEJet","dt1GeV5nsHEJet","dt1GeV1nsHBJet","dt1GeV2nsHBJet","dt1GeV3nsHBJet","dt1GeV4nsHBJet","dt1GeV5nsHBJet","Ratio_Depth", "Ratio_DepthHE", "Ratio_DepthHB","Ratio_Depth_Jets", "Ratio_DepthHE_Jets", "Ratio_DepthHB_Jets","centralTiming"};
+  std::vector<std::string> multTypes = {"dt3GeV1ns","dt3GeV2ns","dt3GeV3ns","dt3GeV4ns","dt3GeV5ns","dt3GeV1nsHE","dt3GeV2nsHE","dt3GeV3nsHE","dt3GeV4nsHE","dt3GeV5nsHE","dt3GeV1nsHB","dt3GeV2nsHB","dt3GeV3nsHB","dt3GeV4nsHB","dt3GeV5nsHB","dt2GeV1ns","dt2GeV2ns","dt2GeV3ns","dt2GeV4ns","dt2GeV5ns","dt2GeV1nsHE","dt2GeV2nsHE","dt2GeV3nsHE","dt2GeV4nsHE","dt2GeV5nsHE","dt2GeV1nsHB","dt2GeV2nsHB","dt2GeV3nsHB","dt2GeV4nsHB","dt2GeV5nsHB","dt1GeV1ns","dt1GeV2ns","dt1GeV3ns","dt1GeV4ns","dt1GeV5ns","dt1GeV1nsHE","dt1GeV2nsHE","dt1GeV3nsHE","dt1GeV4nsHE","dt1GeV5nsHE","dt1GeV1nsHB","dt1GeV2nsHB","dt1GeV3nsHB","dt1GeV4nsHB","dt1GeV5nsHB","dt3GeV1nsJet","dt3GeV2nsJet","dt3GeV3nsJet","dt3GeV4nsJet","dt3GeV5nsJet","dt3GeV1nsHEJet","dt3GeV2nsHEJet","dt3GeV3nsHEJet","dt3GeV4nsHEJet","dt3GeV5nsHEJet","dt3GeV1nsHBJet","dt3GeV2nsHBJet","dt3GeV3nsHBJet","dt3GeV4nsHBJet","dt3GeV5nsHBJet","dt2GeV1nsJet","dt2GeV2nsJet","dt2GeV3nsJet","dt2GeV4nsJet","dt2GeV5nsJet","dt2GeV1nsHEJet","dt2GeV2nsHEJet","dt2GeV3nsHEJet","dt2GeV4nsHEJet","dt2GeV5nsHEJet","dt2GeV1nsHBJet","dt2GeV2nsHBJet","dt2GeV3nsHBJet","dt2GeV4nsHBJet","dt2GeV5nsHBJet","dt1GeV1nsJet","dt1GeV2nsJet","dt1GeV3nsJet","dt1GeV4nsJet","dt1GeV5nsJet","dt1GeV1nsHEJet","dt1GeV2nsHEJet","dt1GeV3nsHEJet","dt1GeV4nsHEJet","dt1GeV5nsHEJet","dt1GeV1nsHBJet","dt1GeV2nsHBJet","dt1GeV3nsHBJet","dt1GeV4nsHBJet","dt1GeV5nsHBJet","Ratio_Depth", "Ratio_DepthHE", "Ratio_DepthHB","Ratio_Depth_Jets", "Ratio_DepthHE_Jets", "Ratio_DepthHB_Jets","centralTiming","dt1GeVcaloT1","dt1GeVcaloT2","dt1GeVcaloT3","dt1GeVcaloT4","dt2GeVcaloT1","dt2GeVcaloT2","dt2GeVcaloT3","dt2GeVcaloT4","dt3GeVcaloT1","dt3GeVcaloT2","dt3GeVcaloT3","dt3GeVcaloT4"};
 
-  //  std::vector<std::string> EDepthTypes = {"Energy_Depth","Timing_Depth","Energy_DepthHE","Timing_DepthHE","Energy_DepthHB","Timing_DepthHB","Energy_Depth_HighE","Energy_DepthHE_HighE","Energy_DepthHB_HighE", "Energy_Depth_Jets","Timing_Depth_Jets","Energy_DepthHE_Jets","Timing_DepthHE_Jets","Energy_DepthHB_Jets","Timing_DepthHB_Jets","Energy_Depth_Jets_HighE","Energy_DepthHE_Jets_HighE","Energy_DepthHB_Jets_HighE"};
   std::vector<std::string> EDepthTypes = {"Timing_Depth","Timing_DepthHE","Timing_DepthHB","Energy_Depth_HighE","Energy_DepthHE_HighE","Energy_DepthHB_HighE","Timing_Depth_Jets","Timing_DepthHE_Jets","Timing_DepthHB_Jets","Energy_Depth_Jets_HighE","Energy_DepthHE_Jets_HighE","Energy_DepthHB_Jets_HighE"};
 
   std::vector<std::string> RatioTypes = {"Ratio_Depth", "Ratio_DepthHE", "Ratio_DepthHB","Ratio_Depth_Jets", "Ratio_DepthHE_Jets", "Ratio_DepthHB_Jets"};
@@ -113,7 +112,7 @@ int main()
     std::string histName(multType);
     std::string histNameHw(histName);
     if (multType.substr(0,2) == "dt" ) {
-      histName += "Mult_emu"; // multiplicity plots all have this appended to name in histogram, example "dt3GeV2nsMult_emu". Ratio plots do not
+      histName += "Mult_emu"; // multiplicity plots all have this appended to name in histogram, example "dt3GeV2nsMult_emu". Ratio plots do not have this added, nor does central timing
     }
     multHists_QCD[multType]  = dynamic_cast<TH1F*>(mult_files.at(3)->Get(histName.c_str()));
     multHists_LLP10000[multType] = dynamic_cast<TH1F*>(mult_files.at(0)->Get(histName.c_str()));
@@ -165,7 +164,7 @@ int main()
   std::vector<std::string> multPlots1GeV = {"dt1GeV5ns","dt1GeV4ns","dt1GeV3ns","dt1GeV2ns","dt1GeV1ns"}; 
   std::vector<std::string> multPlots1GeVHE = {"dt1GeV5nsHE","dt1GeV4nsHE","dt1GeV3nsHE","dt1GeV2nsHE","dt1GeV1nsHE"};
   std::vector<std::string> multPlots1GeVHB = {"dt1GeV5nsHB","dt1GeV4nsHB","dt1GeV3nsHB","dt1GeV2nsHB","dt1GeV1nsHB"};
-  // multiplicyt plot types for matched with L1 Jets
+  // multiplicity plot types for matched with L1 Jets
   std::vector<std::string> multPlots3GeV_Jet = {"dt3GeV5nsJet","dt3GeV4nsJet","dt3GeV3nsJet","dt3GeV2nsJet","dt3GeV1nsJet"};
   std::vector<std::string> multPlots3GeVHE_Jet = {"dt3GeV5nsHEJet","dt3GeV4nsHEJet","dt3GeV3nsHEJet","dt3GeV2nsHEJet","dt3GeV1nsHEJet"};
   std::vector<std::string> multPlots3GeVHB_Jet = {"dt3GeV5nsHBJet","dt3GeV4nsHBJet","dt3GeV3nsHBJet","dt3GeV2nsHBJet","dt3GeV1nsHBJet"};
@@ -469,47 +468,52 @@ int main()
     RatioyMax = multHists_LLP1000[hist]->GetMaximum();
     multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1.2*RatioyMax);
     TString name (multHists_QCD[hist]->GetName());
-    double x1 = 0.15; // values for legend position for Ratio plots
+    double x1 = 0.15; // values for legend position for ratio plots (this moves it to the top left)
     double x2 = 0.5;
     if (name(0,5) != "Ratio") {
-      x1 = 0.55;
+      x1 = 0.55; // for the legend position when not on a ratio plot (this moves it to the top right)
       x2 = 0.95;
       int yMax = 0;
       yMax = multHists_QCD[hist]->GetMaximum();
       //      multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,0.8*yMax);
-      if (name(9,3) == "HBM"){
+      if (name(9,3) == "HBM"){ // setting max for HCAL barrel regions, generally high here
 	multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,3.4*yMax);
       }
-      if (name(9,3) == "Jet" ) {
-	multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1.2*yMax);
+      if (name(9,3) == "Jet" || name(6,4) == "calo" ) { // setting max for histograms matched with L1 jets
+	multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1.5*yMax);
       }
     }
-    multHists_QCD[hist]->SetFillStyle(3005);
+    multHists_QCD[hist]->SetFillStyle(3005); // this is the grey shading on QCD plots
     multHists_QCD[hist]->Draw("hist pfc");
     TLegend *leg = new TLegend(x1, 0.6, x2, 0.9);
     multHists_LLP500[hist]->SetLineColor(kBlue);
     multHists_LLP500[hist]->Draw("hist same");
     multHists_LLP1000[hist]->SetLineColor(kGreen+1);
     multHists_LLP1000[hist]->Draw("hist same");
-    multHists_LLP10000[hist]->SetLineColor(kRed);
+    //    multHists_LLP10000[hist]->SetLineColor(kRed); // not using LLP with ctau = 10m, very far out
     //    multHists_LLP10000[hist]->Draw("hist same");
     leg->AddEntry(multHists_QCD[hist],"QCD", "F");
     leg->AddEntry(multHists_LLP500[hist],"LLP, c#scale[1.2]{#tau}=0.5m", "L");
     leg->AddEntry(multHists_LLP1000[hist], "LLP, c#scale[1.2]{#tau}=1m", "L");
     //    leg->AddEntry(multHists_LLP10000[hist], "LLP, c#scale[1.2]{#tau}=10m", "L");
-    multHists_QCD[hist]->SetTitle("Multiplicity at " + name(2,4) + " and " + name(6,3)+", TP matched w/" + name (9,3));
-    if (name(9,3) != "Jet" ) multHists_QCD[hist]->SetTitle("Multiplicity at " + name(2,4) + " and " + name(6,3));
     multHists_QCD[hist]->GetYaxis()->CenterTitle(true);
-    if ( name(9,2) == "HE" || name(9,2) == "HB" ){
+    multHists_QCD[hist]->SetTitle("Multiplicity at " + name(2,4) + " and " + name(6,3)+", TP matched w/" + name (9,3)); // general name "mult at 3 GeV and 1 ns, TP matched w/jet"
+    if (name(9,3) != "Jet" ) multHists_QCD[hist]->SetTitle("Multiplicity at " + name(2,4) + " and " + name(6,3)); // "mult at 3 GeV and 1 ns"
+    if ( name(9,2) == "HE" || name(9,2) == "HB" ){ // setting range and name of histograms for HCAL barrel and endcap regions
       multHists_QCD[hist]->SetTitle("Multiplicity at " + name(2,4) + " and " + name(6,3) + " in " + name(9,2)+", TP matched w/" + name(11,3));
       if (name(11,3) != "Jet" ) multHists_QCD[hist]->SetTitle("Multiplicity at " + name(2,4) + " and " + name(6,3) + " in " + name(9,2));
       if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,100);
       if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,70);
       if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,50);
     }
+    if ( name(11,3) == "Jet" || name(9,3) == "Jet" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,25); // reduce x axis range for plots where HCAL TP has been matched to L1 Jet
     if ( hist == "centralTiming" ) multHists_QCD[hist]->SetTitle("Time of arrival - TOF (central barrel iEta)");
-    if ( name(11,3) == "Jet" || name(9,3) == "Jet" ) { // reduce x axis range for plots where HCAL TP has been matched to L1 Jet
-      multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,25);
+    if (hist.substr(6,4) == "calo"){ // setting histogram name for calo tower ieta energy scan
+      multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,50);
+      if (hist.substr(10,2) == "T1") multHists_QCD[hist]->SetTitle("Multiplicity of cells above " + name(2,4) + ", CaloTower 1 (iEta 1-4)");
+      if (hist.substr(10,2) == "T2") multHists_QCD[hist]->SetTitle("Multiplicity of cells above " + name(2,4) + ", CaloTower 2 (iEta 5-8)");
+      if (hist.substr(10,2) == "T3") multHists_QCD[hist]->SetTitle("Multiplicity of cells above " + name(2,4) + ", CaloTower 3 (iEta 9-12)");
+      if (hist.substr(10,2) == "T4") multHists_QCD[hist]->SetTitle("Multiplicity of cells above " + name(2,4) + ", CaloTower 4 (iEta 13-16)");
     }
     if (name(0,5) == "Ratio" ) {
       multHists_QCD[hist]->SetTitle("Ratio of First 2 HCAL Layers to E_{T} " + name(11,7));
