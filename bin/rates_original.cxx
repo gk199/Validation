@@ -215,6 +215,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F* doubleJetRates_emu = new TH1F("doubleJetRates_emu", axR.c_str(), nJetBins, jetLo, jetHi);
   TH1F* tripleJetRates_emu = new TH1F("tripleJetRates_emu", axR.c_str(), nJetBins, jetLo, jetHi);
   TH1F* quadJetRates_emu = new TH1F("quadJetRates_emu", axR.c_str(), nJetBins, jetLo, jetHi);
+  TH1F* singleJetGlobalRates_emu = new TH1F("singleJetGlobalRates_emu", axR.c_str(), nJetBins, jetLo, jetHi);
+  TH1F* doubleJetGlobalRates_emu = new TH1F("doubleJetGlobalRates_emu", axR.c_str(), nJetBins, jetLo, jetHi);
+  TH1F* tripleJetGlobalRates_emu = new TH1F("tripleJetGlobalRates_emu", axR.c_str(), nJetBins, jetLo, jetHi);
+  TH1F* quadJetGlobalRates_emu = new TH1F("quadJetGlobalRates_emu", axR.c_str(), nJetBins, jetLo, jetHi);
   TH1F* singleEgRates_emu = new TH1F("singleEgRates_emu", axR.c_str(), nEgBins, egLo, egHi);
   TH1F* doubleEgRates_emu = new TH1F("doubleEgRates_emu", axR.c_str(), nEgBins, egLo, egHi);
   TH1F* singleTauRates_emu = new TH1F("singleTauRates_emu", axR.c_str(), nTauBins, tauLo, tauHi);
@@ -233,6 +237,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F* doubleJetRates_hw = new TH1F("doubleJetRates_hw", axR.c_str(), nJetBins, jetLo, jetHi);
   TH1F* tripleJetRates_hw = new TH1F("tripleJetRates_hw", axR.c_str(), nJetBins, jetLo, jetHi);
   TH1F* quadJetRates_hw = new TH1F("quadJetRates_hw", axR.c_str(), nJetBins, jetLo, jetHi);
+  TH1F* singleJetGlobalRates_hw = new TH1F("singleJetGlobalRates_hw", axR.c_str(), nJetBins, jetLo, jetHi);
+  TH1F* doubleJetGlobalRates_hw = new TH1F("doubleJetGlobalRates_hw", axR.c_str(), nJetBins, jetLo, jetHi);
+  TH1F* tripleJetGlobalRates_hw = new TH1F("tripleJetGlobalRates_hw", axR.c_str(), nJetBins, jetLo, jetHi);
+  TH1F* quadJetGlobalRates_hw = new TH1F("quadJetGlobalRates_hw", axR.c_str(), nJetBins, jetLo, jetHi);
   TH1F* singleEgRates_hw = new TH1F("singleEgRates_hw", axR.c_str(), nEgBins, egLo, egHi);
   TH1F* doubleEgRates_hw = new TH1F("doubleEgRates_hw", axR.c_str(), nEgBins, egLo, egHi);
   TH1F* singleTauRates_hw = new TH1F("singleTauRates_hw", axR.c_str(), nTauBins, tauLo, tauHi);
@@ -360,6 +368,20 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       }
 
       // for each bin fill according to whether our object has a larger corresponding energy
+      // Global
+      for(int bin=0; bin<nJetBins; bin++){
+        if( (jetEt_1) >= jetLo + (bin*jetBinWidth) ) singleJetGlobalRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV  
+      }
+      for(int bin=0; bin<nJetBins; bin++){
+        if( (jetEt_2) >= jetLo + (bin*jetBinWidth) ) doubleJetGlobalRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV      
+      }
+      for(int bin=0; bin<nJetBins; bin++){
+        if( (jetEt_3) >= jetLo + (bin*jetBinWidth) ) tripleJetGlobalRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+      }
+      for(int bin=0; bin<nJetBins; bin++){
+        if( (jetEt_4) >= jetLo + (bin*jetBinWidth) ) quadJetGlobalRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV     
+      }
+      // jet matched
       for(int bin=0; bin<nJetBins; bin++){
         if( (jetEt_1) >= jetLo + (bin*jetBinWidth) ) singleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
       } 
@@ -545,6 +567,19 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 
       // for each bin fill according to whether our object has a larger corresponding energy
       for(int bin=0; bin<nJetBins; bin++){
+        if( (jetEt_1) >= jetLo + (bin*jetBinWidth) ) singleJetGlobalRates_hw->Fill(jetLo+(bin*jetBinWidth));  //GeV 
+      }
+      for(int bin=0; bin<nJetBins; bin++){
+        if( (jetEt_2) >= jetLo + (bin*jetBinWidth) ) doubleJetGlobalRates_hw->Fill(jetLo+(bin*jetBinWidth));  //GeV
+      }
+      for(int bin=0; bin<nJetBins; bin++){
+        if( (jetEt_3) >= jetLo + (bin*jetBinWidth) ) tripleJetGlobalRates_hw->Fill(jetLo+(bin*jetBinWidth));  //GeV
+      }
+      for(int bin=0; bin<nJetBins; bin++){
+        if( (jetEt_4) >= jetLo + (bin*jetBinWidth) ) quadJetGlobalRates_hw->Fill(jetLo+(bin*jetBinWidth));  //GeV 
+      }
+
+      for(int bin=0; bin<nJetBins; bin++){
         if( (jetEt_1) >= jetLo + (bin*jetBinWidth) ) singleJetRates_hw->Fill(jetLo+(bin*jetBinWidth));  //GeV
       } 
 
@@ -626,6 +661,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     doubleJetRates_emu->Scale(norm);
     tripleJetRates_emu->Scale(norm);
     quadJetRates_emu->Scale(norm);
+    singleJetGlobalRates_emu->Scale(norm);
+    doubleJetGlobalRates_emu->Scale(norm);
+    tripleJetGlobalRates_emu->Scale(norm);
+    quadJetGlobalRates_emu->Scale(norm);
     singleEgRates_emu->Scale(norm);
     doubleEgRates_emu->Scale(norm);
     singleTauRates_emu->Scale(norm);
@@ -649,6 +688,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     doubleJetRates_emu->Write();
     tripleJetRates_emu->Write();
     quadJetRates_emu->Write();
+    singleJetGlobalRates_emu->Write();
+    doubleJetGlobalRates_emu->Write();
+    tripleJetGlobalRates_emu->Write();
+    quadJetGlobalRates_emu->Write();
     singleEgRates_emu->Write();
     doubleEgRates_emu->Write();
     singleTauRates_emu->Write();
@@ -670,6 +713,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     doubleJetRates_hw->Scale(norm);
     tripleJetRates_hw->Scale(norm);
     quadJetRates_hw->Scale(norm);
+    singleJetGlobalRates_hw->Scale(norm);
+    doubleJetGlobalRates_hw->Scale(norm);
+    tripleJetGlobalRates_hw->Scale(norm);
+    quadJetGlobalRates_hw->Scale(norm);
     singleEgRates_hw->Scale(norm);
     doubleEgRates_hw->Scale(norm);
     singleTauRates_hw->Scale(norm);
@@ -690,6 +737,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     doubleJetRates_hw->Write();
     tripleJetRates_hw->Write();
     quadJetRates_hw->Write();
+    singleJetGlobalRates_hw->Write();
+    doubleJetGlobalRates_hw->Write();
+    tripleJetGlobalRates_hw->Write();
+    quadJetGlobalRates_hw->Write();
     singleEgRates_hw->Write();
     doubleEgRates_hw->Write();
     singleTauRates_hw->Write();
