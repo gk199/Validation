@@ -451,9 +451,22 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F * Ratio_DepthHE_Jets = new TH1F("Ratio_DepthHE_Jets", "Ratio of First 2 HCAL Layers to E_{T} in HE, matched w/Jets;Ratio;Number of Events", 50,0,1);
   TH1F * Ratio_DepthHB_Jets = new TH1F("Ratio_DepthHB_Jets", "Ratio of First 2 HCAL Layers to E_{T} in HB, matched w/Jets;Ratio;Number of Events", 50,0,1);
   // delta R plot for HCAL TP max energy near L1 jet
-  TH1F * DeltaR_TP_L1Jet = new TH1F("DeltaR_TP_L1Jet", "DeltaR Between Leading L1 Jet and Closest HCAL TP; DeltaR;Number of Events",20,0,0.8);
+  TH1F * DeltaR_TP_L1Jet = new TH1F("DeltaR_TP_L1Jet", "DeltaR Between Leading L1 Jet and Closest HCAL TP; DeltaR;Number of Events",12,0,0.8); // earlier binning was 20
   // timing values for center of barrel
   TH1F * centralTiming = new TH1F("centralTiming", "Time of arrival - TOF (central barrel iEta);Time (ns);Number of Events",50,-10,40);
+  // eta, ieta, phi, iphi plots to check 
+  TH1F * JetEta = new TH1F("JetEta", "Eta position of L1Jet;Eta;Number of Events",100,-4,4);
+  TH1F * JetiEta = new TH1F("JetiEta", "iEta position of L1Jet;iEta;Number of Events",100,-40,40);
+  TH1F * JetPhi = new TH1F("JetPhi", "Phi position of L1Jet;Phi;Number of Events",100,-4,4);
+  TH1F * JetiPhi = new TH1F("JetiPhi", "iPhi position of L1Jet;iPhi;Number of Events",100,-1,73);
+  TH1F * AllJetEta = new TH1F("AllJetEta", "Eta position of All L1Jet;Eta;Number of Events",100,-4,4);
+  TH1F * AllJetiEta = new TH1F("AllJetiEta", "iEta position of All L1Jet;iEta;Number of Events",100,-40,40);
+  TH1F * AllJetPhi = new TH1F("AllJetPhi", "Phi position of All L1Jet;Phi;Number of Events",100,-4,4);
+  TH1F * AllJetiPhi = new TH1F("AllJetiPhi", "iPhi position of All L1Jet;iPhi;Number of Events",100,-1,73);
+  TH1F * HCALTPEta = new TH1F("HCALTPEta", "Eta position of HCALTP;Eta;Number of Events",100,-4,4);
+  TH1F * HCALTPiEta = new TH1F("HCALTPiEta", "iEta position of HCALTP;iEta;Number of Events",100,-40,40);
+  TH1F * HCALTPPhi = new TH1F("HCALTPPhi", "Phi position of HCALTP;Phi;Number of Events",100,-4,4);
+  TH1F * HCALTPiPhi = new TH1F("HCALTPiPhi", "iPhi position of HCALTP;iPhi;Number of Events",100,-1,73);
 
   // counting LLP efficiencies
   double totalJets(0), passedMultJets(0);
@@ -609,6 +622,23 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	hJetEt->Fill(l1emu_->jetEt[jetIt]); // these are already in order of highest E_T
 	seedTowerIPhi = l1emu_->jetTowerIPhi[jetIt];
 	seedTowerIEta = l1emu_->jetTowerIEta[jetIt];
+
+	double AllJet_eta;
+	double AllJet_phi;
+	if (abs(seedTowerIEta) >= 24) {
+	  AllJet_eta = .1695*seedTowerIEta - 1.9931*(seedTowerIEta/(abs(seedTowerIEta)));
+	}
+	else {
+	  AllJet_eta = .0875*seedTowerIEta - 0.0489*(seedTowerIEta/(abs(seedTowerIEta)));
+	}
+	AllJet_phi = double(seedTowerIPhi)*(2.*TMath::Pi()/72);
+	if (seedTowerIPhi > 36) AllJet_phi -= 2.*TMath::Pi();
+
+	AllJetiEta->Fill(seedTowerIEta);
+        AllJetEta->Fill(AllJet_eta);
+	AllJetiPhi->Fill(seedTowerIPhi);
+        AllJetPhi->Fill(AllJet_phi);
+
 	if (jetIt != 0 ) continue; // only do matching to the highest energy jet. Otherwise match to four L1 Jets
 	totalJets += 1;
 	if (l1emu_->jetEt[jetIt] < 20 ) continue; // require jet is greater than 20 GeV to attempt matching to HCAL TP
@@ -651,6 +681,17 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
           TP_phi = double(tpPhiemu)*(2.*TMath::Pi()/72);
           if (tpPhiemu > 36) TP_phi -= 2.*TMath::Pi();
 
+	  // eta, ieta, phi, iphi for jets that are > 20 GeV
+	  JetEta->Fill(Jet_eta);
+          JetiEta->Fill(seedTowerIEta);
+          JetPhi->Fill(Jet_phi);
+          JetiPhi->Fill(seedTowerIPhi);
+	  // eta, ieta, phi, iphi for HCAL TPs (not yet matched to L1 Jets)
+	  HCALTPEta->Fill(TP_eta);
+          HCALTPiEta->Fill(tpEtaemu);
+          HCALTPPhi->Fill(TP_phi);
+          HCALTPiPhi->Fill(tpPhiemu);
+
 	  // Delta R matching in a cone, based on converted ieta, iphi values from above to physical eta, phi values
 	  double DeltaEta = Jet_eta - TP_eta;
 	  double DeltaPhi = Jet_phi - TP_phi;
@@ -668,7 +709,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	  if (DeltaR < min_DeltaR) min_DeltaR = DeltaR; // find min delta R between L1 Jet and HCAL TPs
 	  if (sqrt(DeltaEta*DeltaEta + DeltaPhi*DeltaPhi) > 0.5 ) continue;
 
-	  //	} // closing the TP loop -- move if using more than 1 HCAL TP. This is used only when considering just the highest energy HCAL TP. Also, if using more than one HCAL TP, change maxE_HcalTPIt to HcalTPIt
+	  //	} // closing the TP loop -- move if using more than 1 HCAL TP. This is used only when considering just the highest energy HCAL TP that is matched within DeltaR 0.5 of a L1 Jet. Also, if using more than one HCAL TP, change maxE_HcalTPIt to HcalTPIt
 	  //	  if (maxE == 0) continue;
 
 	  // Energy deposited in each depth layer for every HCAL TP (4 in HB, 7 in HE)  
@@ -688,17 +729,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	  hcalTPtiming[5] = l1CaloTPemu_->hcalTPtiming6[HcalTPIt];
 	  hcalTPtiming[6] = l1CaloTPemu_->hcalTPtiming7[HcalTPIt];
 
-	  /*
-	  // print outs for confirming and troubleshooting energy depth
-	  std::cout << "Info for when HCAL TPs are matched to L1 Jets with Delta R < 0.5 " << std::endl;
-	  std::cout << "Jet iterator = " << jetIt << " and jet energy = " << l1emu_->jetEt[jetIt] << std::endl;
-	  std::cout << "iPhi values = " << seedTowerIPhi << " and " << maxE_iPhi << std::endl;
-	  std::cout << "iEta values = " << seedTowerIEta << " and " << maxE_iEta << std::endl;
-	  std::cout << "HCAL TP iterator = " << maxE_HcalTPIt << " and TP energy = " << maxE << std::endl;
-	  std::cout << hcalTPdepth[0] << ", " <<hcalTPdepth[1] << ", " << hcalTPdepth[2] << ", " << hcalTPdepth[3] << ", " << hcalTPdepth[4] << ", " << hcalTPdepth[5] << ", " << hcalTPdepth[6] << std::endl;
-	  std::cout << " " << std::endl;
-	  */
-	
 	  // filling fractional energy deposit and avg time plots for each of 7 HCAL depths. Done for all HCAL TPs within DR 0.5 of the L1 Jet
 	  for (int i = 0; i < 7; i++){
 	    Energy_Depth_Jets->Fill(i+1,hcalTPdepth[i]/tpEtemu); // normalized by total energy in event so is fractional energy in each layer
@@ -892,7 +922,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 
 	for (int i = 0; i < 4; i++ ) {
 	  if (tpEtaemu == 1 && hcalTPtiming[i] > -0.5 ) {
-	    centralTiming->Fill(hcalTPtiming[i]-5.5);
+	    centralTiming->Fill(hcalTPtiming[i]-5.5); // filling distribution of time of hits (corrected by expected TOF) in the center of the barrel (ieta = 1)
 	  }
 	}
 
@@ -1019,8 +1049,9 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	  } // closing 1 GeV energy cut loop
 	} // closing HCAL depths loop
       } // closing HCAL TP loop
+
       totalGlobal += 1;
-      if (mult3GeV3nsHB > 5 ) passedMultGlobal += 1;
+      if (mult3GeV3nsHB > 3 ) passedMultGlobal += 1;
 
       // after HCAL depth and HCAL TP loops fill the histograms with multiplicity variables. The multiplicity counter is reset on each loop iteration 
       // 3 GeV histograms
@@ -1086,18 +1117,18 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       dt3GeVcaloT4Mult_emu->Fill(mult3GeVcaloT4);
 
       // for each bin fill according to whether our object has a larger corresponding energy
-      // Global
+      // Global. nJetBins = 400, jetBinWidht = 1 so this is jetLo + 1, jetLo + 2...etc
       for(int bin=0; bin<nJetBins; bin++){
-        if( (jetEt_1) >= jetLo + (bin*jetBinWidth) && mult3GeV3nsHB > 5 ) singleJetGlobalRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+        if( (jetEt_1) >= jetLo + (bin*jetBinWidth) && mult3GeV3nsHB > 3 ) singleJetGlobalRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
       } 
       for(int bin=0; bin<nJetBins; bin++){
-        if( (jetEt_2) >= jetLo + (bin*jetBinWidth) && mult3GeV3nsHB > 5 ) doubleJetGlobalRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+        if( (jetEt_2) >= jetLo + (bin*jetBinWidth) && mult3GeV3nsHB > 3 ) doubleJetGlobalRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
       }  
       for(int bin=0; bin<nJetBins; bin++){
-        if( (jetEt_3) >= jetLo + (bin*jetBinWidth) && mult3GeV3nsHB > 5 ) tripleJetGlobalRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+        if( (jetEt_3) >= jetLo + (bin*jetBinWidth) && mult3GeV3nsHB > 3 ) tripleJetGlobalRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
       }  
       for(int bin=0; bin<nJetBins; bin++){
-        if( (jetEt_4) >= jetLo + (bin*jetBinWidth) && mult3GeV3nsHB > 5 ) quadJetGlobalRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+        if( (jetEt_4) >= jetLo + (bin*jetBinWidth) && mult3GeV3nsHB > 3 ) quadJetGlobalRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
       }  
       // matched to L1 Jets, cut mult3GeV3nsHB_Jets>1 for 1 L1jet matched, mult3GeV3nsHB_Jets>2 for 4 L1 jets matched
       for(int bin=0; bin<nJetBins; bin++){
@@ -1147,7 +1178,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       } 
 
       for(int bin=0; bin<nHtSumBins; bin++){
-        if( (htSum) >= htSumLo+(bin*htSumBinWidth) ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV
+        if( (htSum) >= htSumLo+(bin*htSumBinWidth) && mult3GeV3nsHB > 3 ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV
       }
 
       for(int bin=0; bin<nMhtSumBins; bin++){
@@ -1360,8 +1391,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 
   std::cout << "LLP passed jet matched multiplicity cut of mult3GeV3nsHB_Jets>1 / total LLPs = " << passedMultJets/totalJets << std::endl;
   std::cout << "LLP passed global multiplicity cut of mult3GeV3nsHB>5 / total LLPs = " << passedMultGlobal/totalGlobal << std::endl;
-  //  std::cout << "total LLP = " << totalJets << std::endl;
-  //  std::cout << "LLP passed multiplicity cut of mult3GeV3nsHB_Jets>2 = " << passedMultJets << std::endl;
 
   //  TFile g( outputFilename.c_str() , "new");
   kk->cd();
@@ -1591,6 +1620,19 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     DeltaR_TP_L1Jet->Write();
 
     centralTiming->Write();
+
+    JetEta->Write();
+    JetiEta->Write();
+    JetPhi->Write();
+    JetiPhi->Write();
+    AllJetEta->Write();
+    AllJetiEta->Write();
+    AllJetPhi->Write();
+    AllJetiPhi->Write();
+    HCALTPEta->Write();
+    HCALTPiEta->Write();
+    HCALTPPhi->Write();
+    HCALTPiPhi->Write();
   }
 
   if (hwOn){
