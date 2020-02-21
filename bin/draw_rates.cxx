@@ -7,7 +7,7 @@
 #include "TFile.h"
 #include "TLegend.h"
 #include "TROOT.h"
-
+#include "TGraph.h"
 #include <map>
 #include <string>
 #include <vector>
@@ -99,7 +99,7 @@ int main()
     std::string histName(rateType);
     std::string histNameHw(histName);
     histName += "Rates_emu";
-    std::cout <<histName<< std::endl;
+    //    std::cout <<histName<< std::endl;
     histNameHw += "Rates_hw";
     rateHists_def[rateType] = dynamic_cast<TH1F*>(files.at(0)->Get(histName.c_str()));
     rateHists_hw[rateType] = dynamic_cast<TH1F*>(files.at(0)->Get(histNameHw.c_str()));
@@ -120,8 +120,9 @@ int main()
       rateHistsRatio[rateType] = dynamic_cast<TH1F*>(rateHists_new_cond[rateType]->Clone(name));
       rateHistsRatio[rateType]->Divide(rateHists_def[rateType]);
     }
-    rateHistsRatio[rateType]->SetMinimum(0.6);    
-    rateHistsRatio[rateType]->SetMaximum(1.4);    
+    rateHistsRatio[rateType]->SetMinimum(-0.05);    // -0.5 for singleJet  // previously 0.6
+    rateHistsRatio[rateType]->SetMaximum(0.05);    // 80 for singleJet // previously 1.4
+    rateHistsRatio[rateType]->GetXaxis()->SetRangeUser(0,600); // 200 for singleJet
     rateHistsRatio[rateType]->SetLineWidth(2);    
   }
 
@@ -175,7 +176,8 @@ int main()
   std::vector<std::string> jetPlotsGlobal = {"singleJetGlobal", "doubleJetGlobal", "tripleJetGlobal", "quadJetGlobal"};
   std::vector<std::string> egPlots = {"singleEg", "singleISOEg", "doubleEg", "doubleISOEg"};
   std::vector<std::string> tauPlots = {"singleTau", "singleISOTau", "doubleTau", "doubleISOTau"};
-  std::vector<std::string> scalarSumPlots = {"etSum", "htSum"};
+  //  std::vector<std::string> scalarSumPlots = {"etSum", "htSum"};
+  std::vector<std::string> scalarSumPlots = {"htSum"}; 
   std::vector<std::string> vectorSumPlots = {"metSum", "metHFSum"};
   // multiplicity plot types 
   std::vector<std::string> multPlots3GeV = {"dt3GeV5ns","dt3GeV4ns","dt3GeV3ns","dt3GeV2ns","dt3GeV1ns"};
@@ -242,7 +244,9 @@ int main()
     pad1.back()->cd();
     
     rateHists_def[iplot.second.front()]->Draw("hist");
-    rateHists_def[iplot.second.front()]->GetXaxis()->SetRangeUser(0,200);
+    rateHists_def[iplot.second.front()]->GetXaxis()->SetRangeUser(0,600); // 200 for single jet, 600 for htSum
+    //    std::cout << iplot.second.front() << std::endl;
+    if ( iplot.second.front() == "htSumRates_emu" || iplot.second.front() == "etSumRates_emu" ) rateHists_def[iplot.second.front()]->GetXaxis()->SetRangeUser(0,600);
     TLegend *leg = new TLegend(0.55, 0.9 - 0.1*iplot.second.size(), 0.95, 0.93);
     for(auto hist : iplot.second) {
       rateHists_def[hist]->Draw("hist same");
@@ -679,5 +683,56 @@ int main()
     energy_profile_LLP10000->SetTitle("TP Energy Fraction vs. Depth for LLP c#scale[1.2]{#tau}=10m");
     //    canvases.back()->Print(Form("plots/%s_LLP10000.pdf", hist.c_str()));
   }
+
+  Double_t EffPl500[3], EffQCD[3], singleJetRate[3], htSumRate[3];
+  // neutrino gun rate at 60 GeV for single Jet
+  singleJetRate[0] = 166.449; // in kHz
+  singleJetRate[1] = 38.411;
+  singleJetRate[2] = 8.536;
+  // neutrino gun rate for htSum at 350 GeV
+  htSumRate[0] = 76.822;
+  htSumRate[1] = 25.607;
+  htSumRate[2] = 4.268;
+  // signal efficiency for pl 500
+  EffPl500[0] = 0.8765;
+  EffPl500[1] = 0.837;
+  EffPl500[2] = 0.781;
+  // background efficiency for QCD
+  EffQCD[0] = 0.2175; //mult3GeV3nsHB > 3
+  EffQCD[1] = 0.159; //mult3GeV3nsHB > 4
+  EffQCD[2] = 0.1225; //mult3GeV3nsHB > 5
+
+  TGraph *gr1 = new TGraph (3, EffPl500, singleJetRate);
+  TGraph *gr2 = new TGraph (3, EffPl500, htSumRate);
+  TCanvas *c1 = new TCanvas("c1","Graph Draw Options",200,10,600,400);
+  gr1->SetLineColor(4); // blue
+  gr1->GetHistogram()->SetMinimum(0.);
+  gr2->GetHistogram()->SetMinimum(0.);
+  gr1->Draw("AC*");
+  gr1->SetTitle("Rate vs. Signal Efficiency;LLP c#scale[1.2]{#tau}=0.5m Efficiency;Neutrino Gun Rate (kHz)      ");
+  gr2->SetLineColor(2); // red
+  gr2->Draw("C*");
+  auto legend = new TLegend(0.15,0.7,0.5,0.9);
+  legend->AddEntry(gr1,"Single Jet Rate at 60 GeV");
+  legend->AddEntry(gr2,"ht Sum Rate at 350 GeV");
+  legend->Draw();
+  c1->SaveAs("NuGunRates_vs_SignalEff_Pl500.pdf");
+
+  TGraph *gr3 = new TGraph (3, EffQCD, singleJetRate);
+  TGraph *gr4 = new TGraph (3, EffQCD, htSumRate);
+  TCanvas *c2 = new TCanvas("c2","Graph Draw Options",200,10,600,400);
+  gr3->SetLineColor(4); // blue
+  gr3->GetHistogram()->SetMinimum(0.);
+  gr4->GetHistogram()->SetMinimum(0.);
+  gr3->Draw("AC*");
+  gr3->SetTitle("Rate vs. Background Efficiency;QCD Efficiency;Neutrino Gun Rate (kHz)      ");
+  gr4->SetLineColor(2); // red 
+  gr4->Draw("C*");
+  auto legend2 = new TLegend(0.15,0.7,0.5,0.9);
+  legend2->AddEntry(gr3,"Single Jet Rate at 60 GeV");
+  legend2->AddEntry(gr4,"ht Sum Rate at 350 GeV");
+  legend2->Draw();
+  c2->SaveAs("NuGunRate_vs_BkgEff_QCD.pdf");
+
   return 0;
 }
