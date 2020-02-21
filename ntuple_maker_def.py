@@ -26,10 +26,10 @@ process.maxEvents = cms.untracked.PSet(
 
 # Input source
 process.source = cms.Source("PoolSource",
-#    fileNames = cms.untracked.vstring('file:/eos/cms/store/user/lowang/mh1000_pl1000_step1.root'),
+#    fileNames = cms.untracked.vstring('file:/eos/cms/store/user/lowang/mh1000_pl500_step1.root'),
 #fileNames = cms.untracked.vstring('file:/eos/cms/store/user/lowang/mh350_ml160_pl500_step1.root'),
-fileNames = cms.untracked.vstring('file:/eos/cms/store/user/lowang/mh250_ml120_pl500_step1.root'),
-#                            fileNames = cms.untracked.vstring('file:/eos/cms/store/user/lowang/RelValNuGun_step1.root'),
+#fileNames = cms.untracked.vstring('file:/eos/cms/store/user/lowang/mh250_ml120_pl500_step1.root'),
+                            fileNames = cms.untracked.vstring('file:/eos/cms/store/user/lowang/RelValNuGun/RelValNuGun_RAW_TDC/200129_165224/0000/RelValNuGun_PU_step1_1.root','file:/eos/cms/store/user/lowang/RelValNuGun/RelValNuGun_RAW_TDC/200129_165224/0000/RelValNuGun_PU_step1_3.root','file:/eos/cms/store/user/lowang/RelValNuGun/RelValNuGun_RAW_TDC/200129_165224/0000/RelValNuGun_PU_step1_4.root','file:/eos/cms/store/user/lowang/RelValNuGun/RelValNuGun_RAW_TDC/200129_165224/0000/RelValNuGun_PU_step1_5.root','file:/eos/cms/store/user/lowang/RelValNuGun/RelValNuGun_RAW_TDC/200129_165224/0000/RelValNuGun_PU_step1_6.root','file:/eos/cms/store/user/lowang/RelValNuGun/RelValNuGun_RAW_TDC/200129_165224/0000/RelValNuGun_PU_step1_7.root','file:/eos/cms/store/user/lowang/RelValNuGun/RelValNuGun_RAW_TDC/200129_165224/0000/RelValNuGun_PU_step1_8.root','file:/eos/cms/store/user/lowang/RelValNuGun/RelValNuGun_RAW_TDC/200129_165224/0000/RelValNuGun_PU_step1_9.root','file:/eos/cms/store/user/lowang/RelValNuGun/RelValNuGun_RAW_TDC/200129_165224/0000/RelValNuGun_PU_step1_10.root'),
 #    fileNames = cms.untracked.vstring('file:/eos/cms/store/user/lowang/SMP-PhaseIITDRFall17DR-00002_step1_1.root','file:/eos/cms/store/user/lowang/SMP-PhaseIITDRFall17DR-00002_step1_2.root','file:/eos/cms/store/user/lowang/SMP-PhaseIITDRFall17DR-00002_step1_3.root','file:/eos/cms/store/user/lowang/SMP-PhaseIITDRFall17DR-00002_step1_4.root','file:/eos/cms/store/user/lowang/SMP-PhaseIITDRFall17DR-00002_step1_5.root','file:/eos/cms/store/user/lowang/SMP-PhaseIITDRFall17DR-00002_step1_6.root','file:/eos/cms/store/user/lowang/SMP-PhaseIITDRFall17DR-00002_step1_7.root','file:/eos/cms/store/user/lowang/SMP-PhaseIITDRFall17DR-00002_step1_8.root','file:/eos/cms/store/user/lowang/SMP-PhaseIITDRFall17DR-00002_step1_9.root','file:/eos/cms/store/user/lowang/SMP-PhaseIITDRFall17DR-00002_step1_10.root'), # QCD files from Long
     secondaryFileNames = cms.untracked.vstring()
 )
