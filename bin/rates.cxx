@@ -35,7 +35,7 @@ nb: for 2&3 I have provided the info in runInfoForRates.txt
 */
 
 // configurable parameters
-double numBunch = 1537; //the number of bunches colliding for the run of interest
+double numBunch = 2556; //1537; //the number of bunches colliding for the run of interest
 double runLum = 0.02; // 0.44: 275783  0.58:  276363 //luminosity of the run of interest (*10^34)
 double expectedLum = 1.15; //expected luminosity of 2016 runs (*10^34)
 
@@ -78,6 +78,48 @@ bool isGoodLumiSection(int lumiBlock)
   }
 
   return false;
+}
+
+// functions to calculate eta from ieta, phi from iphi, delta eta, delta phi, and deltaR. Code from https://github.com/gk199/cms-hcal-debug/blob/PulseShape/plugins/HcalCompareUpgradeChains.cc#L894-L954
+double deltaPhi(double phi1, double phi2) {  // Delta phi calculation, using 0 to 2pi
+  if (phi1<0) phi1+=2.*TMath::Pi();
+  if (phi2<0) phi2+=2.*TMath::Pi();
+  double result = phi1 - phi2;
+  if(fabs(result) > 9999) return result;
+  while (result > TMath::Pi()) result -= 2*TMath::Pi();
+  while (result <= -TMath::Pi()) result += 2*TMath::Pi();
+  return result;
+}
+
+double deltaR(double eta1, double phi1, double eta2, double phi2) {
+  double deta = eta1 - eta2;
+  double dphi = deltaPhi(phi1, phi2);
+  return sqrt(deta*deta + dphi*dphi);
+}
+
+double etaVal(int ieta) { // calculate eta given ieta
+  double etavl;
+  if (ieta <= -24){
+    etavl = .1695*ieta + 1.9931;
+  }
+  else if (ieta <= -1){
+    etavl = .0875*ieta + .0489;
+  }
+  else if (ieta < 24){
+    etavl = .0875*ieta - .0489;
+  }
+  else {
+    etavl = .1695*ieta - 1.9931;
+  }
+  return etavl;
+}
+
+double phiVal(int iphi) { // calculate phi given iphi
+  double phiBins=72.;
+  double phivl;
+  phivl=double(iphi)*(2.*TMath::Pi()/phiBins);
+  if (iphi > 36) phivl -= 2.*TMath::Pi();
+  return phivl;
 }
 
 void rates(bool newConditions, const std::string& inputFileDirectory){
@@ -189,9 +231,9 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   float tauBinWidth = (tauHi-tauLo)/nTauBins;
 
   // htSum bins
-  int nHtSumBins = 600;
+  int nHtSumBins = 1200; // 600
   float htSumLo = 0.;
-  float htSumHi = 600.;
+  float htSumHi = 1200.;
   float htSumBinWidth = (htSumHi-htSumLo)/nHtSumBins;
 
   // mhtSum bins
@@ -201,9 +243,9 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   float mhtSumBinWidth = (mhtSumHi-mhtSumLo)/nMhtSumBins;
 
   // etSum bins
-  int nEtSumBins = 600;
+  int nEtSumBins = 1200; // 600
   float etSumLo = 0.;
-  float etSumHi = 600.;
+  float etSumHi = 1200.;
   float etSumBinWidth = (etSumHi-etSumLo)/nEtSumBins;
 
   // metSum bins
@@ -625,6 +667,9 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 
 	double AllJet_eta;
 	double AllJet_phi;
+	AllJet_eta = etaVal(seedTowerIEta);
+	AllJet_phi = phiVal(seedTowerIPhi);
+	/*
 	if (abs(seedTowerIEta) >= 24) {
 	  AllJet_eta = .1695*seedTowerIEta - 1.9931*(seedTowerIEta/(abs(seedTowerIEta)));
 	}
@@ -633,21 +678,22 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	}
 	AllJet_phi = double(seedTowerIPhi)*(2.*TMath::Pi()/72);
 	if (seedTowerIPhi > 36) AllJet_phi -= 2.*TMath::Pi();
+	*/
 
 	AllJetiEta->Fill(seedTowerIEta);
         AllJetEta->Fill(AllJet_eta);
 	AllJetiPhi->Fill(seedTowerIPhi);
         AllJetPhi->Fill(AllJet_phi);
 
-	if (jetIt != 0 ) continue; // only do matching to the highest energy jet. Otherwise match to four L1 Jets
+	//	if (jetIt != 0 ) continue; // only do matching to the highest energy jet. Otherwise match to four L1 Jets
 	totalJets += 1;
 	if (l1emu_->jetEt[jetIt] < 20 ) continue; // require jet is greater than 20 GeV to attempt matching to HCAL TP
 	// loop over HCAL TPs to find ones that match with L1 Jet
-	double maxE = 0;
-	int maxE_HcalTPIt = 0;
-	int maxE_iEta = 50;
-	int maxE_iPhi = -1;
-	double maxE_DeltaR = -1;
+	//	double maxE = 0;
+	//	int maxE_HcalTPIt = 0;
+	//	int maxE_iEta = 50;
+	//	int maxE_iPhi = -1;
+	//	double maxE_DeltaR = -1;
 	double min_DeltaR = 100;
 	double DeltaR = 100;
 	// loop over HCAL TPs, and this is only for the first four L1 Jets (since these are the highest energy)
@@ -662,25 +708,12 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	  // convert ieta, iphi to physical eta, phi for delta R matching to L1 Jet. From https://github.com/gk199/cms-hcal-debug/blob/PulseShape/plugins/HcalCompareUpgradeChains.cc#L915-L956
 	  double Jet_eta;
 	  double TP_eta;
-	  if (abs(seedTowerIEta) >= 24) {
-	    Jet_eta = .1695*seedTowerIEta - 1.9931*(seedTowerIEta/(abs(seedTowerIEta)));
-	  }
-	  else {
-	    Jet_eta = .0875*seedTowerIEta - 0.0489*(seedTowerIEta/(abs(seedTowerIEta)));
-	  }
-          if (abs(tpEtaemu) >= 24) {
-            TP_eta = .1695*tpEtaemu - 1.9931*(tpEtaemu/(abs(tpEtaemu)));
-          }
-          else {
-            TP_eta = .0875*tpEtaemu - 0.0489*(tpEtaemu/(abs(tpEtaemu)));
-          }
 	  double Jet_phi;
 	  double TP_phi;
-	  Jet_phi = double(seedTowerIPhi)*(2.*TMath::Pi()/72);
-	  if (seedTowerIPhi > 36) Jet_phi -= 2.*TMath::Pi();
-          TP_phi = double(tpPhiemu)*(2.*TMath::Pi()/72);
-          if (tpPhiemu > 36) TP_phi -= 2.*TMath::Pi();
-
+	  Jet_eta = etaVal(seedTowerIEta);
+	  TP_eta = etaVal(tpEtaemu);
+	  Jet_phi = phiVal(seedTowerIPhi);
+	  TP_phi = phiVal(tpPhiemu);
 	  // eta, ieta, phi, iphi for jets that are > 20 GeV
 	  JetEta->Fill(Jet_eta);
           JetiEta->Fill(seedTowerIEta);
@@ -693,21 +726,20 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
           HCALTPiPhi->Fill(tpPhiemu);
 
 	  // Delta R matching in a cone, based on converted ieta, iphi values from above to physical eta, phi values
-	  double DeltaEta = Jet_eta - TP_eta;
-	  double DeltaPhi = Jet_phi - TP_phi;
-	  
+	  DeltaR = deltaR(Jet_eta,Jet_phi,TP_eta,TP_phi);   // this is DeltaR for all HCAL TPs to L1 Jet 
 	  // save the iterator where the TP that is matched to L1 Jet has the max energy of all matched TPs. Also save the ieta, iphi, max energy, and iterator position of this TP, and deltaR between TP and L1 Jet
+	  /*
 	  if ( l1CaloTPemu_->hcalTPet[HcalTPIt] > maxE ) {
-            maxE_DeltaR = sqrt(DeltaEta*DeltaEta + DeltaPhi*DeltaPhi); // save delta R betwen leading L1 jet and max energy HCAL TP
-	    if (sqrt(DeltaEta*DeltaEta + DeltaPhi*DeltaPhi) > 0.5 ) continue;
+            maxE_DeltaR = DeltaR; // save delta R betwen leading L1 jet and max energy HCAL TP
+	    if ( DeltaR > 0.5 ) continue;
 	    maxE = l1CaloTPemu_->hcalTPet[HcalTPIt];
 	    maxE_HcalTPIt = HcalTPIt;
 	    maxE_iEta = l1CaloTPemu_->hcalTPieta[HcalTPIt];
 	    maxE_iPhi = l1CaloTPemu_->hcalTPiphi[HcalTPIt];
 	  }
-	  DeltaR = sqrt(DeltaEta*DeltaEta + DeltaPhi*DeltaPhi); // this is DeltaR for all HCAL TPs to L1 Jet
+	  */
 	  if (DeltaR < min_DeltaR) min_DeltaR = DeltaR; // find min delta R between L1 Jet and HCAL TPs
-	  if (sqrt(DeltaEta*DeltaEta + DeltaPhi*DeltaPhi) > 0.5 ) continue;
+	  if ( DeltaR > 2 )  continue;
 
 	  //	} // closing the TP loop -- move if using more than 1 HCAL TP. This is used only when considering just the highest energy HCAL TP that is matched within DeltaR 0.5 of a L1 Jet. Also, if using more than one HCAL TP, change maxE_HcalTPIt to HcalTPIt
 	  //	  if (maxE == 0) continue;
@@ -1119,29 +1151,29 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       // for each bin fill according to whether our object has a larger corresponding energy
       // Global. nJetBins = 400, jetBinWidht = 1 so this is jetLo + 1, jetLo + 2...etc
       for(int bin=0; bin<nJetBins; bin++){
-        if( (jetEt_1) >= jetLo + (bin*jetBinWidth) && mult3GeV3nsHB > 3 ) singleJetGlobalRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+        if( ((jetEt_1) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB > 3) ) singleJetGlobalRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
       } 
       for(int bin=0; bin<nJetBins; bin++){
-        if( (jetEt_2) >= jetLo + (bin*jetBinWidth) && mult3GeV3nsHB > 3 ) doubleJetGlobalRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+        if( ((jetEt_2) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB > 3) ) doubleJetGlobalRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
       }  
       for(int bin=0; bin<nJetBins; bin++){
-        if( (jetEt_3) >= jetLo + (bin*jetBinWidth) && mult3GeV3nsHB > 3 ) tripleJetGlobalRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+        if( ((jetEt_3) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB > 3) ) tripleJetGlobalRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
       }  
       for(int bin=0; bin<nJetBins; bin++){
-        if( (jetEt_4) >= jetLo + (bin*jetBinWidth) && mult3GeV3nsHB > 3 ) quadJetGlobalRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+        if( ((jetEt_4) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB > 3) ) quadJetGlobalRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
       }  
       // matched to L1 Jets, cut mult3GeV3nsHB_Jets>1 for 1 L1jet matched, mult3GeV3nsHB_Jets>2 for 4 L1 jets matched
       for(int bin=0; bin<nJetBins; bin++){
-        if( (jetEt_1) >= jetLo + (bin*jetBinWidth) && mult3GeV3nsHB_Jets > 1 ) singleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV     
+        if( ((jetEt_1) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB_Jets > 1) ) singleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV     
       }
       for(int bin=0; bin<nJetBins; bin++){
-        if( (jetEt_2) >= jetLo + (bin*jetBinWidth) && mult3GeV3nsHB_Jets > 1 ) doubleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV  
+        if( ((jetEt_2) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB_Jets > 1) ) doubleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV  
       }
       for(int bin=0; bin<nJetBins; bin++){
-        if( (jetEt_3) >= jetLo + (bin*jetBinWidth) && mult3GeV3nsHB_Jets > 1 ) tripleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV        
+        if( ((jetEt_3) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB_Jets > 1) ) tripleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV        
       }
       for(int bin=0; bin<nJetBins; bin++){
-        if( (jetEt_4) >= jetLo + (bin*jetBinWidth) && mult3GeV3nsHB_Jets > 1 ) quadJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+        if( ((jetEt_4) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB_Jets > 1) ) quadJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
       }
 
       // eGamma rates             
@@ -1178,7 +1210,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       } 
 
       for(int bin=0; bin<nHtSumBins; bin++){
-        if( (htSum) >= htSumLo+(bin*htSumBinWidth) && mult3GeV3nsHB > 3 ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV
+        if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeV3nsHB > 3) ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV
       }
 
       for(int bin=0; bin<nMhtSumBins; bin++){
@@ -1186,7 +1218,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       }
 
       for(int bin=0; bin<nEtSumBins; bin++){
-        if( (etSum) >= etSumLo+(bin*etSumBinWidth) ) etSumRates_emu->Fill(etSumLo+(bin*etSumBinWidth)); //GeV           
+        if( ((etSum) >= etSumLo+(bin*etSumBinWidth)) && (mult3GeV3nsHB > 3) ) etSumRates_emu->Fill(etSumLo+(bin*etSumBinWidth)); //GeV           
       }
 
       for(int bin=0; bin<nMetSumBins; bin++){
@@ -1402,7 +1434,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     singleJetRates_emu->Scale(norm);
     doubleJetRates_emu->Scale(norm);
     tripleJetRates_emu->Scale(norm);
-    quadJetGlobalRates_emu->Scale(norm);
+    quadJetRates_emu->Scale(norm);
     singleJetGlobalRates_emu->Scale(norm);
     doubleJetGlobalRates_emu->Scale(norm);
     tripleJetGlobalRates_emu->Scale(norm);
