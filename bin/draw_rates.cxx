@@ -1,61 +1,63 @@
-#include "PhysicsTools/Utilities/macros/setTDRStyle.C"
+ #include "PhysicsTools/Utilities/macros/setTDRStyle.C"
 
-#include "TCanvas.h"
-#include "TH1.h"
-#include "TH2.h"
-#include "TProfile.h"
-#include "TFile.h"
-#include "TLegend.h"
-#include "TROOT.h"
-#include "TGraph.h"
-#include <map>
-#include <string>
-#include <vector>
-#include <iostream>
+ #include "TCanvas.h"
+ #include "TH1.h"
+ #include "TH2.h"
+ #include "TProfile.h"
+ #include "TFile.h"
+ #include "TLegend.h"
+ #include "TROOT.h"
+ #include "TGraph.h"
+ #include <map>
+ #include <string>
+ #include <vector>
+ #include <iostream>
 
-int main()
-{
-  // include comparisons between HW and data TPs
-  bool includeHW = false;
-  int rebinFactor = 1;
+ int main()
+ {
+   // include comparisons between HW and data TPs
+   bool includeHW = false;
+   int rebinFactor = 1;
 
-  setTDRStyle();
-  gROOT->ForceStyle();
+   setTDRStyle();
+   gROOT->ForceStyle();
 
-  // default, then new conditions
-  // files for L1 rates
-  std::vector<std::string> filenames = {"rates_def_nugunTDC.root", "rates_new_cond_nugunTDC_1L1Jet.root"};
-  //  std::vector<std::string> filenames = {"rates_def_nugunTDC.root", "rates_new_cond_nugunTDC_4L1Jets.root"};
-  //  std::vector<std::string> filenames = {"rates_new_cond_QCD.root", "rates_new_cond_pl1000.root"};
-  std::vector<std::string> rateTypes = {"singleJet", "doubleJet", "tripleJet", "quadJet",
-					"singleJetGlobal", "doubleJetGlobal", "tripleJetGlobal", "quadJetGlobal",
-					"singleEg", "singleISOEg", "doubleEg", "doubleISOEg",
-					"singleTau", "singleISOTau", "doubleTau", "doubleISOTau",
-					"htSum", "etSum", "metSum", "metHFSum"};
-  // files for multiplicity overlay plots
-  std::vector<std::string> mult_filenames = {"rates_new_cond_pl10000_1L1Jet.root", "rates_new_cond_pl1000_1L1Jet.root", "rates_new_cond_pl500_1L1Jet.root", "rates_new_cond_QCD_1L1Jet.root"};
-  //  std::vector<std::string> mult_filenames = {"rates_new_cond_pl10000_4L1Jets.root", "rates_new_cond_pl1000_4L1Jets.root", "rates_new_cond_pl500_4L1Jets.root", "rates_new_cond_QCD_4L1Jets.root"};
-  // these are multiplicity files (used for timescan and overlay plots) as well as ratio type plts
-  std::vector<std::string> multTypes = {"dt3GeV1ns","dt3GeV2ns","dt3GeV3ns","dt3GeV4ns","dt3GeV5ns",
-					"dt3GeV1nsHE","dt3GeV2nsHE","dt3GeV3nsHE","dt3GeV4nsHE","dt3GeV5nsHE",
-					"dt3GeV1nsHB","dt3GeV2nsHB","dt3GeV3nsHB","dt3GeV4nsHB","dt3GeV5nsHB",
-					"dt2GeV1ns","dt2GeV2ns","dt2GeV3ns","dt2GeV4ns","dt2GeV5ns",
-					"dt2GeV1nsHE","dt2GeV2nsHE","dt2GeV3nsHE","dt2GeV4nsHE","dt2GeV5nsHE",
-					"dt2GeV1nsHB","dt2GeV2nsHB","dt2GeV3nsHB","dt2GeV4nsHB","dt2GeV5nsHB",
-					"dt1GeV1ns","dt1GeV2ns","dt1GeV3ns","dt1GeV4ns","dt1GeV5ns",
-					"dt1GeV1nsHE","dt1GeV2nsHE","dt1GeV3nsHE","dt1GeV4nsHE","dt1GeV5nsHE",
-					"dt1GeV1nsHB","dt1GeV2nsHB","dt1GeV3nsHB","dt1GeV4nsHB","dt1GeV5nsHB",
-					"dt3GeV1nsJet","dt3GeV2nsJet","dt3GeV3nsJet","dt3GeV4nsJet","dt3GeV5nsJet",
-					"dt3GeV1nsHEJet","dt3GeV2nsHEJet","dt3GeV3nsHEJet","dt3GeV4nsHEJet","dt3GeV5nsHEJet",
-					"dt3GeV1nsHBJet","dt3GeV2nsHBJet","dt3GeV3nsHBJet","dt3GeV4nsHBJet","dt3GeV5nsHBJet",
-					"dt2GeV1nsJet","dt2GeV2nsJet","dt2GeV3nsJet","dt2GeV4nsJet","dt2GeV5nsJet",
-					"dt2GeV1nsHEJet","dt2GeV2nsHEJet","dt2GeV3nsHEJet","dt2GeV4nsHEJet","dt2GeV5nsHEJet",
-					"dt2GeV1nsHBJet","dt2GeV2nsHBJet","dt2GeV3nsHBJet","dt2GeV4nsHBJet","dt2GeV5nsHBJet",
-					"dt1GeV1nsJet","dt1GeV2nsJet","dt1GeV3nsJet","dt1GeV4nsJet","dt1GeV5nsJet",
-					"dt1GeV1nsHEJet","dt1GeV2nsHEJet","dt1GeV3nsHEJet","dt1GeV4nsHEJet","dt1GeV5nsHEJet",
-					"dt1GeV1nsHBJet","dt1GeV2nsHBJet","dt1GeV3nsHBJet","dt1GeV4nsHBJet","dt1GeV5nsHBJet",
-					"Ratio_Depth", "Ratio_DepthHE", "Ratio_DepthHB","Ratio_Depth_Jets", "Ratio_DepthHE_Jets", "Ratio_DepthHB_Jets","centralTiming",
-					"dt1GeVcaloT1","dt1GeVcaloT2","dt1GeVcaloT3","dt1GeVcaloT4","dt2GeVcaloT1","dt2GeVcaloT2","dt2GeVcaloT3","dt2GeVcaloT4","dt3GeVcaloT1","dt3GeVcaloT2","dt3GeVcaloT3","dt3GeVcaloT4"};
+   // default, then new conditions
+   // files for L1 rates
+   //   std::vector<std::string> filenames = {"rates_def_nugunTDC.root", "rates_new_cond_nugunTDC_1L1Jet.root"};
+   std::vector<std::string> filenames = {"rates_def_nugunTDC.root", "rates_new_cond_nugunTDC_4L1Jets.root"};
+   //  std::vector<std::string> filenames = {"rates_new_cond_QCD.root", "rates_new_cond_pl1000.root"};
+   std::vector<std::string> rateTypes = {"singleJet", "doubleJet", "tripleJet", "quadJet",
+					 "singleJetGlobal", "doubleJetGlobal", "tripleJetGlobal", "quadJetGlobal",
+					 "singleEg", "singleISOEg", "doubleEg", "doubleISOEg",
+					 "singleTau", "singleISOTau", "doubleTau", "doubleISOTau",
+					 "htSum", "etSum", "metSum", "metHFSum"};
+   // files for multiplicity overlay plots
+   //   std::vector<std::string> mult_filenames = {"rates_new_cond_pl10000_1L1Jet.root", "rates_new_cond_pl1000_1L1Jet.root", "rates_new_cond_pl500_1L1Jet.root", "rates_new_cond_QCD_1L1Jet.root"};
+   std::vector<std::string> mult_filenames = {"rates_new_cond_pl10000_4L1Jets.root", "rates_new_cond_pl1000_4L1Jets.root", "rates_new_cond_pl500_4L1Jets.root", "rates_new_cond_QCD_4L1Jets.root"};
+   // these are multiplicity files (used for timescan and overlay plots) as well as ratio type plts
+   std::vector<std::string> multTypes = {"dt3GeV1ns","dt3GeV2ns","dt3GeV3ns","dt3GeV4ns","dt3GeV5ns",
+					 "dt3GeV1nsHE","dt3GeV2nsHE","dt3GeV3nsHE","dt3GeV4nsHE","dt3GeV5nsHE",
+					 "dt3GeV1nsHB","dt3GeV2nsHB","dt3GeV3nsHB","dt3GeV4nsHB","dt3GeV5nsHB",
+					 "dt2GeV1ns","dt2GeV2ns","dt2GeV3ns","dt2GeV4ns","dt2GeV5ns",
+					 "dt2GeV1nsHE","dt2GeV2nsHE","dt2GeV3nsHE","dt2GeV4nsHE","dt2GeV5nsHE",
+					 "dt2GeV1nsHB","dt2GeV2nsHB","dt2GeV3nsHB","dt2GeV4nsHB","dt2GeV5nsHB",
+					 "dt1GeV1ns","dt1GeV2ns","dt1GeV3ns","dt1GeV4ns","dt1GeV5ns",
+					 "dt1GeV1nsHE","dt1GeV2nsHE","dt1GeV3nsHE","dt1GeV4nsHE","dt1GeV5nsHE",
+					 "dt1GeV1nsHB","dt1GeV2nsHB","dt1GeV3nsHB","dt1GeV4nsHB","dt1GeV5nsHB",
+					 "dt3GeV1nsJet","dt3GeV2nsJet","dt3GeV3nsJet","dt3GeV4nsJet","dt3GeV5nsJet",
+					 "dt3GeV1nsHEJet","dt3GeV2nsHEJet","dt3GeV3nsHEJet","dt3GeV4nsHEJet","dt3GeV5nsHEJet",
+					 "dt3GeV1nsHBJet","dt3GeV2nsHBJet","dt3GeV3nsHBJet","dt3GeV4nsHBJet","dt3GeV5nsHBJet",
+					 "dt2GeV1nsJet","dt2GeV2nsJet","dt2GeV3nsJet","dt2GeV4nsJet","dt2GeV5nsJet",
+					 "dt2GeV1nsHEJet","dt2GeV2nsHEJet","dt2GeV3nsHEJet","dt2GeV4nsHEJet","dt2GeV5nsHEJet",
+					 "dt2GeV1nsHBJet","dt2GeV2nsHBJet","dt2GeV3nsHBJet","dt2GeV4nsHBJet","dt2GeV5nsHBJet",
+					 "dt1GeV1nsJet","dt1GeV2nsJet","dt1GeV3nsJet","dt1GeV4nsJet","dt1GeV5nsJet",
+					 "dt1GeV1nsHEJet","dt1GeV2nsHEJet","dt1GeV3nsHEJet","dt1GeV4nsHEJet","dt1GeV5nsHEJet",
+					 "dt1GeV1nsHBJet","dt1GeV2nsHBJet","dt1GeV3nsHBJet","dt1GeV4nsHBJet","dt1GeV5nsHBJet",
+					 "Ratio_Depth", "Ratio_DepthHE", "Ratio_DepthHB","Ratio_Depth_Jets", "Ratio_DepthHE_Jets", "Ratio_DepthHB_Jets","centralTiming",
+					 "dt1GeVcaloT1","dt1GeVcaloT2","dt1GeVcaloT3","dt1GeVcaloT4",
+					 "dt2GeVcaloT1","dt2GeVcaloT2","dt2GeVcaloT3","dt2GeVcaloT4",
+					 "dt3GeVcaloT1","dt3GeVcaloT2","dt3GeVcaloT3","dt3GeVcaloT4"};
 
   std::vector<std::string> EDepthTypes = {"Timing_Depth","Timing_DepthHE","Timing_DepthHB","Energy_Depth_HighE","Energy_DepthHE_HighE","Energy_DepthHB_HighE","Timing_Depth_Jets","Timing_DepthHE_Jets","Timing_DepthHB_Jets","Energy_Depth_Jets_HighE","Energy_DepthHE_Jets_HighE","Energy_DepthHB_Jets_HighE"};
 
@@ -120,9 +122,8 @@ int main()
       rateHistsRatio[rateType] = dynamic_cast<TH1F*>(rateHists_new_cond[rateType]->Clone(name));
       rateHistsRatio[rateType]->Divide(rateHists_def[rateType]);
     }
-    rateHistsRatio[rateType]->SetMinimum(-0.05);    // -0.5 for singleJet  // previously 0.6
-    rateHistsRatio[rateType]->SetMaximum(0.05);    // 80 for singleJet // previously 1.4
-    rateHistsRatio[rateType]->GetXaxis()->SetRangeUser(0,600); // 200 for singleJet
+    rateHistsRatio[rateType]->SetMinimum(0);    // -0.5 for singleJet  // previously 0.6
+    rateHistsRatio[rateType]->SetMaximum(1.4);    // 80 for singleJet // previously 1.4
     rateHistsRatio[rateType]->SetLineWidth(2);    
   }
 
@@ -176,8 +177,8 @@ int main()
   std::vector<std::string> jetPlotsGlobal = {"singleJetGlobal", "doubleJetGlobal", "tripleJetGlobal", "quadJetGlobal"};
   std::vector<std::string> egPlots = {"singleEg", "singleISOEg", "doubleEg", "doubleISOEg"};
   std::vector<std::string> tauPlots = {"singleTau", "singleISOTau", "doubleTau", "doubleISOTau"};
-  //  std::vector<std::string> scalarSumPlots = {"etSum", "htSum"};
-  std::vector<std::string> scalarSumPlots = {"htSum"}; 
+  std::vector<std::string> scalarSumPlots = {"etSum", "htSum"};
+  //  std::vector<std::string> scalarSumPlots = {"htSum"}; 
   std::vector<std::string> vectorSumPlots = {"metSum", "metHFSum"};
   // multiplicity plot types 
   std::vector<std::string> multPlots3GeV = {"dt3GeV5ns","dt3GeV4ns","dt3GeV3ns","dt3GeV2ns","dt3GeV1ns"};
@@ -244,9 +245,6 @@ int main()
     pad1.back()->cd();
     
     rateHists_def[iplot.second.front()]->Draw("hist");
-    rateHists_def[iplot.second.front()]->GetXaxis()->SetRangeUser(0,600); // 200 for single jet, 600 for htSum
-    //    std::cout << iplot.second.front() << std::endl;
-    if ( iplot.second.front() == "htSumRates_emu" || iplot.second.front() == "etSumRates_emu" ) rateHists_def[iplot.second.front()]->GetXaxis()->SetRangeUser(0,600);
     TLegend *leg = new TLegend(0.55, 0.9 - 0.1*iplot.second.size(), 0.95, 0.93);
     for(auto hist : iplot.second) {
       rateHists_def[hist]->Draw("hist same");
@@ -312,9 +310,9 @@ int main()
         if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,70);
         if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,50);
       }
-      if ( name(11,3) == "Jet" || name(9,3) == "Jet" ) { // reduce x axis range for plots where HCAL TP has been matched to L1 Jet                     
-	multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,25);
-      }
+      //      if ( name(11,3) == "Jet" || name(9,3) == "Jet" ) { // reduce x axis range for plots where HCAL TP has been matched to L1 Jet                     
+	//	multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,25);
+      //      }
       multHists_QCD[hist]->GetXaxis()->SetLabelSize(0.03);
       multHists_QCD[hist]->GetYaxis()->SetLabelSize(0.03);
       multHists_QCD[hist]->GetXaxis()->SetTitleSize(0.04);
@@ -363,9 +361,9 @@ int main()
 	if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_LLP10000[hist]->GetXaxis()->SetRangeUser(0,70);
 	if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_LLP10000[hist]->GetXaxis()->SetRangeUser(0,50);
       }
-      if ( name(11,3) == "Jet" || name(9,3) == "Jet" ) { // reduce x axis range for plots where HCAL TP has been matched to L1 Jet      
-	multHists_LLP10000[hist]->GetXaxis()->SetRangeUser(0,25);
-      }
+      //      if ( name(11,3) == "Jet" || name(9,3) == "Jet" ) { // reduce x axis range for plots where HCAL TP has been matched to L1 Jet      
+      //	multHists_LLP10000[hist]->GetXaxis()->SetRangeUser(0,25);
+      //      }
       multHists_LLP10000[hist]->GetXaxis()->SetLabelSize(0.03);
       multHists_LLP10000[hist]->GetYaxis()->SetLabelSize(0.03);
       multHists_LLP10000[hist]->GetXaxis()->SetTitleSize(0.04);
@@ -414,9 +412,9 @@ int main()
         if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_LLP1000[hist]->GetXaxis()->SetRangeUser(0,70);
         if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_LLP1000[hist]->GetXaxis()->SetRangeUser(0,50);
       }
-      if ( name(11,3) == "Jet" || name(9,3) == "Jet" ) { // reduce x axis range for plots where HCAL TP has been matched to L1 Jet                             
-	multHists_LLP1000[hist]->GetXaxis()->SetRangeUser(0,25);
-      }
+      //      if ( name(11,3) == "Jet" || name(9,3) == "Jet" ) { // reduce x axis range for plots where HCAL TP has been matched to L1 Jet                             
+      //	multHists_LLP1000[hist]->GetXaxis()->SetRangeUser(0,25);
+      //      }
       multHists_LLP1000[hist]->GetXaxis()->SetLabelSize(0.03);
       multHists_LLP1000[hist]->GetYaxis()->SetLabelSize(0.03);
       multHists_LLP1000[hist]->GetXaxis()->SetTitleSize(0.04);
@@ -465,9 +463,9 @@ int main()
         if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_LLP500[hist]->GetXaxis()->SetRangeUser(0,70);
         if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_LLP500[hist]->GetXaxis()->SetRangeUser(0,50);
       }
-      if ( name(11,3) == "Jet" || name(9,3) == "Jet" ) { // reduce x axis range for plots where HCAL TP has been matched to L1 Jet              
-	multHists_LLP500[hist]->GetXaxis()->SetRangeUser(0,25);
-      }
+      //      if ( name(11,3) == "Jet" || name(9,3) == "Jet" ) { // reduce x axis range for plots where HCAL TP has been matched to L1 Jet              
+      //	multHists_LLP500[hist]->GetXaxis()->SetRangeUser(0,25);
+      //      }
       multHists_LLP500[hist]->GetXaxis()->SetLabelSize(0.03);
       multHists_LLP500[hist]->GetYaxis()->SetLabelSize(0.03);
       multHists_LLP500[hist]->GetXaxis()->SetTitleSize(0.04);
@@ -501,12 +499,12 @@ int main()
       int yMax = 0;
       yMax = multHists_QCD[hist]->GetMaximum();
       //      multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,0.8*yMax);
-      if (name(9,3) == "HBM"){ // setting max for HCAL barrel regions, generally high here
+      if (name(9,3) == "HB"){ // setting max for HCAL barrel regions, generally high here
 	multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,3*yMax); // 3 sometimes, 1.5 sometimes
       }
       if (name(6,4) == "calo") multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,2*yMax);
       if (name(9,3) == "Jet" || name(9,5) == "HBJet") { // setting max for histograms matched with L1 jets
-	multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1.2*yMax); // 1.2 sometimes
+	//	multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1.2*yMax); // 1.2 sometimes
         if ( name(0,3) == "dt2" && name(9,5) == "HBJet") {
 	  //	  multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,2*yMax);
 	}
@@ -535,7 +533,7 @@ int main()
       if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,70);
       if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,50);
     }
-    if ( name(11,3) == "Jet" || name(9,3) == "Jet" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,20); // reduce x axis range for plots where HCAL TP has been matched to L1 Jet
+    //    if ( name(11,3) == "Jet" || name(9,3) == "Jet" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,20); // reduce x axis range for plots where HCAL TP has been matched to L1 Jet
     if ( hist == "centralTiming" ) multHists_QCD[hist]->SetTitle("Time of arrival - TOF (central barrel iEta)");
     if (hist.substr(6,4) == "calo"){ // setting histogram name for calo tower ieta energy scan
       if (hist.substr(10,2) == "T1") multHists_QCD[hist]->SetTitle("Multiplicity of cells above " + name(2,4) + ", CaloTower 1 (iEta 1-4)");
