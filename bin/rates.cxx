@@ -787,7 +787,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	  */
 
 	  if (DeltaR < min_DeltaR) min_DeltaR = DeltaR; // find min delta R between L1 Jet and HCAL TPs
-	  if ( DeltaR > 0.5 )  continue;
+	  if ( DeltaR > 1 )  continue;
 
 	  // Energy deposited in each depth layer for every HCAL TP (4 in HB, 7 in HE)  
 	  hcalTPdepth[0] = l1CaloTPemu_->hcalTPDepth1[HcalTPIt];
@@ -1152,8 +1152,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	for (uint jetIt=0; jetIt < nJetemu && jetIt < 4; jetIt++){ // loop over L1 jets, and only do first four (4 highest energy L1 jets from 4 leptons)
 	  seedTowerIPhi = l1emu_->jetTowerIPhi[jetIt];
 	  seedTowerIEta = l1emu_->jetTowerIEta[jetIt];
-	  //	  if (l1emu_->jetEt[jetIt] < 20 ) continue; // require jet is greater than 20 GeV to attempt matching to HCAL TP
-	  //	  if (abs(seedTowerIEta) > 16 ) continue; // require jet is in the HB to match to the HCAL TP
+	  if (l1emu_->jetEt[jetIt] < 20 ) continue; // require jet is greater than 20 GeV to attempt matching to HCAL TP
+	  if (abs(seedTowerIEta) > 16 ) continue; // require jet is in the HB to match to the HCAL TP
 	  double Jet_eta;
 	  double Jet_phi;
 	  Jet_eta = etaVal(seedTowerIEta);
@@ -1166,6 +1166,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	} // closing the L1 jet loop
 	// count multiplicity based on which jet is closest to the HCAL TP
 	// loop over HCAL depths for the HCAL TP
+	if ( min_DeltaR > 1 ) continue; // don't fill matched multiplicity for TPs that are DR > 1 away from their nearest L1 jet
         for (int depthIt = 0; depthIt < nDepth-1; depthIt++){
 	  if ( (hcalTPdepth[depthIt] > 3) && (hcalTPtiming[depthIt] > 3) ) { // 3 GeV 3ns in HB region
 	    if (closestJet == 0) mult3GeV3nsHB_nearJet0 += 1;
