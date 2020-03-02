@@ -499,7 +499,7 @@
       int yMax = 0;
       yMax = multHists_QCD[hist]->GetMaximum();
       multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1.5*yMax);
-      if ( name(9,3) != "HBJ" ) multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,3.5*yMax);
+      if ( name(9,3) != "HBJ" ) multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,3*yMax);
       /*
       if ( (name(9,3) == "HBM") || (name(9,3) == "HBJ") ){ // setting max for HCAL barrel regions, generally high here
 	multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,5*yMax); // 3 sometimes, 1.5 sometimes
