@@ -35,4 +35,9 @@ Follow this twiki on how to use the Rates scripts for more details:
 [HCAL Days L1 Rates workshop](https://twiki.cern.ch/twiki/bin/view/Sandbox/L1TriggerAtHCALdays2019#HCAL_conditions_impact_at_L1_rat)
 
 ## Multiplicity Studies with Timing and Energy Information
-With the inclusion of Georgia's upgrade HCAL TPs branch, HCAL timing (TDC) and energy (ACD) information are avaliable at every HCAL depth layer. Multiplicity calculations are done in `rates.cxx` for global counts and regional counts. The regional multiplicity counts are done in the region of a L1 Jet, by matching HCAL TPs within deltaR < 0.5 of the leading L1 Jet. `draw_rates.cxx` makes plots of multiplicity counts (global and regional) with a timescan, overlaying for QCD and multiple LLPs, and plots average energy and timing information per depth level, along with the ratio of energy deposited in 2 HCAL layers to total.
+With the inclusion of Georgia's upgrade HCAL TPs branch, HCAL timing (TDC) and energy (ACD) information are avaliable at every HCAL depth layer. Multiplicity calculations are done in `rates.cxx` for global counts and regional counts. The regional multiplicity counts are done either: in the region of a L1 Jet, by matching HCAL TPs within deltaR < 0.5 of the leading L1 Jet; or by associating each HCAL TP to the closest L1 jet, and then optionally adding a DR restriction as well. `draw_rates.cxx` makes plots of multiplicity counts (global and regional) with a timescan, overlaying for QCD and multiple LLPs, and plots average energy and timing information per depth level, along with the ratio of energy deposited in 2 HCAL layers to total.
+
+If `rates.cxx` is edited (changing multiplicity counting, DR values, energy thresholds, multiplicity thresholds), the new rate NTuples (neutrino gun, QCD, LLP ctau = 10000, 1000, 500 mm) and resulting overlay plots can all be made by running
+```
+./RunRates.sh
+```
