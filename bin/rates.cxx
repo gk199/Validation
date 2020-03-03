@@ -1,6 +1,6 @@
 // Script for calculating rate histograms
 // Originally from Aaron Bundock
-// Edited by Gillian Kopp to add multiplicity studies for LLP L1 trigger using depth and timing (2020)
+// Edited by Gillian Kopp for multiplicity studies for LLP L1 trigger using HCAL depth and timing (2020)
 #include "TMath.h"
 #include "TFile.h"
 #include "TTree.h"
@@ -692,9 +692,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	double Jet_phi;
 	Jet_eta = etaVal(seedTowerIEta);
 	Jet_phi = phiVal(seedTowerIPhi);
-	//	if (phiVal(seedTowerIPhi) <= 0) Jet_phi += TMath::Pi();
+	//	if (phiVal(seedTowerIPhi) <= 0) Jet_phi += TMath::Pi(); // testing if shift between jet and TP phi values (pi, pi/2)
 	//	if (phiVal(seedTowerIPhi) > 0) Jet_phi -= TMath::Pi();
 
+	// positions and deltaR between each jet to understand spatial information
 	if (jetIt == 0 ) {
 	  JetiEta_1->Fill(seedTowerIEta);
 	  JetEta_1->Fill(Jet_eta);
@@ -721,205 +722,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	  JetEta4= Jet_eta;
           JetPhi4= Jet_phi;
 	}
-
-	if(jentry == 4) {
+	if(jentry == 4) { // eta phi position of 4 L1 jets
 	  etaphiJet->SetMarkerColor(2); // red marker color for jets
 	  etaphiJet->SetPoint(jetIt,Jet_eta,Jet_phi);
 	}
-
-	//	if (jetIt != 0 ) continue; // only do matching to the highest energy jet. Otherwise match to four L1 Jets
-	totalJets += 1;
-	if (l1emu_->jetEt[jetIt] < 20 ) continue; // require jet is greater than 20 GeV to attempt matching to HCAL TP
-	// loop over HCAL TPs to find ones that match with L1 Jet
-	//	double maxE = 0;
-	//	int maxE_HcalTPIt = 0;
-	//	int maxE_iEta = 50;
-	//	int maxE_iPhi = -1;
-	//	double maxE_DeltaR = -1;
-	double min_DeltaR = 100;
-	double DeltaR = 100;
-	// loop over HCAL TPs, and this is only for the first four L1 Jets (since these are the highest energy)
-	for (int HcalTPIt = 0; HcalTPIt < nCaloTPemu; HcalTPIt++){
-	  tpEtaemu = l1CaloTPemu_->hcalTPieta[HcalTPIt]; // use for HB HE restrictions
-	  tpPhiemu = l1CaloTPemu_->hcalTPiphi[HcalTPIt]; // use for deltaR calculation
-	  tpEtemu = l1CaloTPemu_->hcalTPet[HcalTPIt]; // used for energy normalization in the energy depth plots
-	  nDepth = l1CaloTPemu_->hcalTPnDepths[HcalTPIt]; // how many HCAL depth layers to go over
-
-	  if (nDepth == 0) continue; // skipping events where depth = 0, since here timing = -1 and energy = 0 (invalid event)     
-	 
-	  // convert ieta, iphi to physical eta, phi for delta R matching to L1 Jet. From https://github.com/gk199/cms-hcal-debug/blob/PulseShape/plugins/HcalCompareUpgradeChains.cc#L915-L956
-	  double TP_eta;
-	  double TP_phi;
-	  TP_eta = etaVal(tpEtaemu);
-	  TP_phi = phiVal(tpPhiemu);
-
-	  // eta, ieta, phi, iphi for HCAL TPs (not yet matched to L1 Jets)
-	  HCALTPEta->Fill(TP_eta);
-          HCALTPiEta->Fill(tpEtaemu);
-          HCALTPPhi->Fill(TP_phi);
-          HCALTPiPhi->Fill(tpPhiemu);
-
-	  if(jentry == 4) {
-	    etaphiTP->SetMarkerColor(4); // blue marker color for HCAL TPs
-	    etaphiTP->SetPoint(HcalTPIt+4,TP_eta,TP_phi);
-	  }
-
-	  // Delta R matching in a cone, based on converted ieta, iphi values from above to physical eta, phi values
-	  DeltaR = deltaR(Jet_eta,Jet_phi,TP_eta,TP_phi);   // this is DeltaR for all HCAL TPs to L1 Jet 
-          // filling with DeltaR between each L1 jet and all the HCAL TPs                                 
-	  //          if (tpEtemu > 10) {
-	    if (jetIt == 0) DeltaR_TP_L1Jet_1->Fill(DeltaR);
-	    if (jetIt == 1) DeltaR_TP_L1Jet_2->Fill(DeltaR);
-	    if (jetIt == 2) DeltaR_TP_L1Jet_3->Fill(DeltaR);
-	    if (jetIt == 3) DeltaR_TP_L1Jet_4->Fill(DeltaR);
-	    //	  }
-
-	  // save the iterator where the TP that is matched to L1 Jet has the max energy of all matched TPs. Also save the ieta, iphi, max energy, and iterator position of this TP, and deltaR between TP and L1 Jet
-	  /*
-	  if ( l1CaloTPemu_->hcalTPet[HcalTPIt] > maxE ) {
-            maxE_DeltaR = DeltaR; // save delta R betwen leading L1 jet and max energy HCAL TP
-	    if ( DeltaR > 0.5 ) continue;
-	    maxE = l1CaloTPemu_->hcalTPet[HcalTPIt];
-	    maxE_HcalTPIt = HcalTPIt;
-	    maxE_iEta = l1CaloTPemu_->hcalTPieta[HcalTPIt];
-	    maxE_iPhi = l1CaloTPemu_->hcalTPiphi[HcalTPIt];
-	  }
-	  */
-
-	  if (DeltaR < min_DeltaR) min_DeltaR = DeltaR; // find min delta R between L1 Jet and HCAL TPs
-	  if ( DeltaR > 1 )  continue;
-
-	  // Energy deposited in each depth layer for every HCAL TP (4 in HB, 7 in HE)  
-	  hcalTPdepth[0] = l1CaloTPemu_->hcalTPDepth1[HcalTPIt];
-	  hcalTPdepth[1] = l1CaloTPemu_->hcalTPDepth2[HcalTPIt];
-	  hcalTPdepth[2] = l1CaloTPemu_->hcalTPDepth3[HcalTPIt];
-	  hcalTPdepth[3] = l1CaloTPemu_->hcalTPDepth4[HcalTPIt];
-	  hcalTPdepth[4] = l1CaloTPemu_->hcalTPDepth5[HcalTPIt];
-	  hcalTPdepth[5] = l1CaloTPemu_->hcalTPDepth6[HcalTPIt];
-	  hcalTPdepth[6] = l1CaloTPemu_->hcalTPDepth7[HcalTPIt];
-	  // timing info for each layer, in 25 ns with resolution 0.5 ns 
-	  hcalTPtiming[0] = l1CaloTPemu_->hcalTPtiming1[HcalTPIt];
-	  hcalTPtiming[1] = l1CaloTPemu_->hcalTPtiming2[HcalTPIt];
-	  hcalTPtiming[2] = l1CaloTPemu_->hcalTPtiming3[HcalTPIt];
-	  hcalTPtiming[3] = l1CaloTPemu_->hcalTPtiming4[HcalTPIt];
-	  hcalTPtiming[4] = l1CaloTPemu_->hcalTPtiming5[HcalTPIt];
-	  hcalTPtiming[5] = l1CaloTPemu_->hcalTPtiming6[HcalTPIt];
-	  hcalTPtiming[6] = l1CaloTPemu_->hcalTPtiming7[HcalTPIt];
-
-	  // filling fractional energy deposit and avg time plots for each of 7 HCAL depths. Done for all HCAL TPs within DR 0.5 of the L1 Jet
-	  for (int i = 0; i < 7; i++){
-	    Energy_Depth_Jets->Fill(i+1,hcalTPdepth[i]/tpEtemu); // normalized by total energy in event so is fractional energy in each layer
-	    Timing_Depth_Jets->Fill(i+1,hcalTPtiming[i]); // raw timing value in each layer
-	    if (tpEtemu > 10 ) {
-	      Energy_Depth_Jets_HighE->Fill(i+1,hcalTPdepth[i]/tpEtemu); // restricting to high energy HCAL TPs
-	    }
-	    if (abs(tpEtaemu) < 16) {
-	      Energy_DepthHB_Jets->Fill(i+1,hcalTPdepth[i]/tpEtemu);
-	      Timing_DepthHB_Jets->Fill(i+1,hcalTPtiming[i]);
-	      if (tpEtemu > 10 ) {
-		Energy_DepthHB_Jets_HighE->Fill(i+1,hcalTPdepth[i]/tpEtemu);
-	      }
-	    }
-	    if (abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29 ) {
-	      Energy_DepthHE_Jets->Fill(i+1,hcalTPdepth[i]/tpEtemu);
-	      Timing_DepthHE_Jets->Fill(i+1,hcalTPtiming[i]);
-	      if (tpEtemu > 10 ) {
-		Energy_DepthHE_Jets_HighE->Fill(i+1,hcalTPdepth[i]/tpEtemu);
-	      }
-	    }
-	  } // closing depth loop
-
-	  // Ratio of energy in first two HCAL layers to all HCAL layers. Only consider for high energy TPs > 10 GeV	
-	  if ( tpEtemu > 10 ) {
-	    Ratio_Depth_Jets->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / tpEtemu);
-	    if (abs(tpEtaemu) < 16) {
-	      Ratio_DepthHB_Jets->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / tpEtemu);
-	    }
-	    if (abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29 ) {
-	      Ratio_DepthHE_Jets->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / tpEtemu);
-	    }
-	  }
-	  
-	  // loop over HCAL depths for every HCAL TP
-	  for (int depthIt = 0; depthIt < 7; depthIt++){
-	    // count multiplicity of layers given a timing and energy threshold   
-	    // 3 GeV energy cut
-	    if (hcalTPdepth[depthIt] > 3 ){
-	      if (hcalTPtiming[depthIt] > 1) mult3GeV1ns_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 2) mult3GeV2ns_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 3) mult3GeV3ns_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 4) mult3GeV4ns_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 5) mult3GeV5ns_Jets += 1;
-	      // 3 GeV HB regions
-	      if (hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) < 16){
-		mult3GeV1nsHB_Jets += 1;
-		if (hcalTPtiming[depthIt] > 2) mult3GeV2nsHB_Jets += 1;
-		if (hcalTPtiming[depthIt] > 3) mult3GeV3nsHB_Jets += 1;
-		if (hcalTPtiming[depthIt] > 4) mult3GeV4nsHB_Jets += 1;
-		if (hcalTPtiming[depthIt] > 5) mult3GeV5nsHB_Jets += 1;
-	      }
-	      // 3 GeV HE regions
-	      if (hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29){
-		mult3GeV1nsHE_Jets += 1;
-		if (hcalTPtiming[depthIt] > 2) mult3GeV2nsHE_Jets += 1;
-		if (hcalTPtiming[depthIt] > 3) mult3GeV3nsHE_Jets += 1;
-		if (hcalTPtiming[depthIt] > 4) mult3GeV4nsHE_Jets += 1;
-		if (hcalTPtiming[depthIt] > 5) mult3GeV5nsHE_Jets += 1;
-	      }
-	    } // closing 3 GeV energy cut loop
-	    // 2 GeV energy cut
-	    if (hcalTPdepth[depthIt] > 2){
-	      if (hcalTPtiming[depthIt] > 1) mult2GeV1ns_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 2) mult2GeV2ns_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 3) mult2GeV3ns_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 4) mult2GeV4ns_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 5) mult2GeV5ns_Jets += 1;
-	      // 2 GeV HB regions                                
-	      if (hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) < 16){
-		mult2GeV1nsHB_Jets += 1;
-		if (hcalTPtiming[depthIt] > 2) mult2GeV2nsHB_Jets += 1;
-		if (hcalTPtiming[depthIt] > 3) mult2GeV3nsHB_Jets += 1;
-		if (hcalTPtiming[depthIt] > 4) mult2GeV4nsHB_Jets += 1;
-		if (hcalTPtiming[depthIt] > 5) mult2GeV5nsHB_Jets += 1;
-	      }
-	      // 2 GeV HE regions
-	      if (hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29){
-		mult2GeV1nsHE_Jets += 1;
-		if (hcalTPtiming[depthIt] > 2) mult2GeV2nsHE_Jets += 1;
-		if (hcalTPtiming[depthIt] > 3) mult2GeV3nsHE_Jets += 1;
-		if (hcalTPtiming[depthIt] > 4) mult2GeV4nsHE_Jets += 1;
-		if (hcalTPtiming[depthIt] > 5) mult2GeV5nsHE_Jets += 1;
-	      }
-	    } // clsoing 2 GeV energy cut loop
-	    // 1 GeV energy cut
-	    if (hcalTPdepth[depthIt] > 1){
-	      if (hcalTPtiming[depthIt] > 1) mult1GeV1ns_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 2) mult1GeV2ns_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 3) mult1GeV3ns_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 4) mult1GeV4ns_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 5) mult1GeV5ns_Jets += 1;
-	      // 1 GeV HB regions                                                      
-	      if (hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) < 16){
-		mult1GeV1nsHB_Jets += 1;
-		if (hcalTPtiming[depthIt] > 2) mult1GeV2nsHB_Jets += 1;
-		if (hcalTPtiming[depthIt] > 3) mult1GeV3nsHB_Jets += 1;
-		if (hcalTPtiming[depthIt] > 4) mult1GeV4nsHB_Jets += 1;
-		if (hcalTPtiming[depthIt] > 5) mult1GeV5nsHB_Jets += 1;
-	      }
-	      // 1 GeV HE regions
-	      if (hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29){
-		mult1GeV1nsHE_Jets += 1;
-		if (hcalTPtiming[depthIt] > 2) mult1GeV2nsHE_Jets += 1;
-		if (hcalTPtiming[depthIt] > 3) mult1GeV3nsHE_Jets += 1;
-		if (hcalTPtiming[depthIt] > 4) mult1GeV4nsHE_Jets += 1;
-		if (hcalTPtiming[depthIt] > 5) mult1GeV5nsHE_Jets += 1;
-	      }
-	    } // closing 1 GeV energy cut loop
-	  } // closing HCAL depths loop
-	} // closing HCAL TP loop (all TPs)
-	DeltaR_TP_4L1Jets->Fill(min_DeltaR); // fill with min distance between a HCAL TP and the L1 Jet. Filled once per L1 jet
-	if (jetIt == 0) DeltaR_TP_L1Jet->Fill(min_DeltaR); // fill with min distance between leading L1 Jet and HCAL TP
-	if (mult3GeV3nsHB_Jets > 1 ) passedMultJets += 1; // used to calculate LLP efficiencies
       } // closing L1 Jets loop
       // fill DeltaR histograms for DR between each L1 Jet to understand spatial distribution
       DeltaR_L1Jets_1_2->Fill(deltaR(JetEta1,JetPhi1,JetEta2,JetPhi2));
@@ -929,65 +735,18 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       DeltaR_L1Jets_2_4->Fill(deltaR(JetEta2,JetPhi2,JetEta4,JetPhi4));
       DeltaR_L1Jets_3_4->Fill(deltaR(JetEta3,JetPhi3,JetEta4,JetPhi4));
 
-      // after HCAL depth loop and L1 Jet loop fill histograms with multiplicity variables. Multiplicity counter reset on each loop iteration. These are for where HCAL TP is matched to the L1 Jet
-      // 3 GeV histograms
-      dt3GeV1nsJetMult_emu->Fill(mult3GeV1ns_Jets);
-      dt3GeV2nsJetMult_emu->Fill(mult3GeV2ns_Jets);
-      dt3GeV3nsJetMult_emu->Fill(mult3GeV3ns_Jets);
-      dt3GeV4nsJetMult_emu->Fill(mult3GeV4ns_Jets);
-      dt3GeV5nsJetMult_emu->Fill(mult3GeV5ns_Jets);
-      dt3GeV1nsHEJetMult_emu->Fill(mult3GeV1nsHE_Jets);
-      dt3GeV2nsHEJetMult_emu->Fill(mult3GeV2nsHE_Jets);
-      dt3GeV3nsHEJetMult_emu->Fill(mult3GeV3nsHE_Jets);
-      dt3GeV4nsHEJetMult_emu->Fill(mult3GeV4nsHE_Jets);
-      dt3GeV5nsHEJetMult_emu->Fill(mult3GeV5nsHE_Jets);
-      dt3GeV1nsHBJetMult_emu->Fill(mult3GeV1nsHB_Jets);
-      dt3GeV2nsHBJetMult_emu->Fill(mult3GeV2nsHB_Jets);
-      dt3GeV3nsHBJetMult_emu->Fill(mult3GeV3nsHB_Jets);
-      dt3GeV4nsHBJetMult_emu->Fill(mult3GeV4nsHB_Jets);
-      dt3GeV5nsHBJetMult_emu->Fill(mult3GeV5nsHB_Jets);
-      // 2 GeV histograms
-      dt2GeV1nsJetMult_emu->Fill(mult2GeV1ns_Jets);
-      dt2GeV2nsJetMult_emu->Fill(mult2GeV2ns_Jets);
-      dt2GeV3nsJetMult_emu->Fill(mult2GeV3ns_Jets);
-      dt2GeV4nsJetMult_emu->Fill(mult2GeV4ns_Jets);
-      dt2GeV5nsJetMult_emu->Fill(mult2GeV5ns_Jets);
-      dt2GeV1nsHEJetMult_emu->Fill(mult2GeV1nsHE_Jets);
-      dt2GeV2nsHEJetMult_emu->Fill(mult2GeV2nsHE_Jets);
-      dt2GeV3nsHEJetMult_emu->Fill(mult2GeV3nsHE_Jets);
-      dt2GeV4nsHEJetMult_emu->Fill(mult2GeV4nsHE_Jets);
-      dt2GeV5nsHEJetMult_emu->Fill(mult2GeV5nsHE_Jets);
-      dt2GeV1nsHBJetMult_emu->Fill(mult2GeV1nsHB_Jets);
-      dt2GeV2nsHBJetMult_emu->Fill(mult2GeV2nsHB_Jets);
-      dt2GeV3nsHBJetMult_emu->Fill(mult2GeV3nsHB_Jets);
-      dt2GeV4nsHBJetMult_emu->Fill(mult2GeV4nsHB_Jets);
-      dt2GeV5nsHBJetMult_emu->Fill(mult2GeV5nsHB_Jets);
-      // 1 GeV histograms
-      dt1GeV1nsJetMult_emu->Fill(mult1GeV1ns_Jets);
-      dt1GeV2nsJetMult_emu->Fill(mult1GeV2ns_Jets);
-      dt1GeV3nsJetMult_emu->Fill(mult1GeV3ns_Jets);
-      dt1GeV4nsJetMult_emu->Fill(mult1GeV4ns_Jets);
-      dt1GeV5nsJetMult_emu->Fill(mult1GeV5ns_Jets);
-      dt1GeV1nsHEJetMult_emu->Fill(mult1GeV1nsHE_Jets);
-      dt1GeV2nsHEJetMult_emu->Fill(mult1GeV2nsHE_Jets);
-      dt1GeV3nsHEJetMult_emu->Fill(mult1GeV3nsHE_Jets);
-      dt1GeV4nsHEJetMult_emu->Fill(mult1GeV4nsHE_Jets);
-      dt1GeV5nsHEJetMult_emu->Fill(mult1GeV5nsHE_Jets);
-      dt1GeV1nsHBJetMult_emu->Fill(mult1GeV1nsHB_Jets);
-      dt1GeV2nsHBJetMult_emu->Fill(mult1GeV2nsHB_Jets);
-      dt1GeV3nsHBJetMult_emu->Fill(mult1GeV3nsHB_Jets);
-      dt1GeV4nsHBJetMult_emu->Fill(mult1GeV4nsHB_Jets);
-      dt1GeV5nsHBJetMult_emu->Fill(mult1GeV5nsHB_Jets);
+      double min_DR_L1_TP = 100;
 
-
-      // HCAL TP information when TPs are not matched to L1 Jets
+      // HCAL TP loop
+      // Used for plots with all HCAL TPs (not matched to L1 jets), and when each HCAL TP is associated to one L1 Jet + apply DR restrictions (in L1 jet loop inside of HCAL TP loop)
       for (int HcalTPIt = 0; HcalTPIt < nCaloTPemu; HcalTPIt++){
 	tpEtaemu = l1CaloTPemu_->hcalTPieta[HcalTPIt]; // use for HB HE restrictions                                 
-	tpPhiemu = l1CaloTPemu_->hcalTPiphi[HcalTPIt];
+	tpPhiemu = l1CaloTPemu_->hcalTPiphi[HcalTPIt]; // use for deltaR calculation
 	tpEtemu = l1CaloTPemu_->hcalTPet[HcalTPIt]; // used for energy normalization in the energy depth plots    
-	nDepth = l1CaloTPemu_->hcalTPnDepths[HcalTPIt];
+	nDepth = l1CaloTPemu_->hcalTPnDepths[HcalTPIt]; // how many HCAL depth layers to go over
 	
        	if (nDepth == 0) continue; // skipping events where depth = 0, since here timing = -1 and energy = 0 (invalid event)
+
 	// Energy deposited in each depth layer for every HCAL TP (4 in HB, 7 in HE)  
 	hcalTPdepth[0] = l1CaloTPemu_->hcalTPDepth1[HcalTPIt];
 	hcalTPdepth[1] = l1CaloTPemu_->hcalTPDepth2[HcalTPIt];
@@ -1006,7 +765,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	hcalTPtiming[6] = l1CaloTPemu_->hcalTPtiming7[HcalTPIt];
 
 	for (int i = 0; i < 4; i++ ) {
-	  if (tpEtaemu == 1 && hcalTPtiming[i] > -0.5 ) {
+	  if ( (abs(tpEtaemu) == 1) && (hcalTPtiming[i] > -0.5) ) {
 	    centralTiming->Fill(hcalTPtiming[i]-5.5); // filling distribution of time of hits (corrected by expected TOF) in the center of the barrel (ieta = 1)
 	  }
 	}
@@ -1056,7 +815,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	    if (hcalTPtiming[depthIt] > 4) mult3GeV4ns += 1;
 	    if (hcalTPtiming[depthIt] > 5) mult3GeV5ns += 1;
 	    // 3 GeV HB regions
-	    if (hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) < 16) {
+	    if ( (hcalTPtiming[depthIt] > 1) && (abs(tpEtaemu) < 16) ) {
 	      mult3GeV1nsHB += 1;
 	      if (hcalTPtiming[depthIt] > 2) mult3GeV2nsHB += 1;
 	      if (hcalTPtiming[depthIt] > 3) mult3GeV3nsHB += 1;
@@ -1064,7 +823,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	      if (hcalTPtiming[depthIt] > 5) mult3GeV5nsHB += 1;
 	    }
 	    // 3 GeV HE regions
-	    if (hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29){
+	    if ( (hcalTPtiming[depthIt] > 1) && (abs(tpEtaemu) > 16) && (abs(tpEtaemu) < 29) ){
 	      mult3GeV1nsHE += 1;
 	      if (hcalTPtiming[depthIt] > 2) mult3GeV2nsHE += 1;
 	      if (hcalTPtiming[depthIt] > 3) mult3GeV3nsHE += 1;
@@ -1072,9 +831,9 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	      if (hcalTPtiming[depthIt] > 5) mult3GeV5nsHE += 1;
 	    }
 	    if (abs(tpEtaemu) < 5 ) mult3GeVcaloT1 += 1;
-	    if (abs(tpEtaemu) > 4 && abs(tpEtaemu) < 9 ) mult3GeVcaloT2 += 1;
-	    if (abs(tpEtaemu) > 8 && abs(tpEtaemu) < 13 ) mult3GeVcaloT3 += 1;
-	    if (abs(tpEtaemu) > 12 && abs(tpEtaemu) < 17 ) mult3GeVcaloT4 += 1;
+	    if ((abs(tpEtaemu) > 4) && (abs(tpEtaemu) < 9) ) mult3GeVcaloT2 += 1;
+	    if ((abs(tpEtaemu) > 8) && (abs(tpEtaemu) < 13) ) mult3GeVcaloT3 += 1;
+	    if ((abs(tpEtaemu) > 12) && (abs(tpEtaemu) < 17) ) mult3GeVcaloT4 += 1;
 	  } // closing 3 GeV energy cut loop
 	  // 2 GeV energy cut
 	  if (hcalTPdepth[depthIt] > 2){
@@ -1084,7 +843,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	    if (hcalTPtiming[depthIt] > 4) mult2GeV4ns += 1;
 	    if (hcalTPtiming[depthIt] > 5) mult2GeV5ns += 1;
 	    // 2 GeV HB regions                                
-	    if (hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) < 16){
+	    if ( (hcalTPtiming[depthIt] > 1) && (abs(tpEtaemu) < 16) ){
 	      mult2GeV1nsHB += 1;
 	      if (hcalTPtiming[depthIt] > 2) mult2GeV2nsHB += 1;
 	      if (hcalTPtiming[depthIt] > 3) mult2GeV3nsHB += 1;
@@ -1092,7 +851,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	      if (hcalTPtiming[depthIt] > 5) mult2GeV5nsHB += 1;
 	    }
 	    // 2 GeV HE regions
-	    if (hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29){
+	    if ( (hcalTPtiming[depthIt] > 1) && (abs(tpEtaemu) > 16) && (abs(tpEtaemu) < 29) ){
 	      mult2GeV1nsHE += 1;
 	      if (hcalTPtiming[depthIt] > 2) mult2GeV2nsHE += 1;
 	      if (hcalTPtiming[depthIt] > 3) mult2GeV3nsHE += 1;
@@ -1100,9 +859,9 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	      if (hcalTPtiming[depthIt] > 5) mult2GeV5nsHE += 1;
 	    }
 	    if (abs(tpEtaemu) < 5 ) mult2GeVcaloT1 += 1;
-            if (abs(tpEtaemu) > 4 && abs(tpEtaemu) < 9 ) mult2GeVcaloT2 += 1;
-            if (abs(tpEtaemu) > 8 && abs(tpEtaemu) < 13 ) mult2GeVcaloT3 += 1;
-            if (abs(tpEtaemu) > 12 && abs(tpEtaemu) < 17 ) mult2GeVcaloT4 += 1;
+	    if ((abs(tpEtaemu) > 4) && (abs(tpEtaemu) < 9) ) mult2GeVcaloT2 += 1;
+	    if ((abs(tpEtaemu) > 8) && (abs(tpEtaemu) < 13) ) mult2GeVcaloT3 += 1;
+	    if ((abs(tpEtaemu) > 12) && (abs(tpEtaemu) < 17) ) mult2GeVcaloT4 += 1;
 	  } // closing 2 GeV energy cut loop
 	  // 1 GeV energy cut
 	  if (hcalTPdepth[depthIt] > 1){
@@ -1112,7 +871,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	    if (hcalTPtiming[depthIt] > 4) mult1GeV4ns += 1;
 	    if (hcalTPtiming[depthIt] > 5) mult1GeV5ns += 1;
 	    // 1 GeV HB regions                                                      
-	    if (hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) < 16){
+	    if ( (hcalTPtiming[depthIt] > 1) && (abs(tpEtaemu) < 16) ){
 	      mult1GeV1nsHB += 1;
 	      if (hcalTPtiming[depthIt] > 2) mult1GeV2nsHB += 1;
 	      if (hcalTPtiming[depthIt] > 3) mult1GeV3nsHB += 1;
@@ -1120,7 +879,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	      if (hcalTPtiming[depthIt] > 5) mult1GeV5nsHB += 1;
 	    }
 	    // 1 GeV HE regions
-	    if (hcalTPtiming[depthIt] > 1 && abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29){
+	    if ( (hcalTPtiming[depthIt] > 1) && (abs(tpEtaemu) > 16) && (abs(tpEtaemu) < 29) ){
 	      mult1GeV1nsHE += 1;
 	      if (hcalTPtiming[depthIt] > 2) mult1GeV2nsHE += 1;
 	      if (hcalTPtiming[depthIt] > 3) mult1GeV3nsHE += 1;
@@ -1128,19 +887,28 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	      if (hcalTPtiming[depthIt] > 5) mult1GeV5nsHE += 1;
 	    }
 	    if (abs(tpEtaemu) < 5 ) mult1GeVcaloT1 += 1;
-            if (abs(tpEtaemu) > 4 && abs(tpEtaemu) < 9 ) mult1GeVcaloT2 += 1;
-            if (abs(tpEtaemu) > 8 && abs(tpEtaemu) < 13 ) mult1GeVcaloT3 += 1;
-            if (abs(tpEtaemu) > 12 && abs(tpEtaemu) < 17 ) mult1GeVcaloT4 += 1;
+            if ((abs(tpEtaemu) > 4) && (abs(tpEtaemu) < 9) ) mult1GeVcaloT2 += 1;
+            if ((abs(tpEtaemu) > 8) && (abs(tpEtaemu) < 13) ) mult1GeVcaloT3 += 1;
+	    if ((abs(tpEtaemu) > 12) && (abs(tpEtaemu) < 17) ) mult1GeVcaloT4 += 1;
 	  } // closing 1 GeV energy cut loop
 	} // closing HCAL depths loop
 	// here have calculated multiplicity for a single HCAL TP in an event
 
-	// convert HCAL TP ieta, iphi to eta phi so that deltaR can be used for L1 jet matching
+	// convert HCAL TP ieta, iphi to eta phi so that deltaR can be used for L1 jet matching. From https://github.com/gk199/cms-hcal-debug/blob/PulseShape/plugins/HcalCompareUpgradeChains.cc#L915-L956
 	double TP_eta;
 	double TP_phi;
 	TP_eta = etaVal(tpEtaemu);
 	TP_phi = phiVal(tpPhiemu);
-	if (abs(tpEtaemu) >= 16 ) continue; // only consider HCAL TPs in the barrel for the matching with L1 jets, such that can compare global HB multiplicity to jet matched HB multiplicity
+	// eta, ieta, phi, iphi for HCAL TPs (not yet matched to L1 Jets)
+	HCALTPEta->Fill(TP_eta);
+	HCALTPiEta->Fill(tpEtaemu);
+	HCALTPPhi->Fill(TP_phi);
+	HCALTPiPhi->Fill(tpPhiemu);
+	if(jentry == 4) { // eta phi positions for HCAL TPs
+	  etaphiTP->SetMarkerColor(4); // blue marker color for HCAL TPs
+	  etaphiTP->SetPoint(HcalTPIt+4,TP_eta,TP_phi);
+	}
+
 	// now find which L1 jet is closest to each HCAL TP
 	int seedTowerIEta(-1);
 	int seedTowerIPhi(-1);
@@ -1149,38 +917,158 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	double min_DeltaR = 100;
 	double DeltaR = 100;
 	int closestJet(-1);
-	for (uint jetIt=0; jetIt < nJetemu && jetIt < 4; jetIt++){ // loop over L1 jets, and only do first four (4 highest energy L1 jets from 4 leptons)
+
+	for (uint jetIt=0; (jetIt < nJetemu) && (jetIt < 4); jetIt++){ // loop over L1 jets, and only do first four (4 highest energy L1 jets from 4 leptons)
 	  seedTowerIPhi = l1emu_->jetTowerIPhi[jetIt];
 	  seedTowerIEta = l1emu_->jetTowerIEta[jetIt];
-	  if (l1emu_->jetEt[jetIt] < 20 ) continue; // require jet is greater than 20 GeV to attempt matching to HCAL TP
-	  if (abs(seedTowerIEta) > 16 ) continue; // require jet is in the HB to match to the HCAL TP
+	  //	  if (l1emu_->jetEt[jetIt] < 20 ) continue; // require jet is greater than 20 GeV to attempt matching to HCAL TP
+	  //	  if (abs(seedTowerIEta) > 16 ) continue; // require jet is in the HB to match to the HCAL TP
 	  double Jet_eta;
 	  double Jet_phi;
 	  Jet_eta = etaVal(seedTowerIEta);
 	  Jet_phi = phiVal(seedTowerIPhi);
+
 	  DeltaR = deltaR(Jet_eta,Jet_phi,TP_eta,TP_phi);   // this is DeltaR for the HCAL TPs to L1 Jet 
+	  if (jetIt == 0) DeltaR_TP_L1Jet_1->Fill(DeltaR);
+	  if (jetIt == 1) DeltaR_TP_L1Jet_2->Fill(DeltaR);
+	  if (jetIt == 2) DeltaR_TP_L1Jet_3->Fill(DeltaR);
+	  if (jetIt == 3) DeltaR_TP_L1Jet_4->Fill(DeltaR);
 	  if (DeltaR < min_DeltaR) {
-	    min_DeltaR = DeltaR; // find min delta R between L1 Jet and HCAL TPs
+	    min_DeltaR = DeltaR; // find min delta R between L1 Jet and HCAL TPs -- this is reset for each HCAL TP, so is which jet is closest to the TP
 	    closestJet = jetIt; // record which L1 jet is the closest
 	  }
+	  // find overall smallest DR between L1 jet and HCAL TP on a per event basis
+	  if (DeltaR < min_DR_L1_TP) min_DR_L1_TP = DeltaR;
 	} // closing the L1 jet loop
 	// count multiplicity based on which jet is closest to the HCAL TP
+
+        if ( min_DeltaR > 2 ) continue; // don't fill matched multiplicity for TPs that are DR > 1 away from their nearest L1 jet         
+
+	// Ratio of energy in first two HCAL layers to all HCAL layers. Only consider for high energy TPs > 10 GeV
+	if ( tpEtemu > 10 ) {
+	  Ratio_Depth_Jets->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / tpEtemu);
+	  if (abs(tpEtaemu) < 16) {
+	    Ratio_DepthHB_Jets->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / tpEtemu);
+	  }
+	  if ((abs(tpEtaemu) > 16) && (abs(tpEtaemu) < 29) ) {
+	    Ratio_DepthHE_Jets->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / tpEtemu);
+	  }
+	}
+
 	// loop over HCAL depths for the HCAL TP
-	if ( min_DeltaR > 1 ) continue; // don't fill matched multiplicity for TPs that are DR > 1 away from their nearest L1 jet
-        for (int depthIt = 0; depthIt < nDepth-1; depthIt++){
-	  if ( (hcalTPdepth[depthIt] > 3) && (hcalTPtiming[depthIt] > 3) ) { // 3 GeV 3ns in HB region
+	// filling fractional energy deposit and avg time plots for each of 7 HCAL depths. Done for all HCAL TPs within DR 0.5 of the L1 Jet
+	for (int depthIt = 0; depthIt < nDepth-1; depthIt++){
+	  Energy_Depth_Jets->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu); // normalized by total energy in event so is fractional energy in each layer
+	  Timing_Depth_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]); // raw timing value in each layer
+	  if (tpEtemu > 10 ) {
+	    Energy_Depth_Jets_HighE->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu); // restricting to high energy HCAL TPs
+	  }
+	  if (abs(tpEtaemu) < 16) {
+	    Energy_DepthHB_Jets->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
+	    Timing_DepthHB_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]);
+	    if (tpEtemu > 10 ) {
+	      Energy_DepthHB_Jets_HighE->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
+	    }
+	  }
+	  if (abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29 ) {
+	    Energy_DepthHE_Jets->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
+	    Timing_DepthHE_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]);
+	    if (tpEtemu > 10 ) {
+	      Energy_DepthHE_Jets_HighE->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
+	    }
+	  }
+
+	  if ( (hcalTPdepth[depthIt] > 3) && (hcalTPtiming[depthIt] > 3) && (abs(tpEtaemu) < 16) ) { // 3 GeV 3ns in HB region
 	    if (closestJet == 0) mult3GeV3nsHB_nearJet0 += 1;
 	    if (closestJet == 1) mult3GeV3nsHB_nearJet1 += 1;
 	    if (closestJet == 2) mult3GeV3nsHB_nearJet2 += 1;
 	    if (closestJet == 3) mult3GeV3nsHB_nearJet3 += 1;
 	  } // close HB region loop
+
+          // multiplicity in 1,2,3 GeV 1,2,3,4,5 ns HB, HE, global regions
+	  if (hcalTPdepth[depthIt] > 3 ){
+	    if (hcalTPtiming[depthIt] > 1) mult3GeV1ns_Jets += 1;
+	    if (hcalTPtiming[depthIt] > 2) mult3GeV2ns_Jets += 1;
+	    if (hcalTPtiming[depthIt] > 3) mult3GeV3ns_Jets += 1;
+	    if (hcalTPtiming[depthIt] > 4) mult3GeV4ns_Jets += 1;
+	    if (hcalTPtiming[depthIt] > 5) mult3GeV5ns_Jets += 1;
+	    // 3 GeV HB regions
+	    if ((hcalTPtiming[depthIt] > 1) && (abs(tpEtaemu) < 16)){
+	      mult3GeV1nsHB_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 2) mult3GeV2nsHB_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 3) mult3GeV3nsHB_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 4) mult3GeV4nsHB_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 5) mult3GeV5nsHB_Jets += 1;
+	    }
+	    // 3 GeV HE regions
+	    if ((hcalTPtiming[depthIt] > 1) && (abs(tpEtaemu) > 16) && (abs(tpEtaemu) < 29)){
+	      mult3GeV1nsHE_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 2) mult3GeV2nsHE_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 3) mult3GeV3nsHE_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 4) mult3GeV4nsHE_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 5) mult3GeV5nsHE_Jets += 1;
+	    }
+	  } // closing 3 GeV energy cut loop
+	  // 2 GeV energy cut
+	  if (hcalTPdepth[depthIt] > 2){
+	    if (hcalTPtiming[depthIt] > 1) mult2GeV1ns_Jets += 1;
+	    if (hcalTPtiming[depthIt] > 2) mult2GeV2ns_Jets += 1;
+	    if (hcalTPtiming[depthIt] > 3) mult2GeV3ns_Jets += 1;
+	    if (hcalTPtiming[depthIt] > 4) mult2GeV4ns_Jets += 1;
+	    if (hcalTPtiming[depthIt] > 5) mult2GeV5ns_Jets += 1;
+	    // 2 GeV HB regions                                
+	    if ((hcalTPtiming[depthIt] > 1) && (abs(tpEtaemu) < 16)){
+	      mult2GeV1nsHB_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 2) mult2GeV2nsHB_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 3) mult2GeV3nsHB_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 4) mult2GeV4nsHB_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 5) mult2GeV5nsHB_Jets += 1;
+	    }
+	    // 2 GeV HE regions
+	    if ((hcalTPtiming[depthIt] > 1) && (abs(tpEtaemu) > 16) && (abs(tpEtaemu) < 29)){
+	      mult2GeV1nsHE_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 2) mult2GeV2nsHE_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 3) mult2GeV3nsHE_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 4) mult2GeV4nsHE_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 5) mult2GeV5nsHE_Jets += 1;
+	    }
+	  } // clsoing 2 GeV energy cut loop
+	  // 1 GeV energy cut
+	  if (hcalTPdepth[depthIt] > 1){
+	    if (hcalTPtiming[depthIt] > 1) mult1GeV1ns_Jets += 1;
+	    if (hcalTPtiming[depthIt] > 2) mult1GeV2ns_Jets += 1;
+	    if (hcalTPtiming[depthIt] > 3) mult1GeV3ns_Jets += 1;
+	    if (hcalTPtiming[depthIt] > 4) mult1GeV4ns_Jets += 1;
+	    if (hcalTPtiming[depthIt] > 5) mult1GeV5ns_Jets += 1;
+	    // 1 GeV HB regions                                                      
+	    if ((hcalTPtiming[depthIt] > 1) && (abs(tpEtaemu) < 16)){
+	      mult1GeV1nsHB_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 2) mult1GeV2nsHB_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 3) mult1GeV3nsHB_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 4) mult1GeV4nsHB_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 5) mult1GeV5nsHB_Jets += 1;
+	    }
+	    // 1 GeV HE regions
+	    if ( (hcalTPtiming[depthIt] > 1) && (abs(tpEtaemu) > 16) && (abs(tpEtaemu) < 29)){
+	      mult1GeV1nsHE_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 2) mult1GeV2nsHE_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 3) mult1GeV3nsHE_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 4) mult1GeV4nsHE_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 5) mult1GeV5nsHE_Jets += 1;
+	    }
+	  } // closing 1 GeV energy cut loop
 	} // close TP depth loop
       } // closing HCAL TP loop
+
+      DeltaR_TP_4L1Jets->Fill(min_DR_L1_TP); // min distance between HCAL TP and L1 jet per event
+
       int mult3GeV3nsHB_nearL1Jets_total = mult3GeV3nsHB_nearJet0 + mult3GeV3nsHB_nearJet1 + mult3GeV3nsHB_nearJet2 + mult3GeV3nsHB_nearJet3;
       dt3GeV3nsHBnearJetMult_emu->Fill(mult3GeV3nsHB_nearL1Jets_total);
 	
       totalGlobal += 1;
+      totalJets += 1;
       if (mult3GeV3nsHB > 3 ) passedMultGlobal += 1;
+      if (mult3GeV3nsHB_Jets > 3 ) passedMultJets += 1;
 
       // after HCAL depth and HCAL TP loops fill the histograms with multiplicity variables. The multiplicity counter is reset on each loop iteration 
       // 3 GeV histograms
@@ -1245,6 +1133,56 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       dt3GeVcaloT3Mult_emu->Fill(mult3GeVcaloT3);
       dt3GeVcaloT4Mult_emu->Fill(mult3GeVcaloT4);
 
+      // after HCAL depth loop and L1 Jet loop fill histograms with multiplicity variables. Multiplicity counter reset on each loop iteration. These are for where HCAL TP is matched to the L1 Jet
+      // 3 GeV histograms
+      dt3GeV1nsJetMult_emu->Fill(mult3GeV1ns_Jets);
+      dt3GeV2nsJetMult_emu->Fill(mult3GeV2ns_Jets);
+      dt3GeV3nsJetMult_emu->Fill(mult3GeV3ns_Jets);
+      dt3GeV4nsJetMult_emu->Fill(mult3GeV4ns_Jets);
+      dt3GeV5nsJetMult_emu->Fill(mult3GeV5ns_Jets);
+      dt3GeV1nsHEJetMult_emu->Fill(mult3GeV1nsHE_Jets);
+      dt3GeV2nsHEJetMult_emu->Fill(mult3GeV2nsHE_Jets);
+      dt3GeV3nsHEJetMult_emu->Fill(mult3GeV3nsHE_Jets);
+      dt3GeV4nsHEJetMult_emu->Fill(mult3GeV4nsHE_Jets);
+      dt3GeV5nsHEJetMult_emu->Fill(mult3GeV5nsHE_Jets);
+      dt3GeV1nsHBJetMult_emu->Fill(mult3GeV1nsHB_Jets);
+      dt3GeV2nsHBJetMult_emu->Fill(mult3GeV2nsHB_Jets);
+      dt3GeV3nsHBJetMult_emu->Fill(mult3GeV3nsHB_Jets);
+      dt3GeV4nsHBJetMult_emu->Fill(mult3GeV4nsHB_Jets);
+      dt3GeV5nsHBJetMult_emu->Fill(mult3GeV5nsHB_Jets);
+      // 2 GeV histograms
+      dt2GeV1nsJetMult_emu->Fill(mult2GeV1ns_Jets);
+      dt2GeV2nsJetMult_emu->Fill(mult2GeV2ns_Jets);
+      dt2GeV3nsJetMult_emu->Fill(mult2GeV3ns_Jets);
+      dt2GeV4nsJetMult_emu->Fill(mult2GeV4ns_Jets);
+      dt2GeV5nsJetMult_emu->Fill(mult2GeV5ns_Jets);
+      dt2GeV1nsHEJetMult_emu->Fill(mult2GeV1nsHE_Jets);
+      dt2GeV2nsHEJetMult_emu->Fill(mult2GeV2nsHE_Jets);
+      dt2GeV3nsHEJetMult_emu->Fill(mult2GeV3nsHE_Jets);
+      dt2GeV4nsHEJetMult_emu->Fill(mult2GeV4nsHE_Jets);
+      dt2GeV5nsHEJetMult_emu->Fill(mult2GeV5nsHE_Jets);
+      dt2GeV1nsHBJetMult_emu->Fill(mult2GeV1nsHB_Jets);
+      dt2GeV2nsHBJetMult_emu->Fill(mult2GeV2nsHB_Jets);
+      dt2GeV3nsHBJetMult_emu->Fill(mult2GeV3nsHB_Jets);
+      dt2GeV4nsHBJetMult_emu->Fill(mult2GeV4nsHB_Jets);
+      dt2GeV5nsHBJetMult_emu->Fill(mult2GeV5nsHB_Jets);
+      // 1 GeV histograms
+      dt1GeV1nsJetMult_emu->Fill(mult1GeV1ns_Jets);
+      dt1GeV2nsJetMult_emu->Fill(mult1GeV2ns_Jets);
+      dt1GeV3nsJetMult_emu->Fill(mult1GeV3ns_Jets);
+      dt1GeV4nsJetMult_emu->Fill(mult1GeV4ns_Jets);
+      dt1GeV5nsJetMult_emu->Fill(mult1GeV5ns_Jets);
+      dt1GeV1nsHEJetMult_emu->Fill(mult1GeV1nsHE_Jets);
+      dt1GeV2nsHEJetMult_emu->Fill(mult1GeV2nsHE_Jets);
+      dt1GeV3nsHEJetMult_emu->Fill(mult1GeV3nsHE_Jets);
+      dt1GeV4nsHEJetMult_emu->Fill(mult1GeV4nsHE_Jets);
+      dt1GeV5nsHEJetMult_emu->Fill(mult1GeV5nsHE_Jets);
+      dt1GeV1nsHBJetMult_emu->Fill(mult1GeV1nsHB_Jets);
+      dt1GeV2nsHBJetMult_emu->Fill(mult1GeV2nsHB_Jets);
+      dt1GeV3nsHBJetMult_emu->Fill(mult1GeV3nsHB_Jets);
+      dt1GeV4nsHBJetMult_emu->Fill(mult1GeV4nsHB_Jets);
+      dt1GeV5nsHBJetMult_emu->Fill(mult1GeV5nsHB_Jets);
+
       // for each bin fill according to whether our object has a larger corresponding energy
       // Global. nJetBins = 400, jetBinWidht = 1 so this is jetLo + 1, jetLo + 2...etc
       for(int bin=0; bin<nJetBins; bin++){
@@ -1261,16 +1199,16 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       }  
       // matched to L1 Jets, cut mult3GeV3nsHB_Jets>1 for 1 L1jet matched, mult3GeV3nsHB_Jets>2 for 4 L1 jets matched
       for(int bin=0; bin<nJetBins; bin++){
-        if( ((jetEt_1) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB_Jets > 1) ) singleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV     
+        if( ((jetEt_1) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB_Jets > 3) ) singleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV     
       }
       for(int bin=0; bin<nJetBins; bin++){
-        if( ((jetEt_2) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB_Jets > 1) ) doubleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV  
+        if( ((jetEt_2) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB_Jets > 3) ) doubleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV  
       }
       for(int bin=0; bin<nJetBins; bin++){
-        if( ((jetEt_3) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB_Jets > 1) ) tripleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV        
+        if( ((jetEt_3) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB_Jets > 3) ) tripleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV        
       }
       for(int bin=0; bin<nJetBins; bin++){
-        if( ((jetEt_4) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB_Jets > 1) ) quadJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+        if( ((jetEt_4) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB_Jets > 3) ) quadJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
       }
 
       // eGamma rates             
@@ -1518,7 +1456,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     }// closes if 'hwOn' is true
   }// closes loop through events
 
-  std::cout << "LLP passed jet matched multiplicity cut of mult3GeV3nsHB_Jets>1 / total LLPs = " << passedMultJets/totalJets << std::endl;
+  std::cout << "LLP passed jet matched multiplicity cut of mult3GeV3nsHB_Jets>5 / total LLPs = " << passedMultJets/totalJets << std::endl;
   std::cout << "LLP passed global multiplicity cut of mult3GeV3nsHB>5 / total LLPs = " << passedMultGlobal/totalGlobal << std::endl;
 
   //  TFile g( outputFilename.c_str() , "new");
