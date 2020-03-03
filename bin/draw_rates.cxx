@@ -1,5 +1,6 @@
- #include "PhysicsTools/Utilities/macros/setTDRStyle.C"
+// From HCAL Trigger Validation framework, edited by Gillian Kopp for LLP trigger multiplicity studies (2020)
 
+ #include "PhysicsTools/Utilities/macros/setTDRStyle.C"
  #include "TCanvas.h"
  #include "TH1.h"
  #include "TH2.h"
@@ -498,20 +499,8 @@
       x2 = 0.95;
       int yMax = 0;
       yMax = multHists_QCD[hist]->GetMaximum();
-      multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1.5*yMax);
-      if ( name(9,3) != "HBJ" ) multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,3*yMax);
-      /*
-      if ( (name(9,3) == "HBM") || (name(9,3) == "HBJ") ){ // setting max for HCAL barrel regions, generally high here
-	multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,5*yMax); // 3 sometimes, 1.5 sometimes
-      }
-      if (name(6,4) == "calo") multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,2*yMax);
-      if (name(9,3) == "Jet" || name(9,5) == "HBJet") { // setting max for histograms matched with L1 jets
-	//	multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1.2*yMax); // 1.2 sometimes
-        if ( name(0,3) == "dt2" && name(9,5) == "HBJet") {
-	  //	  multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,2*yMax);
-	}
-      }
-      */
+      multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,4.5*yMax);
+//      if ( (name(9,3) != "HBJ") && (name(9,3) != "HBn") ) multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,3*yMax);
     }
     multHists_QCD[hist]->SetFillStyle(3005); // this is the grey shading on QCD plots
     multHists_QCD[hist]->Draw("hist pfc");
