@@ -32,7 +32,8 @@
 					 "singleJetGlobal", "doubleJetGlobal", "tripleJetGlobal", "quadJetGlobal",
 					 "singleEg", "singleISOEg", "doubleEg", "doubleISOEg",
 					 "singleTau", "singleISOTau", "doubleTau", "doubleISOTau",
-					 "htSum", "etSum", "metSum", "metHFSum"};
+					 "htSum", "etSum", "metSum", "metHFSum",
+					 "htSumGlobal", "etSumGlobal"};
    // files for multiplicity overlay plots
    //   std::vector<std::string> mult_filenames = {"rates_new_cond_pl10000_1L1Jet.root", "rates_new_cond_pl1000_1L1Jet.root", "rates_new_cond_pl500_1L1Jet.root", "rates_new_cond_QCD_1L1Jet.root"};
    std::vector<std::string> mult_filenames = {"rates_new_cond_pl10000_4L1Jets.root", "rates_new_cond_pl1000_4L1Jets.root", "rates_new_cond_pl500_4L1Jets.root", "rates_new_cond_QCD_4L1Jets.root"};
@@ -65,8 +66,8 @@
   std::vector<std::string> RatioTypes = {"Ratio_Depth", "Ratio_DepthHE", "Ratio_DepthHB","Ratio_Depth_Jets", "Ratio_DepthHE_Jets", "Ratio_DepthHB_Jets"};
 
   std::map<std::string, int> histColor;
-  histColor["singleJet"] = histColor["singleJetGlobal"] = histColor["singleEg"] = histColor["singleTau"] = histColor["etSum"] = histColor["metSum"] = histColor["dt3GeV1ns"] = histColor["dt3GeV1nsHE"] =histColor["dt3GeV1nsHB"] = histColor["dt2GeV1ns"] = histColor["dt2GeV1nsHE"] = histColor["dt2GeV1nsHB"] = histColor["dt1GeV1ns"] = histColor["dt1GeV1nsHE"] = histColor["dt1GeV1nsHB"] = histColor["dt3GeV1nsJet"] = histColor["dt3GeV1nsHEJet"] =histColor["dt3GeV1nsHBJet"] = histColor["dt2GeV1nsJet"] = histColor["dt2GeV1nsHEJet"] = histColor["dt2GeV1nsHBJet"] = histColor["dt1GeV1nsJet"] = histColor["dt1GeV1nsHEJet"] = histColor["dt1GeV1nsHBJet"] = kRed;
-  histColor["doubleJet"] = histColor["doubleJetGlobal"] = histColor["singleISOEg"] = histColor["singleISOTau"] = histColor["htSum"] = histColor["metHFSum"] = histColor["dt3GeV2ns"] = histColor["dt3GeV2nsHE"] = histColor["dt3GeV2nsHB"] = histColor["dt2GeV2ns"] = histColor["dt2GeV2nsHE"] = histColor["dt2GeV2nsHB"] = histColor["dt1GeV2ns"] = histColor["dt1GeV2nsHE"] = histColor["dt1GeV2nsHB"] = histColor["dt3GeV2nsJet"] = histColor["dt3GeV2nsHEJet"] = histColor["dt3GeV2nsHBJet"] = histColor["dt2GeV2nsJet"] = histColor["dt2GeV2nsHEJet"] = histColor["dt2GeV2nsHBJet"] = histColor["dt1GeV2nsJet"] = histColor["dt1GeV2nsHEJet"] = histColor["dt1GeV2nsHBJet"] = kBlue;
+  histColor["singleJet"] = histColor["singleJetGlobal"] = histColor["singleEg"] = histColor["singleTau"] = histColor["etSum"] = histColor["etSumGlobal"] = histColor["metSum"] = histColor["dt3GeV1ns"] = histColor["dt3GeV1nsHE"] =histColor["dt3GeV1nsHB"] = histColor["dt2GeV1ns"] = histColor["dt2GeV1nsHE"] = histColor["dt2GeV1nsHB"] = histColor["dt1GeV1ns"] = histColor["dt1GeV1nsHE"] = histColor["dt1GeV1nsHB"] = histColor["dt3GeV1nsJet"] = histColor["dt3GeV1nsHEJet"] =histColor["dt3GeV1nsHBJet"] = histColor["dt2GeV1nsJet"] = histColor["dt2GeV1nsHEJet"] = histColor["dt2GeV1nsHBJet"] = histColor["dt1GeV1nsJet"] = histColor["dt1GeV1nsHEJet"] = histColor["dt1GeV1nsHBJet"] = kRed;
+  histColor["doubleJet"] = histColor["doubleJetGlobal"] = histColor["singleISOEg"] = histColor["singleISOTau"] = histColor["htSum"] = histColor["htSumGlobal"] = histColor["metHFSum"] = histColor["dt3GeV2ns"] = histColor["dt3GeV2nsHE"] = histColor["dt3GeV2nsHB"] = histColor["dt2GeV2ns"] = histColor["dt2GeV2nsHE"] = histColor["dt2GeV2nsHB"] = histColor["dt1GeV2ns"] = histColor["dt1GeV2nsHE"] = histColor["dt1GeV2nsHB"] = histColor["dt3GeV2nsJet"] = histColor["dt3GeV2nsHEJet"] = histColor["dt3GeV2nsHBJet"] = histColor["dt2GeV2nsJet"] = histColor["dt2GeV2nsHEJet"] = histColor["dt2GeV2nsHBJet"] = histColor["dt1GeV2nsJet"] = histColor["dt1GeV2nsHEJet"] = histColor["dt1GeV2nsHBJet"] = kBlue;
   histColor["tripleJet"] = histColor["tripleJetGlobal"] = histColor["doubleEg"] = histColor["doubleTau"] = histColor["dt3GeV3ns"] = histColor["dt3GeV3nsHE"] = histColor["dt3GeV3nsHB"] = histColor["dt2GeV3ns"] = histColor["dt1GeV3ns"] =histColor["dt2GeV3nsHE"] = histColor["dt1GeV3nsHE"] = histColor["dt2GeV3nsHB"] = histColor["dt1GeV3nsHB"] = histColor["dt3GeV3nsJet"] = histColor["dt3GeV3nsHEJet"] = histColor["dt3GeV3nsHBJet"] = histColor["dt3GeV3nsHBnearJet"] = histColor["dt2GeV3nsJet"] = histColor["dt1GeV3nsJet"] =histColor["dt2GeV3nsHEJet"] = histColor["dt1GeV3nsHEJet"] = histColor["dt2GeV3nsHBJet"] = histColor["dt1GeV3nsHBJet"]  = kGreen+1;
   histColor["quadJet"] = histColor["quadJetGlobal"] = histColor["doubleISOEg"] = histColor["doubleISOTau"] = histColor["dt3GeV4ns"] = histColor["dt3GeV4nsHE"] = histColor["dt3GeV4nsHB"] = histColor["dt2GeV4ns"] = histColor["dt1GeV4ns"] = histColor["dt2GeV4nsHE"] = histColor["dt1GeV4nsHE"] = histColor["dt2GeV4nsHB"] = histColor["dt1GeV4nsHB"] = histColor["dt3GeV4nsJet"] = histColor["dt3GeV4nsHEJet"] = histColor["dt3GeV4nsHBJet"] = histColor["dt2GeV4nsJet"] = histColor["dt1GeV4nsJet"] = histColor["dt2GeV4nsHEJet"] = histColor["dt1GeV4nsHEJet"] = histColor["dt2GeV4nsHBJet"] = histColor["dt1GeV4nsHBJet"] = kBlack;
   histColor["dt3GeV5ns"] = histColor["dt3GeV5nsHE"] = histColor["dt3GeV5nsHB"] = histColor["dt2GeV5ns"] = histColor["dt1GeV5ns"]  = histColor["dt2GeV5nsHE"] = histColor["dt1GeV5nsHE"] = histColor["dt2GeV5nsHB"] = histColor["dt1GeV5nsHB"] = histColor["dt3GeV5nsJet"] = histColor["dt3GeV5nsHEJet"] = histColor["dt3GeV5nsHBJet"] = histColor["dt2GeV5nsJet"] = histColor["dt1GeV5nsJet"]  = histColor["dt2GeV5nsHEJet"] = histColor["dt1GeV5nsHEJet"] = histColor["dt2GeV5nsHBJet"] = histColor["dt1GeV5nsHBJet"] = kCyan;
@@ -93,6 +94,11 @@
   std::map<std::string, TH1D*> energy_profile_LLP1000_overlay;
   std::map<std::string, TH1D*> energy_profile_LLP10000_overlay;
 
+  int SJet60GeV = 0;
+  int htSum350GeV = 0;
+  int SJet60GeV_l = 0;
+  int htSum350GeV_l = 0;
+
   std::vector<TFile*> files;
   for(auto file : filenames) {
     files.push_back(TFile::Open(file.c_str()));
@@ -113,6 +119,23 @@
     rateHists_def[rateType]->SetLineColor(histColor[rateType]);
     rateHists_hw[rateType]->SetLineColor(histColor[rateType]);
     rateHists_new_cond[rateType]->SetLineColor(histColor[rateType]);
+    // for the rate and efficiency plots
+    if ( rateType == "singleJetGlobal" ) {
+      int xval = rateHists_new_cond[rateType]->GetXaxis()->FindBin(60); // get x value of bin of interest
+      SJet60GeV = rateHists_new_cond[rateType]->GetBinContent(xval);
+    }
+    if ( rateType == "htSumGlobal" ) {
+      int xval = rateHists_new_cond[rateType]->GetXaxis()->FindBin(350);
+      htSum350GeV = rateHists_new_cond[rateType]->GetBinContent(xval);
+    }
+    if ( rateType == "singleJet" ) {
+      int xval = rateHists_new_cond[rateType]->GetXaxis()->FindBin(60); // get x value of bin of interest   
+      SJet60GeV_l = rateHists_new_cond[rateType]->GetBinContent(xval);
+    }
+    if ( rateType == "htSum" ) {
+      int xval = rateHists_new_cond[rateType]->GetXaxis()->FindBin(350);
+      htSum350GeV_l = rateHists_new_cond[rateType]->GetBinContent(xval);
+    }
     TString name(rateHists_new_cond[rateType]->GetName());
     name += "_ratio";
     if(includeHW) {
@@ -125,6 +148,8 @@
     }
     rateHistsRatio[rateType]->SetMinimum(0);    // -0.5 for singleJet  // previously 0.6
     rateHistsRatio[rateType]->SetMaximum(1.4);    // 80 for singleJet // previously 1.4
+    if ((rateType == "singleJet") || (rateType ==  "doubleJet") || (rateType ==  "tripleJet") || (rateType ==  "quadJet")) rateHistsRatio[rateType]->SetMaximum(0.02);
+    if ((rateType ==  "htSum") || (rateType ==  "etSum")) rateHistsRatio[rateType]->SetMaximum(0.1);
     rateHistsRatio[rateType]->SetLineWidth(2);    
   }
 
@@ -179,7 +204,7 @@
   std::vector<std::string> egPlots = {"singleEg", "singleISOEg", "doubleEg", "doubleISOEg"};
   std::vector<std::string> tauPlots = {"singleTau", "singleISOTau", "doubleTau", "doubleISOTau"};
   std::vector<std::string> scalarSumPlots = {"etSum", "htSum"};
-  //  std::vector<std::string> scalarSumPlots = {"htSum"}; 
+  std::vector<std::string> scalarSumPlotsGlobal = {"etSumGlobal", "htSumGlobal"};
   std::vector<std::string> vectorSumPlots = {"metSum", "metHFSum"};
   // multiplicity plot types 
   //  std::vector<std::string> multPlots3GeV = {"dt3GeV5ns","dt3GeV4ns","dt3GeV3ns","dt3GeV2ns","dt3GeV1ns"};
@@ -211,6 +236,7 @@
   plots["eg"] = egPlots;
   plots["tau"] = tauPlots;
   plots["scalarSum"] = scalarSumPlots;
+  plots["scalarSumGlobal"] = scalarSumPlotsGlobal;
   plots["vectorSum"] = vectorSumPlots;
 
   std::map<std::string, std::vector<std::string> > mult_plots;
@@ -674,23 +700,49 @@
     //    canvases.back()->Print(Form("plots/%s_LLP10000.pdf", hist.c_str()));
   }
 
+  std::cout << "Global multiplicity: single jet rate = " << SJet60GeV << " and htSum rate = " << htSum350GeV << std::endl;
+  std::cout << "Jet matched multiplicity: single jet rate = " << SJet60GeV_l << " and htSum rate = " << htSum350GeV_l << std::endl;
+
   Double_t EffPl500[3], EffQCD[3], singleJetRate[3], htSumRate[3];
+  //Double_t EffPl500Global[3], EffQCDGlobal[3], singleJetRateGlobal[3], htSumRateGlobal[3];
+
+  // L1 JET MATCHED
   // neutrino gun rate at 60 GeV for single Jet
-  singleJetRate[0] = 166.449; // in kHz
+  singleJetRate[0] = 106.462; // in kHz
   singleJetRate[1] = 38.411;
   singleJetRate[2] = 8.536;
   // neutrino gun rate for htSum at 350 GeV
-  htSumRate[0] = 76.822;
+  htSumRate[0] = 56.779;
   htSumRate[1] = 25.607;
   htSumRate[2] = 4.268;
   // signal efficiency for pl 500
-  EffPl500[0] = 0.8765;
+  EffPl500[0] = 0.8615;
   EffPl500[1] = 0.837;
   EffPl500[2] = 0.781;
-  // background efficiency for QCD
-  EffQCD[0] = 0.2175; //mult3GeV3nsHB > 3
+  // background efficiency for QCD                                                                                                                                                      
+  EffQCD[0] = 0.201; //mult3GeV3nsHB > 3
   EffQCD[1] = 0.159; //mult3GeV3nsHB > 4
-  EffQCD[2] = 0.1225; //mult3GeV3nsHB > 5
+  EffQCD[2] = 0.1225; //mult3GeV3nsHB > 5 
+
+  /*
+  // GLOBAL
+  // neutrino gun rate at 60 GeV for single Jet
+  singleJetRateGlobal[0] = 269.704; // in kHz        
+  singleJetRateGlobal[1] = 38.411;
+  singleJetRateGlobal[2] = 8.536;
+  // neutrino gun rate for htSum at 350 GeV    
+  htSumRateGlobal[0] = 127.754;
+  htSumRateGlobal[1] = 25.607;
+  htSumRateGlobal[2] = 4.268;
+  // signal efficiency for pl 500
+  EffPl500Global[0] = 0.8765;
+  EffPl500Global[1] = 0.837;
+  EffPl500Global[2] = 0.781;
+  // background efficiency for QCD
+  EffQCDGlobal[0] = 0.2175; //mult3GeV3nsHB > 3
+  EffQCDGlobal[1] = 0.159; //mult3GeV3nsHB > 4
+  EffQCDGlobal[2] = 0.1225; //mult3GeV3nsHB > 5
+*/
 
   TGraph *gr1 = new TGraph (3, EffPl500, singleJetRate);
   TGraph *gr2 = new TGraph (3, EffPl500, htSumRate);
