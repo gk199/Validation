@@ -288,8 +288,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F* singleISOTauRates_emu = new TH1F("singleISOTauRates_emu", axR.c_str(), nTauBins, tauLo, tauHi);
   TH1F* doubleISOTauRates_emu = new TH1F("doubleISOTauRates_emu", axR.c_str(), nTauBins, tauLo, tauHi);
   TH1F* htSumRates_emu = new TH1F("htSumRates_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
+  TH1F* htSumGlobalRates_emu = new TH1F("htSumGlobalRates_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
   TH1F* mhtSumRates_emu = new TH1F("mhtSumRates_emu",axR.c_str(), nMhtSumBins, mhtSumLo, mhtSumHi);
   TH1F* etSumRates_emu = new TH1F("etSumRates_emu",axR.c_str(), nEtSumBins, etSumLo, etSumHi);
+  TH1F* etSumGlobalRates_emu = new TH1F("etSumGlobalRates_emu",axR.c_str(), nEtSumBins, etSumLo, etSumHi);
   TH1F* metSumRates_emu = new TH1F("metSumRates_emu",axR.c_str(), nMetSumBins, metSumLo, metSumHi); 
   TH1F* metHFSumRates_emu = new TH1F("metHFSumRates_emu",axR.c_str(), nMetHFSumBins, metHFSumLo, metHFSumHi); 
   
@@ -310,8 +312,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F* singleISOTauRates_hw = new TH1F("singleISOTauRates_hw", axR.c_str(), nTauBins, tauLo, tauHi);
   TH1F* doubleISOTauRates_hw = new TH1F("doubleISOTauRates_hw", axR.c_str(), nTauBins, tauLo, tauHi);
   TH1F* htSumRates_hw = new TH1F("htSumRates_hw",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
+  TH1F* htSumGlobalRates_hw = new TH1F("htSumGlobalRates_hw",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
   TH1F* mhtSumRates_hw = new TH1F("mhtSumRates_hw",axR.c_str(), nMhtSumBins, mhtSumLo, mhtSumHi);
   TH1F* etSumRates_hw = new TH1F("etSumRates_hw",axR.c_str(), nEtSumBins, etSumLo, etSumHi);
+  TH1F* etSumGlobalRates_hw = new TH1F("etSumGlobalRates_hw",axR.c_str(), nEtSumBins, etSumLo, etSumHi);
   TH1F* metSumRates_hw = new TH1F("metSumRates_hw",axR.c_str(), nMetHFSumBins, metHFSumLo, metHFSumHi); 
   TH1F* metHFSumRates_hw = new TH1F("metHFSumRates_hw",axR.c_str(), nMetHFSumBins, metHFSumLo, metHFSumHi); 
 
@@ -533,6 +537,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   // counting LLP efficiencies
   double totalJets(0), passedMultJets(0);
   double totalGlobal(0), passedMultGlobal(0);
+  uint GeV3ns3Global_threshold = 3;
+  uint GeV3ns3Jet_threshold = 3;
 
   /////////////////////////////////
   // loop through all the entries//
@@ -1067,8 +1073,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	
       totalGlobal += 1;
       totalJets += 1;
-      if (mult3GeV3nsHB > 3 ) passedMultGlobal += 1;
-      if (mult3GeV3nsHB_Jets > 3 ) passedMultJets += 1;
+      if (mult3GeV3nsHB > GeV3ns3Global_threshold ) passedMultGlobal += 1;
+      if (mult3GeV3nsHB_Jets > GeV3ns3Jet_threshold ) passedMultJets += 1;
 
       // after HCAL depth and HCAL TP loops fill the histograms with multiplicity variables. The multiplicity counter is reset on each loop iteration 
       // 3 GeV histograms
@@ -1186,29 +1192,15 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       // for each bin fill according to whether our object has a larger corresponding energy
       // Global. nJetBins = 400, jetBinWidht = 1 so this is jetLo + 1, jetLo + 2...etc
       for(int bin=0; bin<nJetBins; bin++){
-        if( ((jetEt_1) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB > 3) ) singleJetGlobalRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
-      } 
-      for(int bin=0; bin<nJetBins; bin++){
-        if( ((jetEt_2) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB > 3) ) doubleJetGlobalRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
-      }  
-      for(int bin=0; bin<nJetBins; bin++){
-        if( ((jetEt_3) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB > 3) ) tripleJetGlobalRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
-      }  
-      for(int bin=0; bin<nJetBins; bin++){
-        if( ((jetEt_4) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB > 3) ) quadJetGlobalRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
-      }  
-      // matched to L1 Jets, cut mult3GeV3nsHB_Jets>1 for 1 L1jet matched, mult3GeV3nsHB_Jets>2 for 4 L1 jets matched
-      for(int bin=0; bin<nJetBins; bin++){
-        if( ((jetEt_1) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB_Jets > 3) ) singleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV     
-      }
-      for(int bin=0; bin<nJetBins; bin++){
-        if( ((jetEt_2) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB_Jets > 3) ) doubleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV  
-      }
-      for(int bin=0; bin<nJetBins; bin++){
-        if( ((jetEt_3) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB_Jets > 3) ) tripleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV        
-      }
-      for(int bin=0; bin<nJetBins; bin++){
-        if( ((jetEt_4) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB_Jets > 3) ) quadJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+        if( ((jetEt_1) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB > GeV3ns3Global_threshold) ) singleJetGlobalRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+        if( ((jetEt_2) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB > GeV3ns3Global_threshold) ) doubleJetGlobalRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+        if( ((jetEt_3) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB > GeV3ns3Global_threshold) ) tripleJetGlobalRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+        if( ((jetEt_4) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB > GeV3ns3Global_threshold) ) quadJetGlobalRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+	// matched to L1 Jets, cut mult3GeV3nsHB_Jets>1 for 1 L1jet matched, mult3GeV3nsHB_Jets>2 for 4 L1 jets matched
+        if( ((jetEt_1) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB_Jets > GeV3ns3Jet_threshold) ) singleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV     
+        if( ((jetEt_2) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB_Jets > GeV3ns3Jet_threshold) ) doubleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV  
+        if( ((jetEt_3) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB_Jets > GeV3ns3Jet_threshold) ) tripleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV        
+        if( ((jetEt_4) >= jetLo + (bin*jetBinWidth)) && (mult3GeV3nsHB_Jets > GeV3ns3Jet_threshold) ) quadJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
       }
 
       // eGamma rates             
@@ -1245,7 +1237,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       } 
 
       for(int bin=0; bin<nHtSumBins; bin++){
-        if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeV3nsHB > 3) ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV
+        if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeV3nsHB_Jets > GeV3ns3Jet_threshold) ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV
+        if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeV3nsHB > GeV3ns3Global_threshold) ) htSumGlobalRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV  
       }
 
       for(int bin=0; bin<nMhtSumBins; bin++){
@@ -1253,7 +1246,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       }
 
       for(int bin=0; bin<nEtSumBins; bin++){
-        if( ((etSum) >= etSumLo+(bin*etSumBinWidth)) && (mult3GeV3nsHB > 3) ) etSumRates_emu->Fill(etSumLo+(bin*etSumBinWidth)); //GeV           
+        if( ((etSum) >= etSumLo+(bin*etSumBinWidth)) && (mult3GeV3nsHB_Jets > GeV3ns3Jet_threshold) ) etSumRates_emu->Fill(etSumLo+(bin*etSumBinWidth)); //GeV           
+        if( ((etSum) >= etSumLo+(bin*etSumBinWidth)) && (mult3GeV3nsHB > GeV3ns3Global_threshold) ) etSumGlobalRates_emu->Fill(etSumLo+(bin*etSumBinWidth)); //GeV  
       }
 
       for(int bin=0; bin<nMetSumBins; bin++){
@@ -1437,6 +1431,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 
       for(int bin=0; bin<nHtSumBins; bin++){
         if( (htSum) >= htSumLo+(bin*htSumBinWidth) ) htSumRates_hw->Fill(htSumLo+(bin*htSumBinWidth)); //GeV
+        if( (htSum) >= htSumLo+(bin*htSumBinWidth) ) htSumGlobalRates_hw->Fill(htSumLo+(bin*htSumBinWidth)); //GeV  
       }
 
       for(int bin=0; bin<nMhtSumBins; bin++){
@@ -1444,7 +1439,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       }
 
       for(int bin=0; bin<nEtSumBins; bin++){
-        if( (etSum) >= etSumLo+(bin*etSumBinWidth) ) etSumRates_hw->Fill(etSumLo+(bin*etSumBinWidth)); //GeV           
+        if( (etSum) >= etSumLo+(bin*etSumBinWidth) ) etSumRates_hw->Fill(etSumLo+(bin*etSumBinWidth)); //GeV         
+	if( (etSum) >= etSumLo+(bin*etSumBinWidth) ) etSumGlobalRates_hw->Fill(etSumLo+(bin*etSumBinWidth)); //GeV  
       }
 
       for(int bin=0; bin<nMetSumBins; bin++){
@@ -1456,8 +1452,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     }// closes if 'hwOn' is true
   }// closes loop through events
 
-  std::cout << "LLP passed jet matched multiplicity cut of mult3GeV3nsHB_Jets>5 / total LLPs = " << passedMultJets/totalJets << std::endl;
-  std::cout << "LLP passed global multiplicity cut of mult3GeV3nsHB>5 / total LLPs = " << passedMultGlobal/totalGlobal << std::endl;
+  std::cout << "LLP passed jet matched multiplicity cut of mult3GeV3nsHB_Jets>" << GeV3ns3Jet_threshold << " / total LLPs = " << passedMultJets/totalJets << std::endl;
+  std::cout << "LLP passed global multiplicity cut of mult3GeV3nsHB>" << GeV3ns3Global_threshold << " / total LLPs = " << passedMultGlobal/totalGlobal << std::endl;
 
   //  TFile g( outputFilename.c_str() , "new");
   kk->cd();
@@ -1483,8 +1479,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     singleISOTauRates_emu->Scale(norm);
     doubleISOTauRates_emu->Scale(norm);
     htSumRates_emu->Scale(norm);
+    htSumGlobalRates_emu->Scale(norm);
     mhtSumRates_emu->Scale(norm);
     etSumRates_emu->Scale(norm);
+    etSumGlobalRates_emu->Scale(norm);
     metSumRates_emu->Scale(norm);
     metHFSumRates_emu->Scale(norm);
 
@@ -1506,6 +1504,21 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     //set the errors for the rates
     //want error -> error * sqrt(norm) ?
 
+    if (inputFile.substr(0,11) == "../Neutrino" ) {
+      int SJ_60GeV_bin = singleJetGlobalRates_emu->GetXaxis()->FindBin(60); // get x value of bin of interest                      
+      int SJet60GeV = singleJetGlobalRates_emu->GetBinContent(SJ_60GeV_bin); // get rate value for single jet at 60 GeV ET threshold
+      int HT_350GeV_bin = htSumGlobalRates_emu->GetXaxis()->FindBin(350); // get x value of bin of interest
+      int htSum350GeV = htSumGlobalRates_emu->GetBinContent(HT_350GeV_bin); // get rate value for ht sum rate at 350 GeV ET threshold
+      std::cout <<  "For global multiplicity threshold of >" << GeV3ns3Global_threshold << " the single jet rate = " << SJet60GeV << " and htSum rate = " << htSum350GeV << std::endl;
+
+      int SJ_60GeV_bin_l = singleJetRates_emu->GetXaxis()->FindBin(60); // get x value of bin of interest                          
+      int SJet60GeV_l = singleJetRates_emu->GetBinContent(SJ_60GeV_bin_l); // get rate value for single jet at 60 GeV ET threshold   
+      int HT_350GeV_bin_l = htSumRates_emu->GetXaxis()->FindBin(350); // get x value of bin of interest                            
+      int htSum350GeV_l = htSumRates_emu->GetBinContent(HT_350GeV_bin_l); // get rate value for ht sum rate at 350 GeV ET threshold  
+      std::cout <<  "For L1 jet matched multiplicity threshold of > " << GeV3ns3Jet_threshold << " the single jet rate = " << SJet60GeV_l << " and htSum rate = " << htSum350GeV_l << std::endl;
+      std::cout << inputFile << std::endl;
+    }
+
     hJetEt->Write();
     hcalTP_emu->Write();
     ecalTP_emu->Write();
@@ -1526,8 +1539,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     singleISOTauRates_emu->Write();
     doubleISOTauRates_emu->Write();
     htSumRates_emu->Write();
+    htSumGlobalRates_emu->Write();
     mhtSumRates_emu->Write();
     etSumRates_emu->Write();
+    etSumGlobalRates_emu->Write();
     metSumRates_emu->Write();
     metHFSumRates_emu->Write();
     // 3 GeV
@@ -1744,8 +1759,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     singleISOTauRates_hw->Scale(norm);
     doubleISOTauRates_hw->Scale(norm);
     htSumRates_hw->Scale(norm);
+    htSumGlobalRates_hw->Scale(norm);
     mhtSumRates_hw->Scale(norm);
     etSumRates_hw->Scale(norm);
+    etSumGlobalRates_hw->Scale(norm);
     metSumRates_hw->Scale(norm);
     metHFSumRates_hw->Scale(norm);
 
@@ -1768,8 +1785,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     singleISOTauRates_hw->Write();
     doubleISOTauRates_hw->Write();
     htSumRates_hw->Write();
+    htSumGlobalRates_hw->Write();
     mhtSumRates_hw->Write();
     etSumRates_hw->Write();
+    etSumGlobalRates_hw->Write();
     metSumRates_hw->Write();
     metHFSumRates_hw->Write();
   }
