@@ -379,12 +379,18 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F * dt3GeV3nsHBJetMult_emu = new TH1F("dt3GeV3nsHBJetMult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HB, match TP with L1Jet);Hit Multiplicity;Number of Entries",120,0,120);
   TH1F * dt3GeV4nsHBJetMult_emu = new TH1F("dt3GeV4nsHBJetMult_emu","Multiplicity of 4ns delayed cells above 3 GeV (HB, match TP with L1Jet);Hit Multiplicity;Number of Entries",120,0,120);
   TH1F * dt3GeV5nsHBJetMult_emu = new TH1F("dt3GeV5nsHBJetMult_emu","Multiplicity of 5ns delayed cells above 3 GeV (HB, match TP with L1Jet);Hit Multiplicity;Number of Entries",120,0,120);
-
+  // divide HCAL TPs into four groups based on which L1 jet is closest, then do DR restriction. No double counting in combined plot
   TH1F * dt3GeV3nsHBnearJetMult_emu = new TH1F("dt3GeV3nsHBnearJetMult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HB, match TP with nearest L1Jet);Hit Multiplicity;Number of Entries",120,0,120);
   TH1F * dt3GeV3nsHBnearJet1Mult_emu = new TH1F("dt3GeV3nsHBnearJet1Mult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HB, match TP with nearest L1Jet);Hit Multiplicity;Number of Entries",120,0,120);
   TH1F * dt3GeV3nsHBnearJet2Mult_emu = new TH1F("dt3GeV3nsHBnearJet2Mult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HB, match TP with nearest L1Jet);Hit Multiplicity;Number of Entries",120,0,120);
   TH1F * dt3GeV3nsHBnearJet3Mult_emu = new TH1F("dt3GeV3nsHBnearJet3Mult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HB, match TP with nearest L1Jet);Hit Multiplicity;Number of Entries",120,0,120);
   TH1F * dt3GeV3nsHBnearJet4Mult_emu = new TH1F("dt3GeV3nsHBnearJet4Mult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HB, match TP with nearest L1Jet);Hit Multiplicity;Number of Entries",120,0,120);
+  // include all HCAL TPs included in DR cone of a L1 jet
+  TH1F * dt3GeV3nsHBJet1Mult_emu = new TH1F("dt3GeV3nsHBJet1Mult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HB, all TPs within DR<2 1st L1Jet);Hit Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV3nsHBJet2Mult_emu = new TH1F("dt3GeV3nsHBJet2Mult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HB, all TPs within DR<2 2nd L1Jet);Hit Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV3nsHBJet3Mult_emu = new TH1F("dt3GeV3nsHBJet3Mult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HB, all TPs within DR<2 3rd L1Jet);Hit Multiplicity;Number of Entries",120,0,120);
+  TH1F * dt3GeV3nsHBJet4Mult_emu = new TH1F("dt3GeV3nsHBJet4Mult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HB, all TPs within DR<2 4th L1Jet);Hit Multiplicity;Number of Entries",120,0,120);
+
   // 2 GeV energy cuts, scanning time cut
   // inclusive
   TH1F * dt2GeV1nsMult_emu = new TH1F("dt2GeV1nsMult_emu","Multiplicity of 1ns delayed cells above 2 GeV (inclusive);Hit Multiplicity;Number of Entries",200,0,200);
@@ -703,6 +709,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       double mult1GeV1nsHE_Jets(0), mult1GeV2nsHE_Jets(0), mult1GeV3nsHE_Jets(0), mult1GeV4nsHE_Jets(0), mult1GeV5nsHE_Jets(0);
       double mult1GeV1nsHB_Jets(0), mult1GeV2nsHB_Jets(0), mult1GeV3nsHB_Jets(0), mult1GeV4nsHB_Jets(0), mult1GeV5nsHB_Jets(0);
       double mult3GeV3nsHB_nearJet0(0), mult3GeV3nsHB_nearJet1(0), mult3GeV3nsHB_nearJet2(0), mult3GeV3nsHB_nearJet3(0);
+      double mult3GeV3nsHB_Jet0(0), mult3GeV3nsHB_Jet1(0), mult3GeV3nsHB_Jet2(0), mult3GeV3nsHB_Jet3(0);
       double JetEta1(0), JetEta2(0), JetEta3(0), JetEta4(0);
       double JetPhi1(0), JetPhi2(0), JetPhi3(0), JetPhi4(0);
 
@@ -755,15 +762,50 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	  etaphiJet->SetMarkerColor(2); // red marker color for jets
 	  etaphiJet->SetPoint(jetIt,Jet_eta,Jet_phi);
 	}
-	// cross checking of multiplicity plots done in HCAL TP then L1 jet loop. Need to not double count any HCAL TPs if they are in DR cone of multiple jets
+	// cross checking of multiplicity plots done in HCAL TP then L1 jet loop. MaynNeed to not double count any HCAL TPs if they are in DR cone of multiple jets
 	// loop over HCAL TPs
 	for (int HcalTPIt = 0; HcalTPIt < nCaloTPemu; HcalTPIt++){
-
+	  tpEtaemu = l1CaloTPemu_->hcalTPieta[HcalTPIt]; // use for HB HE restrictions                                 
+	  tpPhiemu = l1CaloTPemu_->hcalTPiphi[HcalTPIt]; // use for deltaR calculation
+	  tpEtemu = l1CaloTPemu_->hcalTPet[HcalTPIt]; // used for energy normalization in the energy depth plots    
+	  nDepth = l1CaloTPemu_->hcalTPnDepths[HcalTPIt]; // how many HCAL depth layers
+	  if (nDepth == 0) continue; // skip events
+	  // Energy deposited in each depth layer for every HCAL TP (4 in HB, 7 in HE)  
+	  hcalTPdepth[0] = l1CaloTPemu_->hcalTPDepth1[HcalTPIt];
+	  hcalTPdepth[1] = l1CaloTPemu_->hcalTPDepth2[HcalTPIt];
+	  hcalTPdepth[2] = l1CaloTPemu_->hcalTPDepth3[HcalTPIt];
+	  hcalTPdepth[3] = l1CaloTPemu_->hcalTPDepth4[HcalTPIt];
+	  hcalTPdepth[4] = l1CaloTPemu_->hcalTPDepth5[HcalTPIt];
+	  hcalTPdepth[5] = l1CaloTPemu_->hcalTPDepth6[HcalTPIt];
+	  hcalTPdepth[6] = l1CaloTPemu_->hcalTPDepth7[HcalTPIt];
+	  // timing info for each layer, in 25 ns with resolution 0.5 ns 
+	  hcalTPtiming[0] = l1CaloTPemu_->hcalTPtiming1[HcalTPIt];
+	  hcalTPtiming[1] = l1CaloTPemu_->hcalTPtiming2[HcalTPIt];
+	  hcalTPtiming[2] = l1CaloTPemu_->hcalTPtiming3[HcalTPIt];
+	  hcalTPtiming[3] = l1CaloTPemu_->hcalTPtiming4[HcalTPIt];
+	  hcalTPtiming[4] = l1CaloTPemu_->hcalTPtiming5[HcalTPIt];
+	  hcalTPtiming[5] = l1CaloTPemu_->hcalTPtiming6[HcalTPIt];
+	  hcalTPtiming[6] = l1CaloTPemu_->hcalTPtiming7[HcalTPIt];
+	  double TP_eta;
+	  double TP_phi;
+	  TP_eta = etaVal(tpEtaemu);
+	  TP_phi = phiVal(tpPhiemu);
+	  // eta, ieta, phi, iphi for HCAL TPs (not yet matched to L1 Jets)
+	  if (deltaR(Jet_eta,Jet_phi,TP_eta,TP_phi) > 1 ) continue; // DR between L1 jet and HCAL TP
 	  // loop over HCAL depths for each TP
 	  for (int depthIt = 0; depthIt < nDepth-1; depthIt++){
-
+	    if ( (hcalTPdepth[depthIt] > 3) && (hcalTPtiming[depthIt] > 3) && (abs(tpEtaemu) < 16) ) { // 3 GeV 3ns in HB region                                             
+	      if (jetIt == 0) mult3GeV3nsHB_Jet0 += 1;
+	      if (jetIt == 1) mult3GeV3nsHB_Jet1 += 1;
+	      if (jetIt == 2) mult3GeV3nsHB_Jet2 += 1;
+	      if (jetIt == 3) mult3GeV3nsHB_Jet3 += 1;
+	    } // close HB region loop   
 	  } // closing HCAL depth loop
 	} // closing HCAL TP loop
+	if (jetIt == 0) dt3GeV3nsHBJet1Mult_emu->Fill(mult3GeV3nsHB_Jet0);
+	if (jetIt == 1)	dt3GeV3nsHBJet2Mult_emu->Fill(mult3GeV3nsHB_Jet1);
+	if (jetIt == 2) dt3GeV3nsHBJet3Mult_emu->Fill(mult3GeV3nsHB_Jet2);
+	if (jetIt == 3) dt3GeV3nsHBJet4Mult_emu->Fill(mult3GeV3nsHB_Jet3);
       } // closing L1 Jets loop
       // fill DeltaR histograms for DR between each L1 Jet to understand spatial distribution
       DeltaR_L1Jets_1_2->Fill(deltaR(JetEta1,JetPhi1,JetEta2,JetPhi2));
@@ -774,6 +816,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       DeltaR_L1Jets_3_4->Fill(deltaR(JetEta3,JetPhi3,JetEta4,JetPhi4));
 
       double min_DR_L1_TP = 100;
+      for (int i=0; i<7; i++) { // resetting hcal TP depth and timing before HCAL TP loop
+	hcalTPdepth[i] = {0};
+	hcalTPtiming[i] = {0};
+      }
 
       // HCAL TP loop
       // Used for plots with all HCAL TPs (not matched to L1 jets), and when each HCAL TP is associated to one L1 Jet + apply DR restrictions (in L1 jet loop inside of HCAL TP loop)
@@ -1613,6 +1659,11 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     dt3GeV3nsHBnearJet2Mult_emu->Write();
     dt3GeV3nsHBnearJet3Mult_emu->Write();
     dt3GeV3nsHBnearJet4Mult_emu->Write();
+
+    dt3GeV3nsHBJet1Mult_emu->Write();
+    dt3GeV3nsHBJet2Mult_emu->Write();
+    dt3GeV3nsHBJet3Mult_emu->Write();
+    dt3GeV3nsHBJet4Mult_emu->Write();
     // 2 GeV
     dt2GeV1nsMult_emu->Write();
     dt2GeV2nsMult_emu->Write();
