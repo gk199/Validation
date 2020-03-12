@@ -77,6 +77,7 @@ from L1Trigger.L1TNtuples.customiseL1Ntuple import L1NtupleGEN
 
 #call to customisation function L1NtupleRAWEMU imported from L1Trigger.L1TNtuples.customiseL1Ntuple
 process = L1NtupleRAWEMU(process)
+process = L1NtupleGEN(process) 
 
 # End of customisation functions
 
