@@ -36,7 +36,7 @@
 					 "htSumGlobal", "etSumGlobal"};
    // files for multiplicity overlay plots
    //   std::vector<std::string> mult_filenames = {"rates_new_cond_pl10000_1L1Jet.root", "rates_new_cond_pl1000_1L1Jet.root", "rates_new_cond_pl500_1L1Jet.root", "rates_new_cond_QCD_1L1Jet.root"};
-   std::vector<std::string> mult_filenames = {"rates_new_cond_pl10000_4L1Jets.root", "rates_new_cond_pl1000_4L1Jets.root", "rates_new_cond_pl500_4L1Jets.root", "rates_new_cond_QCD_4L1Jets.root"};
+   std::vector<std::string> mult_filenames = {"rates_new_cond_pl500_noPU_4L1Jets.root", "rates_new_cond_pl1000_4L1Jets.root", "rates_new_cond_pl500_4L1Jets.root", "rates_new_cond_QCD_4L1Jets.root"};
    // these are multiplicity files (used for timescan and overlay plots) as well as ratio type plts
    std::vector<std::string> multTypes = {//"dt3GeV1ns","dt3GeV2ns","dt3GeV3ns","dt3GeV4ns","dt3GeV5ns",
 					 //					 "dt3GeV1nsHE","dt3GeV2nsHE","dt3GeV3nsHE","dt3GeV4nsHE","dt3GeV5nsHE",
@@ -50,7 +50,7 @@
 					 //					 "dt3GeV1nsJet","dt3GeV2nsJet","dt3GeV3nsJet","dt3GeV4nsJet","dt3GeV5nsJet",
 					 //					 "dt3GeV1nsHEJet","dt3GeV2nsHEJet","dt3GeV3nsHEJet","dt3GeV4nsHEJet","dt3GeV5nsHEJet",
 					 "dt3GeV1nsHBJet","dt3GeV2nsHBJet","dt3GeV3nsHBJet","dt3GeV4nsHBJet","dt3GeV5nsHBJet",
-					 "dt3GeV3nsHBnearJet","dt3GeV3nsHBnearJet1","dt3GeV3nsHBnearJet2","dt3GeV3nsHBnearJet3","dt3GeV3nsHBnearJet4",
+					 //					 "dt3GeV3nsHBnearJet","dt3GeV3nsHBnearJet1","dt3GeV3nsHBnearJet2","dt3GeV3nsHBnearJet3","dt3GeV3nsHBnearJet4",
 					 "dt3GeV3nsHBJet1","dt3GeV3nsHBJet2","dt3GeV3nsHBJet3","dt3GeV3nsHBJet4",
 					 //					 "dt2GeV1nsJet","dt2GeV2nsJet","dt2GeV3nsJet","dt2GeV4nsJet","dt2GeV5nsJet",
 					 //					 "dt2GeV1nsHEJet","dt2GeV2nsHEJet","dt2GeV3nsHEJet","dt2GeV4nsHEJet","dt2GeV5nsHEJet",
@@ -70,7 +70,7 @@
   std::map<std::string, int> histColor;
   histColor["singleJet"] = histColor["singleJetGlobal"] = histColor["singleEg"] = histColor["singleTau"] = histColor["etSum"] = histColor["etSumGlobal"] = histColor["metSum"] = histColor["dt3GeV1ns"] = histColor["dt3GeV1nsHE"] =histColor["dt3GeV1nsHB"] = histColor["dt2GeV1ns"] = histColor["dt2GeV1nsHE"] = histColor["dt2GeV1nsHB"] = histColor["dt1GeV1ns"] = histColor["dt1GeV1nsHE"] = histColor["dt1GeV1nsHB"] = histColor["dt3GeV1nsJet"] = histColor["dt3GeV1nsHEJet"] =histColor["dt3GeV1nsHBJet"] = histColor["dt2GeV1nsJet"] = histColor["dt2GeV1nsHEJet"] = histColor["dt2GeV1nsHBJet"] = histColor["dt1GeV1nsJet"] = histColor["dt1GeV1nsHEJet"] = histColor["dt1GeV1nsHBJet"] = kRed;
   histColor["doubleJet"] = histColor["doubleJetGlobal"] = histColor["singleISOEg"] = histColor["singleISOTau"] = histColor["htSum"] = histColor["htSumGlobal"] = histColor["metHFSum"] = histColor["dt3GeV2ns"] = histColor["dt3GeV2nsHE"] = histColor["dt3GeV2nsHB"] = histColor["dt2GeV2ns"] = histColor["dt2GeV2nsHE"] = histColor["dt2GeV2nsHB"] = histColor["dt1GeV2ns"] = histColor["dt1GeV2nsHE"] = histColor["dt1GeV2nsHB"] = histColor["dt3GeV2nsJet"] = histColor["dt3GeV2nsHEJet"] = histColor["dt3GeV2nsHBJet"] = histColor["dt2GeV2nsJet"] = histColor["dt2GeV2nsHEJet"] = histColor["dt2GeV2nsHBJet"] = histColor["dt1GeV2nsJet"] = histColor["dt1GeV2nsHEJet"] = histColor["dt1GeV2nsHBJet"] = kBlue;
-  histColor["tripleJet"] = histColor["tripleJetGlobal"] = histColor["doubleEg"] = histColor["doubleTau"] = histColor["dt3GeV3ns"] = histColor["dt3GeV3nsHE"] = histColor["dt3GeV3nsHB"] = histColor["dt2GeV3ns"] = histColor["dt1GeV3ns"] =histColor["dt2GeV3nsHE"] = histColor["dt1GeV3nsHE"] = histColor["dt2GeV3nsHB"] = histColor["dt1GeV3nsHB"] = histColor["dt3GeV3nsJet"] = histColor["dt3GeV3nsHEJet"] = histColor["dt3GeV3nsHBJet"] = histColor["dt3GeV3nsHBnearJet"] = histColor["dt3GeV3nsHBnearJet1"] = histColor["dt3GeV3nsHBnearJet2"]= histColor["dt3GeV3nsHBnearJet3"] = histColor["dt3GeV3nsHBnearJet4"] = histColor["dt3GeV3nsHBJet1"] = histColor["dt3GeV3nsHBJet2"]= histColor["dt3GeV3nsHBJet3"] = histColor["dt3GeV3nsHBJet4"] = histColor["dt2GeV3nsJet"] = histColor["dt1GeV3nsJet"] =histColor["dt2GeV3nsHEJet"] = histColor["dt1GeV3nsHEJet"] = histColor["dt2GeV3nsHBJet"] = histColor["dt1GeV3nsHBJet"]  = kGreen+1;
+  histColor["tripleJet"] = histColor["tripleJetGlobal"] = histColor["doubleEg"] = histColor["doubleTau"] = histColor["dt3GeV3ns"] = histColor["dt3GeV3nsHE"] = histColor["dt3GeV3nsHB"] = histColor["dt2GeV3ns"] = histColor["dt1GeV3ns"] =histColor["dt2GeV3nsHE"] = histColor["dt1GeV3nsHE"] = histColor["dt2GeV3nsHB"] = histColor["dt1GeV3nsHB"] = histColor["dt3GeV3nsJet"] = histColor["dt3GeV3nsHEJet"] = histColor["dt3GeV3nsHBJet"] = histColor["dt3GeV3nsHBJet1"] = histColor["dt3GeV3nsHBJet2"]= histColor["dt3GeV3nsHBJet3"] = histColor["dt3GeV3nsHBJet4"] = histColor["dt2GeV3nsJet"] = histColor["dt1GeV3nsJet"] =histColor["dt2GeV3nsHEJet"] = histColor["dt1GeV3nsHEJet"] = histColor["dt2GeV3nsHBJet"] = histColor["dt1GeV3nsHBJet"]  = kGreen+1;
   histColor["quadJet"] = histColor["quadJetGlobal"] = histColor["doubleISOEg"] = histColor["doubleISOTau"] = histColor["dt3GeV4ns"] = histColor["dt3GeV4nsHE"] = histColor["dt3GeV4nsHB"] = histColor["dt2GeV4ns"] = histColor["dt1GeV4ns"] = histColor["dt2GeV4nsHE"] = histColor["dt1GeV4nsHE"] = histColor["dt2GeV4nsHB"] = histColor["dt1GeV4nsHB"] = histColor["dt3GeV4nsJet"] = histColor["dt3GeV4nsHEJet"] = histColor["dt3GeV4nsHBJet"] = histColor["dt2GeV4nsJet"] = histColor["dt1GeV4nsJet"] = histColor["dt2GeV4nsHEJet"] = histColor["dt1GeV4nsHEJet"] = histColor["dt2GeV4nsHBJet"] = histColor["dt1GeV4nsHBJet"] = kBlack;
   histColor["dt3GeV5ns"] = histColor["dt3GeV5nsHE"] = histColor["dt3GeV5nsHB"] = histColor["dt2GeV5ns"] = histColor["dt1GeV5ns"]  = histColor["dt2GeV5nsHE"] = histColor["dt1GeV5nsHE"] = histColor["dt2GeV5nsHB"] = histColor["dt1GeV5nsHB"] = histColor["dt3GeV5nsJet"] = histColor["dt3GeV5nsHEJet"] = histColor["dt3GeV5nsHBJet"] = histColor["dt2GeV5nsJet"] = histColor["dt1GeV5nsJet"]  = histColor["dt2GeV5nsHEJet"] = histColor["dt1GeV5nsHEJet"] = histColor["dt2GeV5nsHBJet"] = histColor["dt1GeV5nsHBJet"] = kCyan;
 
@@ -228,7 +228,7 @@
   //  std::vector<std::string> multPlots3GeV_Jet = {"dt3GeV5nsJet","dt3GeV4nsJet","dt3GeV3nsJet","dt3GeV2nsJet","dt3GeV1nsJet"};
   //  std::vector<std::string> multPlots3GeVHE_Jet = {"dt3GeV5nsHEJet","dt3GeV4nsHEJet","dt3GeV3nsHEJet","dt3GeV2nsHEJet","dt3GeV1nsHEJet"};
   std::vector<std::string> multPlots3GeVHB_Jet = {"dt3GeV5nsHBJet","dt3GeV4nsHBJet","dt3GeV3nsHBJet","dt3GeV2nsHBJet","dt3GeV1nsHBJet"};
-  std::vector<std::string> multPlots3GeVHB_Jet_near = {"dt3GeV3nsHBnearJet","dt3GeV3nsHBnearJet1","dt3GeV3nsHBnearJet2","dt3GeV3nsHBnearJet3","dt3GeV3nsHBnearJet4"}; // from associating HCAL TPs to one of four L1 jets and then DR restrictions
+  //  std::vector<std::string> multPlots3GeVHB_Jet_near = {"dt3GeV3nsHBnearJet","dt3GeV3nsHBnearJet1","dt3GeV3nsHBnearJet2","dt3GeV3nsHBnearJet3","dt3GeV3nsHBnearJet4"}; // from associating HCAL TPs to one of four L1 jets and then DR restrictions
   std::vector<std::string> multPlots3GeVHB_Jet_L1DRcone = {"dt3GeV3nsHBJet1","dt3GeV3nsHBJet2","dt3GeV3nsHBJet3","dt3GeV3nsHBJet4"}; // just DR restrictions around a L1 jet
   //  std::vector<std::string> multPlots2GeV_Jet = {"dt2GeV5nsJet","dt2GeV4nsJet","dt2GeV3nsJet","dt2GeV2nsJet","dt2GeV1nsJet"};
   //  std::vector<std::string> multPlots2GeVHE_Jet = {"dt2GeV5nsHEJet","dt2GeV4nsHEJet","dt2GeV3nsHEJet","dt2GeV2nsHEJet","dt2GeV1nsHEJet"};
@@ -262,7 +262,7 @@
   //  mult_plots["3GeV_timescan_Jet"] = multPlots3GeV_Jet;
   //  mult_plots["3GeV_timescanHE_Jet"] = multPlots3GeVHE_Jet;
   mult_plots["3GeV_timescanHB_Jet"]= multPlots3GeVHB_Jet;
-  mult_plots["3GeV_timescanHB_Jet_near"]= multPlots3GeVHB_Jet_near;
+  //  mult_plots["3GeV_timescanHB_Jet_near"]= multPlots3GeVHB_Jet_near;
   mult_plots["multPlots3GeVHB_Jet_L1DRcone"]= multPlots3GeVHB_Jet_L1DRcone;
   //  mult_plots["2GeV_timescan"] = multPlots2GeV_Jet;
   //  mult_plots["2GeV_timescanHE_Jet"] = multPlots2GeVHE_Jet;
@@ -539,13 +539,13 @@
       yMax = multHists_QCD[hist]->GetMaximum();
       multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,4.5*yMax);
       if (name(11,8) == "nearJet1" ) multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1.8*yMax);
-      if (name(11,4) == "Jet1" ) multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1.8*yMax); // 3.5*
+      if (name(11,4) == "Jet1" ) multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,2*yMax); // 3.5*
       if (name(11,8) == "nearJet2" ) multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1.6*yMax);
-      if (name(11,4) == "Jet2" ) multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1.7*yMax); // 3.3*
+      if (name(11,4) == "Jet2" ) multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,2*yMax); // 3.3*
       if (name(11,8) == "nearJet3" ) multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1.4*yMax);
-      if (name(11,4) == "Jet3" ) multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1.5*yMax); // 3*
+      if (name(11,4) == "Jet3" ) multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,2*yMax); // 3*
       if (name(11,8) == "nearJet4" ) multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1.2*yMax);
-      if (name(11,4) == "Jet4" ) multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1.3*yMax); // 1.5*
+      if (name(11,4) == "Jet4" ) multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1.5*yMax); // 1.5*
     }
     multHists_QCD[hist]->SetFillStyle(3005); // this is the grey shading on QCD plots
     multHists_QCD[hist]->Draw("hist pfc");
@@ -554,12 +554,12 @@
     multHists_LLP500[hist]->Draw("hist same");
     multHists_LLP1000[hist]->SetLineColor(kGreen+1);
     multHists_LLP1000[hist]->Draw("hist same");
-    //    multHists_LLP10000[hist]->SetLineColor(kRed); // not using LLP with ctau = 10m, very far out
-    //    multHists_LLP10000[hist]->Draw("hist same");
+    multHists_LLP10000[hist]->SetLineColor(kRed); // not using LLP with ctau = 10m, very far out
+    multHists_LLP10000[hist]->Draw("hist same");
     leg->AddEntry(multHists_QCD[hist],"QCD", "F");
     leg->AddEntry(multHists_LLP500[hist],"LLP, c#scale[1.2]{#tau}=0.5m", "L");
     leg->AddEntry(multHists_LLP1000[hist], "LLP, c#scale[1.2]{#tau}=1m", "L");
-    //    leg->AddEntry(multHists_LLP10000[hist], "LLP, c#scale[1.2]{#tau}=10m", "L");
+    leg->AddEntry(multHists_LLP10000[hist], "LLP, c#scale[1.2]{#tau}=0.5m, noPU", "L");
     multHists_QCD[hist]->GetYaxis()->CenterTitle(true);
     multHists_QCD[hist]->SetTitle("Multiplicity at " + name(2,4) + " and " + name(6,3)+", TP matched w/" + name (9,3)); // general name "mult at 3 GeV and 1 ns, TP matched w/jet"
     if (name(9,3) != "Jet" ) multHists_QCD[hist]->SetTitle("Multiplicity at " + name(2,4) + " and " + name(6,3)); // "mult at 3 GeV and 1 ns"
@@ -642,11 +642,11 @@
     TH1D *energy_profile_LLP10000 = energy_depth_LLP10000[hist]->ProfileX("LLP10000");
     energy_profile_LLP10000->SetLineColor(kRed);
     energy_profile_LLP10000->SetDirectory(0);
-    //    energy_profile_LLP10000->Draw("ehist same");
+    energy_profile_LLP10000->Draw("ehist same");
     leg->AddEntry(energy_profile_QCD,"QCD","L");
     leg->AddEntry(energy_profile_LLP500,"LLP, c#scale[1.2]{#tau}=0.5m", "L");
     leg->AddEntry(energy_profile_LLP1000, "LLP, c#scale[1.2]{#tau}=1m", "L");
-    //    leg->AddEntry(energy_profile_LLP10000, "LLP, c#scale[1.2]{#tau}=10m", "L");
+    leg->AddEntry(energy_profile_LLP10000, "LLP, c#scale[1.2]{#tau}=0.5m, noPU", "L");
     energy_profile_QCD->GetXaxis()->SetLabelSize(0.03);
     energy_profile_QCD->GetYaxis()->SetLabelSize(0.03);
     energy_profile_QCD->GetXaxis()->SetTitleSize(0.04);
