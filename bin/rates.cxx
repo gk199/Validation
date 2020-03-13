@@ -516,11 +516,19 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F * Ratio_DepthHE_Jets = new TH1F("Ratio_DepthHE_Jets", "Ratio of First 2 HCAL Layers to E_{T} in HE, matched w/Jets;Ratio;Number of Events", 50,0,1);
   TH1F * Ratio_DepthHB_Jets = new TH1F("Ratio_DepthHB_Jets", "Ratio of First 2 HCAL Layers to E_{T} in HB, matched w/Jets;Ratio;Number of Events", 50,0,1);
   // delta R plot for HCAL TP max energy near L1 jet
-  TH1F * DeltaR_TP_4L1Jets = new TH1F("DeltaR_TP_4L1Jets", "DeltaR Between Leading L1 Jet and Closest HCAL TP; DeltaR;Number of Events",20,0,0.5); // earlier binning was 20
-  TH1F * DeltaR_TP_L1Jet_1 = new TH1F("DeltaR_TP_L1Jet_1", "DeltaR Between First L1 Jet and HCAL TPs; DeltaR;Number of Events",50,0,5);
-  TH1F * DeltaR_TP_L1Jet_2 = new TH1F("DeltaR_TP_L1Jet_2", "DeltaR Between Second L1 Jet and HCAL TPs; DeltaR;Number of Events",50,0,5);
-  TH1F * DeltaR_TP_L1Jet_3 = new TH1F("DeltaR_TP_L1Jet_3", "DeltaR Between Third L1 Jet and HCAL TPs; DeltaR;Number of Events",50,0,5);
-  TH1F * DeltaR_TP_L1Jet_4 = new TH1F("DeltaR_TP_L1Jet_4", "DeltaR Between Fourth L1 Jet and HCAL TPs; DeltaR;Number of Events",50,0,5);
+  TH1F * DeltaR_TP_L1Jet_1 = new TH1F("DeltaR_TP_L1Jet_1", "DeltaR Between First L1 Jet and Closest HCAL TP; DeltaR;Number of Events",50,0,0.5);
+  TH1F * DeltaR_TP_L1Jet_2 = new TH1F("DeltaR_TP_L1Jet_2", "DeltaR Between Second L1 Jet and Closest HCAL TP; DeltaR;Number of Events",50,0,0.5);
+  TH1F * DeltaR_TP_L1Jet_3 = new TH1F("DeltaR_TP_L1Jet_3", "DeltaR Between Third L1 Jet and Closest HCAL TP; DeltaR;Number of Events",50,0,0.5);
+  TH1F * DeltaR_TP_L1Jet_4 = new TH1F("DeltaR_TP_L1Jet_4", "DeltaR Between Fourth L1 Jet and Closest HCAL TP; DeltaR;Number of Events",50,0,0.5);
+  TH1F * DeltaR_TPall_L1Jet_1 = new TH1F("DeltaR_TPall_L1Jet_1", "DeltaR Between First L1 Jet and All HCAL TPs; DeltaR;Number of Events",50,0,5);
+  TH1F * DeltaR_TPall_L1Jet_2 = new TH1F("DeltaR_TPall_L1Jet_2", "DeltaR Between Second L1 Jet and All HCAL TPs; DeltaR;Number of Events",50,0,5);
+  TH1F * DeltaR_TPall_L1Jet_3 = new TH1F("DeltaR_TPall_L1Jet_3", "DeltaR Between Third L1 Jet and All HCAL TPs; DeltaR;Number of Events",50,0,5);
+  TH1F * DeltaR_TPall_L1Jet_4 = new TH1F("DeltaR_TPall_L1Jet_4", "DeltaR Between Fourth L1 Jet and All HCAL TPs; DeltaR;Number of Events",50,0,5);
+  TH1F * DeltaR_TPet_L1Jet_1 = new TH1F("DeltaR_TPet_L1Jet_1", "DeltaR Between First L1 Jet and HCAL TPs above energy, time cuts; DeltaR;Number of Events",50,0,5);
+  TH1F * DeltaR_TPet_L1Jet_2 = new TH1F("DeltaR_TPet_L1Jet_2", "DeltaR Between Second L1 Jet and HCAL TPs above energy, time cuts; DeltaR;Number of Events",50,0,5);
+  TH1F * DeltaR_TPet_L1Jet_3 = new TH1F("DeltaR_TPet_L1Jet_3", "DeltaR Between Third L1 Jet and HCAL TPs above energy, time cuts; DeltaR;Number of Events",50,0,5);
+  TH1F * DeltaR_TPet_L1Jet_4 = new TH1F("DeltaR_TPet_L1Jet_4", "DeltaR Between Fourth L1 Jet and HCAL TPs above energy, time cuts; DeltaR;Number of Events",50,0,5);
+  // delta R plots between each L1 jet
   TH1F * DeltaR_L1Jets_1_2 = new TH1F("DeltaR_L1Jets_1_2", "DeltaR Between 1st and 2nd L1 Jets;DeltaR;Number of Events",90,0,6);
   TH1F * DeltaR_L1Jets_1_3 = new TH1F("DeltaR_L1Jets_1_3", "DeltaR Between 1st and 3rd L1 Jets;DeltaR;Number of Events",90,0,6);
   TH1F * DeltaR_L1Jets_1_4 = new TH1F("DeltaR_L1Jets_1_4", "DeltaR Between 1st and 4th L1 Jets;DeltaR;Number of Events",90,0,6);
@@ -555,6 +563,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   // change these variables to change the multiplicity thresholds that are set
   uint GeV3ns3Global_threshold = 3;
   uint GeV3ns3Jet_threshold = 3;
+  double DR_threshold = 0.5;
 
   /////////////////////////////////
   // loop through all the entries//
@@ -748,7 +757,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
           JetPhi4= Jet_phi;
 	}
 
-	if(jentry == 2) { // eta phi position of 4 L1 jets
+	if(jentry == 1) { // eta phi position of 4 L1 jets
 	  if (l1emu_->jetEt[jetIt] < 20) continue; // only consider jets that are greater than 20 GeV
 	  etaphiJet->SetMarkerColor(2); // red marker color for jets
 	  etaphiJet->SetPoint(jetIt,Jet_eta,Jet_phi);
@@ -787,8 +796,20 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	  TP_phi = phiVal(tpPhiemu);
 	  // minimum deltaR between HCAL TP and each L1 jet
 	  if (deltaR(Jet_eta,Jet_phi,TP_eta,TP_phi) < min_DeltaR ) min_DeltaR = deltaR(Jet_eta,Jet_phi,TP_eta,TP_phi);
+	  // fill DR plots between each L1 jet and every HCAL TP
+	  if (jetIt == 0) DeltaR_TPall_L1Jet_1->Fill(deltaR(Jet_eta,Jet_phi,TP_eta,TP_phi));
+	  if (jetIt == 1) DeltaR_TPall_L1Jet_2->Fill(deltaR(Jet_eta,Jet_phi,TP_eta,TP_phi));
+	  if (jetIt == 2) DeltaR_TPall_L1Jet_3->Fill(deltaR(Jet_eta,Jet_phi,TP_eta,TP_phi));
+	  if (jetIt == 3) DeltaR_TPall_L1Jet_4->Fill(deltaR(Jet_eta,Jet_phi,TP_eta,TP_phi));
+	  // fill DR plots between each L1 jet and HCAL TPs with at least one layer above energy and timing cuts
+	  if ( (hcalTPtiming[0]>3 && hcalTPdepth[0]>3) || (hcalTPtiming[1]>3 && hcalTPdepth[1]>3) || (hcalTPtiming[2]>3 && hcalTPdepth[2]>3) || (hcalTPtiming[3]>3 && hcalTPdepth[3]>3) || (hcalTPtiming[4]>3 && hcalTPdepth[4]>3) || (hcalTPtiming[5]>3 && hcalTPdepth[5]>3) || (hcalTPtiming[6]>3 && hcalTPdepth[6]>3) ) {
+	    if (jetIt == 0) DeltaR_TPet_L1Jet_1->Fill(deltaR(Jet_eta,Jet_phi,TP_eta,TP_phi));
+	    if (jetIt == 1) DeltaR_TPet_L1Jet_2->Fill(deltaR(Jet_eta,Jet_phi,TP_eta,TP_phi));
+	    if (jetIt == 2) DeltaR_TPet_L1Jet_3->Fill(deltaR(Jet_eta,Jet_phi,TP_eta,TP_phi));
+	    if (jetIt == 3) DeltaR_TPet_L1Jet_4->Fill(deltaR(Jet_eta,Jet_phi,TP_eta,TP_phi));
+	  }
 
-	  if (deltaR(Jet_eta,Jet_phi,TP_eta,TP_phi) > 0.6 ) continue; // DR between L1 jet and HCAL TP for the matching in a DR cone
+	  if (deltaR(Jet_eta,Jet_phi,TP_eta,TP_phi) > DR_threshold ) continue; // DR between L1 jet and HCAL TP for the matching in a DR cone
 
 	  // Ratio of energy in first two HCAL layers to all HCAL layers. Only consider for high energy TPs > 10 GeV
 	  if ( tpEtemu > 10 ) {
@@ -911,7 +932,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	  } // closing HCAL depth loop
 	} // closing HCAL TP loop
 	// minimum DeltaR between L1 jet and HCAL TP on a per event basis
-	if (jetIt == 0) DeltaR_TP_4L1Jets->Fill(min_DeltaR); // min deltaR between leading L1 jet and HCAL TPs                                                                                                
 	if (jetIt == 0) DeltaR_TP_L1Jet_1->Fill(min_DeltaR); // (deltaR(Jet_eta,Jet_phi,TP_eta,TP_phi)); // (min_DeltaR);
 	if (jetIt == 1) DeltaR_TP_L1Jet_2->Fill(min_DeltaR); // (deltaR(Jet_eta,Jet_phi,TP_eta,TP_phi)); // (min_DeltaR);
 	if (jetIt == 2) DeltaR_TP_L1Jet_3->Fill(min_DeltaR); // (deltaR(Jet_eta,Jet_phi,TP_eta,TP_phi)); // (min_DeltaR);                
@@ -1097,7 +1117,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	HCALTPiEta->Fill(tpEtaemu);
 	HCALTPPhi->Fill(TP_phi);
 	HCALTPiPhi->Fill(tpPhiemu);
-	if(jentry == 2) { // eta phi positions for HCAL TPs
+	if(jentry == 1) { // eta phi positions for HCAL TPs
 	  etaphiTP->SetMarkerColor(4); // blue marker color for HCAL TPs
 	  etaphiTP->SetPoint(HcalTPIt+4,TP_eta,TP_phi);
 	}
@@ -1745,11 +1765,18 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     Ratio_DepthHE_Jets->Write();
     Ratio_DepthHB_Jets->Write();
 
-    DeltaR_TP_4L1Jets->Write();
     DeltaR_TP_L1Jet_1->Write();
     DeltaR_TP_L1Jet_2->Write();
     DeltaR_TP_L1Jet_3->Write();
     DeltaR_TP_L1Jet_4->Write();
+    DeltaR_TPall_L1Jet_1->Write();
+    DeltaR_TPall_L1Jet_2->Write();
+    DeltaR_TPall_L1Jet_3->Write();
+    DeltaR_TPall_L1Jet_4->Write();
+    DeltaR_TPet_L1Jet_1->Write();
+    DeltaR_TPet_L1Jet_2->Write();
+    DeltaR_TPet_L1Jet_3->Write();
+    DeltaR_TPet_L1Jet_4->Write();
     DeltaR_L1Jets_1_2->Write();
     DeltaR_L1Jets_1_3->Write();
     DeltaR_L1Jets_1_4->Write();
@@ -1777,11 +1804,11 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     HCALTPiPhi->Write();
 
     etaphiJet->GetYaxis()->SetRangeUser(-3.5,3.5);
-    etaphiJet->GetXaxis()->SetRangeUser(-3.5,3.5);
+    etaphiJet->GetXaxis()->SetLimits(-3.5,3.5);
     etaphiJet->Draw("AP*");
     etaphiJet->Write();
     etaphiTP->GetYaxis()->SetRangeUser(-3.5,3.5);
-    etaphiTP->GetXaxis()->SetRangeUser(-3.5,3.5);
+    etaphiTP->GetXaxis()->SetLimits(-3.5,3.5);
     etaphiTP->Draw("AP*");
     etaphiTP->Write();
   }
