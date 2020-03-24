@@ -19,7 +19,7 @@
 #include "L1Trigger/L1TNtuples/interface/L1AnalysisRecoVertexDataFormat.h"
 #include "L1Trigger/L1TNtuples/interface/L1AnalysisCaloTPDataFormat.h"
 #include "L1Trigger/L1TNtuples/interface/L1AnalysisL1CaloTowerDataFormat.h"
-#include "L1Trigger/L1TNtuples/interface/L1AnalysisCaloTPDataFormat.h"
+#include "L1Trigger/L1TNtuples/interface/L1AnalysisGeneratorDataFormat.h"
 
 
 /* TODO: put errors in rates...
@@ -170,8 +170,14 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   if (emuOn){
     treeL1CaloTPemu->Add(inputFile.c_str());
   }
+  TChain * treeL1CaloTPhw = new TChain("l1CaloTowerTree/L1CaloTowerTree");
+  if (hwOn){
+    treeL1CaloTPhw->Add(inputFile.c_str());
+  }
   TChain * eventTree = new TChain("l1EventTree/L1EventTree");
   eventTree->Add(inputFile.c_str());
+  TChain * genTree = new TChain("l1GeneratorTree/L1GenTree");
+  genTree->Add(inputFile.c_str());
 
   // In case you want to include PU info
   // TChain * vtxTree = new TChain("l1RecoTree/RecoTree");
@@ -179,15 +185,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   //   vtxTree->Add(inputFile.c_str());
   // }
 
-  TChain * treeL1TPemu = new TChain("l1CaloTowerEmuTree/L1CaloTowerTree");
-  if (emuOn){
-    treeL1TPemu->Add(inputFile.c_str());
-  }
-
-  TChain * treeL1TPhw = new TChain("l1CaloTowerTree/L1CaloTowerTree");
-  if (hwOn){
-    treeL1TPhw->Add(inputFile.c_str());
-  }
 
   L1Analysis::L1AnalysisL1UpgradeDataFormat    *l1emu_ = new L1Analysis::L1AnalysisL1UpgradeDataFormat();
   treeL1emu->SetBranchAddress("L1Upgrade", &l1emu_);
@@ -199,14 +196,12 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   treeL1CaloTPemu->SetBranchAddress("CaloTP", &l1CaloTPemu_);
   L1Analysis::L1AnalysisEventDataFormat    *event_ = new L1Analysis::L1AnalysisEventDataFormat();
   eventTree->SetBranchAddress("Event", &event_);
+  L1Analysis::L1AnalysisCaloTPDataFormat    *l1CaloTPhw_ = new L1Analysis::L1AnalysisCaloTPDataFormat();
+  treeL1CaloTPhw->SetBranchAddress("CaloTP", &l1CaloTPhw_);
+  L1Analysis::L1AnalysisGeneratorDataFormat    *generator_ = new L1Analysis::L1AnalysisGeneratorDataFormat();
+  genTree->SetBranchAddress("Generator", &generator_);
   // L1Analysis::L1AnalysisRecoVertexDataFormat    *vtx_ = new L1Analysis::L1AnalysisRecoVertexDataFormat();
   // vtxTree->SetBranchAddress("Vertex", &vtx_);
-
-  L1Analysis::L1AnalysisCaloTPDataFormat    *l1TPemu_ = new L1Analysis::L1AnalysisCaloTPDataFormat();
-  treeL1TPemu->SetBranchAddress("CaloTP", &l1TPemu_);
-  L1Analysis::L1AnalysisCaloTPDataFormat    *l1TPhw_ = new L1Analysis::L1AnalysisCaloTPDataFormat();
-  treeL1TPhw->SetBranchAddress("CaloTP", &l1TPhw_);
-
 
   // get number of entries
   Long64_t nentries;
@@ -554,8 +549,22 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F * HCALTPPhi = new TH1F("HCALTPPhi", "Phi position of HCALTP;Phi;Number of Events",77,-3.32,3.32);
   TH1F * HCALTPiPhi = new TH1F("HCALTPiPhi", "iPhi position of HCALTP;iPhi;Number of Events",74,-1,73);
 
+  // TGraph for eta phi of HCAL TPs and L1 jets
   TGraph * etaphiTP = new TGraph();
   TGraph * etaphiJet = new TGraph();
+  
+  // Create a TTree Object so multiplicities can be sent to TMVA analyzer
+  TTree *tree = new TTree("MultForTMVA","MultForTMVA");
+  //  Double_t mult3GeV3nsHB_Jets(0);
+  //  Int_t event;
+  Float_t mult_Jet1, mult_Global, ET_Jet1(0);
+  Int_t event;
+  tree->Branch("mult_Jet1",&mult_Jet1,"mult_Jet1/F");
+  tree->Branch("mult_Global",&mult_Global,"mult_Global/F");
+  tree->Branch("ET_Jet1",&ET_Jet1,"ET_Jet1/F");
+  tree->Branch("event",&event,"event/I");
+  //  tree->Branch("EventBranch", "Event", &event);
+  //  tree->Branch("LocalMultBranch", "LocalMult", &mult3GeV3nsHB_Jets);
 
   // counting LLP efficiencies
   double totalJets(0), passedMultJets(0);
@@ -580,17 +589,16 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     //do routine for L1 emulator quantites
     if (emuOn){
 
-      treeL1TPemu->GetEntry(jentry);
       treeL1Towemu->GetEntry(jentry);
       treeL1CaloTPemu->GetEntry(jentry);
       double tpEt(0.);
       
-      for(int i=0; i < l1TPemu_->nHCALTP; i++){
-	tpEt = l1TPemu_->hcalTPet[i];
+      for(int i=0; i < l1CaloTPemu_->nHCALTP; i++){
+	tpEt = l1CaloTPemu_->hcalTPet[i];
 	hcalTP_emu->Fill(tpEt);
       }
-      for(int i=0; i < l1TPemu_->nECALTP; i++){
-	tpEt = l1TPemu_->ecalTPet[i];
+      for(int i=0; i < l1CaloTPemu_->nECALTP; i++){
+	tpEt = l1CaloTPemu_->ecalTPet[i];
 	ecalTP_emu->Fill(tpEt);
       }
 
@@ -713,10 +721,12 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       double JetEta1(0), JetEta2(0), JetEta3(0), JetEta4(0);
       double JetPhi1(0), JetPhi2(0), JetPhi3(0), JetPhi4(0);
 
+
       // loop over L1 jets, and only do first four (4 highest energy L1 jets from 4 leptons)
       for(uint jetIt=0; jetIt < nJetemu && jetIt < 4; jetIt++){
 	hJetEt->Fill(l1emu_->jetEt[jetIt]); // these are already in order of highest E_T
-	if (jetIt == 0 ) hJetEt_1->Fill(l1emu_->jetEt[jetIt]);
+	if ((jetIt == 0) && (l1emu_->jetEt[jetIt] < 1000) ) ET_Jet1 = l1emu_->jetEt[jetIt];
+        if (jetIt == 0 ) hJetEt_1->Fill(l1emu_->jetEt[jetIt]);
         if (jetIt == 1 ) hJetEt_2->Fill(l1emu_->jetEt[jetIt]);
         if (jetIt == 2 ) hJetEt_3->Fill(l1emu_->jetEt[jetIt]);
         if (jetIt == 3 ) hJetEt_4->Fill(l1emu_->jetEt[jetIt]);
@@ -1241,6 +1251,13 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       dt1GeV4nsHBJetMult_emu->Fill(mult1GeV4nsHB_Jets);
       dt1GeV5nsHBJetMult_emu->Fill(mult1GeV5nsHB_Jets);
 
+      // setting the things for the tree used with TMVA, ET_Jet1 has already been set at the top of the event and jet loop
+      event = jentry;
+      mult_Jet1= mult3GeV3nsHB_Jet0;
+      mult_Global = mult3GeV3nsHB;
+      tree->Fill();
+
+
       // for each bin fill according to whether our object has a larger corresponding energy
       // Global. nJetBins = 400, jetBinWidht = 1 so this is jetLo + 1, jetLo + 2...etc
       for(int bin=0; bin<nJetBins; bin++){
@@ -1314,15 +1331,15 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     //do routine for L1 hardware quantities
     if (hwOn){
 
-      treeL1TPhw->GetEntry(jentry);
+      treeL1CaloTPhw->GetEntry(jentry);
       double tpEt(0.);
       
-      for(int i=0; i < l1TPhw_->nHCALTP; i++){
-	tpEt = l1TPhw_->hcalTPet[i];
+      for(int i=0; i < l1CaloTPhw_->nHCALTP; i++){
+	tpEt = l1CaloTPhw_->hcalTPet[i];
 	hcalTP_hw->Fill(tpEt);
       }
-      for(int i=0; i < l1TPhw_->nECALTP; i++){
-	tpEt = l1TPhw_->ecalTPet[i];
+      for(int i=0; i < l1CaloTPhw_->nECALTP; i++){
+	tpEt = l1CaloTPhw_->ecalTPet[i];
 	ecalTP_hw->Fill(tpEt);
       }
 
@@ -1621,11 +1638,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     dt3GeV3nsHBMult_emu->Write();
     dt3GeV4nsHBMult_emu->Write();
     dt3GeV5nsHBMult_emu->Write();
-
-    dt3GeV3nsHBJet1Mult_emu->Write();
-    dt3GeV3nsHBJet2Mult_emu->Write();
-    dt3GeV3nsHBJet3Mult_emu->Write();
-    dt3GeV3nsHBJet4Mult_emu->Write();
     // 2 GeV
     dt2GeV1nsMult_emu->Write();
     dt2GeV2nsMult_emu->Write();
@@ -1689,6 +1701,12 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     dt3GeV3nsHBJetMult_emu->Write();
     dt3GeV4nsHBJetMult_emu->Write();
     dt3GeV5nsHBJetMult_emu->Write();
+
+    dt3GeV3nsHBJet1Mult_emu->Write();
+    dt3GeV3nsHBJet2Mult_emu->Write();
+    dt3GeV3nsHBJet3Mult_emu->Write();
+    dt3GeV3nsHBJet4Mult_emu->Write();
+
     // 2 GeV
     dt2GeV1nsJetMult_emu->Write();
     dt2GeV2nsJetMult_emu->Write();
@@ -1811,6 +1829,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     etaphiTP->GetXaxis()->SetLimits(-3.5,3.5);
     etaphiTP->Draw("AP*");
     etaphiTP->Write();
+
+    tree->Write();
+    //    treeL1CaloTPemu->Write();
+    //    kk->Write();
   }
 
   if (hwOn){
