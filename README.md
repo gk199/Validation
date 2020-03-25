@@ -41,3 +41,12 @@ If `rates.cxx` is edited (changing multiplicity counting, DR values, energy thre
 ```
 ./RunRates.sh
 ```
+
+## TMVA
+TMVA is the [Toolkit for Multivariate Data Analysis with ROOT](https://root.cern.ch/root/html/guides/tmva/TMVAUsersGuide.pdf) and uses ML techniques to optimize signal and background separation. This is run with `mvaAnalysisTemplate_multiplicity.py' with
+```
+python mvaAnalysisTemplate_multiplicity.py
+root
+TMVA::TMVAGui(output.root)
+```
+Which opens the GUI to see the classifier cut efficiencies. Data from ROOT files is read in to the analysis template with 'background_filename' and 'signal_filename'.
