@@ -591,8 +591,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 
       treeL1Towemu->GetEntry(jentry);
       treeL1CaloTPemu->GetEntry(jentry);
-      double tpEt(0.);
-      
+      treeL1emu->GetEntry(jentry);
+      genTree->GetEntry(jentry); // used for gen particle matching later 
+
+      double tpEt(0.);      
       for(int i=0; i < l1CaloTPemu_->nHCALTP; i++){
 	tpEt = l1CaloTPemu_->hcalTPet[i];
 	hcalTP_emu->Fill(tpEt);
@@ -602,7 +604,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	ecalTP_emu->Fill(tpEt);
       }
 
-      treeL1emu->GetEntry(jentry);
       // get jetEt*, egEt*, tauEt, htSum, mhtSum, etSum, metSum
       // ALL EMU OBJECTS HAVE BX=0...
       double jetEt_1 = 0;
@@ -774,6 +775,20 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	}
 	double min_DeltaR = 100; // used for storing min deltaR value between a L1 jet and a HCAL TP
 	if (l1emu_->jetEt[jetIt] < 20 ) continue; // require jet is greater than 20 GeV to attempt matching to HCAL TP
+
+	// ************ GEN PARTICLE MATCHING CODE ******************                                                                                                                                                         
+	// already got the entries from genTree at start of event loop                                                                                                                                                        
+	for (int partonN = 0; partonN < generator_->nPart; partonN ++) {
+	  if ( (abs(generator_->partId[partonN]) >= 1 && abs(generator_->partId[partonN]) <=5 ) || (abs(generator_->partId[partonN]) == 21) ) { // only consider generator particles that are partons (quarks, gluons) from the LLP decay. Top quark is unstable 
+	    if (abs(generator_->partEta[partonN]) <= 3) { // detector cuts for the HB region                                                                                                                                  
+	      if (generator_->partPt[partonN] > 20 ) { // require parton pT > 20 GeV to be considered for gen matching                                                                                                        
+		std::cout << generator_->partId[partonN] << std::endl;
+	      } // end parton Pt cut loop                                                                                                                                                                                     
+	    } // end HB region loop                                                                                                                                                                                           
+	  } // end loop restricting to quarks or gluons                                                                                                                                                                       
+	} // end parton loop                                                                                                                                                                                                  
+	//	std::cout << jentry << std::endl;
+	//	std::cout << " " << std::endl;
 
 	// multiplicity plots including HCAL TPs in a DeltaR region of the L1 jets
 	// loop over HCAL TPs
