@@ -14,6 +14,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include "TLorentzVector.h"
+#include "Math/LorentzVector.h" 
 #include "L1Trigger/L1TNtuples/interface/L1AnalysisEventDataFormat.h"
 #include "L1Trigger/L1TNtuples/interface/L1AnalysisL1UpgradeDataFormat.h"
 #include "L1Trigger/L1TNtuples/interface/L1AnalysisRecoVertexDataFormat.h"
@@ -21,6 +23,7 @@
 #include "L1Trigger/L1TNtuples/interface/L1AnalysisL1CaloTowerDataFormat.h"
 #include "L1Trigger/L1TNtuples/interface/L1AnalysisGeneratorDataFormat.h"
 
+typedef ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double> > LorentzVector;
 
 /* TODO: put errors in rates...
 creates the the rates and distributions for l1 trigger objects
@@ -120,6 +123,73 @@ double phiVal(int iphi) { // calculate phi given iphi
   if (iphi > 36) phivl -= 2.*TMath::Pi();
   return phivl;
 }
+
+// sorting Lorentz vector
+struct ptsort: public std::binary_function<LorentzVector, LorentzVector, bool> 
+{
+  bool operator () (const LorentzVector & x, const LorentzVector & y) 
+  { return  ( x.pt() > y.pt() ) ; }
+};
+
+// this is a correction function for the eta phi value of the intersection of a particle not resulting from the IP       
+// used since the b quark is matched to the TP based on eta phi, but the b quark results from a LLP decay so has a different vertex 
+// from HcalCompareUpgradeChains intersect function https://github.com/gk199/cms-hcal-debug/blob/PulseShape/plugins/HcalCompareUpgradeChains.cc#L961
+std::vector<double> intersect(double vx, double vy,double vz, double px, double py, double pz) {
+  double lightSpeed = 29979245800;
+  double radius = 179; // 130 for calorimeters (ECAL + HCAL)
+  double length = 388; // 300 for calorimeters (ECAL + HCAL)
+  double energy = sqrt(px*px + py*py + pz*pz);
+  // First work out intersection with cylinder (barrel)        
+  double a = (px*px + py*py)*lightSpeed*lightSpeed/(energy*energy);
+  double b = 2*(vx*px + vy*py)*lightSpeed/energy;
+  double c = (vx*vx + vy*vy) - radius*radius;
+  double sqrt_disc = sqrt(b*b - 4*a*c);
+  double tCircle1 = (-b + sqrt_disc)/(2*a);
+  double tCircle2 = (-b - sqrt_disc)/(2*a);
+  // If intersection in the past it doesn't count         
+  if (tCircle1 < 0) tCircle1 = 1E9;
+  if (tCircle2 < 0) tCircle2 = 1E9;
+  // If the intsersection occurs outside the barrel length it doesn't count                       
+  double zPosCircle1 = tCircle1*(pz/energy)*lightSpeed + vz;
+  double zPosCircle2 = tCircle2*(pz/energy)*lightSpeed + vz;
+  if (zPosCircle1 > length) tCircle1 = 1E9;
+  if (zPosCircle2 > length) tCircle2 = 1E9;
+  // Now work out if it intersects the endcap                      
+  double tPlane1 = (length-vz)*energy/(pz*lightSpeed);
+  double tPlane2 = (-length-vz)*energy/(pz*lightSpeed);
+  // If intersection in the past it doesn't count                     
+  if (tPlane1 < 0) tPlane1 = 1E9;
+  if (tPlane2 < 0) tPlane2 = 1E9;
+  double xPosPlane1 = tPlane1*(px/energy)*lightSpeed + vx;
+  double yPosPlane1 = tPlane1*(py/energy)*lightSpeed + vy;
+  double xPosPlane2 = tPlane2*(px/energy)*lightSpeed + vx;
+  double yPosPlane2 = tPlane2*(py/energy)*lightSpeed + vy;
+  // If the intsersection occurs outside the endcap radius it doesn't count     
+  if (sqrt(xPosPlane1*xPosPlane1 + yPosPlane1*yPosPlane1) > radius) tPlane1 = 1E9;
+  if (sqrt(xPosPlane2*xPosPlane2+yPosPlane2*yPosPlane2) > radius) tPlane2 = 1E9;
+  // Find the first intersection                          
+  double tInter = std::min({tCircle1,tCircle2,tPlane1,tPlane2});
+  // Return 1000,1000 if not intersection with barrel or endcap             
+  std::vector<double> etaphi;
+  if (tInter > 1E6)
+    {
+      etaphi.push_back(1000);
+      etaphi.push_back(1000);
+      return etaphi;
+    }
+  // Find position of intersection                          
+  double xPos = tInter*(px/energy)*lightSpeed + vx;
+  double yPos = tInter*(py/energy)*lightSpeed + vy;
+  double zPos = tInter*(pz/energy)*lightSpeed + vz;
+  // Find eta/phi of intersection                          
+  double phi = atan2(yPos,xPos); // return the arc tan in radians                                                                                                                               
+  double theta = acos(zPos/sqrt(xPos*xPos + yPos*yPos + zPos*zPos));
+  double eta = -log(tan(theta/2.));
+  etaphi.push_back(eta);
+  etaphi.push_back(phi);
+  return etaphi;
+}
+  
 
 /*
 // matching L1 jets with b quark decays from LLP
@@ -776,19 +846,39 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	double min_DeltaR = 100; // used for storing min deltaR value between a L1 jet and a HCAL TP
 	if (l1emu_->jetEt[jetIt] < 20 ) continue; // require jet is greater than 20 GeV to attempt matching to HCAL TP
 
-	// ************ GEN PARTICLE MATCHING CODE ******************                                                                                                                                                         
-	// already got the entries from genTree at start of event loop                                                                                                                                                        
+	// ************* GEN PARTICLE MATCHING CODE ******************                                                         
+	// already got the entries from genTree at start of event loop                  
+	double partonEta = 1000;
+	double partonPhi = 1000;
+	double partonEtaHCAL = 1000;
+	double partonPhiHCAL = 1000;
+	double min_deltaR_partonGen_L1jet = 1000;
+	double deltaR_partonGen_L1jet = 1000;
+	double min_deltaR_partonGenHCAL_L1jet = 1000;
+        double deltaR_partonGenHCAL_L1jet = 1000;
 	for (int partonN = 0; partonN < generator_->nPart; partonN ++) {
+	  if (generator_->partHardProcess[partonN] == 0 ) continue; // require hard process - this is what LLP results from 
 	  if ( (abs(generator_->partId[partonN]) >= 1 && abs(generator_->partId[partonN]) <=5 ) || (abs(generator_->partId[partonN]) == 21) ) { // only consider generator particles that are partons (quarks, gluons) from the LLP decay. Top quark is unstable 
-	    if (abs(generator_->partEta[partonN]) <= 3) { // detector cuts for the HB region                                                                                                                                  
-	      if (generator_->partPt[partonN] > 20 ) { // require parton pT > 20 GeV to be considered for gen matching                                                                                                        
-		std::cout << generator_->partId[partonN] << std::endl;
-	      } // end parton Pt cut loop                                                                                                                                                                                     
-	    } // end HB region loop                                                                                                                                                                                           
-	  } // end loop restricting to quarks or gluons                                                                                                                                                                       
-	} // end parton loop                                                                                                                                                                                                  
-	//	std::cout << jentry << std::endl;
-	//	std::cout << " " << std::endl;
+	    // detector cuts for the HB and HE regions
+	    if ((generator_->partPt[partonN] > 20) && (abs(intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[0]) < 3) ) { // require parton pT > 20 GeV to be considered for gen matching and in the HE HB region
+	      std::cout << generator_->partId[partonN] << std::endl;
+	      partonEta = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[0];
+	      partonPhi = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[1];
+	      // see if LLP decayed in HCAL volume
+	      double radius = sqrt(generator_->partVx[partonN]*generator_->partVx[partonN] + generator_->partVy[partonN]*generator_->partVy[partonN]);
+	      if ( abs(generator_->partVz[partonN]) < 568 && radius < 295 && ( abs(generator_->partVz[partonN]) > 388 || radius > 179 ) ) {
+		partonEtaHCAL = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[0];
+		partonPhiHCAL = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[1];
+	      }
+	    } // end parton Pt cut loop 
+	  } // end loop restricting to quarks or gluons 
+	  // calculate the delta R between the L1 jet and the generator parton that passed all cuts
+	  deltaR_partonGen_L1jet = deltaR(Jet_eta,Jet_phi,partonEta,partonPhi);
+	  if (deltaR_partonGen_L1jet < min_deltaR_partonGen_L1jet ) min_deltaR_partonGen_L1jet = deltaR_partonGen_L1jet; // find the min dR between each L1 jet and the gen partons. Use this for gen matching criterion
+	  deltaR_partonGenHCAL_L1jet = deltaR(Jet_eta,Jet_phi,partonEtaHCAL,partonPhiHCAL);
+          if (deltaR_partonGenHCAL_L1jet < min_deltaR_partonGenHCAL_L1jet ) min_deltaR_partonGenHCAL_L1jet = deltaR_partonGenHCAL_L1jet; // find the min dR between each L1 jet and the gen partons. Use this for gen matching criterion, when LLP decays in HCAL volume
+	} // end parton loop
+
 
 	// multiplicity plots including HCAL TPs in a DeltaR region of the L1 jets
 	// loop over HCAL TPs
