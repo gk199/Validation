@@ -585,6 +585,14 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F * DeltaR_TP_L1Jet_2 = new TH1F("DeltaR_TP_L1Jet_2", "DeltaR Between Second L1 Jet and Closest HCAL TP; DeltaR;Number of Events",50,0,0.5);
   TH1F * DeltaR_TP_L1Jet_3 = new TH1F("DeltaR_TP_L1Jet_3", "DeltaR Between Third L1 Jet and Closest HCAL TP; DeltaR;Number of Events",50,0,0.5);
   TH1F * DeltaR_TP_L1Jet_4 = new TH1F("DeltaR_TP_L1Jet_4", "DeltaR Between Fourth L1 Jet and Closest HCAL TP; DeltaR;Number of Events",50,0,0.5);
+  TH1F * DeltaR_partons_L1Jet_1 = new TH1F("DeltaR_partons_L1Jet_1", "DeltaR Between First L1 Jet and All Partons; DeltaR;Number of Events",50,0,5);
+  TH1F * DeltaR_partons_L1Jet_2 = new TH1F("DeltaR_partons_L1Jet_2", "DeltaR Between Second L1 Jet and All Partons; DeltaR;Number of Events",50,0,5);
+  TH1F * DeltaR_partons_L1Jet_3 = new TH1F("DeltaR_partons_L1Jet_3", "DeltaR Between Third L1 Jet and All Partons; DeltaR;Number of Events",50,0,5);
+  TH1F * DeltaR_partons_L1Jet_4 = new TH1F("DeltaR_partons_L1Jet_4", "DeltaR Between Fourth L1 Jet and All Partons; DeltaR;Number of Events",50,0,5);
+  TH1F * DeltaR_partonsHCAL_L1Jet_1 = new TH1F("DeltaR_partonsHCAL_L1Jet_1", "DeltaR Between First L1 Jet and All Partons with HCAL volume vertex; DeltaR;Number of Events",50,0,5);
+  TH1F * DeltaR_partonsHCAL_L1Jet_2 = new TH1F("DeltaR_partonsHCAL_L1Jet_2", "DeltaR Between Second L1 Jet and All Partons with HCAL volume vertex; DeltaR;Number of Events",50,0,5);
+  TH1F * DeltaR_partonsHCAL_L1Jet_3 = new TH1F("DeltaR_partonsHCAL_L1Jet_3", "DeltaR Between Third L1 Jet and All Partons with HCAL volume vertex; DeltaR;Number of Events",50,0,5);
+  TH1F * DeltaR_partonsHCAL_L1Jet_4 = new TH1F("DeltaR_partonsHCAL_L1Jet_4", "DeltaR Between Fourth L1 Jet and All Partons with HCAL volume vertex; DeltaR;Number of Events",50,0,5);
   TH1F * DeltaR_TPall_L1Jet_1 = new TH1F("DeltaR_TPall_L1Jet_1", "DeltaR Between First L1 Jet and All HCAL TPs; DeltaR;Number of Events",50,0,5);
   TH1F * DeltaR_TPall_L1Jet_2 = new TH1F("DeltaR_TPall_L1Jet_2", "DeltaR Between Second L1 Jet and All HCAL TPs; DeltaR;Number of Events",50,0,5);
   TH1F * DeltaR_TPall_L1Jet_3 = new TH1F("DeltaR_TPall_L1Jet_3", "DeltaR Between Third L1 Jet and All HCAL TPs; DeltaR;Number of Events",50,0,5);
@@ -848,25 +856,29 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 
 	// ************* GEN PARTICLE MATCHING CODE ******************                                                         
 	// already got the entries from genTree at start of event loop                  
-	double partonEta = 1000;
-	double partonPhi = 1000;
-	double partonEtaHCAL = 1000;
-	double partonPhiHCAL = 1000;
 	double min_deltaR_partonGen_L1jet = 1000;
-	double deltaR_partonGen_L1jet = 1000;
-	double min_deltaR_partonGenHCAL_L1jet = 1000;
-        double deltaR_partonGenHCAL_L1jet = 1000;
+	double min_deltaR_partonGenHCAL_L1jet = 1000; // min dR defined per each L1 jet
 	for (int partonN = 0; partonN < generator_->nPart; partonN ++) {
+	  // reset values for eta, phi of partons (w/ and w/o requirement of vertex within HCAL volume), and for dR between parton and L1 jet on a per-parton basis
+	  double partonEta = 1000;
+	  double partonPhi = 1000;
+	  double partonEtaHCAL = 1000;
+	  double partonPhiHCAL = 1000;
+	  double deltaR_partonGen_L1jet = 1000;
+	  double deltaR_partonGenHCAL_L1jet = 1000;
 	  if (generator_->partHardProcess[partonN] == 0 ) continue; // require hard process - this is what LLP results from 
 	  if ( (abs(generator_->partId[partonN]) >= 1 && abs(generator_->partId[partonN]) <=5 ) || (abs(generator_->partId[partonN]) == 21) ) { // only consider generator particles that are partons (quarks, gluons) from the LLP decay. Top quark is unstable 
 	    // detector cuts for the HB and HE regions
 	    if ((generator_->partPt[partonN] > 20) && (abs(intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[0]) < 3) ) { // require parton pT > 20 GeV to be considered for gen matching and in the HE HB region
-	      std::cout << generator_->partId[partonN] << std::endl;
+	      //	      std::cout << generator_->partId[partonN] << std::endl;
 	      partonEta = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[0];
 	      partonPhi = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[1];
 	      // see if LLP decayed in HCAL volume
+	      // requiring quark gen vertex to be in the HCAL volume
+	      // HE region 3.88 - 5.68 m and out to 2.95 m radius
+	      // HB region z below 3.88m, radius 1.79 - 2.95m
 	      double radius = sqrt(generator_->partVx[partonN]*generator_->partVx[partonN] + generator_->partVy[partonN]*generator_->partVy[partonN]);
-	      if ( abs(generator_->partVz[partonN]) < 568 && radius < 295 && ( abs(generator_->partVz[partonN]) > 388 || radius > 179 ) ) {
+	      if ( abs(generator_->partVz[partonN]) < 568 && (radius < 295) && ( (abs(generator_->partVz[partonN]) > 388) || radius > 179 ) ) {
 		partonEtaHCAL = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[0];
 		partonPhiHCAL = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[1];
 	      }
@@ -877,8 +889,19 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	  if (deltaR_partonGen_L1jet < min_deltaR_partonGen_L1jet ) min_deltaR_partonGen_L1jet = deltaR_partonGen_L1jet; // find the min dR between each L1 jet and the gen partons. Use this for gen matching criterion
 	  deltaR_partonGenHCAL_L1jet = deltaR(Jet_eta,Jet_phi,partonEtaHCAL,partonPhiHCAL);
           if (deltaR_partonGenHCAL_L1jet < min_deltaR_partonGenHCAL_L1jet ) min_deltaR_partonGenHCAL_L1jet = deltaR_partonGenHCAL_L1jet; // find the min dR between each L1 jet and the gen partons. Use this for gen matching criterion, when LLP decays in HCAL volume
+
+	  if (jetIt == 0) DeltaR_partons_L1Jet_1->Fill(deltaR_partonGen_L1jet); // deltaR plot of distance between L1 jet 1 and all partons passing cuts
+	  if (jetIt == 1) DeltaR_partons_L1Jet_2->Fill(deltaR_partonGen_L1jet);
+	  if (jetIt == 2) DeltaR_partons_L1Jet_3->Fill(deltaR_partonGen_L1jet);
+	  if (jetIt == 3) DeltaR_partons_L1Jet_4->Fill(deltaR_partonGen_L1jet);
+	  if (jetIt == 0) DeltaR_partonsHCAL_L1Jet_1->Fill(deltaR_partonGenHCAL_L1jet); // deltaR plot of distance between L1 jet 1 and all partons passing cuts that have a vertex in the HCAL volume
+          if (jetIt == 1) DeltaR_partonsHCAL_L1Jet_2->Fill(deltaR_partonGenHCAL_L1jet);
+          if (jetIt == 2) DeltaR_partonsHCAL_L1Jet_3->Fill(deltaR_partonGenHCAL_L1jet);
+          if (jetIt == 3) DeltaR_partonsHCAL_L1Jet_4->Fill(deltaR_partonGenHCAL_L1jet);
 	} // end parton loop
 
+	// DeltaR cut between L1 jet and generator partons -- this is where GEN MATCHING is enforced
+	if (min_deltaR_partonGen_L1jet > 0.3) continue; 
 
 	// multiplicity plots including HCAL TPs in a DeltaR region of the L1 jets
 	// loop over HCAL TPs
@@ -1235,8 +1258,9 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	if(jentry == 1) { // eta phi positions for HCAL TPs
 	  etaphiTP->SetMarkerColor(4); // blue marker color for HCAL TPs
 	  etaphiTP->SetPoint(HcalTPIt+4,TP_eta,TP_phi);
-	}
+       	}
       } // closing HCAL TP loop
+    
 
       totalGlobal += 1;
       totalJets += 1;
@@ -1892,6 +1916,14 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     DeltaR_TP_L1Jet_2->Write();
     DeltaR_TP_L1Jet_3->Write();
     DeltaR_TP_L1Jet_4->Write();
+    DeltaR_partons_L1Jet_1->Write();
+    DeltaR_partons_L1Jet_2->Write();
+    DeltaR_partons_L1Jet_3->Write();
+    DeltaR_partons_L1Jet_4->Write();
+    DeltaR_partonsHCAL_L1Jet_1->Write();
+    DeltaR_partonsHCAL_L1Jet_2->Write();
+    DeltaR_partonsHCAL_L1Jet_3->Write();
+    DeltaR_partonsHCAL_L1Jet_4->Write();
     DeltaR_TPall_L1Jet_1->Write();
     DeltaR_TPall_L1Jet_2->Write();
     DeltaR_TPall_L1Jet_3->Write();
