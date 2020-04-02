@@ -151,7 +151,7 @@
     rateHistsRatio[rateType]->SetMinimum(-0.2);    // -0.5 for singleJet  // previously 0.6
     rateHistsRatio[rateType]->SetMaximum(1.4);    // 80 for singleJet // previously 1.4
     if ((rateType == "singleJet") || (rateType ==  "doubleJet") || (rateType ==  "tripleJet") || (rateType ==  "quadJet")) {
-      rateHistsRatio[rateType]->SetMaximum(0.02);
+      rateHistsRatio[rateType]->SetMaximum(0.2);
       rateHistsRatio[rateType]->SetMinimum(0);
     }
     if ((rateType ==  "htSum") || (rateType ==  "etSum")) {
@@ -322,6 +322,7 @@
     pad1.back()->SetGrid();
     pad1.back()->Draw();
     pad1.back()->cd();
+    multHists_QCD[iplot.second.front()]->Scale(1./multHists_QCD[iplot.second.front()]->Integral());
     multHists_QCD[iplot.second.front()]->Draw("hist");
     TLegend *leg = new TLegend(0.65, 1.1 - 0.1*iplot.second.size(), 0.95, 0.93);
     for (auto hist : iplot.second) { // associative array is list of pairs, access by first entry. Second is actual name / value to access
@@ -336,6 +337,7 @@
       int yMax = 0;
       yMax = multHists_QCD[hist]->GetMaximum();
       multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1.2*yMax);
+      multHists_QCD[hist]->Scale(1./multHists_QCD[hist]->Integral());
       multHists_QCD[hist]->Draw("hist same");
       TString name(multHists_QCD[hist]->GetName());
       leg->AddEntry(multHists_QCD[hist], name(6,3) + " ", "L");
@@ -373,6 +375,7 @@
     pad1.back()->SetGrid();
     pad1.back()->Draw();
     pad1.back()->cd();
+    multHists_LLP10000[iplot.second.front()]->Scale(1./multHists_LLP10000[iplot.second.front()]->Integral());
     multHists_LLP10000[iplot.second.front()]->Draw("hist");
     TLegend *leg = new TLegend(0.65, 1.1 - 0.1*iplot.second.size(), 0.95, 0.93);
     for (auto hist : iplot.second) {
@@ -387,6 +390,7 @@
       int yMax = 0;
       yMax = multHists_LLP10000[hist]->GetMaximum();
       multHists_LLP10000[hist]->GetYaxis()->SetRangeUser(0,1.2*yMax);
+      multHists_LLP10000[hist]->Scale(1./multHists_LLP10000[hist]->Integral());
       multHists_LLP10000[hist]->Draw("hist same");
       TString name(multHists_LLP10000[hist]->GetName());
       leg->AddEntry(multHists_LLP10000[hist], name(6,3) + " ", "L");
@@ -424,6 +428,7 @@
     pad1.back()->SetGrid();
     pad1.back()->Draw();
     pad1.back()->cd();
+    multHists_LLP1000[iplot.second.front()]->Scale(1./multHists_LLP1000[iplot.second.front()]->Integral());
     multHists_LLP1000[iplot.second.front()]->Draw("hist");
     TLegend *leg = new TLegend(0.65, 1.1 - 0.1*iplot.second.size(), 0.95, 0.93);
     for (auto hist : iplot.second) {
@@ -438,6 +443,7 @@
       int yMax = 0;
       yMax = multHists_LLP1000[hist]->GetMaximum();
       multHists_LLP1000[hist]->GetYaxis()->SetRangeUser(0,1.2*yMax);
+      multHists_LLP1000[hist]->Scale(1./multHists_LLP1000[hist]->Integral());
       multHists_LLP1000[hist]->Draw("hist same");
       TString name(multHists_LLP1000[hist]->GetName());
       leg->AddEntry(multHists_LLP1000[hist], name(6,3) + " ", "L");
@@ -475,6 +481,7 @@
     pad1.back()->SetGrid();
     pad1.back()->Draw();
     pad1.back()->cd();
+    multHists_LLP500[iplot.second.front()]->Scale(1./multHists_LLP500[iplot.second.front()]->Integral());
     multHists_LLP500[iplot.second.front()]->Draw("hist");
     TLegend *leg = new TLegend(0.65, 1.1 - 0.1*iplot.second.size(), 0.95, 0.93);
     for (auto hist : iplot.second) {
@@ -489,6 +496,7 @@
       int yMax = 0;
       yMax = multHists_LLP500[hist]->GetMaximum();
       multHists_LLP500[hist]->GetYaxis()->SetRangeUser(0,1.2*yMax);
+      multHists_LLP500[hist]->Scale(1./multHists_LLP500[hist]->Integral());
       multHists_LLP500[hist]->Draw("hist same");
       TString name(multHists_LLP500[hist]->GetName());
       leg->AddEntry(multHists_LLP500[hist], name(6,3) + " ", "L");
@@ -537,24 +545,24 @@
       x2 = 0.95;
       int yMax = 0;
       yMax = multHists_QCD[hist]->GetMaximum();
-      multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,4.5*yMax);
-      if (name(11,8) == "nearJet1" ) multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1.8*yMax);
+      multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,6*yMax);
       if (name(11,4) == "Jet1" ) multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,2*yMax); // 3.5*
-      if (name(11,8) == "nearJet2" ) multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1.6*yMax);
       if (name(11,4) == "Jet2" ) multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,2*yMax); // 3.3*
-      if (name(11,8) == "nearJet3" ) multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1.4*yMax);
       if (name(11,4) == "Jet3" ) multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,2*yMax); // 3*
-      if (name(11,8) == "nearJet4" ) multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1.2*yMax);
       if (name(11,4) == "Jet4" ) multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1.5*yMax); // 1.5*
     }
     multHists_QCD[hist]->SetFillStyle(3005); // this is the grey shading on QCD plots
+    multHists_QCD[hist]->Scale(1./multHists_QCD[hist]->Integral());
     multHists_QCD[hist]->Draw("hist pfc");
     TLegend *leg = new TLegend(x1, 0.6, x2, 0.9);
     multHists_LLP500[hist]->SetLineColor(kBlue);
+    multHists_LLP500[hist]->Scale(1./multHists_LLP500[hist]->Integral());
     multHists_LLP500[hist]->Draw("hist same");
     multHists_LLP1000[hist]->SetLineColor(kGreen+1);
+    multHists_LLP1000[hist]->Scale(1./multHists_LLP1000[hist]->Integral());
     multHists_LLP1000[hist]->Draw("hist same");
     multHists_LLP10000[hist]->SetLineColor(kRed); // not using LLP with ctau = 10m, very far out
+    multHists_LLP10000[hist]->Scale(1./multHists_LLP10000[hist]->Integral());
     multHists_LLP10000[hist]->Draw("hist same");
     leg->AddEntry(multHists_QCD[hist],"QCD", "F");
     leg->AddEntry(multHists_LLP500[hist],"LLP, c#scale[1.2]{#tau}=0.5m", "L");
@@ -569,16 +577,11 @@
       if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,100);
       if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,70);
       if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,50);
-      if ( (name(11,8) == "nearJet1") || (name(11,8) == "nearJet2") || (name(11,8) == "nearJet3") || (name(11,8) == "nearJet4") ) {
-	multHists_QCD[hist]->SetTitle("Multiplicity at " + name(2,4) + " and " + name(6,3) + ", TP closest to L1 Jet #" + name(18,1)); // "mult at 3 GeV and 1 ns, TP closest to L1 jet 1" 
-	multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,25);
-      }
       if ( (name(11,4) == "Jet1") || (name(11,4) == "Jet2") || (name(11,4) == "Jet3") || (name(11,4) == "Jet4") ) {
         multHists_QCD[hist]->SetTitle("Multiplicity at " + name(2,4) + " and " + name(6,3) + ", TP in DR cone of L1 Jet #" + name(14,1)); // "mult at 3 GeV and 1 ns, TP in DR cone of L1 jet 1" 
 	multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,25);
       }
     }
-    //    if ( name(11,3) == "Jet" || name(9,3) == "Jet" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,20); // reduce x axis range for plots where HCAL TP has been matched to L1 Jet
     if ( hist == "centralTiming" ) multHists_QCD[hist]->SetTitle("Time of arrival - TOF (central barrel iEta)");
     if (hist.substr(6,4) == "calo"){ // setting histogram name for calo tower ieta energy scan
       if (hist.substr(10,2) == "T1") multHists_QCD[hist]->SetTitle("Multiplicity of cells above " + name(2,4) + ", CaloTower 1 (iEta 1-4)");
