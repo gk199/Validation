@@ -368,6 +368,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F* metSumRates_emu = new TH1F("metSumRates_emu",axR.c_str(), nMetSumBins, metSumLo, metSumHi); 
   TH1F* metHFSumRates_emu = new TH1F("metHFSumRates_emu",axR.c_str(), nMetHFSumBins, metHFSumLo, metHFSumHi); 
   
+  TH1F* htSumOriginalRates_emu = new TH1F("htSumOriginalRates_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
+
   TH1F* singleJetRates_hw = new TH1F("singleJetRates_hw", axR.c_str(), nJetBins, jetLo, jetHi);
   TH1F* doubleJetRates_hw = new TH1F("doubleJetRates_hw", axR.c_str(), nJetBins, jetLo, jetHi);
   TH1F* tripleJetRates_hw = new TH1F("tripleJetRates_hw", axR.c_str(), nJetBins, jetLo, jetHi);
@@ -443,6 +445,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F * dt3GeV4nsHBJetMult_emu = new TH1F("dt3GeV4nsHBJetMult_emu","Multiplicity of 4ns delayed cells above 3 GeV (HB, match TP with L1Jet);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
   TH1F * dt3GeV5nsHBJetMult_emu = new TH1F("dt3GeV5nsHBJetMult_emu","Multiplicity of 5ns delayed cells above 3 GeV (HB, match TP with L1Jet);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
   // include all HCAL TPs included in DR cone of a L1 jet
+  TH1F * dt3GeV3nsHBQuadJetMult_emu = new TH1F("dt3GeV3nsHBQuadJetMult_emu","Quad Jet Sum Multiplicity of 3ns delayed cells above 3 GeV (HB, dR(TP,L1Jet)<0.5);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
+  TH1F * dt3GeV3nsHBTripleJetMult_emu = new TH1F("dt3GeV3nsHBTripleJetMult_emu","Triple Jet Sum Multiplicity of 3ns delayed cells above 3 GeV (HB, dR(TP,L1Jet)<0.5);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
+  TH1F * dt3GeV3nsHBDoubleJetMult_emu = new TH1F("dt3GeV3nsHBDoubleJetMult_emu","Double Jet Sum Multiplicity of 3ns delayed cells above 3 GeV (HB, dR(TP,L1Jet)<0.5);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
+  TH1F * dt3GeV3nsHBSingleJetMult_emu = new TH1F("dt3GeV3nsHBSingleJetMult_emu","Single Jet Sum Multiplicity of 3ns delayed cells above 3 GeV (HB, dR(TP,L1Jet)<0.5);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
   TH1F * dt3GeV3nsHBJet1Mult_emu = new TH1F("dt3GeV3nsHBJet1Mult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HB, all TPs within DR<2 1st L1Jet);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
   TH1F * dt3GeV3nsHBJet2Mult_emu = new TH1F("dt3GeV3nsHBJet2Mult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HB, all TPs within DR<2 2nd L1Jet);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
   TH1F * dt3GeV3nsHBJet3Mult_emu = new TH1F("dt3GeV3nsHBJet3Mult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HB, all TPs within DR<2 3rd L1Jet);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
@@ -646,7 +652,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 
   // counting LLP efficiencies
   double totalJets(0), passedMultJets(0);
-  double totalGlobal(0), passedMultGlobal(0);
+  double totalGlobal(0), passedMultGlobal(0), passedHtSum350(0);
   // change these variables to change the multiplicity thresholds that are set
   uint GeV3ns3Global_threshold = 3;
   uint GeV3ns3Jet_threshold = 3;
@@ -880,8 +886,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	      // HB region z below 3.88m, radius 1.79 - 2.95m
 	      double radius = sqrt(generator_->partVx[partonN]*generator_->partVx[partonN] + generator_->partVy[partonN]*generator_->partVy[partonN]);
 	      if ( abs(generator_->partVz[partonN]) < 568 && (radius < 295) && ( (abs(generator_->partVz[partonN]) > 388) || radius > 179 ) ) {
-		partonEtaHCAL = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[0];
-		partonPhiHCAL = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[1];
+		partonEtaHCAL = partonEta;
+		partonPhiHCAL = partonPhi;
 	      }
 	    } // end parton Pt cut loop 
 	  } // end loop restricting to quarks or gluons 
@@ -901,7 +907,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	if (jetIt == 3) DeltaR_partonsHCAL_L1Jet_4->Fill(min_deltaR_partonGenHCAL_L1jet);
 
 	// DeltaR cut between L1 jet and generator partons -- this is where GEN MATCHING is enforced
-	if (min_deltaR_partonGen_L1jet > 0.3) continue; 
+	//	if (min_deltaR_partonGen_L1jet > 0.3) continue; 
 	genJetRequirementPassed += 1; // keeps track of for this event, were there L1 jets that passed the gen matching requirement of L1 jet to parton?        
 
 	// multiplicity plots including HCAL TPs in a DeltaR region of the L1 jets
@@ -1346,7 +1352,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
           if (deltaR_partonGenHCAL_L1jet < min_deltaR_partonGenHCAL_L1jet ) min_deltaR_partonGenHCAL_L1jet = deltaR_partonGenHCAL_L1jet; // find the min dR between each L1 jet and the gen partons. Use this for gen matching criterion, when LLP decays in HCAL volume
 	} // end parton loop
 
-        if (min_deltaR_partonGen_L1jet > 0.3) continue;  // require that the L1 jet has a generator parton nearby
+	//        if (min_deltaR_partonGen_L1jet > 0.3) continue;  // require that the L1 jet has a generator parton nearby
 	genJetRequirementPassed += 1; // how many L1 jets this event passed the generator matching requirement?
         // loop over L1 jets to find DR between L1 jet and each TP, given that they are gen matched
         for (uint jetIt=0; (jetIt < nJetemu) && (jetIt < 4); jetIt++){ // loop over L1 jets, and only do first four (4 highest energy L1 jets from 4 leptons)    
@@ -1385,24 +1391,47 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	// loop over HCAL depths for the HCAL TP
 	// filling fractional energy deposit and avg time plots for each of 7 HCAL depths. Done for all HCAL TPs within DR 0.5 of the L1 Jet
 	for (int depthIt = 0; depthIt < nDepth-1; depthIt++){
-	  if (min_deltaR_partonGenHCAL_L1jet < 1) Energy_Depth_Jets->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu); // normalized by total energy in event so is fractional energy in each layer
-	  Timing_Depth_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]); // raw timing value in each layer
-	  if (tpEtemu > 10 ) {
-	    if (min_deltaR_partonGenHCAL_L1jet < 1) Energy_Depth_Jets_HighE->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu); // restricting to high energy HCAL TPs
-	  }
-	  if (abs(tpEtaemu) < 16) {
-	    if (min_deltaR_partonGenHCAL_L1jet < 1) Energy_DepthHB_Jets->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
-	    Timing_DepthHB_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]);
+	  if (inputFile.substr(0,5) == "../mh" ) { // HCAL volume decay requirement for energy depth plots for LLPs
+	    if (min_deltaR_partonGenHCAL_L1jet < 1) Energy_Depth_Jets->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu); // normalized by total energy in event so is fractional energy in each layer
+	    Timing_Depth_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]); // raw timing value in each layer
 	    if (tpEtemu > 10 ) {
-	      if (min_deltaR_partonGenHCAL_L1jet < 1) Energy_DepthHB_Jets_HighE->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
+	      if (min_deltaR_partonGenHCAL_L1jet < 1) Energy_Depth_Jets_HighE->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu); // restricting to high energy HCAL TPs
+	    }
+	    if (abs(tpEtaemu) < 16) {
+	      if (min_deltaR_partonGenHCAL_L1jet < 1) Energy_DepthHB_Jets->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
+	      Timing_DepthHB_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]);
+	      if (tpEtemu > 10 ) {
+		if (min_deltaR_partonGenHCAL_L1jet < 1) Energy_DepthHB_Jets_HighE->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
+	      }
+	    }
+	    if (abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29 ) {
+	      if (min_deltaR_partonGenHCAL_L1jet < 1) Energy_DepthHE_Jets->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
+	      Timing_DepthHE_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]);
+	      if (tpEtemu > 10 ) {
+		if (min_deltaR_partonGenHCAL_L1jet < 1) Energy_DepthHE_Jets_HighE->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
+	      }
 	    }
 	  }
-	  if (abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29 ) {
-	    if (min_deltaR_partonGenHCAL_L1jet < 1) Energy_DepthHE_Jets->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
-	    Timing_DepthHE_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]);
-	    if (tpEtemu > 10 ) {
-	      if (min_deltaR_partonGenHCAL_L1jet < 1) Energy_DepthHE_Jets_HighE->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
-	    }
+	  else { // no HCAL volume decay requirements for QCD or neutrino gun
+            Energy_Depth_Jets->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu); // normalized by total energy in event so is fractional energy in each layer
+            Timing_Depth_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]); // raw timing value in each layer  
+            if (tpEtemu > 10 ) {
+              Energy_Depth_Jets_HighE->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu); // restricting to high energy HCAL TPs                                               
+            }
+            if (abs(tpEtaemu) < 16) {
+              Energy_DepthHB_Jets->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
+              Timing_DepthHB_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]);
+              if (tpEtemu > 10 ) {
+                Energy_DepthHB_Jets_HighE->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
+              }
+            }
+            if (abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29 ) {
+              Energy_DepthHE_Jets->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
+              Timing_DepthHE_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]);
+              if (tpEtemu > 10 ) {
+                Energy_DepthHE_Jets_HighE->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
+              }
+            }
 	  }
 
 	  // count multiplicity based on which jet is closest to the HCAL TP 
@@ -1502,6 +1531,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	dt3GeV3nsHBJet2Mult_emu->Fill(mult3GeV3nsHB_Jet1);
 	dt3GeV3nsHBJet3Mult_emu->Fill(mult3GeV3nsHB_Jet2);
 	dt3GeV3nsHBJet4Mult_emu->Fill(mult3GeV3nsHB_Jet3);
+	dt3GeV3nsHBQuadJetMult_emu->Fill(mult3GeV3nsHB_Jet0+mult3GeV3nsHB_Jet1+mult3GeV3nsHB_Jet2+mult3GeV3nsHB_Jet3);
+	dt3GeV3nsHBTripleJetMult_emu->Fill(mult3GeV3nsHB_Jet0+mult3GeV3nsHB_Jet1+mult3GeV3nsHB_Jet2);
+	dt3GeV3nsHBDoubleJetMult_emu->Fill(mult3GeV3nsHB_Jet0+mult3GeV3nsHB_Jet1);
+	dt3GeV3nsHBSingleJetMult_emu->Fill(mult3GeV3nsHB_Jet0);
       }
       min_DR_L1_TP += 0;    
 
@@ -1509,6 +1542,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       if (genJetRequirementPassed > 0 ) totalJets += 1; // how many events had at least one jet passing gen matching requirements? used to compare with regional multiplicity sum that is jet matched
       if (mult3GeV3nsHB > GeV3ns3Global_threshold ) passedMultGlobal += 1;
       if (mult3GeV3nsHB_Jets > GeV3ns3Jet_threshold ) passedMultJets += 1;
+      if (htSum > 350 ) passedHtSum350 += 1;
 
       //std::cout << mult3GeV3nsHB_Jets << " = mult3GeV3nsHB_Jets. And sum of four jets one = " << mult3GeV3nsHB_Jet0 + mult3GeV3nsHB_Jet1 + mult3GeV3nsHB_Jet2 + mult3GeV3nsHB_Jet3 << std::endl;
       if (mult3GeV3nsHB_Jets != (mult3GeV3nsHB_Jet0 + mult3GeV3nsHB_Jet1 + mult3GeV3nsHB_Jet2 + mult3GeV3nsHB_Jet3) ) std::cout << "sums are not equal!" << std::endl; // though note, these are only put into histograms when at least one jet is gen matched!
@@ -1684,6 +1718,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       for(int bin=0; bin<nHtSumBins; bin++){
         if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeV3nsHB_Jets > GeV3ns3Jet_threshold) ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV
         if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeV3nsHB > GeV3ns3Global_threshold) ) htSumGlobalRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV  
+	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) ) htSumOriginalRates_emu->Fill(htSumLo+(bin*htSumBinWidth));
       }
 
       for(int bin=0; bin<nMhtSumBins; bin++){
@@ -1903,6 +1938,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   //  std::cout << "Number of events passed global multiplicity = " << passedMultGlobal << std::endl;
   std::cout << "LLP passed jet matched multiplicity cut of mult3GeV3nsHB_Jets>" << GeV3ns3Jet_threshold << " / total LLPs = " << passedMultJets/totalJets << std::endl;
   std::cout << "LLP passed global multiplicity cut of mult3GeV3nsHB>" << GeV3ns3Global_threshold << " / total LLPs = " << passedMultGlobal/totalGlobal << std::endl;
+  std::cout << "LLP passed htSum > 350 GeV cut / total LLPs = " << passedHtSum350/totalGlobal << std::endl;
 
   //  TFile g( outputFilename.c_str() , "new");
   kk->cd();
@@ -1929,6 +1965,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     doubleISOTauRates_emu->Scale(norm);
     htSumRates_emu->Scale(norm);
     htSumGlobalRates_emu->Scale(norm);
+    htSumOriginalRates_emu->Scale(norm);
     mhtSumRates_emu->Scale(norm);
     etSumRates_emu->Scale(norm);
     etSumGlobalRates_emu->Scale(norm);
@@ -1960,7 +1997,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       int htSum120GeV = htSumGlobalRates_emu->GetBinContent(HT_120GeV_bin); // get rate value for ht sum rate at 120 GeV ET threshold
       int HT_350GeV_bin = htSumGlobalRates_emu->GetXaxis()->FindBin(350); // get x value of bin of interest         
       int htSum350GeV = htSumGlobalRates_emu->GetBinContent(HT_350GeV_bin); // get rate value for ht sum rate at 350 GeV ET threshold
+      int HT_350GeV_original_bin = htSumOriginalRates_emu->GetXaxis()->FindBin(350); // get x value of bin of interest in original htSum rates plot
+      int htSum350GeV_original = htSumOriginalRates_emu->GetBinContent(HT_350GeV_original_bin); // get rate value for ht sum rate at 350 GeV ET threshold on the original rates plot
       std::cout << "For global multiplicity threshold of >" << GeV3ns3Global_threshold << " the single jet rate = " << SJet60GeV << " and htSum=120 rate = " << htSum120GeV <<  " and htSum=350 rate = " << htSum350GeV << std::endl;
+      std::cout << "Original htSum rate at 350 GeV = " << htSum350GeV_original << std::endl;
 
       int SJ_60GeV_bin_l = singleJetRates_emu->GetXaxis()->FindBin(60); // get x value of bin of interest                          
       int SJet60GeV_l = singleJetRates_emu->GetBinContent(SJ_60GeV_bin_l); // get rate value for single jet at 60 GeV ET threshold   
@@ -2086,6 +2126,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     dt3GeV3nsHBJet2Mult_emu->Write();
     dt3GeV3nsHBJet3Mult_emu->Write();
     dt3GeV3nsHBJet4Mult_emu->Write();
+    dt3GeV3nsHBQuadJetMult_emu->Write();
+    dt3GeV3nsHBTripleJetMult_emu->Write();
+    dt3GeV3nsHBDoubleJetMult_emu->Write();
+    dt3GeV3nsHBSingleJetMult_emu->Write();
 
     // 2 GeV
     dt2GeV1nsJetMult_emu->Write();
