@@ -3,6 +3,8 @@
 <environment>
   <bin file="draw_rates.cxx" name="draw_rates.exe"/>
   <bin file="rates.cxx" name="rates.exe"/>
+  <bin file="rates_noHCALvol_QCD.cxx" name="rates_noHCALvol_QCD.exe"/>
+  <bin file="rates_noGenMatching_nugun.cxx" name="rates_noGenMatching_nugun.exe"/>
   <bin file="rates_TPin4groups.cxx" name="rates_TPin4groups.exe"/>
   <bin file="rates_original.cxx" name="rates_original.exe"/>
   <bin file="draw_l1analysis.cxx" name="draw_l1analysis.exe"/>
