@@ -52,6 +52,7 @@
 					 "dt3GeV1nsHBJet","dt3GeV2nsHBJet","dt3GeV3nsHBJet","dt3GeV4nsHBJet","dt3GeV5nsHBJet",
 					 //					 "dt3GeV3nsHBnearJet","dt3GeV3nsHBnearJet1","dt3GeV3nsHBnearJet2","dt3GeV3nsHBnearJet3","dt3GeV3nsHBnearJet4",
 					 "dt3GeV3nsHBJet1","dt3GeV3nsHBJet2","dt3GeV3nsHBJet3","dt3GeV3nsHBJet4",
+					 "dt3GeV3nsHBQuadJet","dt3GeV3nsHBTripleJet","dt3GeV3nsHBDoubleJet","dt3GeV3nsHBSingleJet",
 					 //					 "dt2GeV1nsJet","dt2GeV2nsJet","dt2GeV3nsJet","dt2GeV4nsJet","dt2GeV5nsJet",
 					 //					 "dt2GeV1nsHEJet","dt2GeV2nsHEJet","dt2GeV3nsHEJet","dt2GeV4nsHEJet","dt2GeV5nsHEJet",
 					 "dt2GeV1nsHBJet","dt2GeV2nsHBJet","dt2GeV3nsHBJet","dt2GeV4nsHBJet","dt2GeV5nsHBJet",
@@ -287,10 +288,9 @@
     TLegend *leg = new TLegend(0.55, 0.9 - 0.1*iplot.second.size(), 0.95, 0.93);
     for(auto hist : iplot.second) {
       rateHists_def[hist]->Draw("hist same");
-      rateHists_def[hist]->GetYaxis()->SetRangeUser(10.01, 100000000); // setting the range of the Y axis to show low rates
+      rateHists_def[hist]->GetYaxis()->SetRangeUser(1000, 100000000); // setting the range of the Y axis to show low rates
       if(includeHW) rateHists_hw[hist]->Draw("hist same");
       rateHists_new_cond[hist]->Draw("hist same");
-      rateHists_def[hist]->GetYaxis()->SetRangeUser(10.01, 100000000); // setting the range of the Y axis to show low rates
       TString name(rateHists_def[hist]->GetName());
       TString nameHw(rateHists_hw[hist]->GetName());
       leg->AddEntry(rateHists_def[hist], name + " (current)", "L");
@@ -574,6 +574,8 @@
     if ( name(9,2) == "HE" || name(9,2) == "HB" ){ // setting range and name of histograms for HCAL barrel and endcap regions
       multHists_QCD[hist]->SetTitle("Multiplicity at " + name(2,4) + " and " + name(6,3) + " in " + name(9,2)+", TP matched w/" + name(11,3));
       if (name(11,3) != "Jet" ) multHists_QCD[hist]->SetTitle("Multiplicity at " + name(2,4) + " and " + name(6,3) + " in " + name(9,2));
+      if (name(9,5) == "HBSin" || name(9,5) == "HBDou" || name(9,5) == "HBTri" ) multHists_QCD[hist]->SetTitle(name(11,6) + " Jet Hit Multiplicity at " + name(2,4) + " and " + name(6,3));
+      if (name(9,5) == "HBQua" ) multHists_QCD[hist]->SetTitle(name(11,4) + " Jet Hit Multiplicity at " + name(2,4) + " and " + name(6,3));
       if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,100);
       if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,70);
       if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,50);
@@ -610,7 +612,7 @@
     canvases.push_back(new TCanvas);
     canvases.back()->SetWindowSize(canvases.back()->GetWw(), canvases.back()->GetWh());
     pad1.push_back(new TPad("pad1", "pad1", 0, 0, 1, 1));
-    pad1.back()->SetGrid();
+    //    pad1.back()->SetGrid();
     pad1.back()->Draw();
     pad1.back()->cd();
     TH1D *energy_profile_QCD = energy_depth_QCD[hist]->ProfileX("QCD");
@@ -632,21 +634,27 @@
     energy_profile_QCD->GetYaxis()->CenterTitle(true);
     TLegend *leg = new TLegend(0.55, y1, 0.95, y2);
     energy_profile_QCD->SetLineColor(kBlack);
+    energy_profile_QCD->SetLineWidth(2);
+    energy_profile_QCD->SetFillStyle(3005); // this is the grey shading on QCD plots
+    energy_profile_QCD->SetFillColor(kGray+2);
     energy_profile_QCD->SetDirectory(0);
     energy_profile_QCD->Draw("ehist same");
     TH1D *energy_profile_LLP500 = energy_depth_LLP500[hist]->ProfileX("LLP500");
     energy_profile_LLP500->SetLineColor(kBlue);
     energy_profile_LLP500->SetDirectory(0);
+    energy_profile_LLP500->SetLineWidth(2);
     energy_profile_LLP500->Draw("ehist same");
     TH1D *energy_profile_LLP1000 = energy_depth_LLP1000[hist]->ProfileX("LLP1000");
     energy_profile_LLP1000->SetLineColor(kGreen+1);
     energy_profile_LLP1000->SetDirectory(0);
+    energy_profile_LLP1000->SetLineWidth(2);
     energy_profile_LLP1000->Draw("ehist same");
     TH1D *energy_profile_LLP10000 = energy_depth_LLP10000[hist]->ProfileX("LLP10000");
     energy_profile_LLP10000->SetLineColor(kRed);
     energy_profile_LLP10000->SetDirectory(0);
+    energy_profile_LLP10000->SetLineWidth(2);
     energy_profile_LLP10000->Draw("ehist same");
-    leg->AddEntry(energy_profile_QCD,"QCD","L");
+    leg->AddEntry(energy_profile_QCD,"QCD","F");
     leg->AddEntry(energy_profile_LLP500,"LLP, c#scale[1.2]{#tau}=0.5m", "L");
     leg->AddEntry(energy_profile_LLP1000, "LLP, c#scale[1.2]{#tau}=1m", "L");
     leg->AddEntry(energy_profile_LLP10000, "LLP, c#scale[1.2]{#tau}=0.5m, noPU", "L");
