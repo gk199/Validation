@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from root_numpy import hist2array, root2array, tree2array
 from root_numpy import testdata
 
-nvariables = 1
+nvariables = 3
 ndata = 2000
 
 # read in signal and background files
