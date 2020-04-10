@@ -9,6 +9,7 @@
  #include "TLegend.h"
  #include "TROOT.h"
  #include "TGraph.h"
+ #include "TMarker.h"
  #include <map>
  #include <string>
  #include <vector>
@@ -152,11 +153,11 @@
     rateHistsRatio[rateType]->SetMinimum(-0.2);    // -0.5 for singleJet  // previously 0.6
     rateHistsRatio[rateType]->SetMaximum(1.4);    // 80 for singleJet // previously 1.4
     if ((rateType == "singleJet") || (rateType ==  "doubleJet") || (rateType ==  "tripleJet") || (rateType ==  "quadJet")) {
-      rateHistsRatio[rateType]->SetMaximum(0.2);
+      rateHistsRatio[rateType]->SetMaximum(0.4);
       rateHistsRatio[rateType]->SetMinimum(0);
     }
     if ((rateType ==  "htSum") || (rateType ==  "etSum")) {
-      rateHistsRatio[rateType]->SetMaximum(0.1);
+      rateHistsRatio[rateType]->SetMaximum(0.04);
       rateHistsRatio[rateType]->SetMinimum(0);
     }
     rateHistsRatio[rateType]->SetLineWidth(2);    
@@ -349,7 +350,7 @@
 	if ( name(11,3) != "Jet" ) multHists_QCD[hist]->SetTitle("Multiplicity for QCD, timing scan at " + name(2,4) + " in " + name(9,2));
 	if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,100);
         if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,70);
-        if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,50);
+        if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,35);
       }
       //      if ( name(11,3) == "Jet" || name(9,3) == "Jet" ) { // reduce x axis range for plots where HCAL TP has been matched to L1 Jet                     
 	//	multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,25);
@@ -376,7 +377,7 @@
     pad1.back()->Draw();
     pad1.back()->cd();
     multHists_LLP10000[iplot.second.front()]->Scale(1./multHists_LLP10000[iplot.second.front()]->Integral());
-    multHists_LLP10000[iplot.second.front()]->Draw("hist");
+    //multHists_LLP10000[iplot.second.front()]->Draw("hist");
     TLegend *leg = new TLegend(0.65, 1.1 - 0.1*iplot.second.size(), 0.95, 0.93);
     for (auto hist : iplot.second) {
       // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV                                
@@ -391,7 +392,7 @@
       yMax = multHists_LLP10000[hist]->GetMaximum();
       multHists_LLP10000[hist]->GetYaxis()->SetRangeUser(0,1.2*yMax);
       multHists_LLP10000[hist]->Scale(1./multHists_LLP10000[hist]->Integral());
-      multHists_LLP10000[hist]->Draw("hist same");
+      //multHists_LLP10000[hist]->Draw("hist same");
       TString name(multHists_LLP10000[hist]->GetName());
       leg->AddEntry(multHists_LLP10000[hist], name(6,3) + " ", "L");
       multHists_LLP10000[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=10m, timing scan at " + name(2,4)+", TP matched w/" + name(9,3));
@@ -402,7 +403,7 @@
 	if (name(11,3) != "Jet" ) multHists_LLP10000[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=10m, timing scan at " + name(2,4) + " in " + name(9,2));
 	if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_LLP10000[hist]->GetXaxis()->SetRangeUser(0,100);
 	if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_LLP10000[hist]->GetXaxis()->SetRangeUser(0,70);
-	if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_LLP10000[hist]->GetXaxis()->SetRangeUser(0,50);
+	if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_LLP10000[hist]->GetXaxis()->SetRangeUser(0,35);
       }
       //      if ( name(11,3) == "Jet" || name(9,3) == "Jet" ) { // reduce x axis range for plots where HCAL TP has been matched to L1 Jet      
       //	multHists_LLP10000[hist]->GetXaxis()->SetRangeUser(0,25);
@@ -455,7 +456,7 @@
 	if (name(11,3) != "Jet" ) multHists_LLP1000[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=1m, timing scan at " + name(2,4) + " in " + name(9,2));
 	if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_LLP1000[hist]->GetXaxis()->SetRangeUser(0,100);
         if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_LLP1000[hist]->GetXaxis()->SetRangeUser(0,70);
-        if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_LLP1000[hist]->GetXaxis()->SetRangeUser(0,50);
+        if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_LLP1000[hist]->GetXaxis()->SetRangeUser(0,35);
       }
       //      if ( name(11,3) == "Jet" || name(9,3) == "Jet" ) { // reduce x axis range for plots where HCAL TP has been matched to L1 Jet                             
       //	multHists_LLP1000[hist]->GetXaxis()->SetRangeUser(0,25);
@@ -508,7 +509,7 @@
 	if (name(11,3) != "Jet" ) multHists_LLP500[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=0.5m, timing scan at " + name(2,4) + " in region " + name(9,2));
 	if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_LLP500[hist]->GetXaxis()->SetRangeUser(0,100);
         if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_LLP500[hist]->GetXaxis()->SetRangeUser(0,70);
-        if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_LLP500[hist]->GetXaxis()->SetRangeUser(0,50);
+        if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_LLP500[hist]->GetXaxis()->SetRangeUser(0,35);
       }
       //      if ( name(11,3) == "Jet" || name(9,3) == "Jet" ) { // reduce x axis range for plots where HCAL TP has been matched to L1 Jet              
       //	multHists_LLP500[hist]->GetXaxis()->SetRangeUser(0,25);
@@ -563,11 +564,11 @@
     multHists_LLP1000[hist]->Draw("hist same");
     multHists_LLP10000[hist]->SetLineColor(kRed); // not using LLP with ctau = 10m, very far out
     multHists_LLP10000[hist]->Scale(1./multHists_LLP10000[hist]->Integral());
-    multHists_LLP10000[hist]->Draw("hist same");
+    //multHists_LLP10000[hist]->Draw("hist same");
     leg->AddEntry(multHists_QCD[hist],"QCD", "F");
     leg->AddEntry(multHists_LLP500[hist],"LLP, c#scale[1.2]{#tau}=0.5m", "L");
     leg->AddEntry(multHists_LLP1000[hist], "LLP, c#scale[1.2]{#tau}=1m", "L");
-    leg->AddEntry(multHists_LLP10000[hist], "LLP, c#scale[1.2]{#tau}=0.5m, noPU", "L");
+    //    leg->AddEntry(multHists_LLP10000[hist], "LLP, c#scale[1.2]{#tau}=0.5m, noPU", "L");
     multHists_QCD[hist]->GetYaxis()->CenterTitle(true);
     multHists_QCD[hist]->SetTitle("Multiplicity at " + name(2,4) + " and " + name(6,3)+", TP matched w/" + name (9,3)); // general name "mult at 3 GeV and 1 ns, TP matched w/jet"
     if (name(9,3) != "Jet" ) multHists_QCD[hist]->SetTitle("Multiplicity at " + name(2,4) + " and " + name(6,3)); // "mult at 3 GeV and 1 ns"
@@ -578,7 +579,7 @@
       if (name(9,5) == "HBQua" ) multHists_QCD[hist]->SetTitle(name(11,4) + " Jet Hit Multiplicity at " + name(2,4) + " and " + name(6,3));
       if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,100);
       if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,70);
-      if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,50);
+      if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,35);
       if ( (name(11,4) == "Jet1") || (name(11,4) == "Jet2") || (name(11,4) == "Jet3") || (name(11,4) == "Jet4") ) {
         multHists_QCD[hist]->SetTitle("Multiplicity at " + name(2,4) + " and " + name(6,3) + ", TP in DR cone of L1 Jet #" + name(14,1)); // "mult at 3 GeV and 1 ns, TP in DR cone of L1 jet 1" 
 	multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,25);
@@ -653,11 +654,11 @@
     energy_profile_LLP10000->SetLineColor(kRed);
     energy_profile_LLP10000->SetDirectory(0);
     energy_profile_LLP10000->SetLineWidth(2);
-    energy_profile_LLP10000->Draw("ehist same");
+    //    energy_profile_LLP10000->Draw("ehist same");
     leg->AddEntry(energy_profile_QCD,"QCD","F");
     leg->AddEntry(energy_profile_LLP500,"LLP, c#scale[1.2]{#tau}=0.5m", "L");
     leg->AddEntry(energy_profile_LLP1000, "LLP, c#scale[1.2]{#tau}=1m", "L");
-    leg->AddEntry(energy_profile_LLP10000, "LLP, c#scale[1.2]{#tau}=0.5m, noPU", "L");
+    //    leg->AddEntry(energy_profile_LLP10000, "LLP, c#scale[1.2]{#tau}=0.5m, noPU", "L");
     energy_profile_QCD->GetXaxis()->SetLabelSize(0.03);
     energy_profile_QCD->GetYaxis()->SetLabelSize(0.03);
     energy_profile_QCD->GetXaxis()->SetTitleSize(0.04);
@@ -733,7 +734,7 @@
     }
     else energy_profile_LLP10000->GetYaxis()->SetRangeUser(0,12);
     energy_profile_LLP10000->SetLineColor(kRed);
-    energy_profile_LLP10000->Draw("ehist");
+    //    energy_profile_LLP10000->Draw("ehist");
     energy_profile_LLP10000->SetTitle("TP Energy Fraction vs. Depth for LLP c#scale[1.2]{#tau}=10m");
     //    canvases.back()->Print(Form("plots/%s_LLP10000.pdf", hist.c_str()));
   }
@@ -743,60 +744,61 @@
 
   Double_t EffPl500[4], EffQCD[4], singleJetRate[4], quadJetRate[4], htSum120Rate[4], htSum350Rate[4];
   Double_t EffPl500Global[4], EffQCDGlobal[4], singleJetRateGlobal[4], quadJetRateGlobal[4], htSumRate120Global[4], htSumRate350Global[4];
+  double EffPl500_htSum120_Global, EffPl500_htSum350_Global, EffQCD_htSum120_Global, EffQCD_htSum350_Global, Original_htSumRate350, Original_htSumRate120;
 
   // L1 JET MATCHED
-  // neutrino gun rate at 60 GeV for single Jet
-  singleJetRate[0] = 184.534; // in kHz
-  singleJetRate[1] = 28.389;
-  singleJetRate[2] = 7.097;
+  // neutrino gun rate at 60 GeV for single Jet, in kHz
+  singleJetRate[0] = 184;
+  singleJetRate[1] = 28;
+  singleJetRate[2] = 7;
   singleJetRate[3] = 0;
   // neutrino gun rate at 60 GeV for quad Jet
-  quadJetRate[0] = 0; // in kHz
-  quadJetRate[1] = 0;
+  quadJetRate[0] = 14; // in kHz
+  quadJetRate[1] = 7;
   quadJetRate[2] = 0;
   quadJetRate[3] = 0;
   // neutrino gun rate for htSum at 120 GeV
-  htSum120Rate[0] = 312.288;
-  htSum120Rate[1] = 28.389;
-  htSum120Rate[2] = 7.097;
+  htSum120Rate[0] = 312;
+  htSum120Rate[1] = 28;
+  htSum120Rate[2] = 7;
   htSum120Rate[3] = 0;
   // neutrino gun rate for htSum at 350 GeV
-  htSum350Rate[0] = 78.072;
-  htSum350Rate[1] = 21.292;
+  htSum350Rate[0] = 78;
+  htSum350Rate[1] = 21;
   htSum350Rate[2] = 0;
   htSum350Rate[3] = 0;
   // signal efficiency for pl 500
-  EffPl500[0] = 0.862173;
-  EffPl500[1] = 0.80835;
-  EffPl500[2] = 0.745473;
-  EffPl500[3] = 0.690644;
+  EffPl500[0] = 0.9075;
+  EffPl500[1] = 0.8575;
+  EffPl500[2] = 0.8065;
+  EffPl500[3] = 0.7535;
   // background efficiency for QCD
-  EffQCD[0] = 0.296786; //mult3GeV3nsHB_Jets > 1
-  EffQCD[1] = 0.21172; //mult3GeV3nsHB_Jets > 2
-  EffQCD[2] = 0.145558; //mult3GeV3nsHB_Jets > 3 
-  EffQCD[3] = 0.0888469; //mult3GeV3nsHB_Jets > 4
+  EffQCD[0] = 0.275; //mult3GeV3nsHB_Jets > 1
+  EffQCD[1] = 0.202; //mult3GeV3nsHB_Jets > 2
+  EffQCD[2] = 0.1505; //mult3GeV3nsHB_Jets > 3 
+  EffQCD[3] = 0.1165; //mult3GeV3nsHB_Jets > 4
 
   // GLOBAL
   // neutrino gun rate at 60 GeV for single Jet
-  singleJetRateGlobal[0] = 3782.954; // in kHz        
-  singleJetRateGlobal[1] = 1270.448;
-  singleJetRateGlobal[2] = 269.704;
-  singleJetRateGlobal[3] = 56.779;
+  singleJetRateGlobal[0] = 3782; // in kHz        
+  singleJetRateGlobal[1] = 1270;
+  singleJetRateGlobal[2] = 269;
+  singleJetRateGlobal[3] = 56;
   // neutrino gun rate at 60 GeV for quad Jet
-  quadJetRateGlobal[0] = 0; // in kHz
-  quadJetRateGlobal[1] = 0;
-  quadJetRateGlobal[2] = 0;
-  quadJetRateGlobal[3] = 0;
+  quadJetRateGlobal[0] = 283; // in kHz
+  quadJetRateGlobal[1] = 141;
+  quadJetRateGlobal[2] = 28;
+  quadJetRateGlobal[3] = 7;
   // neutrino gun rate for htSum at 120 GeV
-  htSumRate120Global[0] = 5607.005;
-  htSumRate120Global[1] = 1760.174;
-  htSumRate120Global[2] = 347.776;
-  htSumRate120Global[3] = 85.169;
+  htSumRate120Global[0] = 5607;
+  htSumRate120Global[1] = 1760;
+  htSumRate120Global[2] = 347;
+  htSumRate120Global[3] = 85;
   // neutrino gun rate for htSum at 350 GeV    
-  htSumRate350Global[0] = 1547.249;
-  htSumRate350Global[1] = 574.895;
-  htSumRate350Global[2] = 127.754;
-  htSumRate350Global[3] = 42.584;
+  htSumRate350Global[0] = 1547;
+  htSumRate350Global[1] = 574;
+  htSumRate350Global[2] = 127;
+  htSumRate350Global[3] = 42;
   // signal efficiency for pl 500
   EffPl500Global[0] = 0.96;
   EffPl500Global[1] = 0.9205;
@@ -808,6 +810,14 @@
   EffQCDGlobal[2] = 0.2175; //mult3GeV3nsHB > 3
   EffQCDGlobal[3] = 0.159; //mult3GeV3nsHB > 4  
 
+  // comparison points for htSum rates and efficiencies
+  EffPl500_htSum120_Global = 0.9995;
+  EffPl500_htSum350_Global = 0.9975;
+  EffQCD_htSum120_Global = 0.965;
+  EffQCD_htSum350_Global = 0.656;
+  Original_htSumRate350 = 4776;
+  Original_htSumRate120 = 24117;
+
   TGraph *gr_sing_LLP = new TGraph (4, EffPl500, singleJetRate);
   TGraph *gr_quad_LLP = new TGraph (4, EffPl500, quadJetRate);
   TGraph *gr_350_LLP = new TGraph (4, EffPl500, htSum350Rate);
@@ -816,6 +826,10 @@
   TGraph *gr_global_quad_LLP = new TGraph (4, EffPl500Global, quadJetRateGlobal);
   TGraph *gr_global_350_LLP = new TGraph (4, EffPl500Global, htSumRate350Global);
   TGraph *gr_global_120_LLP = new TGraph (4, EffPl500Global, htSumRate120Global);
+  TMarker *m_QCD_htSum120 = new TMarker (EffQCD_htSum120_Global, Original_htSumRate120, 21);
+  TMarker *m_QCD_htSum350 = new TMarker (EffQCD_htSum350_Global, Original_htSumRate350, 21);
+  TMarker *m_LLP_htSum120 = new TMarker (EffPl500_htSum120_Global, Original_htSumRate120, 21);
+  TMarker *m_LLP_htSum350 = new TMarker (EffPl500_htSum350_Global, Original_htSumRate350, 21);
 
   TCanvas *c1_sing_quad = new TCanvas("c1_sing_quad","Graph Draw Options",200,10,600,400);
   gr_sing_LLP->SetLineColor(4); // blue
@@ -834,16 +848,26 @@
   TCanvas *c1_350_120 = new TCanvas("c1_350_120","Graph Draw Options",200,10,600,400);
   gr_120_LLP->SetLineColor(4); // blue 
   gr_120_LLP->GetHistogram()->SetMinimum(-5.);
-  gr_350_LLP->GetHistogram()->SetMinimum(-5.);
   gr_120_LLP->Draw("AC*");
   gr_120_LLP->SetTitle("htSum Rate vs. Signal Efficiency for Regional Multiplicity Cut;LLP c#scale[1.2]{#tau}=0.5m Efficiency;Neutrino Gun Rate (kHz)      ");
   gr_350_LLP->SetLineColor(2); // red    
   gr_350_LLP->Draw("C*");
+  m_LLP_htSum120->SetMarkerStyle(21);
+  m_LLP_htSum120->SetMarkerColor(4);
+  m_LLP_htSum350->SetMarkerStyle(21);
+  m_LLP_htSum350->SetMarkerColor(2);
   auto legend_350_120 = new TLegend(0.15,0.7,0.5,0.9);
   legend_350_120->AddEntry(gr_120_LLP,"ht Sum Rate at 120 GeV");
   legend_350_120->AddEntry(gr_350_LLP,"ht Sum Rate at 350 GeV");
   legend_350_120->Draw();
   c1_350_120->SaveAs("plots/NuGun_htSumRates_vs_SignalEff_Pl500.pdf");
+//m_LLP_htSum120->Draw();           
+  m_LLP_htSum350->Draw();
+  gr_120_LLP->GetXaxis()->SetLimits(0.7,1.);
+  gr_120_LLP->GetHistogram()->SetMaximum(5000.);
+  legend_350_120->AddEntry(m_LLP_htSum350,"ht Sum>350 GeV Rate, no timing cuts");
+  c1_350_120->SaveAs("plots/NuGun_htSumRates_vs_SignalEff_Pl500_comparison.pdf");
+
 
   TCanvas *c1_global_sing_quad = new TCanvas("c1_global_sing_quad","Graph Draw Options",200,10,600,400);
   gr_global_sing_LLP->SetLineColor(4); // blue                                            
@@ -867,6 +891,12 @@
   gr_global_120_LLP->SetTitle("htSum Rate vs. Signal Efficiency for Global Multiplicity Cut;LLP c#scale[1.2]{#tau}=0.5m Efficiency;Neutrino Gun Rate (kHz)      ");
   gr_global_350_LLP->SetLineColor(2); // red              
   gr_global_350_LLP->Draw("C*");
+  m_LLP_htSum120->SetMarkerStyle(21);
+  m_LLP_htSum120->SetMarkerColor(4);
+  m_LLP_htSum350->SetMarkerStyle(21);
+  m_LLP_htSum350->SetMarkerColor(2);
+  m_LLP_htSum120->Draw();
+  m_LLP_htSum350->Draw();
   auto legend_global_350_120 = new TLegend(0.15,0.7,0.5,0.9);
   legend_global_350_120->AddEntry(gr_global_120_LLP,"ht Sum Rate at 120 GeV");
   legend_global_350_120->AddEntry(gr_global_350_LLP,"ht Sum Rate at 350 GeV");
@@ -904,6 +934,12 @@
   gr_120_QCD->SetTitle("htSum Rate vs. Background Efficiency for Regional Multiplicity Cut;QCD Efficiency;Neutrino Gun Rate (kHz)      ");
   gr_350_QCD->SetLineColor(2); // red
   gr_350_QCD->Draw("C*");
+  m_QCD_htSum120->SetMarkerStyle(21);
+  m_QCD_htSum120->SetMarkerColor(4);
+  m_QCD_htSum350->SetMarkerStyle(21);
+  m_QCD_htSum350->SetMarkerColor(2);
+  m_QCD_htSum120->Draw();
+  m_QCD_htSum350->Draw();
   auto legend2_350_120 = new TLegend(0.15,0.7,0.5,0.9);
   legend2_350_120->AddEntry(gr_120_QCD,"ht Sum Rate at 120 GeV");
   legend2_350_120->AddEntry(gr_350_QCD,"ht Sum Rate at 350 GeV");
@@ -932,6 +968,12 @@
   gr_global_120_QCD->SetTitle("htSum Rate vs. Background Efficiency for Global Multiplicity Cut;QCD Efficiency;Neutrino Gun Rate (kHz)      ");
   gr_global_350_QCD->SetLineColor(2); // red     
   gr_global_350_QCD->Draw("C*");
+  m_QCD_htSum120->SetMarkerStyle(21);
+  m_QCD_htSum120->SetMarkerColor(4);
+  m_QCD_htSum350->SetMarkerStyle(21);
+  m_QCD_htSum350->SetMarkerColor(2);
+  m_QCD_htSum120->Draw();
+  m_QCD_htSum350->Draw();
   auto legend2_global_350_120 = new TLegend(0.15,0.7,0.5,0.9);
   legend2_global_350_120->AddEntry(gr_global_120_QCD,"ht Sum Rate at 120 GeV");
   legend2_global_350_120->AddEntry(gr_global_350_QCD,"ht Sum Rate at 350 GeV");
