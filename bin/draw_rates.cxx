@@ -741,8 +741,8 @@
   std::cout << "Global multiplicity: single jet rate = " << SJet60GeV << " and htSum rate = " << htSum350GeV << std::endl;
   std::cout << "Jet matched multiplicity: single jet rate = " << SJet60GeV_l << " and htSum rate = " << htSum350GeV_l << std::endl;
 
-  Double_t EffPl500[4], EffQCD[4], singleJetRate[4], htSum120Rate[4], htSum350Rate[4];
-  Double_t EffPl500Global[4], EffQCDGlobal[4], singleJetRateGlobal[4], htSumRate120Global[4], htSumRate350Global[4];
+  Double_t EffPl500[4], EffQCD[4], singleJetRate[4], quadJetRate[4], htSum120Rate[4], htSum350Rate[4];
+  Double_t EffPl500Global[4], EffQCDGlobal[4], singleJetRateGlobal[4], quadJetRateGlobal[4], htSumRate120Global[4], htSumRate350Global[4];
 
   // L1 JET MATCHED
   // neutrino gun rate at 60 GeV for single Jet
@@ -750,6 +750,11 @@
   singleJetRate[1] = 28.389;
   singleJetRate[2] = 7.097;
   singleJetRate[3] = 0;
+  // neutrino gun rate at 60 GeV for quad Jet
+  quadJetRate[0] = 0; // in kHz
+  quadJetRate[1] = 0;
+  quadJetRate[2] = 0;
+  quadJetRate[3] = 0;
   // neutrino gun rate for htSum at 120 GeV
   htSum120Rate[0] = 312.288;
   htSum120Rate[1] = 28.389;
@@ -765,7 +770,7 @@
   EffPl500[1] = 0.80835;
   EffPl500[2] = 0.745473;
   EffPl500[3] = 0.690644;
-  // background efficiency for QCD                                                                                                                                                      
+  // background efficiency for QCD
   EffQCD[0] = 0.296786; //mult3GeV3nsHB_Jets > 1
   EffQCD[1] = 0.21172; //mult3GeV3nsHB_Jets > 2
   EffQCD[2] = 0.145558; //mult3GeV3nsHB_Jets > 3 
@@ -777,6 +782,11 @@
   singleJetRateGlobal[1] = 1270.448;
   singleJetRateGlobal[2] = 269.704;
   singleJetRateGlobal[3] = 56.779;
+  // neutrino gun rate at 60 GeV for quad Jet
+  quadJetRateGlobal[0] = 0; // in kHz
+  quadJetRateGlobal[1] = 0;
+  quadJetRateGlobal[2] = 0;
+  quadJetRateGlobal[3] = 0;
   // neutrino gun rate for htSum at 120 GeV
   htSumRate120Global[0] = 5607.005;
   htSumRate120Global[1] = 1760.174;
@@ -798,137 +808,136 @@
   EffQCDGlobal[2] = 0.2175; //mult3GeV3nsHB > 3
   EffQCDGlobal[3] = 0.159; //mult3GeV3nsHB > 4  
 
-  TGraph *gr1 = new TGraph (4, EffPl500, singleJetRate);
-  TGraph *gr2_350 = new TGraph (4, EffPl500, htSum350Rate);
-  TGraph *gr2_120 = new TGraph (4, EffPl500, htSum120Rate);
-  TGraph *gr1_global = new TGraph (4, EffPl500Global, singleJetRateGlobal);
-  TGraph *gr2_global_350 = new TGraph (4, EffPl500Global, htSumRate350Global);
-  TGraph *gr2_global_120 = new TGraph (4, EffPl500Global, htSumRate120Global);
+  TGraph *gr_sing_LLP = new TGraph (4, EffPl500, singleJetRate);
+  TGraph *gr_quad_LLP = new TGraph (4, EffPl500, quadJetRate);
+  TGraph *gr_350_LLP = new TGraph (4, EffPl500, htSum350Rate);
+  TGraph *gr_120_LLP = new TGraph (4, EffPl500, htSum120Rate);
+  TGraph *gr_global_sing_LLP = new TGraph (4, EffPl500Global, singleJetRateGlobal);
+  TGraph *gr_global_quad_LLP = new TGraph (4, EffPl500Global, quadJetRateGlobal);
+  TGraph *gr_global_350_LLP = new TGraph (4, EffPl500Global, htSumRate350Global);
+  TGraph *gr_global_120_LLP = new TGraph (4, EffPl500Global, htSumRate120Global);
 
-  TCanvas *c1_350 = new TCanvas("c1_350","Graph Draw Options",200,10,600,400);
-  gr1->SetLineColor(4); // blue
-  gr1->GetHistogram()->SetMinimum(-5.);
-  gr2_350->GetHistogram()->SetMinimum(-5.);
-  gr1->Draw("AC*");
-  gr1->SetTitle("Rate vs. Signal Efficiency for Regional Multiplicity Cut;LLP c#scale[1.2]{#tau}=0.5m Efficiency;Neutrino Gun Rate (kHz)      ");
-  gr2_350->SetLineColor(2); // red
-  gr2_350->Draw("C*");
+  TCanvas *c1_sing_quad = new TCanvas("c1_sing_quad","Graph Draw Options",200,10,600,400);
+  gr_sing_LLP->SetLineColor(4); // blue
+  gr_sing_LLP->GetHistogram()->SetMinimum(-5.);
+  gr_quad_LLP->GetHistogram()->SetMinimum(-5.);
+  gr_sing_LLP->Draw("AC*");
+  gr_sing_LLP->SetTitle("Jet Rate vs. Signal Efficiency for Regional Multiplicity Cut;LLP c#scale[1.2]{#tau}=0.5m Efficiency;Neutrino Gun Rate (kHz)      ");
+  gr_quad_LLP->SetLineColor(2); // red
+  gr_quad_LLP->Draw("C*");
   auto legend = new TLegend(0.15,0.7,0.5,0.9);
-  legend->AddEntry(gr1,"Single Jet Rate at 60 GeV");
-  legend->AddEntry(gr2_350,"ht Sum Rate at 350 GeV");
+  legend->AddEntry(gr_sing_LLP,"Single Jet Rate at 60 GeV");
+  legend->AddEntry(gr_quad_LLP,"Quad Jet Rate at 60 GeV");
   legend->Draw();
-  c1_350->SaveAs("plots/NuGunRates_ht350_vs_SignalEff_Pl500.pdf");
+  c1_sing_quad->SaveAs("plots/NuGun_JetRates_vs_SignalEff_Pl500.pdf");
 
-  TCanvas *c1_120 = new TCanvas("c1_120","Graph Draw Options",200,10,600,400);
-  gr1->SetLineColor(4); // blue                  
-  gr1->GetHistogram()->SetMinimum(-5.);
-  gr2_120->GetHistogram()->SetMinimum(-5.);
-  gr1->GetHistogram()->SetMaximum(400);
-  gr1->Draw("AC*");
-  gr1->SetTitle("Rate vs. Signal Efficiency for Regional Multiplicity Cut;LLP c#scale[1.2]{#tau}=0.5m Efficiency;Neutrino Gun Rate (kHz)      ");
-  gr2_120->SetLineColor(2); // red           
-  gr2_120->Draw("C*");
-  auto legend_120 = new TLegend(0.15,0.7,0.5,0.9);
-  legend_120->AddEntry(gr1,"Single Jet Rate at 60 GeV");
-  legend_120->AddEntry(gr2_120,"ht Sum Rate at 120 GeV");
-  legend_120->Draw();
-  c1_120->SaveAs("plots/NuGunRates_ht120_vs_SignalEff_Pl500.pdf");
+  TCanvas *c1_350_120 = new TCanvas("c1_350_120","Graph Draw Options",200,10,600,400);
+  gr_120_LLP->SetLineColor(4); // blue 
+  gr_120_LLP->GetHistogram()->SetMinimum(-5.);
+  gr_350_LLP->GetHistogram()->SetMinimum(-5.);
+  gr_120_LLP->Draw("AC*");
+  gr_120_LLP->SetTitle("htSum Rate vs. Signal Efficiency for Regional Multiplicity Cut;LLP c#scale[1.2]{#tau}=0.5m Efficiency;Neutrino Gun Rate (kHz)      ");
+  gr_350_LLP->SetLineColor(2); // red    
+  gr_350_LLP->Draw("C*");
+  auto legend_350_120 = new TLegend(0.15,0.7,0.5,0.9);
+  legend_350_120->AddEntry(gr_120_LLP,"ht Sum Rate at 120 GeV");
+  legend_350_120->AddEntry(gr_350_LLP,"ht Sum Rate at 350 GeV");
+  legend_350_120->Draw();
+  c1_350_120->SaveAs("plots/NuGun_htSumRates_vs_SignalEff_Pl500.pdf");
 
-  TCanvas *c1_global_350 = new TCanvas("c1_global_350","Graph Draw Options",200,10,600,400);
-  gr1_global->SetLineColor(4); // blue                                            
-  gr1_global->GetHistogram()->SetMinimum(-5.);
-  gr2_global_350->GetHistogram()->SetMinimum(-5.);
-  gr1_global->Draw("AC*");
-  gr1_global->SetTitle("Rate vs. Signal Efficiency for Global Multiplicity Cut;LLP c#scale[1.2]{#tau}=0.5m Efficiency;Neutrino Gun Rate (kHz)      ");
-  gr2_global_350->SetLineColor(2); // red        
-  gr2_global_350->Draw("C*");
-  auto legend_global_350 = new TLegend(0.15,0.7,0.5,0.9);
-  legend_global_350->AddEntry(gr1_global,"Single Jet Rate at 60 GeV");
-  legend_global_350->AddEntry(gr2_global_350,"ht Sum Rate at 350 GeV");
-  legend_global_350->Draw();
-  c1_global_350->SaveAs("plots/NuGunRates_ht350_vs_SignalEff_Pl500_Global.pdf");
+  TCanvas *c1_global_sing_quad = new TCanvas("c1_global_sing_quad","Graph Draw Options",200,10,600,400);
+  gr_global_sing_LLP->SetLineColor(4); // blue                                            
+  gr_global_sing_LLP->GetHistogram()->SetMinimum(-5.);
+  gr_global_quad_LLP->GetHistogram()->SetMinimum(-5.);
+  gr_global_sing_LLP->Draw("AC*");
+  gr_global_sing_LLP->SetTitle("Jet Rate vs. Signal Efficiency for Global Multiplicity Cut;LLP c#scale[1.2]{#tau}=0.5m Efficiency;Neutrino Gun Rate (kHz)      ");
+  gr_global_quad_LLP->SetLineColor(2); // red        
+  gr_global_quad_LLP->Draw("C*");
+  auto legend_global_sing_quad = new TLegend(0.15,0.7,0.5,0.9);
+  legend_global_sing_quad->AddEntry(gr_global_sing_LLP,"Single Jet Rate at 60 GeV");
+  legend_global_sing_quad->AddEntry(gr_global_quad_LLP,"Quad Jet Rate at 60 GeV");
+  legend_global_sing_quad->Draw();
+  c1_global_sing_quad->SaveAs("plots/NuGun_JetRates_vs_SignalEff_Pl500_Global.pdf");
 
-  TCanvas *c1_global_120 = new TCanvas("c1_global_120","Graph Draw Options",200,10,600,400);
-  gr1_global->SetLineColor(4); // blue
-  gr1_global->GetHistogram()->SetMinimum(-5.);
-  gr2_global_120->GetHistogram()->SetMinimum(-5.);
-  gr1_global->GetHistogram()->SetMaximum(7000);
-  gr1_global->Draw("AC*");
-  gr1_global->SetTitle("Rate vs. Signal Efficiency for Global Multiplicity Cut;LLP c#scale[1.2]{#tau}=0.5m Efficiency;Neutrino Gun Rate (kHz)      ");
-  gr2_global_120->SetLineColor(2); // red                                                                                                                                        
-  gr2_global_120->Draw("C*");
-  auto legend_global_120 = new TLegend(0.15,0.7,0.5,0.9);
-  legend_global_120->AddEntry(gr1_global,"Single Jet Rate at 60 GeV");
-  legend_global_120->AddEntry(gr2_global_120,"ht Sum Rate at 120 GeV");
-  legend_global_120->Draw();
-  c1_global_120->SaveAs("plots/NuGunRates_ht120_vs_SignalEff_Pl500_Global.pdf");
+  TCanvas *c1_global_350_120 = new TCanvas("c1_global_120","Graph Draw Options",200,10,600,400);
+  gr_global_120_LLP->SetLineColor(4); // blue
+  gr_global_120_LLP->GetHistogram()->SetMinimum(-5.);
+  gr_global_350_LLP->GetHistogram()->SetMinimum(-5.);
+  gr_global_120_LLP->Draw("AC*");
+  gr_global_120_LLP->SetTitle("htSum Rate vs. Signal Efficiency for Global Multiplicity Cut;LLP c#scale[1.2]{#tau}=0.5m Efficiency;Neutrino Gun Rate (kHz)      ");
+  gr_global_350_LLP->SetLineColor(2); // red              
+  gr_global_350_LLP->Draw("C*");
+  auto legend_global_350_120 = new TLegend(0.15,0.7,0.5,0.9);
+  legend_global_350_120->AddEntry(gr_global_120_LLP,"ht Sum Rate at 120 GeV");
+  legend_global_350_120->AddEntry(gr_global_350_LLP,"ht Sum Rate at 350 GeV");
+  legend_global_350_120->Draw();
+  c1_global_350_120->SaveAs("plots/NuGun_htsumRates_vs_SignalEff_Pl500_Global.pdf");
 
-  TGraph *gr3 = new TGraph (4, EffQCD, singleJetRate);
-  TGraph *gr4_350 = new TGraph (4, EffQCD, htSum350Rate);
-  TGraph *gr4_120 = new TGraph (4, EffQCD, htSum120Rate);
-  TGraph *gr3_global = new TGraph (4, EffQCDGlobal, singleJetRateGlobal);
-  TGraph *gr4_global_350 = new TGraph (4, EffQCDGlobal, htSumRate350Global);
-  TGraph *gr4_global_120 = new TGraph (4, EffQCDGlobal, htSumRate120Global);
+  TGraph *gr_sing_QCD = new TGraph (4, EffQCD, singleJetRate);
+  TGraph *gr_quad_QCD = new TGraph (4, EffQCD, quadJetRate);
+  TGraph *gr_350_QCD = new TGraph (4, EffQCD, htSum350Rate);
+  TGraph *gr_120_QCD = new TGraph (4, EffQCD, htSum120Rate);
+  TGraph *gr_global_sing_QCD = new TGraph (4, EffQCDGlobal, singleJetRateGlobal);
+  TGraph *gr_global_quad_QCD = new TGraph (4, EffQCDGlobal, quadJetRateGlobal);
+  TGraph *gr_global_350_QCD = new TGraph (4, EffQCDGlobal, htSumRate350Global);
+  TGraph *gr_global_120_QCD = new TGraph (4, EffQCDGlobal, htSumRate120Global);
 
-  TCanvas *c2_120 = new TCanvas("c2_120","Graph Draw Options",200,10,600,400);
-  gr3->SetLineColor(4); // blue
-  gr3->GetHistogram()->SetMinimum(-5.);
-  gr4_120->GetHistogram()->SetMinimum(-5.);
-  gr3->GetHistogram()->SetMaximum(400.);
-  gr3->Draw("AC*");
-  gr3->SetTitle("Rate vs. Background Efficiency for Regional Multiplicity Cut;QCD Efficiency;Neutrino Gun Rate (kHz)      ");
-  gr4_120->SetLineColor(2); // red 
-  gr4_120->Draw("C*");
-  auto legend2_120 = new TLegend(0.15,0.7,0.5,0.9);
-  legend2_120->AddEntry(gr3,"Single Jet Rate at 60 GeV");
-  legend2_120->AddEntry(gr4_120,"ht Sum Rate at 120 GeV");
-  legend2_120->Draw();
-  c2_120->SaveAs("plots/NuGunRate_ht120_vs_BkgEff_QCD.pdf");
+  TCanvas *c2_sing_quad = new TCanvas("c2_sing_quad","Graph Draw Options",200,10,600,400);
+  gr_sing_QCD->SetLineColor(4); // blue  
+  gr_sing_QCD->GetHistogram()->SetMinimum(-5.);
+  gr_quad_QCD->GetHistogram()->SetMinimum(-5.);
+  gr_sing_QCD->Draw("AC*");
+  gr_sing_QCD->SetTitle("Jet Rate vs. Background Efficiency for Regional Multiplicity Cut;QCD Efficiency;Neutrino Gun Rate (kHz)      ");
+  gr_quad_QCD->SetLineColor(2); // red  
+  gr_quad_QCD->Draw("C*");
+  auto legend2 = new TLegend(0.15,0.7,0.5,0.9);
+  legend2->AddEntry(gr_sing_QCD,"Single Jet Rate at 60 GeV");
+  legend2->AddEntry(gr_quad_QCD,"Quad Jet Rate at 60 GeV");
+  legend2->Draw();
+  c2_sing_quad->SaveAs("plots/NuGun_JetRates_vs_BackgroundEff_Pl500.pdf");
 
-  TCanvas *c2_350 = new TCanvas("c2_350","Graph Draw Options",200,10,600,400);
-  gr3->SetLineColor(4); // blue        
-  gr3->GetHistogram()->SetMinimum(-5.);
-  gr4_350->GetHistogram()->SetMinimum(-5.);
-  gr3->GetHistogram()->SetMaximum(250.);
-  gr3->Draw("AC*");
-  gr3->SetTitle("Rate vs. Background Efficiency for Regional Multiplicity Cut;QCD Efficiency;Neutrino Gun Rate (kHz)      ");
-  gr4_350->SetLineColor(2); // red                                                                                                                                                        
-  gr4_350->Draw("C*");
-  auto legend2_350 = new TLegend(0.15,0.7,0.5,0.9);
-  legend2_350->AddEntry(gr3,"Single Jet Rate at 60 GeV");
-  legend2_350->AddEntry(gr4_350,"ht Sum Rate at 350 GeV");
-  legend2_350->Draw();
-  c2_350->SaveAs("plots/NuGunRate_ht350_vs_BkgEff_QCD.pdf");
+  TCanvas *c2_350_120 = new TCanvas("c2_350_120","Graph Draw Options",200,10,600,400);
+  gr_120_QCD->SetLineColor(4); // blue  
+  gr_120_QCD->GetHistogram()->SetMinimum(-5.);
+  gr_350_QCD->GetHistogram()->SetMinimum(-5.);
+  gr_120_QCD->Draw("AC*");
+  gr_120_QCD->SetTitle("htSum Rate vs. Background Efficiency for Regional Multiplicity Cut;QCD Efficiency;Neutrino Gun Rate (kHz)      ");
+  gr_350_QCD->SetLineColor(2); // red
+  gr_350_QCD->Draw("C*");
+  auto legend2_350_120 = new TLegend(0.15,0.7,0.5,0.9);
+  legend2_350_120->AddEntry(gr_120_QCD,"ht Sum Rate at 120 GeV");
+  legend2_350_120->AddEntry(gr_350_QCD,"ht Sum Rate at 350 GeV");
+  legend2_350_120->Draw();
+  c2_350_120->SaveAs("plots/NuGun_htSumRates_vs_BackgroundEff_Pl500.pdf");
 
-  TCanvas *c2_global_120 = new TCanvas("c2_global_120","Graph Draw Options",200,10,600,400);
-  gr3_global->SetLineColor(4); // blue
-  gr3_global->GetHistogram()->SetMinimum(-10.);
-  gr4_global_120->GetHistogram()->SetMinimum(-10.);
-  gr3_global->GetHistogram()->SetMaximum(7000.);
-  gr3_global->Draw("AC*");
-  gr3_global->SetTitle("Rate vs. Background Efficiency for Global Multiplicity Cut;QCD Efficiency;Neutrino Gun Rate (kHz)      ");
-  gr4_global_120->SetLineColor(2); // red                  
-  gr4_global_120->Draw("C*");
-  auto legend2_global_120 = new TLegend(0.15,0.7,0.5,0.9);
-  legend2_global_120->AddEntry(gr3_global,"Single Jet Rate at 60 GeV");
-  legend2_global_120->AddEntry(gr4_global_120,"ht Sum Rate at 120 GeV");
-  legend2_global_120->Draw();
-  c2_global_120->SaveAs("plots/NuGunRate_ht120_vs_BkgEff_QCD_Global.pdf");
+  TCanvas *c2_global_sing_quad = new TCanvas("c2_global_sing_quad","Graph Draw Options",200,10,600,400);
+  gr_global_sing_QCD->SetLineColor(4); // blue   
+  gr_global_sing_QCD->GetHistogram()->SetMinimum(-5.);
+  gr_global_quad_QCD->GetHistogram()->SetMinimum(-5.);
+  gr_global_sing_QCD->Draw("AC*");
+  gr_global_sing_QCD->SetTitle("Jet Rate vs. Background Efficiency for Global Multiplicity Cut;QCD Efficiency;Neutrino Gun Rate (kHz)      ");
+  gr_global_quad_QCD->SetLineColor(2); // red    
+  gr_global_quad_QCD->Draw("C*");
+  auto legend2_global_sing_quad = new TLegend(0.15,0.7,0.5,0.9);
+  legend2_global_sing_quad->AddEntry(gr_global_sing_QCD,"Single Jet Rate at 60 GeV");
+  legend2_global_sing_quad->AddEntry(gr_global_quad_QCD,"Quad Jet Rate at 60 GeV");
+  legend2_global_sing_quad->Draw();
+  c2_global_sing_quad->SaveAs("plots/NuGun_JetRates_vs_BackgroundEff_Pl500_Global.pdf");
 
-  TCanvas *c2_global_350 = new TCanvas("c2_global_350","Graph Draw Options",200,10,600,400);
-  gr3_global->SetLineColor(4); // blue     
-  gr3_global->GetHistogram()->SetMinimum(0.);
-  gr4_global_350->GetHistogram()->SetMinimum(0.);
-  gr4_global_350->GetHistogram()->SetMaximum(4000.);
-  gr3_global->Draw("AC*");
-  gr3_global->SetTitle("Rate vs. Background Efficiency for Global Multiplicity Cut;QCD Efficiency;Neutrino Gun Rate (kHz)      ");
-  gr4_global_350->SetLineColor(2); // red                                                                                                                                       
-  gr4_global_350->Draw("C*");
-  auto legend2_global_350 = new TLegend(0.15,0.7,0.5,0.9);
-  legend2_global_350->AddEntry(gr3_global,"Single Jet Rate at 60 GeV");
-  legend2_global_350->AddEntry(gr4_global_350,"ht Sum Rate at 350 GeV");
-  legend2_global_350->Draw();
-  c2_global_350->SaveAs("plots/NuGunRate_ht350_vs_BkgEff_QCD_Global.pdf");
+  TCanvas *c2_global_350_120 = new TCanvas("c2_global_120","Graph Draw Options",200,10,600,400);
+  gr_global_120_QCD->SetLineColor(4); // blue    
+  gr_global_120_QCD->GetHistogram()->SetMinimum(-5.);
+  gr_global_350_QCD->GetHistogram()->SetMinimum(-5.);
+  gr_global_120_QCD->Draw("AC*");
+  gr_global_120_QCD->SetTitle("htSum Rate vs. Background Efficiency for Global Multiplicity Cut;QCD Efficiency;Neutrino Gun Rate (kHz)      ");
+  gr_global_350_QCD->SetLineColor(2); // red     
+  gr_global_350_QCD->Draw("C*");
+  auto legend2_global_350_120 = new TLegend(0.15,0.7,0.5,0.9);
+  legend2_global_350_120->AddEntry(gr_global_120_QCD,"ht Sum Rate at 120 GeV");
+  legend2_global_350_120->AddEntry(gr_global_350_QCD,"ht Sum Rate at 350 GeV");
+  legend2_global_350_120->Draw();
+  c2_global_350_120->SaveAs("plots/NuGun_htsumRates_vs_BackgroundEff_Pl500_Global.pdf");
+
 
   return 0;
 }
