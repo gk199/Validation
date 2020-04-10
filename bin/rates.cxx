@@ -285,6 +285,9 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   eventTree->GetEntry(0);
   myfile << "run number = " << event_->run << std::endl;
 
+  std::ofstream EffRate_file;
+  EffRate_file.open("Eff_Rates.txt", std::ios_base::app); // append instead of overwrite
+
   // set parameters for histograms
   // jet bins
   int nJetBins = 400;
@@ -652,10 +655,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 
   // counting LLP efficiencies
   double totalJets(0), passedMultJets(0);
-  double totalGlobal(0), passedMultGlobal(0), passedHtSum350(0);
+  double totalGlobal(0), passedMultGlobal(0), passedHtSum350(0), passedHtSum120(0);
   // change these variables to change the multiplicity thresholds that are set
   uint GeV3ns3Global_threshold = 3;
-  uint GeV3ns3Jet_threshold = 3;
+  uint GeV3ns3Jet_threshold = 2;
   double DR_threshold = 0.5;
 
   /////////////////////////////////
@@ -763,6 +766,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	  if( l1emu_->sumType[c] == L1Analysis::kMissingEtHF ) metHFSum = l1emu_->sumEt[c];
           if( l1emu_->sumType[c] == L1Analysis::kMissingHt ) mhtSum = l1emu_->sumEt[c];
       }
+      //      std::cout << "htSum value = " << htSum << std::endl;
 
       int seedTowerIEta(-1);
       int seedTowerIPhi(-1);
@@ -1543,6 +1547,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       if (mult3GeV3nsHB > GeV3ns3Global_threshold ) passedMultGlobal += 1;
       if (mult3GeV3nsHB_Jets > GeV3ns3Jet_threshold ) passedMultJets += 1;
       if (htSum > 350 ) passedHtSum350 += 1;
+      if (htSum > 120 ) passedHtSum120 += 1;
 
       //std::cout << mult3GeV3nsHB_Jets << " = mult3GeV3nsHB_Jets. And sum of four jets one = " << mult3GeV3nsHB_Jet0 + mult3GeV3nsHB_Jet1 + mult3GeV3nsHB_Jet2 + mult3GeV3nsHB_Jet3 << std::endl;
       if (mult3GeV3nsHB_Jets != (mult3GeV3nsHB_Jet0 + mult3GeV3nsHB_Jet1 + mult3GeV3nsHB_Jet2 + mult3GeV3nsHB_Jet3) ) std::cout << "sums are not equal!" << std::endl; // though note, these are only put into histograms when at least one jet is gen matched!
@@ -1939,6 +1944,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   std::cout << "LLP passed jet matched multiplicity cut of mult3GeV3nsHB_Jets>" << GeV3ns3Jet_threshold << " / total LLPs = " << passedMultJets/totalJets << std::endl;
   std::cout << "LLP passed global multiplicity cut of mult3GeV3nsHB>" << GeV3ns3Global_threshold << " / total LLPs = " << passedMultGlobal/totalGlobal << std::endl;
   std::cout << "LLP passed htSum > 350 GeV cut / total LLPs = " << passedHtSum350/totalGlobal << std::endl;
+  std::cout << "LLP passed htSum > 120 GeV cut / total LLPs = " << passedHtSum120/totalGlobal << std::endl;
 
   //  TFile g( outputFilename.c_str() , "new");
   kk->cd();
@@ -1993,23 +1999,56 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     if (inputFile.substr(0,11) == "../Neutrino" ) {
       int SJ_60GeV_bin = singleJetGlobalRates_emu->GetXaxis()->FindBin(60); // get x value of bin of interest                      
       int SJet60GeV = singleJetGlobalRates_emu->GetBinContent(SJ_60GeV_bin); // get rate value for single jet at 60 GeV ET threshold
+      int QJ_60GeV_bin = quadJetGlobalRates_emu->GetXaxis()->FindBin(60); // get x value of bin of interest
+      int QJet60GeV = quadJetGlobalRates_emu->GetBinContent(QJ_60GeV_bin); // get rate value for quad jet at 60 GeV ET threshold
       int HT_120GeV_bin = htSumGlobalRates_emu->GetXaxis()->FindBin(120); // get x value of bin of interest
       int htSum120GeV = htSumGlobalRates_emu->GetBinContent(HT_120GeV_bin); // get rate value for ht sum rate at 120 GeV ET threshold
       int HT_350GeV_bin = htSumGlobalRates_emu->GetXaxis()->FindBin(350); // get x value of bin of interest         
       int htSum350GeV = htSumGlobalRates_emu->GetBinContent(HT_350GeV_bin); // get rate value for ht sum rate at 350 GeV ET threshold
       int HT_350GeV_original_bin = htSumOriginalRates_emu->GetXaxis()->FindBin(350); // get x value of bin of interest in original htSum rates plot
       int htSum350GeV_original = htSumOriginalRates_emu->GetBinContent(HT_350GeV_original_bin); // get rate value for ht sum rate at 350 GeV ET threshold on the original rates plot
+      int HT_120GeV_original_bin = htSumOriginalRates_emu->GetXaxis()->FindBin(120); // get x value of bin of interest in original htSum rates plot 
+      int htSum120GeV_original = htSumOriginalRates_emu->GetBinContent(HT_120GeV_original_bin); // get rate value for ht sum rate at 120 GeV ET threshold on the original rates plot
       std::cout << "For global multiplicity threshold of >" << GeV3ns3Global_threshold << " the single jet rate = " << SJet60GeV << " and htSum=120 rate = " << htSum120GeV <<  " and htSum=350 rate = " << htSum350GeV << std::endl;
-      std::cout << "Original htSum rate at 350 GeV = " << htSum350GeV_original << std::endl;
+      std::cout << "Original htSum rate at 350 GeV = " << htSum350GeV_original << std::endl;     
+      std::cout << "Original htSum rate at 120 GeV = " << htSum120GeV_original << std::endl;
 
       int SJ_60GeV_bin_l = singleJetRates_emu->GetXaxis()->FindBin(60); // get x value of bin of interest                          
-      int SJet60GeV_l = singleJetRates_emu->GetBinContent(SJ_60GeV_bin_l); // get rate value for single jet at 60 GeV ET threshold   
+      int SJet60GeV_l = singleJetRates_emu->GetBinContent(SJ_60GeV_bin_l); // get rate value for single jet at 60 GeV ET threshold 
+      int QJ_60GeV_bin_l = quadJetRates_emu->GetXaxis()->FindBin(60); // get x value of bin of interest
+      int QJet60GeV_l = quadJetRates_emu->GetBinContent(QJ_60GeV_bin_l); // get rate value for quad jet at 60 GeV ET threshold  
       int HT_120GeV_bin_l = htSumRates_emu->GetXaxis()->FindBin(120); // get x value of bin of interest            
       int htSum120GeV_l = htSumRates_emu->GetBinContent(HT_120GeV_bin_l); // get rate value for ht sum rate at 120 GeV ET threshold
       int HT_350GeV_bin_l = htSumRates_emu->GetXaxis()->FindBin(350); // get x value of bin of interest                            
       int htSum350GeV_l = htSumRates_emu->GetBinContent(HT_350GeV_bin_l); // get rate value for ht sum rate at 350 GeV ET threshold  
       std::cout <<  "For L1 jet matched multiplicity threshold of > " << GeV3ns3Jet_threshold << " the single jet rate at 60 GeV = " << SJet60GeV_l << " and htSum=120 rate = " << htSum120GeV_l << " and htSum=350 rate = " << htSum350GeV_l << std::endl;
       std::cout << inputFile << std::endl;
+
+
+      EffRate_file << "singleJetRate[" << GeV3ns3Jet_threshold-1 << "] = " << SJet60GeV_l/1000 << ";" << std::endl;
+      EffRate_file << "quadJetRate[" << GeV3ns3Jet_threshold-1 << "] = " << QJet60GeV_l/1000 << ";" << std::endl;
+      EffRate_file << "htSum120Rate[" << GeV3ns3Jet_threshold-1 << "] = " << htSum120GeV_l/1000 << ";" << std::endl;
+      EffRate_file << "htSum350Rate[" << GeV3ns3Jet_threshold-1 << "] = " << htSum350GeV_l/1000 << ";" << std::endl;
+
+      EffRate_file << "singleJetRateGlobal[" << GeV3ns3Global_threshold-1 << "] = " << SJet60GeV/1000 << ";" << std::endl;
+      EffRate_file << "quadJetRateGlobal[" << GeV3ns3Global_threshold-1 << "] = " << QJet60GeV/1000 << ";" << std::endl;
+      EffRate_file << "htSumRate120Global[" << GeV3ns3Global_threshold-1 << "] = " << htSum120GeV/1000 << ";" << std::endl;
+      EffRate_file << "htSumRate350Global[" << GeV3ns3Global_threshold-1 << "] = " << htSum350GeV/1000 << ";" << std::endl;
+
+      EffRate_file << "Original_htSumRate350[" << GeV3ns3Global_threshold-1 << "] = " << htSum350GeV_original/1000 << ";" << std::endl;
+      EffRate_file << "Original_htSumRate120[" << GeV3ns3Global_threshold-1 << "] = " << htSum120GeV_original/1000 << ";" << std::endl;
+    }
+    if (inputFile.substr(0,16) == "../mh1000_pl500/" ) {
+      EffRate_file << "EffPl500["<< GeV3ns3Jet_threshold-1 << "] = " << passedMultJets/totalJets << ";" <<std::endl;
+      EffRate_file << "EffPl500Global["<< GeV3ns3Global_threshold-1 << "] = " << passedMultGlobal/totalGlobal << ";" <<std::endl;
+      EffRate_file << "EffPl500_htSum120_Global[" << GeV3ns3Global_threshold-1 << "] = " << passedHtSum120/totalGlobal << ";" <<std::endl;
+      EffRate_file << "EffPl500_htSum350_Global[" << GeV3ns3Global_threshold-1 <<"] = " << passedHtSum350/totalGlobal << ";" <<std::endl;
+    }
+    if (inputFile.substr(0,6) == "../QCD" ) {
+      EffRate_file << "EffQCD["<< GeV3ns3Jet_threshold-1 << "] = " << passedMultJets/totalJets << ";" <<std::endl;
+      EffRate_file << "EffQCDGlobal["<< GeV3ns3Global_threshold-1 << "] = " << passedMultGlobal/totalGlobal << ";" <<std::endl;
+      EffRate_file << "EffQCD_htSum120_Global[" << GeV3ns3Global_threshold-1 <<"] = " << passedHtSum120/totalGlobal << ";" <<std::endl;
+      EffRate_file << "EffQCD_htSum350_Global[" << GeV3ns3Global_threshold-1 <<"] = " << passedHtSum350/totalGlobal << ";" <<std::endl;
     }
 
     hJetEt->Write();
@@ -2326,4 +2365,5 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   myfile << "norm factor used = " << norm << std::endl;
   myfile << "number of good events = " << goodLumiEventCount << std::endl;
   myfile.close(); 
+  EffRate_file.close();
 }//closes the function 'rates'
