@@ -1,9 +1,10 @@
 # Setup
 These scripts use the L1Ntuple framework, which should be set up as described here: [L1Ntuple environment set up instructions](https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideL1TStage2Instructions#Environment_Setup_with_Integrati).
 
-To include the timing and depth branch, after compiling the L1Ntuple environment, do
+To include the timing and depth branch, after compiling the L1Ntuple environment, do (first option in 10_6_X, second one in 11_0_2 for use with the official production samples)
 ```
 git cms-merge-topic --unsafe georgia14:upgradeHcalTPs-l1t-106X
+git cms-merge-topic --unsafe georgia14:upgradeHcalTPs-l1t-110X
 ```
 After compiling with the L1Ntuple environment and the upgrade timing and depth branch, issue the following:
 ```
