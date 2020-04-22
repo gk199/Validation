@@ -355,7 +355,8 @@
       if ( name(9,2) == "HE" || name(9,2) == "HB" ){
         multHists_QCD[hist]->SetTitle("Multiplicity for QCD, timing scan at " + name(2,4) + " in " + name(9,2)+", TP matched w/" + name(11,3));
 	if ( name(11,3) != "Jet" ) multHists_QCD[hist]->SetTitle("Multiplicity for QCD, timing scan at " + name(2,4) + " in " + name(9,2));
-	if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,100);
+	if (hist.substr(0,3) == "dt0" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,40);
+        if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,100);
         if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,70);
         if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,35);
       }
@@ -408,6 +409,7 @@
       if ( name(9,2) == "HE" || name(9,2) == "HB" ){
 	multHists_LLP10000[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=10m, timing scan at " + name(2,4) + " in " + name(9,2)+", TP matched w/" + name(11,3)); 
 	if (name(11,3) != "Jet" ) multHists_LLP10000[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=10m, timing scan at " + name(2,4) + " in " + name(9,2));
+        if (hist.substr(0,3) == "dt0" && name(9,2) == "HB" ) multHists_LLP10000[hist]->GetXaxis()->SetRangeUser(0,40);
 	if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_LLP10000[hist]->GetXaxis()->SetRangeUser(0,100);
 	if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_LLP10000[hist]->GetXaxis()->SetRangeUser(0,70);
 	if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_LLP10000[hist]->GetXaxis()->SetRangeUser(0,35);
@@ -461,6 +463,7 @@
       if ( name(9,2) == "HE" || name(9,2) == "HB" ){
         multHists_LLP1000[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=1m, timing scan at " + name(2,4) + " in " + name(9,2)+", TP matched w/" + name(11,3));
 	if (name(11,3) != "Jet" ) multHists_LLP1000[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=1m, timing scan at " + name(2,4) + " in " + name(9,2));
+        if (hist.substr(0,3) == "dt0" && name(9,2) == "HB" ) multHists_LLP1000[hist]->GetXaxis()->SetRangeUser(0,40);
 	if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_LLP1000[hist]->GetXaxis()->SetRangeUser(0,100);
         if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_LLP1000[hist]->GetXaxis()->SetRangeUser(0,70);
         if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_LLP1000[hist]->GetXaxis()->SetRangeUser(0,35);
@@ -514,6 +517,7 @@
       if ( name(9,2) == "HE" || name(9,2) == "HB" ){
         multHists_LLP500[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=0.5m, timing scan at " + name(2,4) + " in region " + name(9,2)+", TP matched w/" + name(11,3));
 	if (name(11,3) != "Jet" ) multHists_LLP500[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=0.5m, timing scan at " + name(2,4) + " in region " + name(9,2));
+        if (hist.substr(0,3) == "dt0" && name(9,2) == "HB" ) multHists_LLP500[hist]->GetXaxis()->SetRangeUser(0,40);
 	if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_LLP500[hist]->GetXaxis()->SetRangeUser(0,100);
         if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_LLP500[hist]->GetXaxis()->SetRangeUser(0,70);
         if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_LLP500[hist]->GetXaxis()->SetRangeUser(0,35);
@@ -584,6 +588,7 @@
       if (name(11,3) != "Jet" ) multHists_QCD[hist]->SetTitle("Multiplicity at " + name(2,4) + " and " + name(6,3) + " in " + name(9,2));
       if (name(9,5) == "HBSin" || name(9,5) == "HBDou" || name(9,5) == "HBTri" ) multHists_QCD[hist]->SetTitle(name(11,6) + " Jet Hit Multiplicity at " + name(2,4) + " and " + name(6,3));
       if (name(9,5) == "HBQua" ) multHists_QCD[hist]->SetTitle(name(11,4) + " Jet Hit Multiplicity at " + name(2,4) + " and " + name(6,3));
+      if (hist.substr(0,3) == "dt0" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,40);
       if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,100);
       if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,70);
       if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,35);
@@ -749,8 +754,8 @@
   std::cout << "Global multiplicity: single jet rate = " << SJet60GeV << " and htSum rate = " << htSum350GeV << std::endl;
   std::cout << "Jet matched multiplicity: single jet rate = " << SJet60GeV_l << " and htSum rate = " << htSum350GeV_l << std::endl;
 
-  Double_t EffPl500[4], EffPl500Mh350[4], EffQCD[4], singleJetRate[4], quadJetRate[4], htSum120Rate[4], htSum350Rate[4];
-  Double_t EffPl500Global[4], EffPl500Mh350Global[4], EffQCDGlobal[4], singleJetRateGlobal[4], quadJetRateGlobal[4], htSumRate120Global[4], htSumRate350Global[4];
+  Double_t EffPl500[6], EffPl500Mh350[6], EffQCD[6], singleJetRate[6], quadJetRate[6], htSum120Rate[6], htSum350Rate[6];
+  Double_t EffPl500Global[6], EffPl500Mh350Global[6], EffQCDGlobal[6], singleJetRateGlobal[6], quadJetRateGlobal[6], htSumRate120Global[6], htSumRate350Global[6];
   double EffPl500Mh1000_htSum120_Global, EffPl500Mh1000_htSum350_Global, EffQCD_htSum120_Global, EffQCD_htSum350_Global, Original_htSumRate350, Original_htSumRate120;
   double EffPl500Mh350_htSum120_Global, EffPl500Mh350_htSum350_Global;
 
@@ -760,36 +765,50 @@
   singleJetRate[1] = 28;
   singleJetRate[2] = 7;
   singleJetRate[3] = 0;
+  singleJetRate[4] = 0;
+  singleJetRate[5] = 0;
   // neutrino gun rate at 60 GeV for quad Jet
   quadJetRate[0] = 14; // in kHz
   quadJetRate[1] = 7;
   quadJetRate[2] = 0;
   quadJetRate[3] = 0;
+  quadJetRate[4] = 0;
+  quadJetRate[5] = 0;
   // neutrino gun rate for htSum at 120 GeV
   htSum120Rate[0] = 312;
   htSum120Rate[1] = 28;
   htSum120Rate[2] = 7;
   htSum120Rate[3] = 0;
+  htSum120Rate[4] = 0;
+  htSum120Rate[5] = 0;
   // neutrino gun rate for htSum at 350 GeV
   htSum350Rate[0] = 78;
   htSum350Rate[1] = 21;
   htSum350Rate[2] = 0;
   htSum350Rate[3] = 0;
+  htSum350Rate[4] = 0;
+  htSum350Rate[5] = 0;
   // signal efficiency for pl 500, mh1000 GeV
   EffPl500[0] = 0.9075;
   EffPl500[1] = 0.8575;
   EffPl500[2] = 0.8065;
   EffPl500[3] = 0.7535;
+  EffPl500[4] = 0.6855;
+  EffPl500[5] = 0.629;
   // signal efficiency for pl 500, mh350 GeV
   EffPl500Mh350[0] = 0.5225;
   EffPl500Mh350[1] = 0.389;
   EffPl500Mh350[2] = 0.285;
   EffPl500Mh350[3] = 0.219;
+  EffPl500Mh350[4] = 0.1665;
+  EffPl500Mh350[5] = 0.1255;
   // background efficiency for QCD
   EffQCD[0] = 0.275; //mult3GeV3nsHB_Jets > 1
   EffQCD[1] = 0.202; //mult3GeV3nsHB_Jets > 2
   EffQCD[2] = 0.1505; //mult3GeV3nsHB_Jets > 3 
   EffQCD[3] = 0.1165; //mult3GeV3nsHB_Jets > 4
+  EffQCD[4] = 0.0945; //mult3GeV3nsHB_Jets > 5
+  EffQCD[5] = 0.0755; //mult3GeV3nsHB_Jets > 6 
 
   // GLOBAL
   // neutrino gun rate at 60 GeV for single Jet
@@ -797,36 +816,50 @@
   singleJetRateGlobal[1] = 1270;
   singleJetRateGlobal[2] = 269;
   singleJetRateGlobal[3] = 56;
+  singleJetRateGlobal[4] = 14;
+  singleJetRateGlobal[5] = 0;
   // neutrino gun rate at 60 GeV for quad Jet
   quadJetRateGlobal[0] = 283; // in kHz
   quadJetRateGlobal[1] = 141;
   quadJetRateGlobal[2] = 28;
   quadJetRateGlobal[3] = 7;
+  quadJetRateGlobal[4] = 7;
+  quadJetRateGlobal[5] = 0;
   // neutrino gun rate for htSum at 120 GeV
   htSumRate120Global[0] = 5607;
   htSumRate120Global[1] = 1760;
   htSumRate120Global[2] = 347;
   htSumRate120Global[3] = 85;
+  htSumRate120Global[4] = 14;
+  htSumRate120Global[5] = 0;
   // neutrino gun rate for htSum at 350 GeV    
   htSumRate350Global[0] = 1547;
   htSumRate350Global[1] = 574;
   htSumRate350Global[2] = 127;
   htSumRate350Global[3] = 42;
+  htSumRate350Global[4] = 7;
+  htSumRate350Global[5] = 0;
   // signal efficiency for pl 500, mh1000
   EffPl500Global[0] = 0.96;
   EffPl500Global[1] = 0.9205;
   EffPl500Global[2] = 0.8765;
   EffPl500Global[3] = 0.8365;
+  EffPl500Global[4] = 0.781;
+  EffPl500Global[5] = 0.726;
   // signal efficiency for pl500, mh350
   EffPl500Mh350Global[0] = 0.7305;
   EffPl500Mh350Global[1] = 0.583;
   EffPl500Mh350Global[2] = 0.448;
   EffPl500Mh350Global[3] = 0.3365;
+  EffPl500Mh350Global[4] = 0.2545;
+  EffPl500Mh350Global[5] = 0.191;
   // background efficiency for QCD
   EffQCDGlobal[0] = 0.505; //mult3GeV3nsHB > 1
   EffQCDGlobal[1] = 0.32; //mult3GeV3nsHB > 2
   EffQCDGlobal[2] = 0.2175; //mult3GeV3nsHB > 3
   EffQCDGlobal[3] = 0.159; //mult3GeV3nsHB > 4  
+  EffQCDGlobal[4] = 0.1225; //mult3GeV3nsHB > 5
+  EffQCDGlobal[5] = 0.1; //mult3GeV3nsHB > 6
 
   // comparison points for htSum rates and efficiencies
   EffPl500Mh1000_htSum120_Global = 0.9995;
@@ -839,23 +872,23 @@
   Original_htSumRate120 = 24117;
 
   // ************* Efficiency vs. Rate for LLP mh=1000 GeV, ct=500 mm ************
-  TGraph *gr_sing_LLP = new TGraph (4, EffPl500, singleJetRate);
-  TGraph *gr_quad_LLP = new TGraph (4, EffPl500, quadJetRate);
-  TGraph *gr_350_LLP = new TGraph (4, EffPl500, htSum350Rate);
-  TGraph *gr_120_LLP = new TGraph (4, EffPl500, htSum120Rate);
-  TGraph *gr_global_sing_LLP = new TGraph (4, EffPl500Global, singleJetRateGlobal);
-  TGraph *gr_global_quad_LLP = new TGraph (4, EffPl500Global, quadJetRateGlobal);
-  TGraph *gr_global_350_LLP = new TGraph (4, EffPl500Global, htSumRate350Global);
-  TGraph *gr_global_120_LLP = new TGraph (4, EffPl500Global, htSumRate120Global);
+  TGraph *gr_sing_LLP = new TGraph (6, EffPl500, singleJetRate);
+  TGraph *gr_quad_LLP = new TGraph (6, EffPl500, quadJetRate);
+  TGraph *gr_350_LLP = new TGraph (6, EffPl500, htSum350Rate);
+  TGraph *gr_120_LLP = new TGraph (6, EffPl500, htSum120Rate);
+  TGraph *gr_global_sing_LLP = new TGraph (6, EffPl500Global, singleJetRateGlobal);
+  TGraph *gr_global_quad_LLP = new TGraph (6, EffPl500Global, quadJetRateGlobal);
+  TGraph *gr_global_350_LLP = new TGraph (6, EffPl500Global, htSumRate350Global);
+  TGraph *gr_global_120_LLP = new TGraph (6, EffPl500Global, htSumRate120Global);
   // ************** Efficiency vs. Rate for LLP mh=350 GeV, ct=500 mm *************
-  TGraph *gr_sing_LLPMh350 = new TGraph (4, EffPl500Mh350, singleJetRate);
-  TGraph *gr_quad_LLPMh350 = new TGraph (4, EffPl500Mh350, quadJetRate);
-  TGraph *gr_350_LLPMh350 = new TGraph (4, EffPl500Mh350, htSum350Rate);
-  TGraph *gr_120_LLPMh350 = new TGraph (4, EffPl500Mh350, htSum120Rate);
-  TGraph *gr_global_sing_LLPMh350 = new TGraph (4, EffPl500Mh350Global, singleJetRateGlobal);
-  TGraph *gr_global_quad_LLPMh350 = new TGraph (4, EffPl500Mh350Global, quadJetRateGlobal);
-  TGraph *gr_global_350_LLPMh350 = new TGraph (4, EffPl500Mh350Global, htSumRate350Global);
-  TGraph *gr_global_120_LLPMh350 = new TGraph (4, EffPl500Mh350Global, htSumRate120Global);
+  TGraph *gr_sing_LLPMh350 = new TGraph (6, EffPl500Mh350, singleJetRate);
+  TGraph *gr_quad_LLPMh350 = new TGraph (6, EffPl500Mh350, quadJetRate);
+  TGraph *gr_350_LLPMh350 = new TGraph (6, EffPl500Mh350, htSum350Rate);
+  TGraph *gr_120_LLPMh350 = new TGraph (6, EffPl500Mh350, htSum120Rate);
+  TGraph *gr_global_sing_LLPMh350 = new TGraph (6, EffPl500Mh350Global, singleJetRateGlobal);
+  TGraph *gr_global_quad_LLPMh350 = new TGraph (6, EffPl500Mh350Global, quadJetRateGlobal);
+  TGraph *gr_global_350_LLPMh350 = new TGraph (6, EffPl500Mh350Global, htSumRate350Global);
+  TGraph *gr_global_120_LLPMh350 = new TGraph (6, EffPl500Mh350Global, htSumRate120Global);
   // ************** Markers for comparison with current benchmark performance ******
   TMarker *m_QCD_htSum120 = new TMarker (EffQCD_htSum120_Global, Original_htSumRate120, 21);
   TMarker *m_QCD_htSum350 = new TMarker (EffQCD_htSum350_Global, Original_htSumRate350, 21);
@@ -1025,14 +1058,14 @@
   c1_global_350_120Mh350->SaveAs("plots/NuGun_htSumRates_vs_SignalEff_Pl500Mh350_Global.pdf");
 
   // ************ Background (QCD) Efficiency ***********************
-  TGraph *gr_sing_QCD = new TGraph (4, EffQCD, singleJetRate);
-  TGraph *gr_quad_QCD = new TGraph (4, EffQCD, quadJetRate);
-  TGraph *gr_350_QCD = new TGraph (4, EffQCD, htSum350Rate);
-  TGraph *gr_120_QCD = new TGraph (4, EffQCD, htSum120Rate);
-  TGraph *gr_global_sing_QCD = new TGraph (4, EffQCDGlobal, singleJetRateGlobal);
-  TGraph *gr_global_quad_QCD = new TGraph (4, EffQCDGlobal, quadJetRateGlobal);
-  TGraph *gr_global_350_QCD = new TGraph (4, EffQCDGlobal, htSumRate350Global);
-  TGraph *gr_global_120_QCD = new TGraph (4, EffQCDGlobal, htSumRate120Global);
+  TGraph *gr_sing_QCD = new TGraph (6, EffQCD, singleJetRate);
+  TGraph *gr_quad_QCD = new TGraph (6, EffQCD, quadJetRate);
+  TGraph *gr_350_QCD = new TGraph (6, EffQCD, htSum350Rate);
+  TGraph *gr_120_QCD = new TGraph (6, EffQCD, htSum120Rate);
+  TGraph *gr_global_sing_QCD = new TGraph (6, EffQCDGlobal, singleJetRateGlobal);
+  TGraph *gr_global_quad_QCD = new TGraph (6, EffQCDGlobal, quadJetRateGlobal);
+  TGraph *gr_global_350_QCD = new TGraph (6, EffQCDGlobal, htSumRate350Global);
+  TGraph *gr_global_120_QCD = new TGraph (6, EffQCDGlobal, htSumRate120Global);
 
   TCanvas *c2_sing_quad = new TCanvas("c2_sing_quad","Graph Draw Options",200,10,600,400);
   gr_sing_QCD->SetLineColor(4); // blue  
