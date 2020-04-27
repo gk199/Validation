@@ -754,10 +754,10 @@
   std::cout << "Global multiplicity: single jet rate = " << SJet60GeV << " and htSum rate = " << htSum350GeV << std::endl;
   std::cout << "Jet matched multiplicity: single jet rate = " << SJet60GeV_l << " and htSum rate = " << htSum350GeV_l << std::endl;
 
-  Double_t EffPl500[6], EffPl500Mh350[6], EffQCD[6], singleJetRate[6], quadJetRate[6], htSum120Rate[6], htSum350Rate[6];
+  Double_t EffPl500_120[6], EffPl500_350[6], EffPl500Mh350_120[6], EffPl500Mh350_350[6], EffQCD_120[6], EffQCD_350[6], singleJetRate[6], quadJetRate[6], htSum120Rate[6], htSum350Rate[6];
   Double_t EffPl500Global[6], EffPl500Mh350Global[6], EffQCDGlobal[6], singleJetRateGlobal[6], quadJetRateGlobal[6], htSumRate120Global[6], htSumRate350Global[6];
-  double EffPl500Mh1000_htSum120_Global, EffPl500Mh1000_htSum350_Global, EffQCD_htSum120_Global, EffQCD_htSum350_Global, Original_htSumRate350, Original_htSumRate120;
-  double EffPl500Mh350_htSum120_Global, EffPl500Mh350_htSum350_Global;
+  double EffPl500Mh1000_htSum120_Global, EffPl500Mh1000_htSum350_Global, EffPl500Mh1000_htSum430_Global, EffQCD_htSum120_Global, EffQCD_htSum350_Global, EffQCD_htSum430_Global, Original_htSumRate120, Original_htSumRate350, Original_htSumRate430;
+  double EffPl500Mh350_htSum120_Global, EffPl500Mh350_htSum350_Global, EffPl500Mh350_htSum430_Global;
 
   // L1 JET MATCHED
   // neutrino gun rate at 60 GeV for single Jet, in kHz
@@ -788,27 +788,48 @@
   htSum350Rate[3] = 0;
   htSum350Rate[4] = 0;
   htSum350Rate[5] = 0;
-  // signal efficiency for pl 500, mh1000 GeV
-  EffPl500[0] = 0.9075;
-  EffPl500[1] = 0.8575;
-  EffPl500[2] = 0.8065;
-  EffPl500[3] = 0.7535;
-  EffPl500[4] = 0.6855;
-  EffPl500[5] = 0.629;
-  // signal efficiency for pl 500, mh350 GeV
-  EffPl500Mh350[0] = 0.5225;
-  EffPl500Mh350[1] = 0.389;
-  EffPl500Mh350[2] = 0.285;
-  EffPl500Mh350[3] = 0.219;
-  EffPl500Mh350[4] = 0.1665;
-  EffPl500Mh350[5] = 0.1255;
-  // background efficiency for QCD
-  EffQCD[0] = 0.275; //mult3GeV3nsHB_Jets > 1
-  EffQCD[1] = 0.202; //mult3GeV3nsHB_Jets > 2
-  EffQCD[2] = 0.1505; //mult3GeV3nsHB_Jets > 3 
-  EffQCD[3] = 0.1165; //mult3GeV3nsHB_Jets > 4
-  EffQCD[4] = 0.0945; //mult3GeV3nsHB_Jets > 5
-  EffQCD[5] = 0.0755; //mult3GeV3nsHB_Jets > 6 
+  // signal efficiency for pl 500, mh1000 GeV. Efficiency = % of events passing timing mult cuts AND ht > 120
+  EffPl500_120[0] = 0.9075;
+  EffPl500_120[1] = 0.8575;
+  EffPl500_120[2] = 0.8065;
+  EffPl500_120[3] = 0.7535;
+  EffPl500_120[4] = 0.6855;
+  EffPl500_120[5] = 0.629;
+  // signal efficiency for pl 500, mh1000 GeV. Efficiency = % of events passing timing mult cuts AND ht > 350 
+  EffPl500_350[0] = 0.9065;
+  EffPl500_350[1] = 0.857;
+  EffPl500_350[2] = 0.8065;
+  EffPl500_350[3] = 0.7535;
+  EffPl500_350[4] = 0.6855;
+  EffPl500_350[5] = 0.629;
+  // signal efficiency for pl 500, mh350 GeV. Efficiency = % of events passing timing mult cuts AND ht > 120
+  EffPl500Mh350_120[0] = 0.5225;
+  EffPl500Mh350_120[1] = 0.389;
+  EffPl500Mh350_120[2] = 0.285;
+  EffPl500Mh350_120[3] = 0.219;
+  EffPl500Mh350_120[4] = 0.1665;
+  EffPl500Mh350_120[5] = 0.1255;
+  // signal efficiency for pl 500, mh350 GeV. Efficiency = % of events passing timing mult cuts AND ht > 350
+  EffPl500Mh350_350[0] = 0.522;
+  EffPl500Mh350_350[1] = 0.3695;
+  EffPl500Mh350_350[2] = 0.2745;
+  EffPl500Mh350_350[3] = 0.2135;
+  EffPl500Mh350_350[4] = 0.162;
+  EffPl500Mh350_350[5] = 0.1235;
+  // background efficiency for QCD. Efficiency = % of events passing timing mult cuts AND ht > 120
+  EffQCD_120[0] = 0.275; //mult3GeV3nsHB_Jets > 1
+  EffQCD_120[1] = 0.202; //mult3GeV3nsHB_Jets > 2
+  EffQCD_120[2] = 0.1505; //mult3GeV3nsHB_Jets > 3 
+  EffQCD_120[3] = 0.1165; //mult3GeV3nsHB_Jets > 4
+  EffQCD_120[4] = 0.0945; //mult3GeV3nsHB_Jets > 5
+  EffQCD_120[5] = 0.0755; //mult3GeV3nsHB_Jets > 6 
+  // background efficiency for QCD. Efficiency = % of events passing timing mult cuts AND ht > 350
+  EffQCD_350[0] = 0.261; //mult3GeV3nsHB_Jets > 1
+  EffQCD_350[1] = 0.199; //mult3GeV3nsHB_Jets > 2
+  EffQCD_350[2] = 0.1505; //mult3GeV3nsHB_Jets > 3
+  EffQCD_350[3] = 0.1165; //mult3GeV3nsHB_Jets > 4 
+  EffQCD_350[4] = 0.0945; //mult3GeV3nsHB_Jets > 5
+  EffQCD_350[5] = 0.0755; //mult3GeV3nsHB_Jets > 6  
 
   // GLOBAL
   // neutrino gun rate at 60 GeV for single Jet
@@ -864,27 +885,31 @@
   // comparison points for htSum rates and efficiencies
   EffPl500Mh1000_htSum120_Global = 0.9995;
   EffPl500Mh1000_htSum350_Global = 0.9975;
+  EffPl500Mh1000_htSum430_Global = 0.996;
   EffPl500Mh350_htSum120_Global = 0.9955;
   EffPl500Mh350_htSum350_Global = 0.849;
+  EffPl500Mh350_htSum430_Global = 0.7085;
   EffQCD_htSum120_Global = 0.965;
   EffQCD_htSum350_Global = 0.656;
-  Original_htSumRate350 = 4776;
+  EffQCD_htSum430_Global = 0.5285;
   Original_htSumRate120 = 24117;
+  Original_htSumRate350 = 4776;
+  Original_htSumRate430 = 1795;
 
   // ************* Efficiency vs. Rate for LLP mh=1000 GeV, ct=500 mm ************
-  TGraph *gr_sing_LLP = new TGraph (6, EffPl500, singleJetRate);
-  TGraph *gr_quad_LLP = new TGraph (6, EffPl500, quadJetRate);
-  TGraph *gr_350_LLP = new TGraph (6, EffPl500, htSum350Rate);
-  TGraph *gr_120_LLP = new TGraph (6, EffPl500, htSum120Rate);
+  TGraph *gr_sing_LLP = new TGraph (6, EffPl500_120, singleJetRate);
+  TGraph *gr_quad_LLP = new TGraph (6, EffPl500_120, quadJetRate);
+  TGraph *gr_350_LLP = new TGraph (6, EffPl500_350, htSum350Rate);
+  TGraph *gr_120_LLP = new TGraph (6, EffPl500_120, htSum120Rate);
   TGraph *gr_global_sing_LLP = new TGraph (6, EffPl500Global, singleJetRateGlobal);
   TGraph *gr_global_quad_LLP = new TGraph (6, EffPl500Global, quadJetRateGlobal);
   TGraph *gr_global_350_LLP = new TGraph (6, EffPl500Global, htSumRate350Global);
   TGraph *gr_global_120_LLP = new TGraph (6, EffPl500Global, htSumRate120Global);
   // ************** Efficiency vs. Rate for LLP mh=350 GeV, ct=500 mm *************
-  TGraph *gr_sing_LLPMh350 = new TGraph (6, EffPl500Mh350, singleJetRate);
-  TGraph *gr_quad_LLPMh350 = new TGraph (6, EffPl500Mh350, quadJetRate);
-  TGraph *gr_350_LLPMh350 = new TGraph (6, EffPl500Mh350, htSum350Rate);
-  TGraph *gr_120_LLPMh350 = new TGraph (6, EffPl500Mh350, htSum120Rate);
+  TGraph *gr_sing_LLPMh350 = new TGraph (6, EffPl500Mh350_120, singleJetRate);
+  TGraph *gr_quad_LLPMh350 = new TGraph (6, EffPl500Mh350_120, quadJetRate);
+  TGraph *gr_350_LLPMh350 = new TGraph (6, EffPl500Mh350_350, htSum350Rate);
+  TGraph *gr_120_LLPMh350 = new TGraph (6, EffPl500Mh350_120, htSum120Rate);
   TGraph *gr_global_sing_LLPMh350 = new TGraph (6, EffPl500Mh350Global, singleJetRateGlobal);
   TGraph *gr_global_quad_LLPMh350 = new TGraph (6, EffPl500Mh350Global, quadJetRateGlobal);
   TGraph *gr_global_350_LLPMh350 = new TGraph (6, EffPl500Mh350Global, htSumRate350Global);
@@ -892,10 +917,13 @@
   // ************** Markers for comparison with current benchmark performance ******
   TMarker *m_QCD_htSum120 = new TMarker (EffQCD_htSum120_Global, Original_htSumRate120, 21);
   TMarker *m_QCD_htSum350 = new TMarker (EffQCD_htSum350_Global, Original_htSumRate350, 21);
+  TMarker *m_QCD_htSum430 = new TMarker (EffQCD_htSum430_Global, Original_htSumRate430, 21);
   TMarker *m_LLP_htSum120 = new TMarker (EffPl500Mh1000_htSum120_Global, Original_htSumRate120, 21);
   TMarker *m_LLP_htSum350 = new TMarker (EffPl500Mh1000_htSum350_Global, Original_htSumRate350, 21);
+  TMarker *m_LLP_htSum430 = new TMarker (EffPl500Mh1000_htSum430_Global, Original_htSumRate430, 21);
   TMarker *m_LLPMh350_htSum120 = new TMarker (EffPl500Mh350_htSum120_Global, Original_htSumRate120, 21);
   TMarker *m_LLPMh350_htSum350 = new TMarker (EffPl500Mh350_htSum350_Global, Original_htSumRate350, 21);
+  TMarker *m_LLPMh350_htSum430 = new TMarker (EffPl500Mh350_htSum430_Global, Original_htSumRate430, 21);
 
   // Jet rate, LLP mh=1000 efficiency regional
   TCanvas *c1_sing_quad = new TCanvas("c1_sing_quad","Graph Draw Options",200,10,600,400);
@@ -941,13 +969,17 @@
   m_LLP_htSum120->SetMarkerColor(4);
   m_LLP_htSum350->SetMarkerStyle(21);
   m_LLP_htSum350->SetMarkerColor(2);
+  m_LLP_htSum430->SetMarkerStyle(21);
+  m_LLP_htSum430->SetMarkerColor(3);
   auto legend_350_120 = new TLegend(0.15,0.7,0.5,0.9);
-  legend_350_120->AddEntry(gr_120_LLP,"ht Sum Rate at 120 GeV");
-  legend_350_120->AddEntry(gr_350_LLP,"ht Sum Rate at 350 GeV");
-  legend_350_120->AddEntry(m_LLP_htSum350,"ht Sum>350 GeV Rate, no timing cuts");
+  legend_350_120->AddEntry(gr_120_LLP,"H_{T}>120 GeV, with timing cuts");
+  legend_350_120->AddEntry(gr_350_LLP,"H_{T}>350 GeV, with timing cuts");
+  legend_350_120->AddEntry(m_LLP_htSum350,"H_{T}>350 GeV, no timing cuts");
+  legend_350_120->AddEntry(m_LLP_htSum430,"H_{T}>430 GeV, no timing cuts");
   legend_350_120->Draw();
   gr_120_LLP->GetXaxis()->SetLimits(0.,1.);
   m_LLP_htSum350->Draw();
+  m_LLP_htSum430->Draw();
   gr_120_LLP->GetHistogram()->SetMinimum(1.);
   gr_120_LLP->GetHistogram()->SetMaximum(10000.);
   c1_350_120->SetLogy(); 
@@ -966,13 +998,17 @@
   m_LLPMh350_htSum120->SetMarkerColor(4);
   m_LLPMh350_htSum350->SetMarkerStyle(21);
   m_LLPMh350_htSum350->SetMarkerColor(2);
+  m_LLPMh350_htSum430->SetMarkerStyle(21);
+  m_LLPMh350_htSum430->SetMarkerColor(3);
   auto legend_350_120Mh350 = new TLegend(0.15,0.7,0.5,0.9);
-  legend_350_120Mh350->AddEntry(gr_120_LLP,"ht Sum Rate at 120 GeV");
-  legend_350_120Mh350->AddEntry(gr_350_LLP,"ht Sum Rate at 350 GeV");
-  legend_350_120Mh350->AddEntry(m_LLP_htSum350,"ht Sum>350 GeV Rate, no timing cuts");
+  legend_350_120Mh350->AddEntry(gr_120_LLPMh350,"H_{T}>120 GeV, with timing cuts");
+  legend_350_120Mh350->AddEntry(gr_350_LLPMh350,"H_{T}>350 GeV, with timing cuts");
+  legend_350_120Mh350->AddEntry(m_LLPMh350_htSum350,"H_{T}>350 GeV, no timing cuts");
+  legend_350_120Mh350->AddEntry(m_LLPMh350_htSum430,"H_{T}>430 GeV, no timing cuts");
   legend_350_120Mh350->Draw();
   gr_120_LLPMh350->GetXaxis()->SetLimits(0.,1.);
   m_LLPMh350_htSum350->Draw();
+  m_LLPMh350_htSum430->Draw();
   gr_120_LLPMh350->GetHistogram()->SetMinimum(1.);
   gr_120_LLPMh350->GetHistogram()->SetMaximum(10000.);
   c1_350_120Mh350->SetGrid();
@@ -1024,12 +1060,16 @@
   m_LLP_htSum120->SetMarkerColor(4);
   m_LLP_htSum350->SetMarkerStyle(21);
   m_LLP_htSum350->SetMarkerColor(2);
+  m_LLP_htSum430->SetMarkerStyle(21);
+  m_LLP_htSum430->SetMarkerColor(3);
   m_LLP_htSum120->Draw();
   m_LLP_htSum350->Draw();
+  m_LLP_htSum430->Draw();
   auto legend_global_350_120 = new TLegend(0.15,0.7,0.5,0.9);
-  legend_global_350_120->AddEntry(gr_global_120_LLP,"ht Sum Rate at 120 GeV");
-  legend_global_350_120->AddEntry(gr_global_350_LLP,"ht Sum Rate at 350 GeV");
-  legend_global_350_120->AddEntry(m_LLP_htSum350,"ht Sum>350 GeV Rate, no timing cuts");
+  legend_global_350_120->AddEntry(gr_global_120_LLP,"H_{T}>120 GeV, with timing cuts");
+  legend_global_350_120->AddEntry(gr_global_350_LLP,"H_{T}>350 GeV, with timing cuts");
+  legend_global_350_120->AddEntry(m_LLP_htSum350,"H_{T}>350 GeV, no timing cuts");
+  legend_global_350_120->AddEntry(m_LLP_htSum430,"H_{T}>430 GeV, no timing cuts");
   legend_global_350_120->Draw();
   gr_global_120_LLP->GetXaxis()->SetLimits(0.,1.);
   c1_global_350_120->SaveAs("plots/NuGun_htSumRates_vs_SignalEff_Pl500Mh1000_Global.pdf");
@@ -1047,21 +1087,25 @@
   m_LLPMh350_htSum120->SetMarkerColor(4);
   m_LLPMh350_htSum350->SetMarkerStyle(21);
   m_LLPMh350_htSum350->SetMarkerColor(2);
+  m_LLPMh350_htSum430->SetMarkerStyle(21);
+  m_LLPMh350_htSum430->SetMarkerColor(3);
   m_LLPMh350_htSum120->Draw();
   m_LLPMh350_htSum350->Draw();
+  m_LLPMh350_htSum430->Draw();
   auto legend_global_350_120Mh350 = new TLegend(0.15,0.7,0.5,0.9);
-  legend_global_350_120Mh350->AddEntry(gr_global_120_LLPMh350,"ht Sum Rate at 120 GeV");
-  legend_global_350_120Mh350->AddEntry(gr_global_350_LLPMh350,"ht Sum Rate at 350 GeV");
-  legend_global_350_120Mh350->AddEntry(m_LLPMh350_htSum350,"ht Sum>350 GeV Rate, no timing cuts");
+  legend_global_350_120Mh350->AddEntry(gr_global_120_LLPMh350,"H_{T}>120 GeV, with timing cuts");
+  legend_global_350_120Mh350->AddEntry(gr_global_350_LLPMh350,"H_{T}>350 GeV, with timing cuts");
+  legend_global_350_120Mh350->AddEntry(m_LLPMh350_htSum350,"H_{T}>350 GeV, no timing cuts");
+  legend_global_350_120Mh350->AddEntry(m_LLPMh350_htSum430,"H_{T}>430 GeV, no timing cuts");
   legend_global_350_120Mh350->Draw();
   gr_global_120_LLPMh350->GetXaxis()->SetLimits(0.,1.);
   c1_global_350_120Mh350->SaveAs("plots/NuGun_htSumRates_vs_SignalEff_Pl500Mh350_Global.pdf");
 
   // ************ Background (QCD) Efficiency ***********************
-  TGraph *gr_sing_QCD = new TGraph (6, EffQCD, singleJetRate);
-  TGraph *gr_quad_QCD = new TGraph (6, EffQCD, quadJetRate);
-  TGraph *gr_350_QCD = new TGraph (6, EffQCD, htSum350Rate);
-  TGraph *gr_120_QCD = new TGraph (6, EffQCD, htSum120Rate);
+  TGraph *gr_sing_QCD = new TGraph (6, EffQCD_120, singleJetRate);
+  TGraph *gr_quad_QCD = new TGraph (6, EffQCD_120, quadJetRate);
+  TGraph *gr_350_QCD = new TGraph (6, EffQCD_350, htSum350Rate);
+  TGraph *gr_120_QCD = new TGraph (6, EffQCD_120, htSum120Rate);
   TGraph *gr_global_sing_QCD = new TGraph (6, EffQCDGlobal, singleJetRateGlobal);
   TGraph *gr_global_quad_QCD = new TGraph (6, EffQCDGlobal, quadJetRateGlobal);
   TGraph *gr_global_350_QCD = new TGraph (6, EffQCDGlobal, htSumRate350Global);
@@ -1094,14 +1138,18 @@
   m_QCD_htSum120->SetMarkerColor(4);
   m_QCD_htSum350->SetMarkerStyle(21);
   m_QCD_htSum350->SetMarkerColor(2);
+  m_QCD_htSum430->SetMarkerStyle(21);
+  m_QCD_htSum430->SetMarkerColor(3);
   m_QCD_htSum120->Draw();
   m_QCD_htSum350->Draw();
+  m_QCD_htSum430->Draw();
   gr_120_QCD->GetXaxis()->SetLimits(0.,1.);
   c2_350_120->SetGrid();
   auto legend2_350_120 = new TLegend(0.15,0.7,0.5,0.9);
-  legend2_350_120->AddEntry(gr_120_QCD,"ht Sum Rate at 120 GeV");
-  legend2_350_120->AddEntry(gr_350_QCD,"ht Sum Rate at 350 GeV");
-  legend2_350_120->AddEntry(m_QCD_htSum350,"ht Sum>350 GeV Rate, no timing cuts");
+  legend2_350_120->AddEntry(gr_120_QCD,"H_{T}>120 GeV, with timing cuts");
+  legend2_350_120->AddEntry(gr_350_QCD,"H_{T}>350 GeV, with timing cuts");
+  legend2_350_120->AddEntry(m_QCD_htSum350,"H_{T}>350 GeV, no timing cuts");
+  legend2_350_120->AddEntry(m_QCD_htSum430,"H_{T}>430 GeV, no timing cuts");
   legend2_350_120->Draw();
   c2_350_120->SetLogy();
   gr_120_QCD->GetHistogram()->SetMinimum(1.);
@@ -1136,12 +1184,16 @@
   m_QCD_htSum120->SetMarkerColor(4);
   m_QCD_htSum350->SetMarkerStyle(21);
   m_QCD_htSum350->SetMarkerColor(2);
+  m_QCD_htSum430->SetMarkerStyle(21);
+  m_QCD_htSum430->SetMarkerColor(3);
   m_QCD_htSum120->Draw();
   m_QCD_htSum350->Draw();
+  m_QCD_htSum430->Draw();
   auto legend2_global_350_120 = new TLegend(0.15,0.7,0.5,0.9);
-  legend2_global_350_120->AddEntry(gr_global_120_QCD,"ht Sum Rate at 120 GeV");
-  legend2_global_350_120->AddEntry(gr_global_350_QCD,"ht Sum Rate at 350 GeV");
-  legend2_global_350_120->AddEntry(m_LLP_htSum350,"ht Sum>350 GeV Rate, no timing cuts");
+  legend2_global_350_120->AddEntry(gr_global_120_QCD,"H_{T}>120 GeV, with timing cuts");
+  legend2_global_350_120->AddEntry(gr_global_350_QCD,"H_{T}>350 GeV, with timing cuts");
+  legend2_global_350_120->AddEntry(m_LLP_htSum350,"H_{T}>350 GeV, no timing cuts");
+  legend2_global_350_120->AddEntry(m_LLP_htSum430,"H_{T}>430 GeV, no timing cuts");
   legend2_global_350_120->Draw();
   gr_global_120_QCD->GetXaxis()->SetLimits(0.,1.);
   c2_global_350_120->SaveAs("plots/NuGun_htSumRates_vs_BackgroundEff_Global.pdf");
