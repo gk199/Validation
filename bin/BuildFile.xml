@@ -2,6 +2,7 @@
 <use name="rootinteractive"/>
 <environment>
   <bin file="draw_rates.cxx" name="draw_rates.exe"/>
+  <bin file="SignalBkgEff_DelayedHitFrac_Plot.cxx" name="SignalBkgEff_DelayedHitFrac_Plot.exe"/>
   <bin file="rates.cxx" name="rates.exe"/>
   <bin file="rates_noHCALvol_QCD.cxx" name="rates_noHCALvol_QCD.exe"/>
   <bin file="rates_noGenMatching_nugun.cxx" name="rates_noGenMatching_nugun.exe"/>
@@ -9,5 +10,6 @@
   <bin file="rates_original.cxx" name="rates_original.exe"/>
   <bin file="draw_l1analysis.cxx" name="draw_l1analysis.exe"/>
   <bin file="l1jetanalysis.cxx" name="l1jetanalysis.exe"/>
+  <bin file="TMVAClassificationApplication.C" name="TMVAClassificationApplication.exe"/>
 </environment>
-<flags CXXFLAGS="-Wall -Werror -g"/>
+<flags CXXFLAGS="-Wall -Werror -g -lTMVA"/>
