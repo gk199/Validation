@@ -342,6 +342,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F* doubleJetGlobalRates_emu = new TH1F("doubleJetGlobalRates_emu", axR.c_str(), nJetBins, jetLo, jetHi);
   TH1F* tripleJetGlobalRates_emu = new TH1F("tripleJetGlobalRates_emu", axR.c_str(), nJetBins, jetLo, jetHi);
   TH1F* quadJetGlobalRates_emu = new TH1F("quadJetGlobalRates_emu", axR.c_str(), nJetBins, jetLo, jetHi);
+  TH1F* singleJetOriginalRates_emu = new TH1F("singleJetOriginalRates_emu", axR.c_str(), nJetBins, jetLo, jetHi);
+  TH1F* quadJetOriginalRates_emu = new TH1F("quadJetOriginalRates_emu", axR.c_str(), nJetBins, jetLo, jetHi);
   TH1F* singleEgRates_emu = new TH1F("singleEgRates_emu", axR.c_str(), nEgBins, egLo, egHi);
   TH1F* doubleEgRates_emu = new TH1F("doubleEgRates_emu", axR.c_str(), nEgBins, egLo, egHi);
   TH1F* singleTauRates_emu = new TH1F("singleTauRates_emu", axR.c_str(), nTauBins, tauLo, tauHi);
@@ -367,6 +369,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F* doubleJetGlobalRates_hw = new TH1F("doubleJetGlobalRates_hw", axR.c_str(), nJetBins, jetLo, jetHi);
   TH1F* tripleJetGlobalRates_hw = new TH1F("tripleJetGlobalRates_hw", axR.c_str(), nJetBins, jetLo, jetHi);
   TH1F* quadJetGlobalRates_hw = new TH1F("quadJetGlobalRates_hw", axR.c_str(), nJetBins, jetLo, jetHi);
+  TH1F* singleJetOriginalRates_hw = new TH1F("singleJetOriginalRates_hw", axR.c_str(), nJetBins, jetLo, jetHi);
+  TH1F* quadJetOriginalRates_hw = new TH1F("quadJetOriginalRates_hw", axR.c_str(), nJetBins, jetLo, jetHi);
   TH1F* singleEgRates_hw = new TH1F("singleEgRates_hw", axR.c_str(), nEgBins, egLo, egHi);
   TH1F* doubleEgRates_hw = new TH1F("doubleEgRates_hw", axR.c_str(), nEgBins, egLo, egHi);
   TH1F* singleTauRates_hw = new TH1F("singleTauRates_hw", axR.c_str(), nTauBins, tauLo, tauHi);
@@ -394,6 +398,29 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1D * hJetEt_2 = new TH1D("jetET_2","2nd L1 Jet ET;E_{T};# Entries",100,0,1000);
   TH1D * hJetEt_3 = new TH1D("jetET_3","3rd L1 Jet ET;E_{T};# Entries",100,0,1000);
   TH1D * hJetEt_4 = new TH1D("jetET_4","4th L1 Jet ET;E_{T};# Entries",100,0,1000);
+
+  // Delayed hit fraction 
+  TH1F * DelayedHitFraction2GeV1ns = new TH1F("DelayedHitFraction2GeV1ns","Fraction of Hits > 2GeV and also >1ns;Fraction of Hits;Number of Events",22,0,1.1);
+  TH1F * DelayedHitFraction2GeV2ns = new TH1F("DelayedHitFraction2GeV2ns","Fraction of Hits > 2GeV and also >2ns;Fraction of Hits;Number of Events",22,0,1.1);
+  TH1F * DelayedHitFraction2GeV3ns = new TH1F("DelayedHitFraction2GeV3ns","Fraction of Hits > 2GeV and also >3ns;Fraction of Hits;Number of Events",22,0,1.1);
+  TH1F * DelayedHitFraction2GeV4ns = new TH1F("DelayedHitFraction2GeV4ns","Fraction of Hits > 2GeV and also >4ns;Fraction of Hits;Number of Events",22,0,1.1);
+  TH1F * DelayedHitFraction2GeV5ns = new TH1F("DelayedHitFraction2GeV5ns","Fraction of Hits > 2GeV and also >5ns;Fraction of Hits;Number of Events",22,0,1.1);
+  TH1F * DelayedHitFraction2GeV6ns = new TH1F("DelayedHitFraction2GeV6ns","Fraction of Hits > 2GeV and also >6ns;Fraction of Hits;Number of Events",22,0,1.1);
+  TH1F * DelayedHitFraction2GeV7ns = new TH1F("DelayedHitFraction2GeV7ns","Fraction of Hits > 2GeV and also >7ns;Fraction of Hits;Number of Events",22,0,1.1);
+  TH1F * DelayedHitFraction3GeV1ns = new TH1F("DelayedHitFraction3GeV1ns","Fraction of Hits > 3GeV and also >1ns;Fraction of Hits;Number of Events",22,0,1.1);
+  TH1F * DelayedHitFraction3GeV2ns = new TH1F("DelayedHitFraction3GeV2ns","Fraction of Hits > 3GeV and also >2ns;Fraction of Hits;Number of Events",22,0,1.1);
+  TH1F * DelayedHitFraction3GeV3ns = new TH1F("DelayedHitFraction3GeV3ns","Fraction of Hits > 3GeV and also >3ns;Fraction of Hits;Number of Events",22,0,1.1);
+  TH1F * DelayedHitFraction3GeV4ns = new TH1F("DelayedHitFraction3GeV4ns","Fraction of Hits > 3GeV and also >4ns;Fraction of Hits;Number of Events",22,0,1.1);
+  TH1F * DelayedHitFraction3GeV5ns = new TH1F("DelayedHitFraction3GeV5ns","Fraction of Hits > 3GeV and also >5ns;Fraction of Hits;Number of Events",22,0,1.1);
+  TH1F * DelayedHitFraction3GeV6ns = new TH1F("DelayedHitFraction3GeV6ns","Fraction of Hits > 3GeV and also >6ns;Fraction of Hits;Number of Events",22,0,1.1);
+  TH1F * DelayedHitFraction3GeV7ns = new TH1F("DelayedHitFraction3GeV7ns","Fraction of Hits > 3GeV and also >7ns;Fraction of Hits;Number of Events",22,0,1.1);
+  TH1F * DelayedHitFraction4GeV1ns = new TH1F("DelayedHitFraction4GeV1ns","Fraction of Hits > 4GeV and also >1ns;Fraction of Hits;Number of Events",22,0,1.1);
+  TH1F * DelayedHitFraction4GeV2ns = new TH1F("DelayedHitFraction4GeV2ns","Fraction of Hits > 4GeV and also >2ns;Fraction of Hits;Number of Events",22,0,1.1);
+  TH1F * DelayedHitFraction4GeV3ns = new TH1F("DelayedHitFraction4GeV3ns","Fraction of Hits > 4GeV and also >3ns;Fraction of Hits;Number of Events",22,0,1.1);
+  TH1F * DelayedHitFraction4GeV4ns = new TH1F("DelayedHitFraction4GeV4ns","Fraction of Hits > 4GeV and also >4ns;Fraction of Hits;Number of Events",22,0,1.1);
+  TH1F * DelayedHitFraction4GeV5ns = new TH1F("DelayedHitFraction4GeV5ns","Fraction of Hits > 4GeV and also >5ns;Fraction of Hits;Number of Events",22,0,1.1);
+  TH1F * DelayedHitFraction4GeV6ns = new TH1F("DelayedHitFraction4GeV6ns","Fraction of Hits > 4GeV and also >6ns;Fraction of Hits;Number of Events",22,0,1.1);
+  TH1F * DelayedHitFraction4GeV7ns = new TH1F("DelayedHitFraction4GeV7ns","Fraction of Hits > 4GeV and also >7ns;Fraction of Hits;Number of Events",22,0,1.1);
 
   // 3 GeV energy cuts, scanning time cuts
   // inclusive
@@ -438,10 +465,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F * dt3GeV3nsHBTripleJetMult_emu = new TH1F("dt3GeV3nsHBTripleJetMult_emu","Triple Jet Sum Multiplicity of 3ns delayed cells above 3 GeV (HB, dR(TP,L1Jet)<0.5);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
   TH1F * dt3GeV3nsHBDoubleJetMult_emu = new TH1F("dt3GeV3nsHBDoubleJetMult_emu","Double Jet Sum Multiplicity of 3ns delayed cells above 3 GeV (HB, dR(TP,L1Jet)<0.5);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
   TH1F * dt3GeV3nsHBSingleJetMult_emu = new TH1F("dt3GeV3nsHBSingleJetMult_emu","Single Jet Sum Multiplicity of 3ns delayed cells above 3 GeV (HB, dR(TP,L1Jet)<0.5);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
-  TH1F * dt3GeV3nsHBJet1Mult_emu = new TH1F("dt3GeV3nsHBJet1Mult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HB, all TPs within DR<2 1st L1Jet);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
-  TH1F * dt3GeV3nsHBJet2Mult_emu = new TH1F("dt3GeV3nsHBJet2Mult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HB, all TPs within DR<2 2nd L1Jet);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
-  TH1F * dt3GeV3nsHBJet3Mult_emu = new TH1F("dt3GeV3nsHBJet3Mult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HB, all TPs within DR<2 3rd L1Jet);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
-  TH1F * dt3GeV3nsHBJet4Mult_emu = new TH1F("dt3GeV3nsHBJet4Mult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HB, all TPs within DR<2 4th L1Jet);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
+  TH1F * dt3GeV3nsHBJet1Mult_emu = new TH1F("dt3GeV3nsHBJet1Mult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HB, all TPs within DR<0.5 1st L1Jet);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
+  TH1F * dt3GeV3nsHBJet2Mult_emu = new TH1F("dt3GeV3nsHBJet2Mult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HB, all TPs within DR<0.5 2nd L1Jet);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
+  TH1F * dt3GeV3nsHBJet3Mult_emu = new TH1F("dt3GeV3nsHBJet3Mult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HB, all TPs within DR<0.5 3rd L1Jet);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
+  TH1F * dt3GeV3nsHBJet4Mult_emu = new TH1F("dt3GeV3nsHBJet4Mult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HB, all TPs within DR<0.5 4th L1Jet);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
   // 0 GeV cuts, only timing cuts
   // HB         
   TH1F * dt0GeV1nsHBJetMult_emu = new TH1F("dt0GeV1nsHBJetMult_emu","Multiplicity of 1ns delayed cells above 0 GeV (HB, match TP with L1Jet);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
@@ -449,7 +476,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F * dt0GeV3nsHBJetMult_emu = new TH1F("dt0GeV3nsHBJetMult_emu","Multiplicity of 3ns delayed cells above 0 GeV (HB, match TP with L1Jet);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
   TH1F * dt0GeV4nsHBJetMult_emu = new TH1F("dt0GeV4nsHBJetMult_emu","Multiplicity of 4ns delayed cells above 0 GeV (HB, match TP with L1Jet);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
   TH1F * dt0GeV5nsHBJetMult_emu = new TH1F("dt0GeV5nsHBJetMult_emu","Multiplicity of 5ns delayed cells above 0 GeV (HB, match TP with L1Jet);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
-  // include all HCAL TPs included in DR cone of a L1 jet                                                                                                                                                       
+  // include all HCAL TPs included in DR cone of a L1 jet
   TH1F * dt0GeV5nsHBQuadJetMult_emu = new TH1F("dt0GeV5nsHBQuadJetMult_emu","Quad Jet Sum Multiplicity of 5ns delayed cells above 0 GeV (HB, dR(TP,L1Jet)<0.5);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
   TH1F * dt0GeV5nsHBTripleJetMult_emu = new TH1F("dt0GeV5nsHBTripleJetMult_emu","Triple Jet Sum Multiplicity of 5ns delayed cells above 0 GeV (HB, dR(TP,L1Jet)<0.5);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
   TH1F * dt0GeV5nsHBDoubleJetMult_emu = new TH1F("dt0GeV5nsHBDoubleJetMult_emu","Double Jet Sum Multiplicity of 5ns delayed cells above 0 GeV (HB, dR(TP,L1Jet)<0.5);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
@@ -458,6 +485,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F * dt0GeV5nsHBJet2Mult_emu = new TH1F("dt0GeV5nsHBJet2Mult_emu","Multiplicity of 5ns delayed cells above 0 GeV (HB, all TPs within DR<2 2nd L1Jet);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
   TH1F * dt0GeV5nsHBJet3Mult_emu = new TH1F("dt0GeV5nsHBJet3Mult_emu","Multiplicity of 5ns delayed cells above 0 GeV (HB, all TPs within DR<2 3rd L1Jet);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
   TH1F * dt0GeV5nsHBJet4Mult_emu = new TH1F("dt0GeV5nsHBJet4Mult_emu","Multiplicity of 5ns delayed cells above 0 GeV (HB, all TPs within DR<2 4th L1Jet);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
+  TH1F * DepthVariable = new TH1F("DepthVariable","Depth 4 / Depth 1;Hit Multiplicity; Fraction of Entries (normalized)",50,0,50);
 
   // 2 GeV energy cuts, scanning time cut
   // inclusive
@@ -548,6 +576,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F * dt3GeVcaloT2Mult_emu = new TH1F("dt3GeVcaloT2Mult_emu","Multiplicity of cells above 3 GeV, CaloTower 2 (iEta 5-8);Hit Multiplicity;Number of Entries",120,0,120); 
   TH1F * dt3GeVcaloT3Mult_emu = new TH1F("dt3GeVcaloT3Mult_emu","Multiplicity of cells above 3 GeV, CaloTower 3 (iEta 9-12);Hit Multiplicity;Number of Entries",120,0,120);  
   TH1F * dt3GeVcaloT4Mult_emu = new TH1F("dt3GeVcaloT4Mult_emu","Multiplicity of cells above 3 GeV, CaloTower 4 (iEta 13-16);Hit Multiplicity;Number of Entries",120,0,120); 
+
   // making TH2F for the energy depth plots
   TH2F * Energy_Depth = new TH2F("Energy_Depth", "TP Energy Fraction vs. Depth;HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 1.2);
   TH2F * Timing_Depth = new TH2F("Timing_Depth", "TP Timing Value vs. Depth;HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5, 60, 0, 30);
@@ -591,6 +620,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F * Ratio_Depth_Jets = new TH1F("Ratio_Depth_Jets", "Ratio of 3,4 HCAL Layers to E_{T}, matched w/Jets;Ratio;Number of Events", 50,0,1);
   TH1F * Ratio_DepthHE_Jets = new TH1F("Ratio_DepthHE_Jets", "Ratio of 3,4 HCAL Layers to E_{T} in HE, matched w/Jets;Ratio;Number of Events", 50,0,1);
   TH1F * Ratio_DepthHB_Jets = new TH1F("Ratio_DepthHB_Jets", "Ratio of 3,4 HCAL Layers to E_{T} in HB, matched w/Jets;Ratio;Number of Events", 50,0,1);
+
   // delta R plot for HCAL TP max energy near L1 jet
   TH1F * DeltaR_TP_L1Jet_1 = new TH1F("DeltaR_TP_L1Jet_1", "DeltaR Between First L1 Jet and Closest HCAL TP; DeltaR;Number of Events",50,0,0.5);
   TH1F * DeltaR_TP_L1Jet_2 = new TH1F("DeltaR_TP_L1Jet_2", "DeltaR Between Second L1 Jet and Closest HCAL TP; DeltaR;Number of Events",50,0,0.5);
@@ -644,20 +674,24 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   
   // Create a TTree Object so multiplicities can be sent to TMVA analyzer
   TTree *tree = new TTree("MultForTMVA","MultForTMVA");
-  //  Double_t mult3GeV3nsHB_Jets(0);
   //  Int_t event;
-  Float_t mult_Jet1, mult_Global, ET_Jet1(0);
+  Float_t mult_Jet1, mult_Jet2, mult_Jet3, mult_Jet4, ET_Jet1(0); // mult_Global;
   Int_t event;
   tree->Branch("mult_Jet1",&mult_Jet1,"mult_Jet1/F");
-  tree->Branch("mult_Global",&mult_Global,"mult_Global/F");
+  tree->Branch("mult_Jet2",&mult_Jet2,"mult_Jet2/F");
+  tree->Branch("mult_Jet3",&mult_Jet3,"mult_Jet3/F");
+  tree->Branch("mult_Jet4",&mult_Jet4,"mult_Jet4/F");
+  //  tree->Branch("mult_Global",&mult_Global,"mult_Global/F");
   tree->Branch("ET_Jet1",&ET_Jet1,"ET_Jet1/F");
   tree->Branch("event",&event,"event/I");
-  //  tree->Branch("EventBranch", "Event", &event);
-  //  tree->Branch("LocalMultBranch", "LocalMult", &mult3GeV3nsHB_Jets);
 
-  // counting LLP efficiencies
+  // counting LLP efficiencies -- need to reset on a per event basis
   double totalJets(0), passedMultJets(0), passedMultJets_120(0), passedMultJets_350(0);
+  double passedMultJets3GeV3_1(0), passedMultJets3GeV3_2(0), passedMultJets3GeV3_3(0), passedMultJets3GeV3_4(0), passedMultJets3GeV3_5(0), passedMultJets3GeV3_6(0), passedMultJets3GeV3_7(0);
   double totalGlobal(0), passedMultGlobal(0), passedMultGlobal_120(0), passedMultGlobal_350(0), passedHtSum120(0), passedHtSum350(0), passedHtSum430(0);
+  double passedDelayedHitFraction2GeV1(0), passedDelayedHitFraction2GeV2(0), passedDelayedHitFraction2GeV3(0),passedDelayedHitFraction2GeV4(0),passedDelayedHitFraction2GeV5(0),passedDelayedHitFraction2GeV6(0),passedDelayedHitFraction2GeV7(0);
+  double passedDelayedHitFraction3GeV1(0), passedDelayedHitFraction3GeV2(0), passedDelayedHitFraction3GeV3(0),passedDelayedHitFraction3GeV4(0),passedDelayedHitFraction3GeV5(0),passedDelayedHitFraction3GeV6(0),passedDelayedHitFraction3GeV7(0);
+  double passedDelayedHitFraction4GeV1(0), passedDelayedHitFraction4GeV2(0), passedDelayedHitFraction4GeV3(0),passedDelayedHitFraction4GeV4(0),passedDelayedHitFraction4GeV5(0),passedDelayedHitFraction4GeV6(0),passedDelayedHitFraction4GeV7(0);
   // change these variables to change the multiplicity thresholds that are set
   uint GeV3ns3Global_threshold = 3;
   //  uint GeV3ns0Jet_threshold = 3;
@@ -668,6 +702,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   // loop through all the entries//
   /////////////////////////////////
   for (Long64_t jentry=0; jentry<nentries; jentry++){
+    //    std::cout << "new event" << std::endl;
     if((jentry%10000)==0) std::cout << "Done " << jentry  << " events of " << nentries << std::endl;
 
     //lumi break clause
@@ -678,7 +713,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 
     //do routine for L1 emulator quantites
     if (emuOn){
-
       treeL1Towemu->GetEntry(jentry);
       treeL1CaloTPemu->GetEntry(jentry);
       treeL1emu->GetEntry(jentry);
@@ -769,7 +803,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	  if( l1emu_->sumType[c] == L1Analysis::kMissingEtHF ) metHFSum = l1emu_->sumEt[c];
           if( l1emu_->sumType[c] == L1Analysis::kMissingHt ) mhtSum = l1emu_->sumEt[c];
       }
-      //      std::cout << "htSum value = " << htSum << std::endl;
 
       int seedTowerIEta(-1);
       int seedTowerIPhi(-1);
@@ -812,9 +845,14 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       double mult1GeV1nsHB_Jets(0), mult1GeV2nsHB_Jets(0), mult1GeV3nsHB_Jets(0), mult1GeV4nsHB_Jets(0), mult1GeV5nsHB_Jets(0);
       double mult3GeV3nsHB_Jet0(0), mult3GeV3nsHB_Jet1(0), mult3GeV3nsHB_Jet2(0), mult3GeV3nsHB_Jet3(0);
       double mult0GeV5nsHB_Jet0(0), mult0GeV5nsHB_Jet1(0), mult0GeV5nsHB_Jet2(0), mult0GeV5nsHB_Jet3(0);
+      double DepthVariableMult(0);
       double JetEta1(0), JetEta2(0), JetEta3(0), JetEta4(0);
       double JetPhi1(0), JetPhi2(0), JetPhi3(0), JetPhi4(0);
-      int genJetRequirementPassed = 0; // keeps track of for this event, were there L1 jets that passed the gen matching requirement of L1 jet to parton?                                                                
+      int genJetRequirementPassed = 0; // keeps track of for this event, were there L1 jets that passed the gen matching requirement of L1 jet to parton?                                                       
+      double DelayedHitCounter2GeV1ns(0), DelayedHitCounter2GeV2ns(0), DelayedHitCounter2GeV3ns(0), DelayedHitCounter2GeV4ns(0), DelayedHitCounter2GeV5ns(0), DelayedHitCounter2GeV6ns(0), DelayedHitCounter2GeV7ns(0);
+      double DelayedHitCounter3GeV1ns(0), DelayedHitCounter3GeV2ns(0), DelayedHitCounter3GeV3ns(0), DelayedHitCounter3GeV4ns(0), DelayedHitCounter3GeV5ns(0), DelayedHitCounter3GeV6ns(0), DelayedHitCounter3GeV7ns(0);
+      double DelayedHitCounter4GeV1ns(0), DelayedHitCounter4GeV2ns(0), DelayedHitCounter4GeV3ns(0), DelayedHitCounter4GeV4ns(0), DelayedHitCounter4GeV5ns(0), DelayedHitCounter4GeV6ns(0), DelayedHitCounter4GeV7ns(0);
+      double AllHitCounter2GeV(0), AllHitCounter3GeV(0), AllHitCounter4GeV(0);         
 
       // loop over L1 jets, and only do first four (4 highest energy L1 jets from 4 leptons)
       for(uint jetIt=0; jetIt < nJetemu && jetIt < 4; jetIt++){
@@ -955,153 +993,12 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	  // ****************************** GEN MATCHED SECTION FOR MULTIPLICITY, TIMING AND ENERGY PROFILES  *********************************** 
 	  // other option preventing double counting later in HCAL TP loop                                                                             
 	  // ************************************************************************************************************************************ 
+	  // this is saved in a file in HCAL research folder in case needed
 
-	  // fill DR plots between each L1 jet and every HCAL TP
-	  if (jetIt == 0) DeltaR_TPall_L1Jet_1->Fill(deltaR(Jet_eta,Jet_phi,TP_eta,TP_phi));
-	  if (jetIt == 1) DeltaR_TPall_L1Jet_2->Fill(deltaR(Jet_eta,Jet_phi,TP_eta,TP_phi));
-	  if (jetIt == 2) DeltaR_TPall_L1Jet_3->Fill(deltaR(Jet_eta,Jet_phi,TP_eta,TP_phi));
-	  if (jetIt == 3) DeltaR_TPall_L1Jet_4->Fill(deltaR(Jet_eta,Jet_phi,TP_eta,TP_phi));
-	  // fill DR plots between each L1 jet and HCAL TPs with at least one layer above energy and timing cuts
-	  if ( (hcalTPtiming[0]>3 && hcalTPdepth[0]>3) || (hcalTPtiming[1]>3 && hcalTPdepth[1]>3) || (hcalTPtiming[2]>3 && hcalTPdepth[2]>3) || (hcalTPtiming[3]>3 && hcalTPdepth[3]>3) || (hcalTPtiming[4]>3 && hcalTPdepth[4]>3) || (hcalTPtiming[5]>3 && hcalTPdepth[5]>3) || (hcalTPtiming[6]>3 && hcalTPdepth[6]>3) ) {
-	    if (jetIt == 0) DeltaR_TPet_L1Jet_1->Fill(deltaR(Jet_eta,Jet_phi,TP_eta,TP_phi));
-	    if (jetIt == 1) DeltaR_TPet_L1Jet_2->Fill(deltaR(Jet_eta,Jet_phi,TP_eta,TP_phi));
-	    if (jetIt == 2) DeltaR_TPet_L1Jet_3->Fill(deltaR(Jet_eta,Jet_phi,TP_eta,TP_phi));
-	    if (jetIt == 3) DeltaR_TPet_L1Jet_4->Fill(deltaR(Jet_eta,Jet_phi,TP_eta,TP_phi));
-	  }
-
-	  if (deltaR(Jet_eta,Jet_phi,TP_eta,TP_phi) > DR_threshold ) continue; // DR between L1 jet and HCAL TP for the matching in a DR cone
-
-	  // Ratio of energy in first two HCAL layers to all HCAL layers. Only consider for high energy TPs > 10 GeV
-	  if ( tpEtemu > 10 ) {
-	    Ratio_Depth_Jets->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / tpEtemu);
-	    if (abs(tpEtaemu) < 16) {
-	      Ratio_DepthHB_Jets->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / tpEtemu);
-	    }
-	    if ((abs(tpEtaemu) > 16) && (abs(tpEtaemu) < 29) ) {
-	      Ratio_DepthHE_Jets->Fill( (hcalTPdepth[0]+hcalTPdepth[1]) / tpEtemu);
-	    }
-	  }
-
-	  // loop over HCAL depths for the HCAL TP
-	  // filling fractional energy deposit and avg time plots for each of 7 HCAL depths. Done for all HCAL TPs within DR 0.5 of the L1 Jet
-	  // require LLP decayed in HCAL volume for the energy depth plots
-	  for (int depthIt = 0; depthIt < nDepth-1; depthIt++){
-	  if (min_deltaR_partonGenHCAL_L1jet < 1) Energy_Depth_Jets->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu); // normalized by total energy in event so is fractional energy in each layer
-	    Timing_Depth_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]); // raw timing value in each layer
-	    if (tpEtemu > 10 ) {
-	      if (min_deltaR_partonGenHCAL_L1jet < 1) Energy_Depth_Jets_HighE->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu); // restricting to high energy HCAL TPs
-	    }
-	    if (abs(tpEtaemu) < 16) {
-	      if (min_deltaR_partonGenHCAL_L1jet < 1) Energy_DepthHB_Jets->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
-	      Timing_DepthHB_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]);
-	      if (tpEtemu > 10 ) {
-    	        if (min_deltaR_partonGenHCAL_L1jet < 1) Energy_DepthHB_Jets_HighE->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
-	      }
-	    }
-	    if (abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29 ) {
-	      if (min_deltaR_partonGenHCAL_L1jet < 1) Energy_DepthHE_Jets->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
-	      Timing_DepthHE_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]);
-	      if (tpEtemu > 10 ) {
-		if (min_deltaR_partonGenHCAL_L1jet < 1) Energy_DepthHE_Jets_HighE->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
-	      }
-	    }
-
-	    // multiplicity counter now
-	    if ( (hcalTPdepth[depthIt] > 3) && (hcalTPtiming[depthIt] > 3) && (abs(tpEtaemu) < 16) ) { // 3 GeV 3ns in HB region                                             
-	      if (jetIt == 0) mult3GeV3nsHB_Jet0 += 1;
-	      if (jetIt == 1) mult3GeV3nsHB_Jet1 += 1;
-	      if (jetIt == 2) mult3GeV3nsHB_Jet2 += 1;
-	      if (jetIt == 3) mult3GeV3nsHB_Jet3 += 1;
-	    } // close HB region loop   
-	    // count multiplicity of layers given a timing and energy threshold   
-	    // 3 GeV energy cut
-	    if (hcalTPdepth[depthIt] > 3){
-	      if (hcalTPtiming[depthIt] > 1) mult3GeV1ns_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 2) mult3GeV2ns_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 3) mult3GeV3ns_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 4) mult3GeV4ns_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 5) mult3GeV5ns_Jets += 1;
-	      // 3 GeV HB regions
-	      if ( (hcalTPtiming[depthIt] > 1) && (abs(tpEtaemu) < 16) ) {
-		mult3GeV1nsHB_Jets += 1;
-		if (hcalTPtiming[depthIt] > 2) mult3GeV2nsHB_Jets += 1;
-		if (hcalTPtiming[depthIt] > 3) mult3GeV3nsHB_Jets += 1;
-		if (hcalTPtiming[depthIt] > 4) mult3GeV4nsHB_Jets += 1;
-		if (hcalTPtiming[depthIt] > 5) mult3GeV5nsHB_Jets += 1;
-	      }
-	      // 3 GeV HE regions
-	      if ( (hcalTPtiming[depthIt] > 1) && (abs(tpEtaemu) > 16) && (abs(tpEtaemu) < 29) ){
-		mult3GeV1nsHE_Jets += 1;
-		if (hcalTPtiming[depthIt] > 2) mult3GeV2nsHE_Jets += 1;
-		if (hcalTPtiming[depthIt] > 3) mult3GeV3nsHE_Jets += 1;
-		if (hcalTPtiming[depthIt] > 4) mult3GeV4nsHE_Jets += 1;
-		if (hcalTPtiming[depthIt] > 5) mult3GeV5nsHE_Jets += 1;
-	      }
-	    } // closing 3 GeV energy cut loop
-	    // 2 GeV energy cut
-	    if (hcalTPdepth[depthIt] > 2){
-	      if (hcalTPtiming[depthIt] > 1) mult2GeV1ns_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 2) mult2GeV2ns_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 3) mult2GeV3ns_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 4) mult2GeV4ns_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 5) mult2GeV5ns_Jets += 1;
-	      // 2 GeV HB regions                                
-	      if ( (hcalTPtiming[depthIt] > 1) && (abs(tpEtaemu) < 16) ){
-		mult2GeV1nsHB_Jets += 1;
-		if (hcalTPtiming[depthIt] > 2) mult2GeV2nsHB_Jets += 1;
-		if (hcalTPtiming[depthIt] > 3) mult2GeV3nsHB_Jets += 1;
-		if (hcalTPtiming[depthIt] > 4) mult2GeV4nsHB_Jets += 1;
-		if (hcalTPtiming[depthIt] > 5) mult2GeV5nsHB_Jets += 1;
-	      }
-	      // 2 GeV HE regions
-	      if ( (hcalTPtiming[depthIt] > 1) && (abs(tpEtaemu) > 16) && (abs(tpEtaemu) < 29) ){
-		mult2GeV1nsHE_Jets += 1;
-		if (hcalTPtiming[depthIt] > 2) mult2GeV2nsHE_Jets += 1;
-		if (hcalTPtiming[depthIt] > 3) mult2GeV3nsHE_Jets += 1;
-		if (hcalTPtiming[depthIt] > 4) mult2GeV4nsHE_Jets += 1;
-		if (hcalTPtiming[depthIt] > 5) mult2GeV5nsHE_Jets += 1;
-	      }
-	    } // closing 2 GeV energy cut loop
-	    // 1 GeV energy cut
-	    if (hcalTPdepth[depthIt] > 1){
-	      if (hcalTPtiming[depthIt] > 1) mult1GeV1ns_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 2) mult1GeV2ns_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 3) mult1GeV3ns_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 4) mult1GeV4ns_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 5) mult1GeV5ns_Jets += 1;
-	      // 1 GeV HB regions                                                      
-	      if ( (hcalTPtiming[depthIt] > 1) && (abs(tpEtaemu) < 16) ){
-		mult1GeV1nsHB_Jets += 1;
-		if (hcalTPtiming[depthIt] > 2) mult1GeV2nsHB_Jets += 1;
-		if (hcalTPtiming[depthIt] > 3) mult1GeV3nsHB_Jets += 1;
-		if (hcalTPtiming[depthIt] > 4) mult1GeV4nsHB_Jets += 1;
-		if (hcalTPtiming[depthIt] > 5) mult1GeV5nsHB_Jets += 1;
-	      }
-	      // 1 GeV HE regions
-	      if ( (hcalTPtiming[depthIt] > 1) && (abs(tpEtaemu) > 16) && (abs(tpEtaemu) < 29) ){
-		mult1GeV1nsHE_Jets += 1;
-		if (hcalTPtiming[depthIt] > 2) mult1GeV2nsHE_Jets += 1;
-		if (hcalTPtiming[depthIt] > 3) mult1GeV3nsHE_Jets += 1;
-		if (hcalTPtiming[depthIt] > 4) mult1GeV4nsHE_Jets += 1;
-		if (hcalTPtiming[depthIt] > 5) mult1GeV5nsHE_Jets += 1;
-	      }
-	      if (abs(tpEtaemu) < 5 ) mult1GeVcaloT1 += 1;
-	      if ((abs(tpEtaemu) > 4) && (abs(tpEtaemu) < 9) ) mult1GeVcaloT2 += 1;
-	      if ((abs(tpEtaemu) > 8) && (abs(tpEtaemu) < 13) ) mult1GeVcaloT3 += 1;
-	      if ((abs(tpEtaemu) > 12) && (abs(tpEtaemu) < 17) ) mult1GeVcaloT4 += 1;
-	    } // closing 1 GeV energy cut loop
-	  } // closing HCAL depth loop
-	} // closing HCAL TP loop
-
-	if (jetIt == 0) dt3GeV3nsHBJet1Mult_emu->Fill(mult3GeV3nsHB_Jet0);
-	if (jetIt == 1)	dt3GeV3nsHBJet2Mult_emu->Fill(mult3GeV3nsHB_Jet1);
-	if (jetIt == 2) dt3GeV3nsHBJet3Mult_emu->Fill(mult3GeV3nsHB_Jet2);
-	if (jetIt == 3) dt3GeV3nsHBJet4Mult_emu->Fill(mult3GeV3nsHB_Jet3);
-
-	// *************************** END OF GEN MATCHED SECTION *********************************
-	// other option preventing double counting later in HCAL TP loop
-	// ****************************************************************************************
-	*/
+	  // *************************** END OF GEN MATCHED SECTION *********************************
+	  // other option preventing double counting later in HCAL TP loop
+	  // ****************************************************************************************
+	  */
 	} // closing HCAL TP loop
 
         // minimum DeltaR between L1 jet and HCAL TP on a per event basis    
@@ -1394,7 +1291,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
           }
 	} // closing L1 jet loop plotting distance from each HCAL TP to the L1 jet
 
-        if ( min_DeltaR > DR_threshold ) continue; // don't fill matched multiplicity for TPs that are DR > 1 away from their nearest L1 jet
+        if ( min_DeltaR > DR_threshold ) continue; // don't fill matched multiplicity for TPs that are DR > 0.5 away from their nearest L1 jet
 	// Ratio of energy in first two HCAL layers to all HCAL layers. Only consider for high energy TPs > 10 GeV
 	if ( tpEtemu > 10 ) {
 	  Ratio_Depth_Jets->Fill( (hcalTPdepth[2]+hcalTPdepth[3]) / tpEtemu);
@@ -1418,7 +1315,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	    if (abs(tpEtaemu) < 16) {
 	      if (min_deltaR_partonGenHCAL_L1jet < 1) Energy_DepthHB_Jets->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
 	      if (hcalTPtiming[depthIt] > 0) Timing_DepthHB_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]);
-	      //	      if (hcalTPtiming[depthIt] > 0) std::cout << "depth = " << depthIt << " timing value = " << hcalTPtiming[depthIt] << std::endl;
 	      if (tpEtemu > 10 ) {
 		if (min_deltaR_partonGenHCAL_L1jet < 1) Energy_DepthHB_Jets_HighE->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
 	      }
@@ -1452,11 +1348,47 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
               }
             }
 	  }
-
-	  // count multiplicity based on which jet is closest to the HCAL TP 
-	  // multiplicity counter now
+     
+	  // delayed hit fraction calculation, over entire HCAL, near most energetic L1 jet
+	  if (closestJet == 0) {
+	    if (hcalTPdepth[depthIt] > 2) {
+	      if (hcalTPtiming[depthIt] > 1 ) DelayedHitCounter2GeV1ns += 1;
+	      if (hcalTPtiming[depthIt] > 2 ) DelayedHitCounter2GeV2ns += 1;
+	      if (hcalTPtiming[depthIt] > 3 ) DelayedHitCounter2GeV3ns += 1;
+	      if (hcalTPtiming[depthIt] > 4 ) DelayedHitCounter2GeV4ns += 1;
+	      if (hcalTPtiming[depthIt] > 5 ) DelayedHitCounter2GeV5ns += 1;
+	      if (hcalTPtiming[depthIt] > 6 ) DelayedHitCounter2GeV6ns += 1;
+	      if (hcalTPtiming[depthIt] > 7 ) DelayedHitCounter2GeV7ns += 1;
+	      AllHitCounter2GeV += 1;
+	    }
+	    if (hcalTPdepth[depthIt] > 3) {
+	      //	      std::cout << hcalTPdepth[depthIt] << " and timing " << hcalTPtiming[depthIt] << std::endl;
+	      if (hcalTPtiming[depthIt] > 1 ) DelayedHitCounter3GeV1ns += 1;
+	      if (hcalTPtiming[depthIt] > 2 ) DelayedHitCounter3GeV2ns += 1;
+	      if (hcalTPtiming[depthIt] > 3 ) DelayedHitCounter3GeV3ns += 1;
+	      if (hcalTPtiming[depthIt] > 4 ) DelayedHitCounter3GeV4ns += 1;
+	      if (hcalTPtiming[depthIt] > 5 ) DelayedHitCounter3GeV5ns += 1;
+	      if (hcalTPtiming[depthIt] > 6 ) DelayedHitCounter3GeV6ns += 1;
+	      if (hcalTPtiming[depthIt] > 7 ) DelayedHitCounter3GeV7ns += 1;	   
+	      AllHitCounter3GeV += 1;
+	    }
+	    if (hcalTPdepth[depthIt] > 4) {
+	      if (hcalTPtiming[depthIt] > 1 ) DelayedHitCounter4GeV1ns += 1;
+	      if (hcalTPtiming[depthIt] > 2 ) DelayedHitCounter4GeV2ns += 1;
+	      if (hcalTPtiming[depthIt] > 3 ) DelayedHitCounter4GeV3ns += 1;
+	      if (hcalTPtiming[depthIt] > 4 ) DelayedHitCounter4GeV4ns += 1;
+	      if (hcalTPtiming[depthIt] > 5 ) DelayedHitCounter4GeV5ns += 1;
+	      if (hcalTPtiming[depthIt] > 6 ) DelayedHitCounter4GeV6ns += 1;
+	      if (hcalTPtiming[depthIt] > 7 ) DelayedHitCounter4GeV7ns += 1;
+	      AllHitCounter4GeV += 1;
+	    }
+	  }
+	  
+	  // count multiplicity based on which jet is closest to the HCAL TP
+          // multiplicity counter now 
 	  if ( (hcalTPdepth[depthIt] > 3) && (hcalTPtiming[depthIt] > 3) && (abs(tpEtaemu) < 16) ) { // 3 GeV 3ns in HB region
 	    if (closestJet == 0) mult3GeV3nsHB_Jet0 += 1;
+	    //	    std::cout << hcalTPdepth[depthIt] << " and timing " << hcalTPtiming[depthIt] << std::endl;
 	    if (closestJet == 1) mult3GeV3nsHB_Jet1 += 1;
 	    if (closestJet == 2) mult3GeV3nsHB_Jet2 += 1;
 	    if (closestJet == 3) mult3GeV3nsHB_Jet3 += 1;
@@ -1479,7 +1411,9 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	    if ( (hcalTPtiming[depthIt] > 1) && (abs(tpEtaemu) < 16) ) {
 	      mult3GeV1nsHB_Jets += 1;
 	      if (hcalTPtiming[depthIt] > 2) mult3GeV2nsHB_Jets += 1;
-	      if (hcalTPtiming[depthIt] > 3) mult3GeV3nsHB_Jets += 1;
+	      if (hcalTPtiming[depthIt] > 3) {
+		mult3GeV3nsHB_Jets += 1;
+	      }
 	      if (hcalTPtiming[depthIt] > 4) mult3GeV4nsHB_Jets += 1;
 	      if (hcalTPtiming[depthIt] > 5) mult3GeV5nsHB_Jets += 1;
 	    }
@@ -1552,12 +1486,64 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	  } // closing 1 GeV energy cut loop
 	} // closing HCAL depth loop
 
+	if ( (hcalTPdepth[3] / hcalTPdepth[0]) > 1.2) DepthVariableMult += 1;
+
         // ************************ END OF GEN MATCHING WITHOUT TP DOUBLE COUNTING *************************************
         // *************************************************************************************************************
 
       } // closing HCAL TP loop
-   
+      totalGlobal += 1; // how many total events were there? used to compare with global multiplicity sum   
+      if (genJetRequirementPassed > 0 ) totalJets += 1; // how many events had at least one jet passing gen matching requirements? used to compare with regional multiplicity sum that is jet matched
+      if (totalGlobal != totalJets) std::cout << "still using gen matching requirements!" << std::endl;
+
+      double frac_delayed = 0.5;
+      int min_num_delayed = 3;
+      if ((DelayedHitCounter2GeV1ns>min_num_delayed) && (DelayedHitCounter2GeV1ns / AllHitCounter2GeV >= frac_delayed) ) passedDelayedHitFraction2GeV1 += 1;
+      if ((DelayedHitCounter2GeV2ns>min_num_delayed) && (DelayedHitCounter2GeV2ns / AllHitCounter2GeV >= frac_delayed) ) passedDelayedHitFraction2GeV2 += 1;
+      if ((DelayedHitCounter2GeV3ns>min_num_delayed) && (DelayedHitCounter2GeV3ns / AllHitCounter2GeV >= frac_delayed) ) passedDelayedHitFraction2GeV3 += 1;
+      if ((DelayedHitCounter2GeV4ns>min_num_delayed) && (DelayedHitCounter2GeV4ns / AllHitCounter2GeV >= frac_delayed) ) passedDelayedHitFraction2GeV4 += 1;
+      if ((DelayedHitCounter2GeV5ns>min_num_delayed) && (DelayedHitCounter2GeV5ns / AllHitCounter2GeV >= frac_delayed) ) passedDelayedHitFraction2GeV5 += 1;
+      if ((DelayedHitCounter2GeV6ns>min_num_delayed) && (DelayedHitCounter2GeV6ns / AllHitCounter2GeV >= frac_delayed) ) passedDelayedHitFraction2GeV6 += 1;
+      if ((DelayedHitCounter2GeV7ns>min_num_delayed) && (DelayedHitCounter2GeV7ns / AllHitCounter2GeV >= frac_delayed) ) passedDelayedHitFraction2GeV7 += 1;
+      if ((DelayedHitCounter3GeV1ns>min_num_delayed) && (DelayedHitCounter3GeV1ns / AllHitCounter3GeV >= frac_delayed) ) passedDelayedHitFraction3GeV1 += 1;
+      if ((DelayedHitCounter3GeV2ns>min_num_delayed) && (DelayedHitCounter3GeV2ns / AllHitCounter3GeV >= frac_delayed) ) passedDelayedHitFraction3GeV2 += 1;
+      if ((DelayedHitCounter3GeV3ns>min_num_delayed) && (DelayedHitCounter3GeV3ns / AllHitCounter3GeV >= frac_delayed) ) passedDelayedHitFraction3GeV3 += 1;
+      if ((DelayedHitCounter3GeV4ns>min_num_delayed) && (DelayedHitCounter3GeV4ns / AllHitCounter3GeV >= frac_delayed) ) passedDelayedHitFraction3GeV4 += 1;
+      if ((DelayedHitCounter3GeV5ns>min_num_delayed) && (DelayedHitCounter3GeV5ns / AllHitCounter3GeV >= frac_delayed) ) passedDelayedHitFraction3GeV5 += 1;
+      if ((DelayedHitCounter3GeV6ns>min_num_delayed) && (DelayedHitCounter3GeV6ns / AllHitCounter3GeV >= frac_delayed) ) passedDelayedHitFraction3GeV6 += 1;
+      if ((DelayedHitCounter3GeV7ns>min_num_delayed) && (DelayedHitCounter3GeV7ns / AllHitCounter3GeV >= frac_delayed) ) passedDelayedHitFraction3GeV7 += 1;
+      if ((DelayedHitCounter4GeV1ns>min_num_delayed) && (DelayedHitCounter4GeV1ns / AllHitCounter4GeV >= frac_delayed) ) passedDelayedHitFraction4GeV1 += 1;
+      if ((DelayedHitCounter4GeV2ns>min_num_delayed) && (DelayedHitCounter4GeV2ns / AllHitCounter4GeV >= frac_delayed) ) passedDelayedHitFraction4GeV2 += 1;
+      if ((DelayedHitCounter4GeV3ns>min_num_delayed) && (DelayedHitCounter4GeV3ns / AllHitCounter4GeV >= frac_delayed) ) passedDelayedHitFraction4GeV3 += 1;
+      if ((DelayedHitCounter4GeV4ns>min_num_delayed) && (DelayedHitCounter4GeV4ns / AllHitCounter4GeV >= frac_delayed) ) passedDelayedHitFraction4GeV4 += 1;
+      if ((DelayedHitCounter4GeV5ns>min_num_delayed) && (DelayedHitCounter4GeV5ns / AllHitCounter4GeV >= frac_delayed) ) passedDelayedHitFraction4GeV5 += 1;
+      if ((DelayedHitCounter4GeV6ns>min_num_delayed) && (DelayedHitCounter4GeV6ns / AllHitCounter4GeV >= frac_delayed) ) passedDelayedHitFraction4GeV6 += 1;
+      if ((DelayedHitCounter4GeV7ns>min_num_delayed) && (DelayedHitCounter4GeV7ns / AllHitCounter4GeV >= frac_delayed) ) passedDelayedHitFraction4GeV7 += 1;
+
+      if (DelayedHitCounter2GeV1ns > min_num_delayed) DelayedHitFraction2GeV1ns->Fill(DelayedHitCounter2GeV1ns / AllHitCounter2GeV);
+      if (DelayedHitCounter2GeV2ns > min_num_delayed) DelayedHitFraction2GeV2ns->Fill(DelayedHitCounter2GeV2ns / AllHitCounter2GeV);
+      if (DelayedHitCounter2GeV3ns > min_num_delayed) DelayedHitFraction2GeV3ns->Fill(DelayedHitCounter2GeV3ns / AllHitCounter2GeV);
+      if (DelayedHitCounter2GeV4ns > min_num_delayed) DelayedHitFraction2GeV4ns->Fill(DelayedHitCounter2GeV4ns / AllHitCounter2GeV);
+      if (DelayedHitCounter2GeV5ns > min_num_delayed) DelayedHitFraction2GeV5ns->Fill(DelayedHitCounter2GeV5ns / AllHitCounter2GeV);
+      if (DelayedHitCounter2GeV6ns > min_num_delayed) DelayedHitFraction2GeV6ns->Fill(DelayedHitCounter2GeV6ns / AllHitCounter2GeV);
+      if (DelayedHitCounter2GeV7ns > min_num_delayed) DelayedHitFraction2GeV7ns->Fill(DelayedHitCounter2GeV7ns / AllHitCounter2GeV);
+      if (DelayedHitCounter3GeV1ns > min_num_delayed) DelayedHitFraction3GeV1ns->Fill(DelayedHitCounter3GeV1ns / AllHitCounter3GeV);
+      if (DelayedHitCounter3GeV2ns > min_num_delayed) DelayedHitFraction3GeV2ns->Fill(DelayedHitCounter3GeV2ns / AllHitCounter3GeV);
+      if (DelayedHitCounter3GeV3ns > min_num_delayed) DelayedHitFraction3GeV3ns->Fill(DelayedHitCounter3GeV3ns / AllHitCounter3GeV);
+      if (DelayedHitCounter3GeV4ns > min_num_delayed) DelayedHitFraction3GeV4ns->Fill(DelayedHitCounter3GeV4ns / AllHitCounter3GeV);
+      if (DelayedHitCounter3GeV5ns > min_num_delayed) DelayedHitFraction3GeV5ns->Fill(DelayedHitCounter3GeV5ns / AllHitCounter3GeV);
+      if (DelayedHitCounter3GeV6ns > min_num_delayed) DelayedHitFraction3GeV6ns->Fill(DelayedHitCounter3GeV6ns / AllHitCounter3GeV);
+      if (DelayedHitCounter3GeV7ns > min_num_delayed) DelayedHitFraction3GeV7ns->Fill(DelayedHitCounter3GeV7ns / AllHitCounter3GeV);
+      if (DelayedHitCounter4GeV1ns > min_num_delayed) DelayedHitFraction4GeV1ns->Fill(DelayedHitCounter4GeV1ns / AllHitCounter4GeV);
+      if (DelayedHitCounter4GeV2ns > min_num_delayed) DelayedHitFraction4GeV2ns->Fill(DelayedHitCounter4GeV2ns / AllHitCounter4GeV);
+      if (DelayedHitCounter4GeV3ns > min_num_delayed) DelayedHitFraction4GeV3ns->Fill(DelayedHitCounter4GeV3ns / AllHitCounter4GeV);
+      if (DelayedHitCounter4GeV4ns > min_num_delayed) DelayedHitFraction4GeV4ns->Fill(DelayedHitCounter4GeV4ns / AllHitCounter4GeV);
+      if (DelayedHitCounter4GeV5ns > min_num_delayed) DelayedHitFraction4GeV5ns->Fill(DelayedHitCounter4GeV5ns / AllHitCounter4GeV);
+      if (DelayedHitCounter4GeV6ns > min_num_delayed) DelayedHitFraction4GeV6ns->Fill(DelayedHitCounter4GeV6ns / AllHitCounter4GeV);
+      if (DelayedHitCounter4GeV7ns > min_num_delayed) DelayedHitFraction4GeV7ns->Fill(DelayedHitCounter4GeV7ns / AllHitCounter4GeV);
+
       if (genJetRequirementPassed > 0 ) { // fill these histograms when at least one jet has gen matched -- these histograms will sum to give mult3GeV3nsHB_Jets gen matched
+	DepthVariable->Fill(DepthVariableMult); // depth variable
 	dt3GeV3nsHBJet1Mult_emu->Fill(mult3GeV3nsHB_Jet0);
 	dt3GeV3nsHBJet2Mult_emu->Fill(mult3GeV3nsHB_Jet1);
 	dt3GeV3nsHBJet3Mult_emu->Fill(mult3GeV3nsHB_Jet2);
@@ -1577,23 +1563,25 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       }
       min_DR_L1_TP += 0;    
 
-      totalGlobal += 1; // how many total events were there? used to compare with global multiplicity sum
-      if (genJetRequirementPassed > 0 ) totalJets += 1; // how many events had at least one jet passing gen matching requirements? used to compare with regional multiplicity sum that is jet matched
-
       if (mult3GeV3nsHB > GeV3ns3Global_threshold ) passedMultGlobal += 1;
       if ( (mult3GeV3nsHB > GeV3ns3Global_threshold) && (htSum > 120) ) passedMultGlobal_120 += 1;
       if ( (mult3GeV3nsHB > GeV3ns3Global_threshold) && (htSum > 350) ) passedMultGlobal_350 += 1;
       //      if (mult0GeV3nsHB_Jets > GeV3ns0Jet_threshold ) passedMultJets += 1;
       if (mult3GeV3nsHB_Jets > GeV3ns3Jet_threshold ) passedMultJets += 1;
+      if (mult3GeV3nsHB_Jets > 1) passedMultJets3GeV3_1 += 1;
+      if (mult3GeV3nsHB_Jets > 2) passedMultJets3GeV3_2 += 1;
+      if (mult3GeV3nsHB_Jets > 3) passedMultJets3GeV3_3 += 1;
+      if (mult3GeV3nsHB_Jets > 4) passedMultJets3GeV3_4 += 1;
+      if (mult3GeV3nsHB_Jets > 5) passedMultJets3GeV3_5 += 1;
+      if (mult3GeV3nsHB_Jets > 6) passedMultJets3GeV3_6 += 1;
+      if (mult3GeV3nsHB_Jets > 7) passedMultJets3GeV3_7 += 1;
       if ( (mult3GeV3nsHB_Jets > GeV3ns3Jet_threshold) && (htSum > 120) ) passedMultJets_120 += 1;
       if ( (mult3GeV3nsHB_Jets > GeV3ns3Jet_threshold) && (htSum > 350) ) passedMultJets_350 += 1;
       if (htSum > 430 ) passedHtSum430 += 1;
       if (htSum > 350 ) passedHtSum350 += 1;
       if (htSum > 120 ) passedHtSum120 += 1;
 
-      //std::cout << mult3GeV3nsHB_Jets << " = mult3GeV3nsHB_Jets. And sum of four jets one = " << mult3GeV3nsHB_Jet0 + mult3GeV3nsHB_Jet1 + mult3GeV3nsHB_Jet2 + mult3GeV3nsHB_Jet3 << std::endl;
       if (mult3GeV3nsHB_Jets != (mult3GeV3nsHB_Jet0 + mult3GeV3nsHB_Jet1 + mult3GeV3nsHB_Jet2 + mult3GeV3nsHB_Jet3) ) std::cout << "sums are not equal!" << std::endl; // though note, these are only put into histograms when at least one jet is gen matched!
-      if (totalGlobal != totalJets) std::cout << "still using gen matching requirements!" << std::endl;
 
       // after HCAL depth and HCAL TP loops fill the histograms with multiplicity variables. The multiplicity counter is reset on each loop iteration 
       // 3 GeV histograms
@@ -1661,67 +1649,69 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       // after HCAL depth loop and L1 Jet loop fill histograms with multiplicity variables. Multiplicity counter reset on each loop iteration. These are for where HCAL TP is matched to the L1 Jet
       // 3 GeV histograms
       if (genJetRequirementPassed > 0 ) {
-      dt3GeV1nsJetMult_emu->Fill(mult3GeV1ns_Jets);
-      dt3GeV2nsJetMult_emu->Fill(mult3GeV2ns_Jets);
-      dt3GeV3nsJetMult_emu->Fill(mult3GeV3ns_Jets);
-      dt3GeV4nsJetMult_emu->Fill(mult3GeV4ns_Jets);
-      dt3GeV5nsJetMult_emu->Fill(mult3GeV5ns_Jets);
-      dt3GeV1nsHEJetMult_emu->Fill(mult3GeV1nsHE_Jets);
-      dt3GeV2nsHEJetMult_emu->Fill(mult3GeV2nsHE_Jets);
-      dt3GeV3nsHEJetMult_emu->Fill(mult3GeV3nsHE_Jets);
-      dt3GeV4nsHEJetMult_emu->Fill(mult3GeV4nsHE_Jets);
-      dt3GeV5nsHEJetMult_emu->Fill(mult3GeV5nsHE_Jets);
-      dt3GeV1nsHBJetMult_emu->Fill(mult3GeV1nsHB_Jets);
-      dt3GeV2nsHBJetMult_emu->Fill(mult3GeV2nsHB_Jets);
-      dt3GeV3nsHBJetMult_emu->Fill(mult3GeV3nsHB_Jets);
-      dt3GeV4nsHBJetMult_emu->Fill(mult3GeV4nsHB_Jets);
-      dt3GeV5nsHBJetMult_emu->Fill(mult3GeV5nsHB_Jets);
-      // 0 GeV, timing
-      dt0GeV1nsHBJetMult_emu->Fill(mult0GeV1nsHB_Jets);
-      dt0GeV2nsHBJetMult_emu->Fill(mult0GeV2nsHB_Jets);
-      dt0GeV3nsHBJetMult_emu->Fill(mult0GeV3nsHB_Jets);
-      dt0GeV4nsHBJetMult_emu->Fill(mult0GeV4nsHB_Jets);
-      dt0GeV5nsHBJetMult_emu->Fill(mult0GeV5nsHB_Jets);
-      // 2 GeV histograms
-      dt2GeV1nsJetMult_emu->Fill(mult2GeV1ns_Jets);
-      dt2GeV2nsJetMult_emu->Fill(mult2GeV2ns_Jets);
-      dt2GeV3nsJetMult_emu->Fill(mult2GeV3ns_Jets);
-      dt2GeV4nsJetMult_emu->Fill(mult2GeV4ns_Jets);
-      dt2GeV5nsJetMult_emu->Fill(mult2GeV5ns_Jets);
-      dt2GeV1nsHEJetMult_emu->Fill(mult2GeV1nsHE_Jets);
-      dt2GeV2nsHEJetMult_emu->Fill(mult2GeV2nsHE_Jets);
-      dt2GeV3nsHEJetMult_emu->Fill(mult2GeV3nsHE_Jets);
-      dt2GeV4nsHEJetMult_emu->Fill(mult2GeV4nsHE_Jets);
-      dt2GeV5nsHEJetMult_emu->Fill(mult2GeV5nsHE_Jets);
-      dt2GeV1nsHBJetMult_emu->Fill(mult2GeV1nsHB_Jets);
-      dt2GeV2nsHBJetMult_emu->Fill(mult2GeV2nsHB_Jets);
-      dt2GeV3nsHBJetMult_emu->Fill(mult2GeV3nsHB_Jets);
-      dt2GeV4nsHBJetMult_emu->Fill(mult2GeV4nsHB_Jets);
-      dt2GeV5nsHBJetMult_emu->Fill(mult2GeV5nsHB_Jets);
-      // 1 GeV histograms
-      dt1GeV1nsJetMult_emu->Fill(mult1GeV1ns_Jets);
-      dt1GeV2nsJetMult_emu->Fill(mult1GeV2ns_Jets);
-      dt1GeV3nsJetMult_emu->Fill(mult1GeV3ns_Jets);
-      dt1GeV4nsJetMult_emu->Fill(mult1GeV4ns_Jets);
-      dt1GeV5nsJetMult_emu->Fill(mult1GeV5ns_Jets);
-      dt1GeV1nsHEJetMult_emu->Fill(mult1GeV1nsHE_Jets);
-      dt1GeV2nsHEJetMult_emu->Fill(mult1GeV2nsHE_Jets);
-      dt1GeV3nsHEJetMult_emu->Fill(mult1GeV3nsHE_Jets);
-      dt1GeV4nsHEJetMult_emu->Fill(mult1GeV4nsHE_Jets);
-      dt1GeV5nsHEJetMult_emu->Fill(mult1GeV5nsHE_Jets);
-      dt1GeV1nsHBJetMult_emu->Fill(mult1GeV1nsHB_Jets);
-      dt1GeV2nsHBJetMult_emu->Fill(mult1GeV2nsHB_Jets);
-      dt1GeV3nsHBJetMult_emu->Fill(mult1GeV3nsHB_Jets);
-      dt1GeV4nsHBJetMult_emu->Fill(mult1GeV4nsHB_Jets);
-      dt1GeV5nsHBJetMult_emu->Fill(mult1GeV5nsHB_Jets);
+	dt3GeV1nsJetMult_emu->Fill(mult3GeV1ns_Jets);
+	dt3GeV2nsJetMult_emu->Fill(mult3GeV2ns_Jets);
+	dt3GeV3nsJetMult_emu->Fill(mult3GeV3ns_Jets);
+	dt3GeV4nsJetMult_emu->Fill(mult3GeV4ns_Jets);
+	dt3GeV5nsJetMult_emu->Fill(mult3GeV5ns_Jets);
+	dt3GeV1nsHEJetMult_emu->Fill(mult3GeV1nsHE_Jets);
+	dt3GeV2nsHEJetMult_emu->Fill(mult3GeV2nsHE_Jets);
+	dt3GeV3nsHEJetMult_emu->Fill(mult3GeV3nsHE_Jets);
+	dt3GeV4nsHEJetMult_emu->Fill(mult3GeV4nsHE_Jets);
+	dt3GeV5nsHEJetMult_emu->Fill(mult3GeV5nsHE_Jets);
+	dt3GeV1nsHBJetMult_emu->Fill(mult3GeV1nsHB_Jets);
+	dt3GeV2nsHBJetMult_emu->Fill(mult3GeV2nsHB_Jets);
+	dt3GeV3nsHBJetMult_emu->Fill(mult3GeV3nsHB_Jets);
+	dt3GeV4nsHBJetMult_emu->Fill(mult3GeV4nsHB_Jets);
+	dt3GeV5nsHBJetMult_emu->Fill(mult3GeV5nsHB_Jets);
+	// 0 GeV, timing
+	dt0GeV1nsHBJetMult_emu->Fill(mult0GeV1nsHB_Jets);
+	dt0GeV2nsHBJetMult_emu->Fill(mult0GeV2nsHB_Jets);
+	dt0GeV3nsHBJetMult_emu->Fill(mult0GeV3nsHB_Jets);
+	dt0GeV4nsHBJetMult_emu->Fill(mult0GeV4nsHB_Jets);
+	dt0GeV5nsHBJetMult_emu->Fill(mult0GeV5nsHB_Jets);
+	// 2 GeV histograms
+	dt2GeV1nsJetMult_emu->Fill(mult2GeV1ns_Jets);
+	dt2GeV2nsJetMult_emu->Fill(mult2GeV2ns_Jets);
+	dt2GeV3nsJetMult_emu->Fill(mult2GeV3ns_Jets);
+	dt2GeV4nsJetMult_emu->Fill(mult2GeV4ns_Jets);
+	dt2GeV5nsJetMult_emu->Fill(mult2GeV5ns_Jets);
+	dt2GeV1nsHEJetMult_emu->Fill(mult2GeV1nsHE_Jets);
+	dt2GeV2nsHEJetMult_emu->Fill(mult2GeV2nsHE_Jets);
+	dt2GeV3nsHEJetMult_emu->Fill(mult2GeV3nsHE_Jets);
+	dt2GeV4nsHEJetMult_emu->Fill(mult2GeV4nsHE_Jets);
+	dt2GeV5nsHEJetMult_emu->Fill(mult2GeV5nsHE_Jets);
+	dt2GeV1nsHBJetMult_emu->Fill(mult2GeV1nsHB_Jets);
+	dt2GeV2nsHBJetMult_emu->Fill(mult2GeV2nsHB_Jets);
+	dt2GeV3nsHBJetMult_emu->Fill(mult2GeV3nsHB_Jets);
+	dt2GeV4nsHBJetMult_emu->Fill(mult2GeV4nsHB_Jets);
+	dt2GeV5nsHBJetMult_emu->Fill(mult2GeV5nsHB_Jets);
+	// 1 GeV histograms
+	dt1GeV1nsJetMult_emu->Fill(mult1GeV1ns_Jets);
+	dt1GeV2nsJetMult_emu->Fill(mult1GeV2ns_Jets);
+	dt1GeV3nsJetMult_emu->Fill(mult1GeV3ns_Jets);
+	dt1GeV4nsJetMult_emu->Fill(mult1GeV4ns_Jets);
+	dt1GeV5nsJetMult_emu->Fill(mult1GeV5ns_Jets);
+	dt1GeV1nsHEJetMult_emu->Fill(mult1GeV1nsHE_Jets);
+	dt1GeV2nsHEJetMult_emu->Fill(mult1GeV2nsHE_Jets);
+	dt1GeV3nsHEJetMult_emu->Fill(mult1GeV3nsHE_Jets);
+	dt1GeV4nsHEJetMult_emu->Fill(mult1GeV4nsHE_Jets);
+	dt1GeV5nsHEJetMult_emu->Fill(mult1GeV5nsHE_Jets);
+	dt1GeV1nsHBJetMult_emu->Fill(mult1GeV1nsHB_Jets);
+	dt1GeV2nsHBJetMult_emu->Fill(mult1GeV2nsHB_Jets);
+	dt1GeV3nsHBJetMult_emu->Fill(mult1GeV3nsHB_Jets);
+	dt1GeV4nsHBJetMult_emu->Fill(mult1GeV4nsHB_Jets);
+	dt1GeV5nsHBJetMult_emu->Fill(mult1GeV5nsHB_Jets);
       }
       // setting the things for the tree used with TMVA, ET_Jet1 has already been set at the top of the event and jet loop
       event = jentry;
       mult_Jet1= mult3GeV3nsHB_Jet0;
-      mult_Global = mult3GeV3nsHB;
+      mult_Jet2= mult3GeV3nsHB_Jet1;
+      mult_Jet3= mult3GeV3nsHB_Jet2;
+      mult_Jet4= mult3GeV3nsHB_Jet3;
+      //      mult_Global = mult3GeV3nsHB;
       tree->Fill();
-
-
+    
       // for each bin fill according to whether our object has a larger corresponding energy
       // Global. nJetBins = 400, jetBinWidht = 1 so this is jetLo + 1, jetLo + 2...etc
       for(int bin=0; bin<nJetBins; bin++){
@@ -1738,6 +1728,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	if( ((jetEt_2) >= (jetLo + bin*jetBinWidth)) && (mult3GeV3nsHB_Jets > GeV3ns3Jet_threshold) ) doubleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV     
 	if( ((jetEt_3) >= (jetLo + bin*jetBinWidth)) && (mult3GeV3nsHB_Jets > GeV3ns3Jet_threshold) ) tripleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
 	if( ((jetEt_4) >= (jetLo + bin*jetBinWidth)) && (mult3GeV3nsHB_Jets > GeV3ns3Jet_threshold) ) quadJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV 
+	if( ((jetEt_1) >= (jetLo + bin*jetBinWidth)) ) singleJetOriginalRates_emu->Fill(jetLo+(bin*jetBinWidth));
+	if( ((jetEt_4) >= (jetLo + bin*jetBinWidth)) ) quadJetOriginalRates_emu->Fill(jetLo+(bin*jetBinWidth));
       }
 
       // eGamma rates             
@@ -1910,6 +1902,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       // for each bin fill according to whether our object has a larger corresponding energy
       for(int bin=0; bin<nJetBins; bin++){
         if( (jetEt_1) >= jetLo + (bin*jetBinWidth) ) singleJetRates_hw->Fill(jetLo+(bin*jetBinWidth));  //GeV
+        if( (jetEt_1) >= jetLo + (bin*jetBinWidth) ) singleJetOriginalRates_hw->Fill(jetLo+(bin*jetBinWidth));  //GeV       
       } 
 
       for(int bin=0; bin<nJetBins; bin++){
@@ -1922,8 +1915,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 
       for(int bin=0; bin<nJetBins; bin++){
         if( (jetEt_4) >= jetLo + (bin*jetBinWidth) ) quadJetRates_hw->Fill(jetLo+(bin*jetBinWidth));  //GeV
-      }  
-
+	if( (jetEt_4) >= jetLo + (bin*jetBinWidth) ) quadJetOriginalRates_hw->Fill(jetLo+(bin*jetBinWidth));  //GeV      
+      }
       for(int bin=0; bin<nJetBins; bin++){
         if( (jetEt_1) >= jetLo + (bin*jetBinWidth) ) singleJetGlobalRates_hw->Fill(jetLo+(bin*jetBinWidth));  //GeV
       }
@@ -1992,20 +1985,81 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     }// closes if 'hwOn' is true
   }// closes loop through events
 
-  //  std::cout << "Total number of events passing jet gen matching = " << totalJets << std::endl;
-  //  std::cout << "Number of events passed jet multiplicity = " << passedMultJets << std::endl;
-  //  std::cout << "Total number of events = " << totalGlobal << std::endl;
-  //  std::cout << "Number of events passed global multiplicity = " << passedMultGlobal << std::endl;
-  //  std::cout << "LLP passed jet matched multiplicity cut of mult0GeV3nsHB_Jets>" << GeV3ns0Jet_threshold << " / total LLPs = " << passedMultJets/totalJets << std::endl;
-  std::cout << "LLP passed jet matched multiplicity cut of mult3GeV3nsHB_Jets>" << GeV3ns3Jet_threshold << " / total LLPs = " << passedMultJets/totalJets << std::endl;
-  std::cout << "LLP passed ht>120 and jet matched multiplicity cut of mult3GeV3nsHB_Jets>" << GeV3ns3Jet_threshold << " / total LLPs = " << passedMultJets_120/totalJets << std::endl;
-  std::cout << "LLP passed ht>350 and jet matched multiplicity cut of mult3GeV3nsHB_Jets>" << GeV3ns3Jet_threshold << " / total LLPs = " << passedMultJets_350/totalJets << std::endl;
-  std::cout << "LLP passed global multiplicity cut of mult3GeV3nsHB>" << GeV3ns3Global_threshold << " / total LLPs = " << passedMultGlobal/totalGlobal << std::endl;
-  std::cout << "LLP passed ht>120 and global multiplicity cut of mult3GeV3nsHB>" << GeV3ns3Global_threshold << " / total LLPs = " << passedMultGlobal_120/totalGlobal << std::endl;
-  std::cout << "LLP passed ht>350 and global multiplicity cut of mult3GeV3nsHB>" << GeV3ns3Global_threshold << " / total LLPs = " << passedMultGlobal_350/totalGlobal << std::endl;
-  std::cout << "LLP passed htSum > 430 GeV cut / total LLPs = " << passedHtSum430/totalGlobal << std::endl;
-  std::cout << "LLP passed htSum > 350 GeV cut / total LLPs = " << passedHtSum350/totalGlobal << std::endl;
-  std::cout << "LLP passed htSum > 120 GeV cut / total LLPs = " << passedHtSum120/totalGlobal << std::endl;
+  // saving efficiencies in txt files to be read by plotting macros
+  if (inputFile.substr(0,6) == "../QCD" ) {
+    std::ofstream DelayedHitFrac_Background;
+    DelayedHitFrac_Background.open("DelayedHitFrac_Background.txt", std::ios_base::trunc);
+    DelayedHitFrac_Background << passedDelayedHitFraction2GeV1/totalJets << std::endl;
+    DelayedHitFrac_Background << passedDelayedHitFraction2GeV2/totalJets << std::endl;
+    DelayedHitFrac_Background << passedDelayedHitFraction2GeV3/totalJets << std::endl;
+    DelayedHitFrac_Background << passedDelayedHitFraction2GeV4/totalJets << std::endl;
+    DelayedHitFrac_Background << passedDelayedHitFraction2GeV5/totalJets << std::endl;
+    DelayedHitFrac_Background << passedDelayedHitFraction2GeV6/totalJets << std::endl;
+    DelayedHitFrac_Background << passedDelayedHitFraction2GeV7/totalJets << std::endl;
+    DelayedHitFrac_Background << passedDelayedHitFraction3GeV1/totalJets << std::endl;
+    DelayedHitFrac_Background << passedDelayedHitFraction3GeV2/totalJets << std::endl;
+    DelayedHitFrac_Background << passedDelayedHitFraction3GeV3/totalJets << std::endl;
+    DelayedHitFrac_Background << passedDelayedHitFraction3GeV4/totalJets << std::endl;
+    DelayedHitFrac_Background << passedDelayedHitFraction3GeV5/totalJets << std::endl;
+    DelayedHitFrac_Background << passedDelayedHitFraction3GeV6/totalJets << std::endl;
+    DelayedHitFrac_Background << passedDelayedHitFraction3GeV7/totalJets << std::endl;
+    DelayedHitFrac_Background << passedDelayedHitFraction4GeV1/totalJets << std::endl;
+    DelayedHitFrac_Background << passedDelayedHitFraction4GeV2/totalJets << std::endl;
+    DelayedHitFrac_Background << passedDelayedHitFraction4GeV3/totalJets << std::endl;
+    DelayedHitFrac_Background << passedDelayedHitFraction4GeV4/totalJets << std::endl;
+    DelayedHitFrac_Background << passedDelayedHitFraction4GeV5/totalJets << std::endl;
+    DelayedHitFrac_Background << passedDelayedHitFraction4GeV6/totalJets << std::endl;
+    DelayedHitFrac_Background << passedDelayedHitFraction4GeV7/totalJets << std::endl;
+    DelayedHitFrac_Background.close();
+    std::ofstream MultiplicityHits3GeV3ns_Background;
+    MultiplicityHits3GeV3ns_Background.open("MultiplicityHits3GeV3ns_Background.txt",std::ios_base::trunc);
+    MultiplicityHits3GeV3ns_Background << passedMultJets3GeV3_1/totalJets << std::endl;
+    MultiplicityHits3GeV3ns_Background << passedMultJets3GeV3_2/totalJets << std::endl;
+    MultiplicityHits3GeV3ns_Background << passedMultJets3GeV3_3/totalJets << std::endl;
+    MultiplicityHits3GeV3ns_Background << passedMultJets3GeV3_4/totalJets << std::endl;
+    MultiplicityHits3GeV3ns_Background << passedMultJets3GeV3_5/totalJets << std::endl;
+    MultiplicityHits3GeV3ns_Background << passedMultJets3GeV3_6/totalJets << std::endl;
+    MultiplicityHits3GeV3ns_Background << passedMultJets3GeV3_7/totalJets << std::endl;
+    MultiplicityHits3GeV3ns_Background.close();
+  }
+
+  if (inputFile.substr(0,5) == "../mh" && inputFile.substr(0,21) != "../mh1000_pl500_noPU/" ) {
+    std::ofstream DelayedHitFrac_Signal;
+    DelayedHitFrac_Signal.open(Form("DelayedHitFrac_Signal_%s.txt", inputFile.substr(3,11).c_str()), std::ios_base::trunc);
+    //    DelayedHitFrac_Signal.open("DelayedHitFrac_Signal.txt",std::ios_base::trunc);
+    DelayedHitFrac_Signal << passedDelayedHitFraction2GeV1/totalJets << std::endl;
+    DelayedHitFrac_Signal << passedDelayedHitFraction2GeV2/totalJets << std::endl;
+    DelayedHitFrac_Signal << passedDelayedHitFraction2GeV3/totalJets << std::endl;
+    DelayedHitFrac_Signal << passedDelayedHitFraction2GeV4/totalJets << std::endl;
+    DelayedHitFrac_Signal << passedDelayedHitFraction2GeV5/totalJets << std::endl;
+    DelayedHitFrac_Signal << passedDelayedHitFraction2GeV6/totalJets << std::endl;
+    DelayedHitFrac_Signal << passedDelayedHitFraction2GeV7/totalJets << std::endl;
+    DelayedHitFrac_Signal << passedDelayedHitFraction3GeV1/totalJets << std::endl;
+    DelayedHitFrac_Signal << passedDelayedHitFraction3GeV2/totalJets << std::endl;
+    DelayedHitFrac_Signal << passedDelayedHitFraction3GeV3/totalJets << std::endl;
+    DelayedHitFrac_Signal << passedDelayedHitFraction3GeV4/totalJets << std::endl;
+    DelayedHitFrac_Signal << passedDelayedHitFraction3GeV5/totalJets << std::endl;
+    DelayedHitFrac_Signal << passedDelayedHitFraction3GeV6/totalJets << std::endl;
+    DelayedHitFrac_Signal << passedDelayedHitFraction3GeV7/totalJets << std::endl;
+    DelayedHitFrac_Signal << passedDelayedHitFraction4GeV1/totalJets << std::endl;
+    DelayedHitFrac_Signal << passedDelayedHitFraction4GeV2/totalJets << std::endl;
+    DelayedHitFrac_Signal << passedDelayedHitFraction4GeV3/totalJets << std::endl;
+    DelayedHitFrac_Signal << passedDelayedHitFraction4GeV4/totalJets << std::endl;
+    DelayedHitFrac_Signal << passedDelayedHitFraction4GeV5/totalJets << std::endl;
+    DelayedHitFrac_Signal << passedDelayedHitFraction4GeV6/totalJets << std::endl;
+    DelayedHitFrac_Signal << passedDelayedHitFraction4GeV7/totalJets << std::endl;
+    DelayedHitFrac_Signal.close();
+    std::ofstream MultiplicityHits3GeV3ns_Signal;
+    MultiplicityHits3GeV3ns_Signal.open(Form("MultiplicityHits3GeV3ns_Signal_%s.txt", inputFile.substr(3,11).c_str()),std::ios_base::trunc);
+    MultiplicityHits3GeV3ns_Signal << passedMultJets3GeV3_1/totalJets << std::endl;
+    MultiplicityHits3GeV3ns_Signal << passedMultJets3GeV3_2/totalJets << std::endl;
+    MultiplicityHits3GeV3ns_Signal << passedMultJets3GeV3_3/totalJets << std::endl;
+    MultiplicityHits3GeV3ns_Signal << passedMultJets3GeV3_4/totalJets << std::endl;
+    MultiplicityHits3GeV3ns_Signal << passedMultJets3GeV3_5/totalJets << std::endl;
+    MultiplicityHits3GeV3ns_Signal << passedMultJets3GeV3_6/totalJets << std::endl;
+    MultiplicityHits3GeV3ns_Signal << passedMultJets3GeV3_7/totalJets << std::endl;
+    MultiplicityHits3GeV3ns_Signal.close();
+  }
 
   //  TFile g( outputFilename.c_str() , "new");
   kk->cd();
@@ -2022,6 +2076,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     doubleJetGlobalRates_emu->Scale(norm);
     tripleJetGlobalRates_emu->Scale(norm);
     quadJetGlobalRates_emu->Scale(norm);
+    singleJetOriginalRates_emu->Scale(norm);
+    quadJetOriginalRates_emu->Scale(norm);
     singleEgRates_emu->Scale(norm);
     doubleEgRates_emu->Scale(norm);
     singleTauRates_emu->Scale(norm);
@@ -2060,8 +2116,12 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     if (inputFile.substr(0,11) == "../Neutrino" ) {
       int SJ_60GeV_bin = singleJetGlobalRates_emu->GetXaxis()->FindBin(60); // get x value of bin of interest                      
       int SJet60GeV = singleJetGlobalRates_emu->GetBinContent(SJ_60GeV_bin); // get rate value for single jet at 60 GeV ET threshold
+      int SJ_60GeV_original_bin = singleJetOriginalRates_emu->GetXaxis()->FindBin(60); // get x value of bin of interest             
+      int SJet60GeV_original = singleJetOriginalRates_emu->GetBinContent(SJ_60GeV_original_bin); // get rate value for single jet at 60 GeV ET threshold  
       int QJ_60GeV_bin = quadJetGlobalRates_emu->GetXaxis()->FindBin(60); // get x value of bin of interest
       int QJet60GeV = quadJetGlobalRates_emu->GetBinContent(QJ_60GeV_bin); // get rate value for quad jet at 60 GeV ET threshold
+      int QJ_60GeV_original_bin = quadJetOriginalRates_emu->GetXaxis()->FindBin(60); // get x value of bin of interest   
+      int QJet60GeV_original = quadJetOriginalRates_emu->GetBinContent(QJ_60GeV_original_bin); // get rate value for quad jet at 60 GeV ET threshold 
       int HT_120GeV_bin = htSumGlobalRates_emu->GetXaxis()->FindBin(120); // get x value of bin of interest
       int htSum120GeV = htSumGlobalRates_emu->GetBinContent(HT_120GeV_bin); // get rate value for ht sum rate at 120 GeV ET threshold
       int HT_350GeV_bin = htSumGlobalRates_emu->GetXaxis()->FindBin(350); // get x value of bin of interest         
@@ -2109,29 +2169,65 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       EffRate_file << "Original_htSumRate120 = " << htSum120GeV_original/1000 << ";" << std::endl;
       EffRate_file << "Original_htSumRate350 = " << htSum350GeV_original/1000 << ";" << std::endl;
       EffRate_file << "Original_htSumRate430 = " << htSum430GeV_original/1000 << ";" << std::endl;
+
+      EffRate_file << "REGIONAL" << std::endl;
+      EffRate_file << "Factor change in htSum Rate at 120 GeV = " << htSum120GeV_original/htSum120GeV_l << std::endl;
+      EffRate_file << "Factor change in htSum Rate at 350 GeV = " << htSum350GeV_original/htSum350GeV_l << std::endl;
+      EffRate_file << "Factor change in htSum Rate at 430 GeV = " << htSum430GeV_original/htSum430GeV_l << std::endl;
+      EffRate_file << "Factor change in single jet rate at 60 GeV = " << SJet60GeV_original/SJet60GeV_l << std::endl;
+      EffRate_file << "Factor change in quad jet rate at 60 GeV = " << QJet60GeV_original/QJet60GeV_l << std::endl;
+      EffRate_file << "GLOBAL" << std::endl;
+      EffRate_file << "Factor change in htSum Rate at 120 GeV = " << htSum120GeV_original/htSum120GeV << std::endl;
+      EffRate_file << "Factor change in htSum Rate at 350 GeV = " << htSum350GeV_original/htSum350GeV << std::endl;
+      EffRate_file << "Factor change in htSum Rate at 430 GeV = " << htSum430GeV_original/htSum430GeV << std::endl;
+      EffRate_file << "Factor change in single jet rate at 60 GeV = " << SJet60GeV_original/SJet60GeV << std::endl;
+      EffRate_file << "Factor change in quad jet rate at 60 GeV = " << QJet60GeV_original/QJet60GeV << std::endl;
       EffRate_file << " " << std::endl;
     }
     if (inputFile.substr(0,16) == "../mh1000_pl500/" || inputFile.substr(0,21) == "../mh350_pl160_pl500/" ) {
       EffRate_file << "EffPl500["<< GeV3ns3Jet_threshold-1 << "] = " << passedMultJets/totalJets << ";" <<std::endl;
       EffRate_file << "EffPl500_120["<< GeV3ns3Jet_threshold-1 << "] = " << passedMultJets_120/totalJets << ";" <<std::endl;
       EffRate_file << "EffPl500_350["<< GeV3ns3Jet_threshold-1 << "] = " << passedMultJets_350/totalJets << ";" <<std::endl;
+      EffRate_file << "REGIONAL pl=0.5m, Factor reduction in eff with timing and ht=120 cuts as compared with only ht=430 threshold["<< GeV3ns3Jet_threshold-1 << "] = " << (passedMultJets_120/totalJets)/(passedHtSum430/totalGlobal) << ";" << std::endl;
+
       EffRate_file << "EffPl500Global["<< GeV3ns3Global_threshold-1 << "] = " << passedMultGlobal/totalGlobal << ";" <<std::endl;
       EffRate_file << "EffPl500Global_120["<< GeV3ns3Global_threshold-1 << "] = " << passedMultGlobal_120/totalGlobal << ";" <<std::endl;
       EffRate_file << "EffPl500Global_350["<< GeV3ns3Global_threshold-1 << "] = " << passedMultGlobal_350/totalGlobal << ";" <<std::endl;
       EffRate_file << "EffPl500_htSum120_Global = " << passedHtSum120/totalGlobal << ";" <<std::endl;
       EffRate_file << "EffPl500_htSum350_Global = " << passedHtSum350/totalGlobal << ";" <<std::endl;
       EffRate_file << "EffPl500_htSum430_Global = " << passedHtSum430/totalGlobal << ";" <<std::endl;
+      EffRate_file << "GLOBAL pl=0.5m, Factor reduction in eff with timing and ht=120 cuts as compared with only ht=430 threshold["<< GeV3ns3Global_threshold-1 << "] = " << (passedMultGlobal/totalGlobal)/(passedHtSum430/totalGlobal) << ";" << std::endl;
+      EffRate_file << " " << std::endl;
+    }
+    if (inputFile.substr(0,17) == "../mh1000_pl1000/" || inputFile.substr(0,22) == "../mh350_pl160_pl1000/" ) {
+      EffRate_file << "EffPl1000["<< GeV3ns3Jet_threshold-1 << "] = " << passedMultJets/totalJets << ";" <<std::endl;
+      EffRate_file << "EffPl1000_120["<< GeV3ns3Jet_threshold-1 << "] = " << passedMultJets_120/totalJets << ";" <<std::endl;
+      EffRate_file << "EffPl1000_350["<< GeV3ns3Jet_threshold-1 << "] = " << passedMultJets_350/totalJets << ";" <<std::endl;
+      EffRate_file << "REGIONAL pl=1m, Factor reduction in eff with timing and ht=120 cuts as compared with only ht=430 threshold["<< GeV3ns3Jet_threshold-1 << "] = " << (passedMultJets_120/totalJets)/(passedHtSum430/totalGlobal) << ";" << std::endl;
+
+      EffRate_file << "EffPl1000Global["<< GeV3ns3Global_threshold-1 << "] = " << passedMultGlobal/totalGlobal << ";" <<std::endl;
+      EffRate_file << "EffPl1000Global_120["<< GeV3ns3Global_threshold-1 << "] = " << passedMultGlobal_120/totalGlobal << ";" <<std::endl;
+      EffRate_file << "EffPl1000Global_350["<< GeV3ns3Global_threshold-1 << "] = " << passedMultGlobal_350/totalGlobal << ";" <<std::endl;
+      EffRate_file << "EffPl1000_htSum120_Global = " << passedHtSum120/totalGlobal << ";" <<std::endl;
+      EffRate_file << "EffPl1000_htSum350_Global = " << passedHtSum350/totalGlobal << ";" <<std::endl;
+      EffRate_file << "EffPl1000_htSum430_Global = " << passedHtSum430/totalGlobal << ";" <<std::endl;
+      EffRate_file << "GLOBAL pl=1m, Factor reduction in eff with timing and ht=120 cuts as compared with only ht=430 threshold["<< GeV3ns3Global_threshold-1 << "] = " << (passedMultGlobal/totalGlobal)/(passedHtSum430/totalGlobal) << ";" << std::endl;
+      EffRate_file << " " << std::endl;
     }
     if (inputFile.substr(0,6) == "../QCD" ) {
       EffRate_file << "EffQCD["<< GeV3ns3Jet_threshold-1 << "] = " << passedMultJets/totalJets << ";" <<std::endl;
       EffRate_file << "EffQCD_120["<< GeV3ns3Jet_threshold-1 << "] = " << passedMultJets_120/totalGlobal << ";" <<std::endl;
       EffRate_file << "EffQCD_350["<< GeV3ns3Jet_threshold-1 << "] = " << passedMultJets_350/totalGlobal << ";" <<std::endl;
+      EffRate_file << "REGIONAL QCD, Factor reduction in eff with timing and ht=120 cuts as compared with only ht=430 threshold["<< GeV3ns3Jet_threshold-1 << "] = " << (passedMultJets_120/totalJets)/(passedHtSum430/totalGlobal) << ";" << std::endl;
+
       EffRate_file << "EffQCDGlobal["<< GeV3ns3Global_threshold-1 << "] = " << passedMultGlobal/totalGlobal << ";" <<std::endl;
       EffRate_file << "EffQCDGlobal_120["<< GeV3ns3Global_threshold-1 << "] = " << passedMultGlobal_120/totalGlobal << ";" <<std::endl;
       EffRate_file << "EffQCDGlobal_350["<< GeV3ns3Global_threshold-1 << "] = " << passedMultGlobal_350/totalGlobal << ";" <<std::endl;
       EffRate_file << "EffQCD_htSum120_Global = " << passedHtSum120/totalGlobal << ";" <<std::endl;
       EffRate_file << "EffQCD_htSum350_Global = " << passedHtSum350/totalGlobal << ";" <<std::endl;
       EffRate_file << "EffQCD_htSum430_Global = " << passedHtSum430/totalGlobal << ";" <<std::endl;
+      EffRate_file << "GLOBAL QCD, Factor reduction in eff with timing and ht=120 cuts as compared with only ht=430 threshold["<< GeV3ns3Global_threshold-1 << "] = " << (passedMultGlobal/totalGlobal)/(passedHtSum430/totalGlobal) << ";" << std::endl;
+      EffRate_file << " " << std::endl;
     }
 
     hJetEt->Write();
@@ -2226,6 +2322,28 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     dt3GeVcaloT3Mult_emu->Write();
     dt3GeVcaloT4Mult_emu->Write();
 
+    DepthVariable->Write();
+    DelayedHitFraction2GeV1ns->Write();
+    DelayedHitFraction2GeV2ns->Write();
+    DelayedHitFraction2GeV3ns->Write();
+    DelayedHitFraction2GeV4ns->Write();
+    DelayedHitFraction2GeV5ns->Write();
+    DelayedHitFraction2GeV6ns->Write();
+    DelayedHitFraction2GeV7ns->Write();
+    DelayedHitFraction3GeV1ns->Write();
+    DelayedHitFraction3GeV2ns->Write();
+    DelayedHitFraction3GeV3ns->Write();
+    DelayedHitFraction3GeV4ns->Write();
+    DelayedHitFraction3GeV5ns->Write();
+    DelayedHitFraction3GeV6ns->Write();
+    DelayedHitFraction3GeV7ns->Write();
+    DelayedHitFraction4GeV1ns->Write();
+    DelayedHitFraction4GeV2ns->Write();
+    DelayedHitFraction4GeV3ns->Write();
+    DelayedHitFraction4GeV4ns->Write();
+    DelayedHitFraction4GeV5ns->Write();
+    DelayedHitFraction4GeV6ns->Write();
+    DelayedHitFraction4GeV7ns->Write();
     // and for the multiplicity counter for HCAL TPs matched with L1 Jets
     // 3 GeV
     dt3GeV1nsJetMult_emu->Write();
