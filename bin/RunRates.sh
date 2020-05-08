@@ -31,14 +31,17 @@ mv plots/* plots_DRaroundTPandL1_mh1000/
 echo " "
 echo " "
 echo "LLP mh=350 GeV, ctau=1 m"
-rates.exe new ../mh350_pl160_pl1000/
+rates.exe new ../mh350_pl1000_mx160/
 mv rates_new_cond.root rates_new_cond_pl1000_4L1Jets.root
 echo " "
 echo "LLP mh=350 GeV, ctau=0.5 m"
-rates.exe new ../mh350_pl160_pl500/
+rates.exe new ../mh350_pl500_mx160/
 mv rates_new_cond.root rates_new_cond_pl500_4L1Jets.root
 echo " "
 echo "Making overlay plots from draw_rates.exe"
 draw_rates.exe
 echo "Moving output plots to a new directory"
 mv plots/* plots_DRaroundTPandL1_mh350/
+echo "Making overlay ROC curves"
+SignalBkgEff_DelayedHitFrac_Plot.exe
+echo " "
