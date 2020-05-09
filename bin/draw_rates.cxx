@@ -64,13 +64,17 @@
 					 //					 "dt1GeV1nsHEJet","dt1GeV2nsHEJet","dt1GeV3nsHEJet","dt1GeV4nsHEJet","dt1GeV5nsHEJet",
 					 "dt1GeV1nsHBJet","dt1GeV2nsHBJet","dt1GeV3nsHBJet","dt1GeV4nsHBJet","dt1GeV5nsHBJet",
 					 "Ratio_Depth", "Ratio_DepthHE", "Ratio_DepthHB","Ratio_Depth_Jets", "Ratio_DepthHE_Jets", "Ratio_DepthHB_Jets","centralTiming",
+					 "DepthVariable",
+					 "DelayedHitFraction2GeV1ns","DelayedHitFraction2GeV2ns","DelayedHitFraction2GeV3ns","DelayedHitFraction2GeV4ns","DelayedHitFraction2GeV5ns","DelayedHitFraction2GeV6ns","DelayedHitFraction2GeV7ns",
+					 "DelayedHitFraction3GeV1ns","DelayedHitFraction3GeV2ns","DelayedHitFraction3GeV3ns","DelayedHitFraction3GeV4ns","DelayedHitFraction3GeV5ns","DelayedHitFraction3GeV6ns","DelayedHitFraction3GeV7ns",
+					 "DelayedHitFraction4GeV1ns","DelayedHitFraction4GeV2ns","DelayedHitFraction4GeV3ns","DelayedHitFraction4GeV4ns","DelayedHitFraction4GeV5ns","DelayedHitFraction4GeV6ns","DelayedHitFraction4GeV7ns",
 					 "dt1GeVcaloT1","dt1GeVcaloT2","dt1GeVcaloT3","dt1GeVcaloT4",
 					 "dt2GeVcaloT1","dt2GeVcaloT2","dt2GeVcaloT3","dt2GeVcaloT4",
 					 "dt3GeVcaloT1","dt3GeVcaloT2","dt3GeVcaloT3","dt3GeVcaloT4"};
 
-  std::vector<std::string> EDepthTypes = {"Timing_Depth","Timing_DepthHE","Timing_DepthHB","Energy_Depth_HighE","Energy_DepthHE_HighE","Energy_DepthHB_HighE","Timing_Depth_Jets","Timing_DepthHE_Jets","Timing_DepthHB_Jets","Energy_Depth_Jets_HighE","Energy_DepthHE_Jets_HighE","Energy_DepthHB_Jets_HighE"};
+   std::vector<std::string> EDepthTypes = {"Timing_Depth","Timing_DepthHE","Timing_DepthHB","Energy_Depth_HighE","Energy_DepthHE_HighE","Energy_DepthHB_HighE","Timing_Depth_Jets","Timing_DepthHE_Jets","Timing_DepthHB_Jets","Energy_Depth_Jets_HighE","Energy_DepthHE_Jets_HighE","Energy_DepthHB_Jets_HighE"};
 
-  std::vector<std::string> RatioTypes = {"Ratio_Depth", "Ratio_DepthHE", "Ratio_DepthHB","Ratio_Depth_Jets", "Ratio_DepthHE_Jets", "Ratio_DepthHB_Jets"};
+   std::vector<std::string> RatioTypes = {"Ratio_Depth", "Ratio_DepthHE", "Ratio_DepthHB","Ratio_Depth_Jets", "Ratio_DepthHE_Jets", "Ratio_DepthHB_Jets"};
 
   std::map<std::string, int> histColor;
   histColor["singleJet"] = histColor["singleJetGlobal"] = histColor["singleEg"] = histColor["singleTau"] = histColor["etSum"] = histColor["etSumGlobal"] = histColor["metSum"] = histColor["dt3GeV1ns"] = histColor["dt3GeV1nsHE"] =histColor["dt3GeV1nsHB"] = histColor["dt2GeV1ns"] = histColor["dt2GeV1nsHE"] = histColor["dt2GeV1nsHB"] = histColor["dt1GeV1ns"] = histColor["dt1GeV1nsHE"] = histColor["dt1GeV1nsHB"] = histColor["dt3GeV1nsJet"] = histColor["dt3GeV1nsHEJet"] =histColor["dt3GeV1nsHBJet"] = histColor["dt2GeV1nsJet"] = histColor["dt2GeV1nsHEJet"] = histColor["dt2GeV1nsHBJet"] = histColor["dt1GeV1nsJet"] = histColor["dt1GeV1nsHEJet"] = histColor["dt1GeV1nsHBJet"] = kRed;
@@ -355,7 +359,7 @@
       if ( name(9,2) == "HE" || name(9,2) == "HB" ){
         multHists_QCD[hist]->SetTitle("Multiplicity for QCD, timing scan at " + name(2,4) + " in " + name(9,2)+", TP matched w/" + name(11,3));
 	if ( name(11,3) != "Jet" ) multHists_QCD[hist]->SetTitle("Multiplicity for QCD, timing scan at " + name(2,4) + " in " + name(9,2));
-	if (hist.substr(0,3) == "dt0" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,40);
+	if (hist.substr(0,3) == "dt0" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,100);
         if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,100);
         if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,70);
         if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,35);
@@ -409,7 +413,7 @@
       if ( name(9,2) == "HE" || name(9,2) == "HB" ){
 	multHists_LLP10000[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=10m, timing scan at " + name(2,4) + " in " + name(9,2)+", TP matched w/" + name(11,3)); 
 	if (name(11,3) != "Jet" ) multHists_LLP10000[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=10m, timing scan at " + name(2,4) + " in " + name(9,2));
-        if (hist.substr(0,3) == "dt0" && name(9,2) == "HB" ) multHists_LLP10000[hist]->GetXaxis()->SetRangeUser(0,40);
+        if (hist.substr(0,3) == "dt0" && name(9,2) == "HB" ) multHists_LLP10000[hist]->GetXaxis()->SetRangeUser(0,100);
 	if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_LLP10000[hist]->GetXaxis()->SetRangeUser(0,100);
 	if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_LLP10000[hist]->GetXaxis()->SetRangeUser(0,70);
 	if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_LLP10000[hist]->GetXaxis()->SetRangeUser(0,35);
@@ -463,7 +467,7 @@
       if ( name(9,2) == "HE" || name(9,2) == "HB" ){
         multHists_LLP1000[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=1m, timing scan at " + name(2,4) + " in " + name(9,2)+", TP matched w/" + name(11,3));
 	if (name(11,3) != "Jet" ) multHists_LLP1000[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=1m, timing scan at " + name(2,4) + " in " + name(9,2));
-        if (hist.substr(0,3) == "dt0" && name(9,2) == "HB" ) multHists_LLP1000[hist]->GetXaxis()->SetRangeUser(0,40);
+        if (hist.substr(0,3) == "dt0" && name(9,2) == "HB" ) multHists_LLP1000[hist]->GetXaxis()->SetRangeUser(0,100);
 	if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_LLP1000[hist]->GetXaxis()->SetRangeUser(0,100);
         if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_LLP1000[hist]->GetXaxis()->SetRangeUser(0,70);
         if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_LLP1000[hist]->GetXaxis()->SetRangeUser(0,35);
@@ -517,7 +521,7 @@
       if ( name(9,2) == "HE" || name(9,2) == "HB" ){
         multHists_LLP500[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=0.5m, timing scan at " + name(2,4) + " in region " + name(9,2)+", TP matched w/" + name(11,3));
 	if (name(11,3) != "Jet" ) multHists_LLP500[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=0.5m, timing scan at " + name(2,4) + " in region " + name(9,2));
-        if (hist.substr(0,3) == "dt0" && name(9,2) == "HB" ) multHists_LLP500[hist]->GetXaxis()->SetRangeUser(0,40);
+        if (hist.substr(0,3) == "dt0" && name(9,2) == "HB" ) multHists_LLP500[hist]->GetXaxis()->SetRangeUser(0,100);
 	if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_LLP500[hist]->GetXaxis()->SetRangeUser(0,100);
         if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_LLP500[hist]->GetXaxis()->SetRangeUser(0,70);
         if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_LLP500[hist]->GetXaxis()->SetRangeUser(0,35);
@@ -563,6 +567,10 @@
       if (name(11,4) == "Jet3" ) multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,2*yMax); // 3*
       if (name(11,4) == "Jet4" ) multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1.5*yMax); // 1.5*
     }
+    if (name(0,11) == "DelayedHitF" ) {
+      x1 = 0.25;
+      x2 = 0.6;
+    }
     multHists_QCD[hist]->SetFillStyle(3005); // this is the grey shading on QCD plots
     multHists_QCD[hist]->Scale(1./multHists_QCD[hist]->Integral());
     multHists_QCD[hist]->Draw("hist pfc");
@@ -583,12 +591,17 @@
     multHists_QCD[hist]->GetYaxis()->CenterTitle(true);
     multHists_QCD[hist]->SetTitle("Multiplicity at " + name(2,4) + " and " + name(6,3)+", TP matched w/" + name (9,3)); // general name "mult at 3 GeV and 1 ns, TP matched w/jet"
     if (name(9,3) != "Jet" ) multHists_QCD[hist]->SetTitle("Multiplicity at " + name(2,4) + " and " + name(6,3)); // "mult at 3 GeV and 1 ns"
+    if (name(0,6) == "DepthV" ) multHists_QCD[hist]->SetTitle("Depth Variable Multiplicity");
+    if (name(0,11) == "DelayedHitF" ) {
+      multHists_QCD[hist]->SetTitle("Delayed Hit Fraction " + name(18,7));
+      multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1);
+    }
     if ( name(9,2) == "HE" || name(9,2) == "HB" ){ // setting range and name of histograms for HCAL barrel and endcap regions
       multHists_QCD[hist]->SetTitle("Multiplicity at " + name(2,4) + " and " + name(6,3) + " in " + name(9,2)+", TP matched w/" + name(11,3));
       if (name(11,3) != "Jet" ) multHists_QCD[hist]->SetTitle("Multiplicity at " + name(2,4) + " and " + name(6,3) + " in " + name(9,2));
       if (name(9,5) == "HBSin" || name(9,5) == "HBDou" || name(9,5) == "HBTri" ) multHists_QCD[hist]->SetTitle(name(11,6) + " Jet Hit Multiplicity at " + name(2,4) + " and " + name(6,3));
       if (name(9,5) == "HBQua" ) multHists_QCD[hist]->SetTitle(name(11,4) + " Jet Hit Multiplicity at " + name(2,4) + " and " + name(6,3));
-      if (hist.substr(0,3) == "dt0" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,40);
+      if (hist.substr(0,3) == "dt0" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,100);
       if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,100);
       if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,70);
       if (hist.substr(0,3) == "dt3" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,35);
@@ -964,7 +977,7 @@
   gr_120_LLP->Draw("AL*");
   gr_120_LLP->SetTitle("htSum Rate vs. Signal Efficiency for Regional Multiplicity Cut;LLP, mh=1TeV, c#scale[1.2]{#tau}=0.5m Efficiency;Neutrino Gun Rate (kHz, unnorm)   ");
   gr_350_LLP->SetLineColor(2); // red    
-  gr_350_LLP->Draw("L*");
+  //  gr_350_LLP->Draw("L*");
   m_LLP_htSum120->SetMarkerStyle(21);
   m_LLP_htSum120->SetMarkerColor(4);
   m_LLP_htSum350->SetMarkerStyle(21);
@@ -973,12 +986,12 @@
   m_LLP_htSum430->SetMarkerColor(3);
   auto legend_350_120 = new TLegend(0.15,0.7,0.5,0.9);
   legend_350_120->AddEntry(gr_120_LLP,"H_{T}>120 GeV, with timing cuts");
-  legend_350_120->AddEntry(gr_350_LLP,"H_{T}>350 GeV, with timing cuts");
-  legend_350_120->AddEntry(m_LLP_htSum350,"H_{T}>350 GeV, no timing cuts");
+  //  legend_350_120->AddEntry(gr_350_LLP,"H_{T}>350 GeV, with timing cuts");
+  //  legend_350_120->AddEntry(m_LLP_htSum350,"H_{T}>350 GeV, no timing cuts");
   legend_350_120->AddEntry(m_LLP_htSum430,"H_{T}>430 GeV, no timing cuts");
   legend_350_120->Draw();
   gr_120_LLP->GetXaxis()->SetLimits(0.,1.);
-  m_LLP_htSum350->Draw();
+  //  m_LLP_htSum350->Draw();
   m_LLP_htSum430->Draw();
   gr_120_LLP->GetHistogram()->SetMinimum(1.);
   gr_120_LLP->GetHistogram()->SetMaximum(10000.);
@@ -993,7 +1006,7 @@
   gr_120_LLPMh350->Draw("AL*");
   gr_120_LLPMh350->SetTitle("htSum Rate vs. Signal Efficiency for Regional Multiplicity Cut;LLP, mh=350GeV, c#scale[1.2]{#tau}=0.5m Efficiency;Neutrino Gun Rate (kHz, unnorm)   ");
   gr_350_LLPMh350->SetLineColor(2); // red
-  gr_350_LLPMh350->Draw("L*");
+  //  gr_350_LLPMh350->Draw("L*");
   m_LLPMh350_htSum120->SetMarkerStyle(21);
   m_LLPMh350_htSum120->SetMarkerColor(4);
   m_LLPMh350_htSum350->SetMarkerStyle(21);
@@ -1002,12 +1015,12 @@
   m_LLPMh350_htSum430->SetMarkerColor(3);
   auto legend_350_120Mh350 = new TLegend(0.15,0.7,0.5,0.9);
   legend_350_120Mh350->AddEntry(gr_120_LLPMh350,"H_{T}>120 GeV, with timing cuts");
-  legend_350_120Mh350->AddEntry(gr_350_LLPMh350,"H_{T}>350 GeV, with timing cuts");
-  legend_350_120Mh350->AddEntry(m_LLPMh350_htSum350,"H_{T}>350 GeV, no timing cuts");
+  //  legend_350_120Mh350->AddEntry(gr_350_LLPMh350,"H_{T}>350 GeV, with timing cuts");
+  //  legend_350_120Mh350->AddEntry(m_LLPMh350_htSum350,"H_{T}>350 GeV, no timing cuts");
   legend_350_120Mh350->AddEntry(m_LLPMh350_htSum430,"H_{T}>430 GeV, no timing cuts");
   legend_350_120Mh350->Draw();
   gr_120_LLPMh350->GetXaxis()->SetLimits(0.,1.);
-  m_LLPMh350_htSum350->Draw();
+  //  m_LLPMh350_htSum350->Draw();
   m_LLPMh350_htSum430->Draw();
   gr_120_LLPMh350->GetHistogram()->SetMinimum(1.);
   gr_120_LLPMh350->GetHistogram()->SetMaximum(10000.);
@@ -1055,7 +1068,7 @@
   gr_global_120_LLP->Draw("AC*");
   gr_global_120_LLP->SetTitle("htSum Rate vs. Signal Efficiency for Global Multiplicity Cut;LLP, mh=1TeV, c#scale[1.2]{#tau}=0.5m Efficiency;Neutrino Gun Rate (kHz, unnorm)   ");
   gr_global_350_LLP->SetLineColor(2); // red              
-  gr_global_350_LLP->Draw("C*");
+  //  gr_global_350_LLP->Draw("C*");
   m_LLP_htSum120->SetMarkerStyle(21);
   m_LLP_htSum120->SetMarkerColor(4);
   m_LLP_htSum350->SetMarkerStyle(21);
@@ -1063,12 +1076,12 @@
   m_LLP_htSum430->SetMarkerStyle(21);
   m_LLP_htSum430->SetMarkerColor(3);
   m_LLP_htSum120->Draw();
-  m_LLP_htSum350->Draw();
+  //  m_LLP_htSum350->Draw();
   m_LLP_htSum430->Draw();
   auto legend_global_350_120 = new TLegend(0.15,0.7,0.5,0.9);
   legend_global_350_120->AddEntry(gr_global_120_LLP,"H_{T}>120 GeV, with timing cuts");
-  legend_global_350_120->AddEntry(gr_global_350_LLP,"H_{T}>350 GeV, with timing cuts");
-  legend_global_350_120->AddEntry(m_LLP_htSum350,"H_{T}>350 GeV, no timing cuts");
+  //  legend_global_350_120->AddEntry(gr_global_350_LLP,"H_{T}>350 GeV, with timing cuts");
+  //  legend_global_350_120->AddEntry(m_LLP_htSum350,"H_{T}>350 GeV, no timing cuts");
   legend_global_350_120->AddEntry(m_LLP_htSum430,"H_{T}>430 GeV, no timing cuts");
   legend_global_350_120->Draw();
   gr_global_120_LLP->GetXaxis()->SetLimits(0.,1.);
@@ -1082,7 +1095,7 @@
   gr_global_120_LLPMh350->Draw("AC*");
   gr_global_120_LLPMh350->SetTitle("htSum Rate vs. Signal Efficiency for Global Multiplicity Cut;LLP, mh=350GeV, c#scale[1.2]{#tau}=0.5m Efficiency;Neutrino Gun Rate (kHz, unnorm)   ");
   gr_global_350_LLPMh350->SetLineColor(2); // red
-  gr_global_350_LLPMh350->Draw("C*");
+  //  gr_global_350_LLPMh350->Draw("C*");
   m_LLPMh350_htSum120->SetMarkerStyle(21);
   m_LLPMh350_htSum120->SetMarkerColor(4);
   m_LLPMh350_htSum350->SetMarkerStyle(21);
@@ -1090,12 +1103,12 @@
   m_LLPMh350_htSum430->SetMarkerStyle(21);
   m_LLPMh350_htSum430->SetMarkerColor(3);
   m_LLPMh350_htSum120->Draw();
-  m_LLPMh350_htSum350->Draw();
+  //  m_LLPMh350_htSum350->Draw();
   m_LLPMh350_htSum430->Draw();
   auto legend_global_350_120Mh350 = new TLegend(0.15,0.7,0.5,0.9);
   legend_global_350_120Mh350->AddEntry(gr_global_120_LLPMh350,"H_{T}>120 GeV, with timing cuts");
-  legend_global_350_120Mh350->AddEntry(gr_global_350_LLPMh350,"H_{T}>350 GeV, with timing cuts");
-  legend_global_350_120Mh350->AddEntry(m_LLPMh350_htSum350,"H_{T}>350 GeV, no timing cuts");
+  //  legend_global_350_120Mh350->AddEntry(gr_global_350_LLPMh350,"H_{T}>350 GeV, with timing cuts");
+  //  legend_global_350_120Mh350->AddEntry(m_LLPMh350_htSum350,"H_{T}>350 GeV, no timing cuts");
   legend_global_350_120Mh350->AddEntry(m_LLPMh350_htSum430,"H_{T}>430 GeV, no timing cuts");
   legend_global_350_120Mh350->Draw();
   gr_global_120_LLPMh350->GetXaxis()->SetLimits(0.,1.);
@@ -1133,7 +1146,7 @@
   gr_120_QCD->Draw("AL*");
   gr_120_QCD->SetTitle("htSum Rate vs. Background Efficiency for Regional Multiplicity Cut;QCD Efficiency;Neutrino Gun Rate (kHz, unnorm)   ");
   gr_350_QCD->SetLineColor(2); // red
-  gr_350_QCD->Draw("L*");
+  //  gr_350_QCD->Draw("L*");
   m_QCD_htSum120->SetMarkerStyle(21);
   m_QCD_htSum120->SetMarkerColor(4);
   m_QCD_htSum350->SetMarkerStyle(21);
@@ -1141,14 +1154,14 @@
   m_QCD_htSum430->SetMarkerStyle(21);
   m_QCD_htSum430->SetMarkerColor(3);
   m_QCD_htSum120->Draw();
-  m_QCD_htSum350->Draw();
+  //  m_QCD_htSum350->Draw();
   m_QCD_htSum430->Draw();
   gr_120_QCD->GetXaxis()->SetLimits(0.,1.);
   c2_350_120->SetGrid();
   auto legend2_350_120 = new TLegend(0.15,0.7,0.5,0.9);
   legend2_350_120->AddEntry(gr_120_QCD,"H_{T}>120 GeV, with timing cuts");
-  legend2_350_120->AddEntry(gr_350_QCD,"H_{T}>350 GeV, with timing cuts");
-  legend2_350_120->AddEntry(m_QCD_htSum350,"H_{T}>350 GeV, no timing cuts");
+  //  legend2_350_120->AddEntry(gr_350_QCD,"H_{T}>350 GeV, with timing cuts");
+  //  legend2_350_120->AddEntry(m_QCD_htSum350,"H_{T}>350 GeV, no timing cuts");
   legend2_350_120->AddEntry(m_QCD_htSum430,"H_{T}>430 GeV, no timing cuts");
   legend2_350_120->Draw();
   c2_350_120->SetLogy();
@@ -1179,7 +1192,7 @@
   gr_global_120_QCD->GetXaxis()->SetLimits(0.,1.);
   gr_global_120_QCD->SetTitle("htSum Rate vs. Background Efficiency for Global Multiplicity Cut;QCD Efficiency;Neutrino Gun Rate (kHz, unnorm)   ");
   gr_global_350_QCD->SetLineColor(2); // red     
-  gr_global_350_QCD->Draw("C*");
+  //  gr_global_350_QCD->Draw("C*");
   m_QCD_htSum120->SetMarkerStyle(21);
   m_QCD_htSum120->SetMarkerColor(4);
   m_QCD_htSum350->SetMarkerStyle(21);
@@ -1187,12 +1200,12 @@
   m_QCD_htSum430->SetMarkerStyle(21);
   m_QCD_htSum430->SetMarkerColor(3);
   m_QCD_htSum120->Draw();
-  m_QCD_htSum350->Draw();
+  //  m_QCD_htSum350->Draw();
   m_QCD_htSum430->Draw();
   auto legend2_global_350_120 = new TLegend(0.15,0.7,0.5,0.9);
   legend2_global_350_120->AddEntry(gr_global_120_QCD,"H_{T}>120 GeV, with timing cuts");
-  legend2_global_350_120->AddEntry(gr_global_350_QCD,"H_{T}>350 GeV, with timing cuts");
-  legend2_global_350_120->AddEntry(m_LLP_htSum350,"H_{T}>350 GeV, no timing cuts");
+  //  legend2_global_350_120->AddEntry(gr_global_350_QCD,"H_{T}>350 GeV, with timing cuts");
+  //  legend2_global_350_120->AddEntry(m_LLP_htSum350,"H_{T}>350 GeV, no timing cuts");
   legend2_global_350_120->AddEntry(m_LLP_htSum430,"H_{T}>430 GeV, no timing cuts");
   legend2_global_350_120->Draw();
   gr_global_120_QCD->GetXaxis()->SetLimits(0.,1.);
