@@ -432,20 +432,23 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     DelayedHitFraction4GeV[TDCns] = new TH1F(Form("DelayedHitFraction4GeV%dns",TDCns),Form("Fraction of Hits that are > 4GeV and also > %dns;Fraction of Hits;Number of Events",TDCns),22,0,1.1);
   }
   // 2D histograms plotting the fraction of hits over energy and scanned time threshold
-  TH2F * DelayedHit2D_Fraction2GeV = new TH2F("DelayedHit2D_Fraction2GeV","Number of Events vs. Fraction of Delayed Hits vs. TDC Delayed Threshold above 2GeV;TDC Delayed Threshold;Fraction of Delayed Hits",30,0,30,50,0,1);
-  TH2F * DelayedHit2D_Fraction3GeV = new TH2F("DelayedHit2D_Fraction3GeV","Number of Events vs. Fraction of Delayed Hits vs. TDC Delayed Threshold above 3GeV;TDC Delayed Threshold;Fraction of Delayed Hits",30,0,30,50,0,1);
-  TH2F * DelayedHit2D_Fraction4GeV = new TH2F("DelayedHit2D_Fraction4GeV","Number of Events vs. Fraction of Delayed Hits vs. TDC Delayed Threshold above 4GeV;TDC Delayed Threshold;Fraction of Delayed Hits",30,0,30,50,0,1);
+  TH2F * DelayedHit2D_Fraction1GeV = new TH2F("DelayedHit2D_Fraction1GeV","Fraction of Delayed Hits vs. Delayed Timing Threshold above 1GeV;Delayed Timing Threshold;Fraction of Delayed Hits",30,0,30,50,0,1);
+  TH2F * DelayedHit2D_Fraction2GeV = new TH2F("DelayedHit2D_Fraction2GeV","Fraction of Delayed Hits vs. Delayed Timing Threshold above 2GeV;Delayed Timing Threshold;Fraction of Delayed Hits",30,0,30,50,0,1);
+  TH2F * DelayedHit2D_Fraction3GeV = new TH2F("DelayedHit2D_Fraction3GeV","Fraction of Delayed Hits vs. Delayed Timing Threshold above 3GeV;Delayed Timing Threshold;Fraction of Delayed Hits",30,0,30,50,0,1);
+  TH2F * DelayedHit2D_Fraction4GeV = new TH2F("DelayedHit2D_Fraction4GeV","Fraction of Delayed Hits vs. Delayed Timing Threshold above 4GeV;Delayed Timing Threshold;Fraction of Delayed Hits",30,0,30,50,0,1);
   // 2D histograms plotting the number of hits over energy and time threshold
-  TH2F * DelayedHit2D_Number2GeV = new TH2F("DelayedHit2D_Number2GeV","Number of Events vs. Number of Delayed Hits vs. TDC Delayed Threshold above 2GeV;TDC Delayed Threshold;Number of Delayed Hits",30,0,30,50,0,50);
-  TH2F * DelayedHit2D_Number3GeV = new TH2F("DelayedHit2D_Number3GeV","Number of Events vs. Number of Delayed Hits vs. TDC Delayed Threshold above 3GeV;TDC Delayed Threshold;Number of Delayed Hits",30,0,30,50,0,50);
-  TH2F * DelayedHit2D_Number4GeV = new TH2F("DelayedHit2D_Number4GeV","Number of Events vs. Number of Delayed Hits vs. TDC Delayed Threshold above 4GeV;TDC Delayed Threshold;Number of Delayed Hits",30,0,30,50,0,50);
+  TH2F * DelayedHit2D_Number1GeV = new TH2F("DelayedHit2D_Number1GeV","Number of Delayed Hits vs. Delayed Timing Threshold above 1GeV;Delayed Timing Threshold;Number of Delayed Hits",30,0,30,50,0,50);
+  TH2F * DelayedHit2D_Number2GeV = new TH2F("DelayedHit2D_Number2GeV","Number of Delayed Hits vs. Delayed Timing Threshold above 2GeV;Delayed Timing Threshold;Number of Delayed Hits",30,0,30,50,0,50);
+  TH2F * DelayedHit2D_Number3GeV = new TH2F("DelayedHit2D_Number3GeV","Number of Delayed Hits vs. Delayed Timing Threshold above 3GeV;Delayed Timing Threshold;Number of Delayed Hits",30,0,30,50,0,50);
+  TH2F * DelayedHit2D_Number4GeV = new TH2F("DelayedHit2D_Number4GeV","Number of Delayed Hits vs. Delayed Timing Threshold above 4GeV;Delayed Timing Threshold;Number of Delayed Hits",30,0,30,50,0,50);
 
 
   // Number of TPs above energy threshold as a function of timing values
   //  TH2F * NumberTPtiming_3GeV = new TH2F("NumberTPtiming_3GeV","Number of TPs Above 3GeV vs. TDC Values;TDC Value;Number of TPs",20,0,20,100,0,100);
   std::map<int, TH1F*> NumberTPtiming;
-  for (int GeV=0; GeV<6; GeV++) NumberTPtiming[GeV] = new TH1F(Form("NumberTPtiming_%dGeV",GeV),Form("Number of Cells Above %dGeV vs. TDC Values;TDC Value;Number of Cells",GeV),25,0,25);
-  TH2F * NumberTPtiming_energy = new TH2F("NumberTPtiming_energy","Number of Cells vs. Energy vs. TDC Values;TDC Value;Cell Energy Value",30,0,30,45,0,45);
+  for (int GeV=0; GeV<6; GeV++) NumberTPtiming[GeV] = new TH1F(Form("NumberTPtiming_%dGeV",GeV),Form("Number of Cells Above %dGeV vs. Timing Value;Timing (ns);Number of Cells",GeV),25,0,25);
+  TH2F * NumberTPtiming_energy = new TH2F("NumberTPtiming_energy","Number of Cells vs. Energy vs. Timing Value;Timing (ns);Cell Energy Value",30,0,30,45,0,45);
+  TH2F * NumberEvents_Fraction_Mult = new TH2F("NumberEvents_Fraction_Mult","Number of Events vs. Delayed Fraction vs. Delayed Multiplicity Count;Delayed Fraction;Multiplicity Count",50,0,1,40,0,40);
 
   // Fraction of TPs above energy threshold as a function of timing values
   //  TH2F * FractionTPtiming_3GeV = new TH2F("FractionTPtiming_3GeV","Fraction of TPs Above 3GeV vs. TDC Values;TDC Value;Fraction of TPs",20,0,20,20,0,20);
@@ -542,7 +545,11 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   // TH2F for energy depth, where matched to jets for high energy TPs
   TH2F * Energy_Depth_Jets_HighE = new TH2F("Energy_Depth_Jets_HighE", "TP Energy Fraction vs. Depth for TP E_{T} > 10 GeV (TP matched w/ L1 Jets);HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 1.2);
   TH2F * Energy_DepthHE_Jets_HighE = new TH2F("Energy_DepthHE_Jets_HighE", "TP Energy Fraction vs. Depth in HE for TP E_{T} > 10 GeV (TP matched w/ L1 Jets);HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 1.2);
-  TH2F * Energy_DepthHB_Jets_HighE = new TH2F("Energy_DepthHB_Jets_HighE", "TP Energy Fraction vs. Depth in HB for TP E_{T} > 10 GeV (TP matched w/ L1 Jets);HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 1.2);
+  TH2F * Energy_DepthHB_Jets_HighE = new TH2F("Energy_DepthHB_Jets_HighE", "TP Energy Fraction vs. Depth in HB for TP E_{T} > 10 GeV (TP matched w/ L1 Jets);HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 1.2); 
+  TH2F * VolTiming_Depth_Jets = new TH2F("VolTiming_Depth_Jets", "TP Timing Value vs. Depth in HCAL Volume (TP matched w/ L1 Jets);HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5, 60, 0, 30);
+  TH2F * VolTiming_DepthHB_Jets = new TH2F("VolTiming_DepthHB_Jets", "TP Timing Value vs. Depth in HCAL Volume, HB (TP matched w/ L1 Jets);HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5, 60, 0, 30);
+  TH2F * VolTiming_DepthHE_Jets = new TH2F("VolTiming_DepthHE_Jets", "TP Timing Value vs. Depth in HCAL Volume, HE (TP matched w/ L1 Jets);HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5, 60, 0, 30);
+
   // making TH1D for the ProfileX() from the TH2F of energy_depth or timing_depth plots
   TH1D * Energy_Depth_avg = new TH1D("Energy_Depth_avg", "TP Avg Energy Fraction vs. Depth;HCAL Depth;Energy Fraction", 8, -0.5, 7.5);
   TH1D * Timing_Depth_avg = new TH1D("Timing_Depth_avg", "TP Avg Timing Value vs. Depth;HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5);
@@ -557,6 +564,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1D * Timing_DepthHE_avg_Jets = new TH1D("Timing_DepthHE_avg_Jets", "TP Avg Timing Value vs. Depth in HE (TP matched w/ L1 Jets);HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5);
   TH1D * Energy_DepthHB_avg_Jets = new TH1D("Energy_DepthHB_avg_Jets", "TP Avg Energy Fraction vs. Depth in HB (TP matched w/ L1 Jets);HCAL Depth;Energy Fraction", 8, -0.5, 7.5);
   TH1D * Timing_DepthHB_avg_Jets = new TH1D("Timing_DepthHB_avg_Jets", "TP Avg Timing Value vs. Depth in HB (TP matched w/ L1 Jets);HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5);
+  TH1D * VolTiming_Depth_avg_Jets = new TH1D("VolTiming_Depth_avg_Jets", "TP Avg Timing Value vs. Depth  in HCAL Volume (TP matched w/ L1 Jets);HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5);
+  TH1D * VolTiming_DepthHE_avg_Jets = new TH1D("VolTiming_DepthHE_avg_Jets", "TP Avg Timing Value vs. Depth in HCAL Volume, HE (TP matched w/ L1 Jets);HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5);
+  TH1D * VolTiming_DepthHB_avg_Jets = new TH1D("VolTiming_DepthHB_avg_Jets", "TP Avg Timing Value vs. Depth in HCAL Volume, HB (TP matched w/ L1 Jets);HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5);
+
   // Ratio of energy in HCAL depth layers
   TH1F * Ratio_Depth = new TH1F("Ratio_Depth", "Ratio of 3,4 HCAL Layers to E_{T};Ratio;Number of Events", 50,0,1);
   TH1F * Ratio_DepthHE = new TH1F("Ratio_DepthHE", "Ratio of 3,4 HCAL Layers to E_{T} in HE;Ratio;Number of Events", 50,0,1);
@@ -807,10 +818,18 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       double DelayedHitCounter2GeV_jet2[26] = {0};
       double DelayedHitCounter3GeV_jet2[26] = {0};
       double DelayedHitCounter4GeV_jet2[26] = {0};
+      double DelayedHitCounter1GeV_jet3[26] = {0};
+      double DelayedHitCounter2GeV_jet3[26] = {0};
+      double DelayedHitCounter3GeV_jet3[26] = {0};
+      double DelayedHitCounter4GeV_jet3[26] = {0};
+      double DelayedHitCounter1GeV_jet4[26] = {0};
+      double DelayedHitCounter2GeV_jet4[26] = {0};
+      double DelayedHitCounter3GeV_jet4[26] = {0};
+      double DelayedHitCounter4GeV_jet4[26] = {0};
       //      double TDC_HitCounter2GeV[21] = {0};
       //      double TDC_HitCounter3GeV[21] = {0};
       //      double TDC_HitCounter4GeV[21] = {0};
-      double AllHitCounter1GeV(0), AllHitCounter2GeV(0), AllHitCounter3GeV(0), AllHitCounter4GeV(0), AllHitCounter1GeV_jet2(0), AllHitCounter2GeV_jet2(0), AllHitCounter3GeV_jet2(0), AllHitCounter4GeV_jet2(0);         
+      double AllHitCounter1GeV(0), AllHitCounter2GeV(0), AllHitCounter3GeV(0), AllHitCounter4GeV(0), AllHitCounter1GeV_jet2(0), AllHitCounter2GeV_jet2(0), AllHitCounter3GeV_jet2(0), AllHitCounter4GeV_jet2(0), AllHitCounter1GeV_jet3(0), AllHitCounter2GeV_jet3(0), AllHitCounter3GeV_jet3(0), AllHitCounter4GeV_jet3(0), AllHitCounter1GeV_jet4(0), AllHitCounter2GeV_jet4(0), AllHitCounter3GeV_jet4(0), AllHitCounter4GeV_jet4(0);
 
       // loop over L1 jets, and only do first four (4 highest energy L1 jets from 4 leptons)
       for(uint jetIt=0; jetIt < nJetemu && jetIt < 4; jetIt++){
@@ -1024,7 +1043,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	hcalTPtiming[4] = l1CaloTPemu_->hcalTPtiming5[HcalTPIt];// - exp_time;
 	hcalTPtiming[5] = l1CaloTPemu_->hcalTPtiming6[HcalTPIt];// - exp_time;
 	hcalTPtiming[6] = l1CaloTPemu_->hcalTPtiming7[HcalTPIt];// - exp_time;
-
 	for (int i = 0; i < 4; i++ ) {
 	  if ( (abs(tpEtaemu) == 1) && (hcalTPtiming[i] > -0.5) ) {
 	    centralTiming->Fill(hcalTPtiming[i]-5.5); // filling distribution of time of hits (corrected by expected TOF) in the center of the barrel (ieta = 1)
@@ -1237,33 +1255,38 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	  if (inputFile.substr(0,5) == "../mh" ) { // HCAL volume decay requirement for energy depth plots for LLPs
 	    if (min_deltaR_partonGenHCAL_L1jet < 1) Energy_Depth_Jets->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu); // normalized by total energy in event so is fractional energy in each layer
 	    if (hcalTPtiming[depthIt] > 0) Timing_Depth_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]); // raw timing value in each layer
-	    if (tpEtemu > 10 ) {
-	      if (min_deltaR_partonGenHCAL_L1jet < 1) Energy_Depth_Jets_HighE->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu); // restricting to high energy HCAL TPs
+	    if (min_deltaR_partonGenHCAL_L1jet < 1) {
+	      if (tpEtemu > 10 ) Energy_Depth_Jets_HighE->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu); // restricting to high energy HCAL TPs
+	      if (hcalTPtiming[depthIt] > 0) VolTiming_Depth_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]);
 	    }
 	    if (abs(tpEtaemu) < 16) {
 	      if (min_deltaR_partonGenHCAL_L1jet < 1) Energy_DepthHB_Jets->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
 	      if (hcalTPtiming[depthIt] > 0) Timing_DepthHB_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]);
-	      if (tpEtemu > 10 ) {
-		if (min_deltaR_partonGenHCAL_L1jet < 1) Energy_DepthHB_Jets_HighE->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
+	      if (min_deltaR_partonGenHCAL_L1jet < 1) {
+		if (tpEtemu > 10 ) Energy_DepthHB_Jets_HighE->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
+		if (hcalTPtiming[depthIt] > 0) VolTiming_DepthHB_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]);
 	      }
 	    }
 	    if (abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29 ) {
 	      if (min_deltaR_partonGenHCAL_L1jet < 1) Energy_DepthHE_Jets->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
 	      if (hcalTPtiming[depthIt] > 0) Timing_DepthHE_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]);
-	      if (tpEtemu > 10 ) {
-		if (min_deltaR_partonGenHCAL_L1jet < 1) Energy_DepthHE_Jets_HighE->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
+	      if (min_deltaR_partonGenHCAL_L1jet < 1) {
+		if (tpEtemu > 10 ) Energy_DepthHE_Jets_HighE->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
+		if (hcalTPtiming[depthIt] > 0) VolTiming_DepthHE_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]);
 	      }
 	    }
 	  }
 	  else { // no HCAL volume decay requirements for QCD or neutrino gun
             Energy_Depth_Jets->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu); // normalized by total energy in event so is fractional energy in each layer
             if (hcalTPtiming[depthIt] > 0) Timing_Depth_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]); // raw timing value in each layer  
+	    if (hcalTPtiming[depthIt] > 0) VolTiming_Depth_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]);
             if (tpEtemu > 10 ) {
               Energy_Depth_Jets_HighE->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu); // restricting to high energy HCAL TPs                                               
             }
             if (abs(tpEtaemu) < 16) {
               Energy_DepthHB_Jets->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
               if (hcalTPtiming[depthIt] > 0) Timing_DepthHB_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]);
+	      if (hcalTPtiming[depthIt] > 0) VolTiming_DepthHB_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]);
               if (tpEtemu > 10 ) {
                 Energy_DepthHB_Jets_HighE->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
               }
@@ -1271,73 +1294,130 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
             if (abs(tpEtaemu) > 16 && abs(tpEtaemu) < 29 ) {
               Energy_DepthHE_Jets->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
               if (hcalTPtiming[depthIt] > 0) Timing_DepthHE_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]);
+	      if (hcalTPtiming[depthIt] > 0) VolTiming_DepthHE_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]);
               if (tpEtemu > 10 ) {
                 Energy_DepthHE_Jets_HighE->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
               }
             }
 	  }
      
-	  // delayed hit fraction calculation, over entire HCAL, near most energetic L1 jet
-	  if (closestJet == 0 ) {
-	    NumberTPtiming_energy->Fill(hcalTPtiming[depthIt], hcalTPdepth[depthIt],1);
-	    for (int GeV=0; GeV<6; GeV++) {
-	      if (hcalTPdepth[depthIt] > GeV ) NumberTPtiming[GeV]->Fill(hcalTPtiming[depthIt],1); // add one to the # of TP cells at the timing value
-	    }
-	    if (hcalTPdepth[depthIt] > 1) {
-              for (int i=0; i<26; i++) {
-		if (hcalTPtiming[depthIt] > i ) DelayedHitCounter1GeV[i] += 1; // iterator counts the TDC value 
+	  if ( hcalTPtiming[depthIt] >= 0 ) {
+	    // delayed hit fraction calculation, over entire HCAL, near most energetic L1 jet
+	    if (closestJet == 0 ) {
+	      NumberTPtiming_energy->Fill(hcalTPtiming[depthIt], hcalTPdepth[depthIt],1);
+	      for (int GeV=0; GeV<6; GeV++) {
+		if (hcalTPdepth[depthIt] > GeV ) NumberTPtiming[GeV]->Fill(hcalTPtiming[depthIt],1); // add one to the # of TP cells at the timing value
 	      }
-	      AllHitCounter1GeV += 1;
-	    }
-	    if (hcalTPdepth[depthIt] > 2) {
-	      for (int i=0; i<26; i++) {
-		if (hcalTPtiming[depthIt] > i ) DelayedHitCounter2GeV[i] += 1; // iterator counts the TDC value
+	      if (hcalTPdepth[depthIt] > 1) {
+		for (int i=0; i<26; i++) {
+		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter1GeV[i] += 1; // iterator counts the TDC value 
+		}
+		AllHitCounter1GeV += 1;
 	      }
-	      //	      std::cout << "jet 1 timing, energy = " << hcalTPtiming[depthIt] << ", " << hcalTPdepth[depthIt]<< std::endl;
-	      AllHitCounter2GeV += 1;
-	    }
-	    if (hcalTPdepth[depthIt] > 3) {
-	      for (int i=0; i<26; i++) {
-		if (hcalTPtiming[depthIt] > i ) DelayedHitCounter3GeV[i] += 1;
+	      if (hcalTPdepth[depthIt] > 2) {
+		for (int i=0; i<26; i++) {
+		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter2GeV[i] += 1; // iterator counts the TDC value
+		}
+		//	      std::cout << "jet 1 timing, energy = " << hcalTPtiming[depthIt] << ", " << hcalTPdepth[depthIt]<< std::endl;
+		AllHitCounter2GeV += 1;
 	      }
-	      AllHitCounter3GeV += 1;
+	      if (hcalTPdepth[depthIt] > 3) {
+		for (int i=0; i<26; i++) {
+		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter3GeV[i] += 1;
+		}
+		AllHitCounter3GeV += 1;
+	      }
+	      if (hcalTPdepth[depthIt] > 4) {
+		for (int i=0; i<26; i++) {
+		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter4GeV[i] += 1;
+		}
+		AllHitCounter4GeV += 1;
+	      }
 	    }
-	    if (hcalTPdepth[depthIt] > 4) {
-	      for (int i=0; i<26; i++) {
-                if (hcalTPtiming[depthIt] > i ) DelayedHitCounter4GeV[i] += 1;
-              }
-	      AllHitCounter4GeV += 1;
+	    
+	    if (closestJet == 1) {
+	      if (hcalTPdepth[depthIt] > 1) {
+		for (int i=0; i<26; i++) {
+		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter1GeV_jet2[i] += 1; // iterator counts the TDC value
+		}
+		AllHitCounter1GeV_jet2 += 1;
+	      }
+	      if (hcalTPdepth[depthIt] > 2) {
+		for (int i=0; i<26; i++) {
+		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter2GeV_jet2[i] += 1; // iterator counts the TDC value 
+		}
+		//	      std::cout << "jet 2 timing, energy = " << hcalTPtiming[depthIt] << ", " << hcalTPdepth[depthIt] << std::endl;
+		AllHitCounter2GeV_jet2 += 1;
+	      }
+	      if (hcalTPdepth[depthIt] > 3) {
+		for (int i=0; i<26; i++) {
+		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter3GeV_jet2[i] += 1;
+		}
+		AllHitCounter3GeV_jet2 += 1;
+	      }
+	      if (hcalTPdepth[depthIt] > 4) {
+		for (int i=0; i<26; i++) {
+		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter4GeV_jet2[i] += 1;
+		}
+		AllHitCounter4GeV_jet2 += 1;
+	      }
+	    }
+	    
+	    if (closestJet == 2) {
+	      if (hcalTPdepth[depthIt] > 1) {
+		for (int i=0; i<26; i++) {
+		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter1GeV_jet3[i] += 1; // iterator counts the TDC value
+		}
+		AllHitCounter1GeV_jet3 += 1;
+	      }
+	      if (hcalTPdepth[depthIt] > 2) {
+		for (int i=0; i<26; i++) {
+		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter2GeV_jet3[i] += 1; // iterator counts the TDC value
+		}
+		AllHitCounter2GeV_jet3 += 1;
+	      }
+	      if (hcalTPdepth[depthIt] > 3) {
+		for (int i=0; i<26; i++) {
+		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter3GeV_jet3[i] += 1;
+		}
+		AllHitCounter3GeV_jet3 += 1;
+	      }
+	      if (hcalTPdepth[depthIt] > 4) {
+		for (int i=0; i<26; i++) {
+		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter4GeV_jet3[i] += 1;
+		}
+		AllHitCounter4GeV_jet3 += 1;
+	      }
+	    }
+	    
+	    if (closestJet == 3) {
+	      if (hcalTPdepth[depthIt] > 1) {
+		for (int i=0; i<26; i++) {
+		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter1GeV_jet4[i] += 1; // iterator counts the TDC value
+		}
+		AllHitCounter1GeV_jet4 += 1;
+	      }
+	      if (hcalTPdepth[depthIt] > 2) {
+		for (int i=0; i<26; i++) {
+		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter2GeV_jet4[i] += 1; // iterator counts the TDC value
+		}
+		AllHitCounter2GeV_jet4 += 1;
+	      }
+	      if (hcalTPdepth[depthIt] > 3) {
+		for (int i=0; i<26; i++) {
+		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter3GeV_jet4[i] += 1;
+		}
+		AllHitCounter3GeV_jet4 += 1;
+	      }
+	      if (hcalTPdepth[depthIt] > 4) {
+		for (int i=0; i<26; i++) {
+		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter4GeV_jet4[i] += 1;
+		}
+		AllHitCounter4GeV_jet4 += 1;
+	      }
 	    }
 	  }
 
-          if (closestJet == 1) {
-	    if (hcalTPdepth[depthIt] > 1) {
-	      for (int i=0; i<26; i++) {
-		if (hcalTPtiming[depthIt] > i ) DelayedHitCounter1GeV_jet2[i] += 1; // iterator counts the TDC value
-	      }
-	      AllHitCounter1GeV_jet2 += 1;
-	    }
-            if (hcalTPdepth[depthIt] > 2) {
-              for (int i=0; i<26; i++) {
-                if (hcalTPtiming[depthIt] > i ) DelayedHitCounter2GeV_jet2[i] += 1; // iterator counts the TDC value 
-              }
-	      //	      std::cout << "jet 2 timing, energy = " << hcalTPtiming[depthIt] << ", " << hcalTPdepth[depthIt] << std::endl;
-              AllHitCounter2GeV_jet2 += 1;
-            }
-            if (hcalTPdepth[depthIt] > 3) {
-              for (int i=0; i<26; i++) {
-                if (hcalTPtiming[depthIt] > i ) DelayedHitCounter3GeV_jet2[i] += 1;
-              }
-              AllHitCounter3GeV_jet2 += 1;
-            }
-            if (hcalTPdepth[depthIt] > 4) {
-              for (int i=0; i<26; i++) {
-                if (hcalTPtiming[depthIt] > i ) DelayedHitCounter4GeV_jet2[i] += 1;
-              }
-              AllHitCounter4GeV_jet2 += 1;
-            }
-          }
-	  
 	  // count multiplicity based on which jet is closest to the HCAL TP
           // multiplicity counter now 
 	  if ( (hcalTPdepth[depthIt] > 3) && (hcalTPtiming[depthIt] > 3) && (abs(tpEtaemu) < 16) ) { // 3 GeV 3ns in HB region
@@ -1422,12 +1502,16 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       if (totalGlobal != totalJets) std::cout << "still using gen matching requirements!" << std::endl;
 
       double frac_delayed = 0.45;
-      int min_num_delayed = 7;
+      int min_num_delayed = 6;
+      NumberEvents_Fraction_Mult->Fill(DelayedHitCounter3GeV[3] / AllHitCounter3GeV, DelayedHitCounter3GeV[3]+DelayedHitCounter3GeV_jet2[3], 1); // fraction, multiplicity, 1
+
       for (int i=1; i<8; i++) {
+	/*
 	if (((DelayedHitCounter1GeV[i]+DelayedHitCounter1GeV_jet2[i])>min_num_delayed) && ((DelayedHitCounter1GeV[i] / AllHitCounter1GeV >= frac_delayed) || (DelayedHitCounter1GeV_jet2[i] / AllHitCounter1GeV_jet2 >= frac_delayed)) ) passedDelayedHitFraction1GeV[i] += 1;
 	if (((DelayedHitCounter2GeV[i]+DelayedHitCounter2GeV_jet2[i])>min_num_delayed) && ((DelayedHitCounter2GeV[i] / AllHitCounter2GeV >= frac_delayed) || (DelayedHitCounter2GeV_jet2[i] / AllHitCounter2GeV_jet2 >= frac_delayed)) ) passedDelayedHitFraction2GeV[i] += 1;
 	if (((DelayedHitCounter3GeV[i]+DelayedHitCounter3GeV_jet2[i])>min_num_delayed) && ((DelayedHitCounter3GeV[i] / AllHitCounter3GeV >= frac_delayed) || (DelayedHitCounter3GeV_jet2[i] / AllHitCounter3GeV_jet2 >= frac_delayed)) ) passedDelayedHitFraction3GeV[i] += 1;
 	if (((DelayedHitCounter4GeV[i]+DelayedHitCounter4GeV_jet2[i])>min_num_delayed) && ((DelayedHitCounter4GeV[i] / AllHitCounter4GeV >= frac_delayed) || (DelayedHitCounter3GeV_jet2[i] / AllHitCounter4GeV_jet2 >= frac_delayed)) ) passedDelayedHitFraction4GeV[i] += 1;
+	*/
       }
       for (int i=1; i<8; i++) {
 	if (DelayedHitCounter2GeV[i] > min_num_delayed) DelayedHitFraction2GeV[i]->Fill(DelayedHitCounter2GeV[i] / AllHitCounter2GeV);
@@ -1435,13 +1519,91 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	if (DelayedHitCounter4GeV[i] > min_num_delayed) DelayedHitFraction4GeV[i]->Fill(DelayedHitCounter4GeV[i] / AllHitCounter4GeV);
       }
       for (int i=0; i<26; i++) {
-	DelayedHit2D_Fraction2GeV->Fill(i,DelayedHitCounter2GeV[i]/AllHitCounter2GeV,1);//std::max(DelayedHitCounter2GeV[i]/AllHitCounter2GeV,DelayedHitCounter2GeV_jet2[i]/AllHitCounter2GeV_jet2),1);
-        DelayedHit2D_Fraction3GeV->Fill(i,DelayedHitCounter3GeV[i]/AllHitCounter3GeV,1);//std::max(DelayedHitCounter3GeV[i]/AllHitCounter3GeV,DelayedHitCounter3GeV_jet2[i]/AllHitCounter3GeV_jet2),1);
-        DelayedHit2D_Fraction4GeV->Fill(i,DelayedHitCounter4GeV[i]/AllHitCounter4GeV,1);//std::max(DelayedHitCounter4GeV[i]/AllHitCounter4GeV,DelayedHitCounter4GeV_jet2[i]/AllHitCounter4GeV_jet2),1);
+	if ( (DelayedHitCounter1GeV[i] > min_num_delayed && DelayedHitCounter1GeV[i]/AllHitCounter1GeV > frac_delayed) || (DelayedHitCounter1GeV_jet2[i] > min_num_delayed && DelayedHitCounter1GeV_jet2[i]/AllHitCounter1GeV_jet2 > frac_delayed) || (DelayedHitCounter1GeV_jet3[i] > min_num_delayed && DelayedHitCounter1GeV_jet3[i]/AllHitCounter1GeV_jet3 > frac_delayed) || (DelayedHitCounter1GeV_jet4[i] > min_num_delayed && DelayedHitCounter1GeV_jet4[i]/AllHitCounter1GeV_jet4 > frac_delayed) ) {
+	  passedDelayedHitFraction1GeV[i] += 1;
+	  if (DelayedHitCounter1GeV[i] > min_num_delayed && DelayedHitCounter1GeV[i]/AllHitCounter1GeV > frac_delayed ) {
+	    DelayedHit2D_Fraction1GeV->Fill(i,DelayedHitCounter1GeV[i]/AllHitCounter1GeV,1);
+	    DelayedHit2D_Number1GeV->Fill(i,DelayedHitCounter1GeV[i],1);
+	  }
+	  else if (DelayedHitCounter1GeV_jet2[i] > min_num_delayed && DelayedHitCounter1GeV_jet2[i]/AllHitCounter1GeV_jet2 > frac_delayed ) {
+            DelayedHit2D_Fraction1GeV->Fill(i,DelayedHitCounter1GeV_jet2[i]/AllHitCounter1GeV_jet2,1);
+	    DelayedHit2D_Number1GeV->Fill(i,DelayedHitCounter1GeV_jet2[i],1);
+	  }
+	  else if (DelayedHitCounter1GeV_jet3[i] > min_num_delayed && DelayedHitCounter1GeV_jet3[i]/AllHitCounter1GeV_jet3 > frac_delayed ) {
+            DelayedHit2D_Fraction1GeV->Fill(i,DelayedHitCounter1GeV_jet3[i]/AllHitCounter1GeV_jet3,1);
+	    DelayedHit2D_Number1GeV->Fill(i,DelayedHitCounter1GeV_jet3[i],1);
+          }
+	  else if (DelayedHitCounter1GeV_jet4[i] > min_num_delayed && DelayedHitCounter1GeV_jet4[i]/AllHitCounter1GeV_jet4 > frac_delayed ) {
+            DelayedHit2D_Fraction1GeV->Fill(i,DelayedHitCounter1GeV_jet4[i]/AllHitCounter1GeV_jet4,1);
+	    DelayedHit2D_Number1GeV->Fill(i,DelayedHitCounter1GeV_jet4[i],1);
+          }
+	}
+        if ( (DelayedHitCounter2GeV[i] > min_num_delayed && DelayedHitCounter2GeV[i]/AllHitCounter2GeV > frac_delayed) || (DelayedHitCounter2GeV_jet2[i] > min_num_delayed && DelayedHitCounter2GeV_jet2[i]/AllHitCounter2GeV_jet2 > frac_delayed) || (DelayedHitCounter2GeV_jet3[i] > min_num_delayed && DelayedHitCounter2GeV_jet3[i]/AllHitCounter2GeV_jet3 > frac_delayed) || (DelayedHitCounter2GeV_jet4[i] > min_num_delayed && DelayedHitCounter2GeV_jet4[i]/AllHitCounter2GeV_jet4 > frac_delayed) ) {
+          passedDelayedHitFraction2GeV[i] += 1;
+          if (DelayedHitCounter2GeV[i] > min_num_delayed && DelayedHitCounter2GeV[i]/AllHitCounter2GeV > frac_delayed ) {
+            DelayedHit2D_Fraction2GeV->Fill(i,DelayedHitCounter2GeV[i]/AllHitCounter2GeV,1);
+	    DelayedHit2D_Number2GeV->Fill(i,DelayedHitCounter2GeV[i],1);
+          }
+          else if (DelayedHitCounter2GeV_jet2[i] > min_num_delayed && DelayedHitCounter2GeV_jet2[i]/AllHitCounter2GeV_jet2 > frac_delayed ) {
+            DelayedHit2D_Fraction2GeV->Fill(i,DelayedHitCounter2GeV_jet2[i]/AllHitCounter2GeV_jet2,1);
+	    DelayedHit2D_Number2GeV->Fill(i,DelayedHitCounter2GeV_jet2[i],1);
+          }
+          else if (DelayedHitCounter2GeV_jet3[i] > min_num_delayed && DelayedHitCounter2GeV_jet3[i]/AllHitCounter2GeV_jet3 > frac_delayed ) {
+            DelayedHit2D_Fraction2GeV->Fill(i,DelayedHitCounter2GeV_jet3[i]/AllHitCounter2GeV_jet3,1);
+	    DelayedHit2D_Number2GeV->Fill(i,DelayedHitCounter2GeV_jet3[i],1);
+          }
+          else if (DelayedHitCounter2GeV_jet4[i] > min_num_delayed && DelayedHitCounter2GeV_jet4[i]/AllHitCounter2GeV_jet4 > frac_delayed ) {
+            DelayedHit2D_Fraction2GeV->Fill(i,DelayedHitCounter2GeV_jet4[i]/AllHitCounter2GeV_jet4,1);
+	    DelayedHit2D_Number2GeV->Fill(i,DelayedHitCounter2GeV_jet4[i],1);
+          }
+	}
+        if ( (DelayedHitCounter3GeV[i] > min_num_delayed && DelayedHitCounter3GeV[i]/AllHitCounter3GeV > frac_delayed) || (DelayedHitCounter3GeV_jet2[i] > min_num_delayed && DelayedHitCounter3GeV_jet2[i]/AllHitCounter3GeV_jet2 > frac_delayed) || (DelayedHitCounter3GeV_jet3[i] > min_num_delayed && DelayedHitCounter3GeV_jet3[i]/AllHitCounter3GeV_jet3 > frac_delayed) || (DelayedHitCounter3GeV_jet4[i] > min_num_delayed && DelayedHitCounter3GeV_jet4[i]/AllHitCounter3GeV_jet4 > frac_delayed) ) {
+          passedDelayedHitFraction3GeV[i] += 1;
+          if (DelayedHitCounter3GeV[i] > min_num_delayed && DelayedHitCounter3GeV[i]/AllHitCounter3GeV > frac_delayed ) {
+            DelayedHit2D_Fraction3GeV->Fill(i,DelayedHitCounter3GeV[i]/AllHitCounter3GeV,1);
+	    DelayedHit2D_Number3GeV->Fill(i,DelayedHitCounter3GeV[i],1);
+          }
+          else if (DelayedHitCounter3GeV_jet2[i] > min_num_delayed && DelayedHitCounter3GeV_jet2[i]/AllHitCounter3GeV_jet2 > frac_delayed ) {
+            DelayedHit2D_Fraction3GeV->Fill(i,DelayedHitCounter3GeV_jet2[i]/AllHitCounter3GeV_jet2,1);
+	    DelayedHit2D_Number3GeV->Fill(i,DelayedHitCounter3GeV_jet2[i],1);
+          }
+          else if (DelayedHitCounter3GeV_jet3[i] > min_num_delayed && DelayedHitCounter3GeV_jet3[i]/AllHitCounter3GeV_jet3 > frac_delayed ) {
+            DelayedHit2D_Fraction3GeV->Fill(i,DelayedHitCounter3GeV_jet3[i]/AllHitCounter3GeV_jet3,1);
+	    DelayedHit2D_Number3GeV->Fill(i,DelayedHitCounter3GeV_jet3[i],1);
+          }
+          else if (DelayedHitCounter3GeV_jet4[i] > min_num_delayed && DelayedHitCounter3GeV_jet4[i]/AllHitCounter3GeV_jet4 > frac_delayed ) {
+            DelayedHit2D_Fraction3GeV->Fill(i,DelayedHitCounter3GeV_jet4[i]/AllHitCounter3GeV_jet4,1);
+	    DelayedHit2D_Number3GeV->Fill(i,DelayedHitCounter3GeV_jet4[i],1);
+          }
+	}
+        if ( (DelayedHitCounter4GeV[i] > min_num_delayed && DelayedHitCounter4GeV[i]/AllHitCounter4GeV > frac_delayed) || (DelayedHitCounter4GeV_jet2[i] > min_num_delayed && DelayedHitCounter4GeV_jet2[i]/AllHitCounter4GeV_jet2 > frac_delayed) || (DelayedHitCounter4GeV_jet3[i] > min_num_delayed && DelayedHitCounter4GeV_jet3[i]/AllHitCounter4GeV_jet3 > frac_delayed) || (DelayedHitCounter4GeV_jet4[i] > min_num_delayed && DelayedHitCounter4GeV_jet4[i]/AllHitCounter4GeV_jet4 > frac_delayed) ) {
+          passedDelayedHitFraction4GeV[i] += 1;
+          if (DelayedHitCounter4GeV[i] > min_num_delayed && DelayedHitCounter4GeV[i]/AllHitCounter4GeV > frac_delayed ) {
+            DelayedHit2D_Fraction4GeV->Fill(i,DelayedHitCounter4GeV[i]/AllHitCounter4GeV,1);
+            DelayedHit2D_Number4GeV->Fill(i,DelayedHitCounter4GeV[i],1);
+          }
+          else if (DelayedHitCounter4GeV_jet2[i] > min_num_delayed && DelayedHitCounter4GeV_jet2[i]/AllHitCounter4GeV_jet2 > frac_delayed ) {
+            DelayedHit2D_Fraction4GeV->Fill(i,DelayedHitCounter4GeV_jet2[i]/AllHitCounter4GeV_jet2,1);
+            DelayedHit2D_Number4GeV->Fill(i,DelayedHitCounter4GeV_jet2[i],1);
+          }
+          else if (DelayedHitCounter4GeV_jet3[i] > min_num_delayed && DelayedHitCounter4GeV_jet3[i]/AllHitCounter4GeV_jet3 > frac_delayed ) {
+            DelayedHit2D_Fraction4GeV->Fill(i,DelayedHitCounter4GeV_jet3[i]/AllHitCounter4GeV_jet3,1);
+            DelayedHit2D_Number4GeV->Fill(i,DelayedHitCounter4GeV_jet3[i],1);
+          }
+          else if (DelayedHitCounter4GeV_jet4[i] > min_num_delayed && DelayedHitCounter4GeV_jet4[i]/AllHitCounter4GeV_jet4 > frac_delayed ) {
+            DelayedHit2D_Fraction4GeV->Fill(i,DelayedHitCounter4GeV_jet4[i]/AllHitCounter4GeV_jet4,1);
+            DelayedHit2D_Number4GeV->Fill(i,DelayedHitCounter4GeV_jet4[i],1);
+          }
+	}
+	/*
+	DelayedHit2D_Fraction2GeV->Fill(i,std::max(std::max(std::max(DelayedHitCounter2GeV[i]/AllHitCounter2GeV,DelayedHitCounter2GeV_jet2[i]/AllHitCounter2GeV_jet2),DelayedHitCounter2GeV_jet3[i]/AllHitCounter2GeV_jet3),DelayedHitCounter2GeV_jet4[i]/AllHitCounter2GeV_jet4),1);//std::max(DelayedHitCounter2GeV[i]/AllHitCounter2GeV,DelayedHitCounter2GeV_jet2[i]/AllHitCounter2GeV_jet2),1);
+        DelayedHit2D_Fraction3GeV->Fill(i,std::max(std::max(std::max(DelayedHitCounter3GeV[i]/AllHitCounter3GeV,DelayedHitCounter3GeV_jet2[i]/AllHitCounter3GeV_jet2),DelayedHitCounter3GeV_jet3[i]/AllHitCounter3GeV_jet3),DelayedHitCounter3GeV_jet4[i]/AllHitCounter3GeV_jet4),1);
+	DelayedHit2D_Fraction4GeV->Fill(i,std::max(std::max(std::max(DelayedHitCounter4GeV[i]/AllHitCounter4GeV,DelayedHitCounter4GeV_jet2[i]/AllHitCounter4GeV_jet2),DelayedHitCounter4GeV_jet3[i]/AllHitCounter4GeV_jet3),DelayedHitCounter4GeV_jet4[i]/AllHitCounter4GeV_jet4),1);
 
-        DelayedHit2D_Number2GeV->Fill(i,DelayedHitCounter2GeV[i]+DelayedHitCounter2GeV_jet2[i],1);
-        DelayedHit2D_Number3GeV->Fill(i,DelayedHitCounter3GeV[i]+DelayedHitCounter3GeV_jet2[i],1);
-        DelayedHit2D_Number4GeV->Fill(i,DelayedHitCounter4GeV[i]+DelayedHitCounter4GeV_jet2[i],1);
+        DelayedHit2D_Number2GeV->Fill(i,DelayedHitCounter2GeV[i],1);//+DelayedHitCounter2GeV_jet2[i],1);
+        DelayedHit2D_Number3GeV->Fill(i,DelayedHitCounter3GeV[i],1);//+DelayedHitCounter3GeV_jet2[i],1);
+        DelayedHit2D_Number4GeV->Fill(i,DelayedHitCounter4GeV[i],1);//+DelayedHitCounter4GeV_jet2[i],1);
+	*/
       }
 
 
@@ -1886,7 +2048,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 
   if (inputFile.substr(0,5) == "../mh" && inputFile.substr(0,21) != "../mh1000_pl500_noPU/" ) {
     std::ofstream DelayedHitFrac_Signal;
-    DelayedHitFrac_Signal.open(Form("DelayedHitFrac_Signal_%s.txt", inputFile.substr(3,11).c_str()), std::ios_base::trunc);
+    DelayedHitFrac_Signal.open(Form("DelayedHitFrac_Signal_%s.txt", inputFile.substr(3,14).c_str()), std::ios_base::trunc);
     for (int i=1; i<8; i++) {
       DelayedHitFrac_Signal << passedDelayedHitFraction1GeV[i] / totalJets << std::endl;
     }
@@ -1901,7 +2063,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     }
     DelayedHitFrac_Signal.close();
     std::ofstream MultiplicityHits3GeV3ns_Signal;
-    MultiplicityHits3GeV3ns_Signal.open(Form("MultiplicityHits3GeV3ns_Signal_%s.txt", inputFile.substr(3,11).c_str()),std::ios_base::trunc);
+    MultiplicityHits3GeV3ns_Signal.open(Form("MultiplicityHits3GeV3ns_Signal_%s.txt", inputFile.substr(3,14).c_str()),std::ios_base::trunc);
     MultiplicityHits3GeV3ns_Signal << passedMultJets3GeV3_1/totalJets << std::endl;
     MultiplicityHits3GeV3ns_Signal << passedMultJets3GeV3_2/totalJets << std::endl;
     MultiplicityHits3GeV3ns_Signal << passedMultJets3GeV3_3/totalJets << std::endl;
@@ -1911,7 +2073,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     MultiplicityHits3GeV3ns_Signal << passedMultJets3GeV3_7/totalJets << std::endl;
     MultiplicityHits3GeV3ns_Signal.close();
     std::ofstream MultiplicityHits3GeV3ns_ht120_Signal;
-    MultiplicityHits3GeV3ns_ht120_Signal.open(Form("MultiplicityHits3GeV3ns_ht120_Signal_%s.txt", inputFile.substr(3,11).c_str()),std::ios_base::trunc);
+    MultiplicityHits3GeV3ns_ht120_Signal.open(Form("MultiplicityHits3GeV3ns_ht120_Signal_%s.txt", inputFile.substr(3,14).c_str()),std::ios_base::trunc);
     MultiplicityHits3GeV3ns_ht120_Signal << passedMultJets3GeV3_ht120_1/totalJets << std::endl;
     MultiplicityHits3GeV3ns_ht120_Signal << passedMultJets3GeV3_ht120_2/totalJets << std::endl;
     MultiplicityHits3GeV3ns_ht120_Signal << passedMultJets3GeV3_ht120_3/totalJets << std::endl;
@@ -1994,6 +2156,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     Timing_Depth_avg_Jets = Timing_Depth_Jets->ProfileX();
     Timing_DepthHE_avg_Jets = Timing_DepthHE_Jets->ProfileX();
     Timing_DepthHB_avg_Jets = Timing_DepthHB_Jets->ProfileX();
+
+    VolTiming_Depth_avg_Jets = VolTiming_Depth_Jets->ProfileX();
+    VolTiming_DepthHB_avg_Jets = VolTiming_DepthHB_Jets->ProfileX();
+    VolTiming_DepthHE_avg_Jets = VolTiming_DepthHE_Jets->ProfileX();
 
     //set the errors for the rates
     //want error -> error * sqrt(norm) ?
@@ -2103,7 +2269,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       EffRate_file << "Factor change in quad jet rate at 60 GeV = " << QJet60GeV_original/QJet60GeV << std::endl;
       EffRate_file << " " << std::endl;
     }
-    if (inputFile.substr(0,16) == "../mh1000_pl500/" || inputFile.substr(0,21) == "../mh350_pl160_pl500/" ) {
+    if (inputFile.substr(0,16) == "../mh1000_pl500_" || inputFile.substr(0,16) == "../mh350__pl500_" ) {
       EffRate_file << "EffPl500["<< GeV3ns3Jet_threshold-1 << "] = " << passedMultJets/totalJets << ";" <<std::endl;
       EffRate_file << "EffPl500_120["<< GeV3ns3Jet_threshold-1 << "] = " << passedMultJets_120/totalJets << ";" <<std::endl;
       EffRate_file << "EffPl500_350["<< GeV3ns3Jet_threshold-1 << "] = " << passedMultJets_350/totalJets << ";" <<std::endl;
@@ -2118,7 +2284,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       EffRate_file << "GLOBAL pl=0.5m, Factor reduction in eff with timing and ht=120 cuts as compared with only ht=430 threshold["<< GeV3ns3Global_threshold-1 << "] = " << (passedMultGlobal/totalGlobal)/(passedHtSum430/totalGlobal) << ";" << std::endl;
       EffRate_file << " " << std::endl;
     }
-    if (inputFile.substr(0,17) == "../mh1000_pl1000/" || inputFile.substr(0,22) == "../mh350_pl160_pl1000/" ) {
+    if (inputFile.substr(0,17) == "../mh1000_pl1000_" || inputFile.substr(0,17) == "../mh350__pl1000_" ) {
       EffRate_file << "EffPl1000["<< GeV3ns3Jet_threshold-1 << "] = " << passedMultJets/totalJets << ";" <<std::endl;
       EffRate_file << "EffPl1000_120["<< GeV3ns3Jet_threshold-1 << "] = " << passedMultJets_120/totalJets << ";" <<std::endl;
       EffRate_file << "EffPl1000_350["<< GeV3ns3Jet_threshold-1 << "] = " << passedMultJets_350/totalJets << ";" <<std::endl;
@@ -2228,44 +2394,79 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     for (int GeV=0; GeV<6; GeV++) NumberTPtiming[GeV]->Write();
 
     if (inputFile.substr(3,11) != "Neutrino") {
+      TCanvas *c1 = new TCanvas("c1","Graph Draw Options",200,10,1200,500);
+      c1->Divide(2,1);
+      c1->cd(1);
+      //      DelayedHit2D_Number1GeV->Draw("COLZ");
+      DelayedHit2D_Number1GeV->ProfileX()->GetYaxis()->SetRangeUser(0,15);
+      DelayedHit2D_Number1GeV->ProfileX()->GetYaxis()->SetTitle("Number of Delayed Hits");
+      DelayedHit2D_Number1GeV->ProfileX()->Draw();
+      gPad->SetLogz();
+      c1->cd(2);
+      //      DelayedHit2D_Fraction1GeV->Draw("COLZ");
+      DelayedHit2D_Fraction1GeV->ProfileX()->GetYaxis()->SetRangeUser(0,1);
+      DelayedHit2D_Fraction1GeV->ProfileX()->GetYaxis()->SetTitle("Fraction of Delayed Hits");
+      DelayedHit2D_Fraction1GeV->ProfileX()->Draw();
+      gPad->SetLogz();
       TCanvas *c2 = new TCanvas("c2","Graph Draw Options",200,10,1200,500);
       c2->Divide(2,1);
       c2->cd(1);
-      DelayedHit2D_Number2GeV->Draw("COLZ");
+      //      DelayedHit2D_Number2GeV->Draw("COLZ");
+      DelayedHit2D_Number2GeV->ProfileX()->GetYaxis()->SetRangeUser(0,15);
+      DelayedHit2D_Number2GeV->ProfileX()->GetYaxis()->SetTitle("Number of Delayed Hits");
+      DelayedHit2D_Number2GeV->ProfileX()->Draw();
       gPad->SetLogz();
       c2->cd(2);
-      DelayedHit2D_Fraction2GeV->Draw("COLZ");
+      //      DelayedHit2D_Fraction2GeV->Draw("COLZ");
+      DelayedHit2D_Fraction2GeV->ProfileX()->GetYaxis()->SetRangeUser(0,1);
+      DelayedHit2D_Fraction2GeV->ProfileX()->GetYaxis()->SetTitle("Fraction of Delayed Hits");
+      DelayedHit2D_Fraction2GeV->ProfileX()->Draw();
       gPad->SetLogz();
       TCanvas *c3 = new TCanvas("c3","Graph Draw Options",200,10,1200,500);
       c3->Divide(2,1);
       c3->cd(1);
-      DelayedHit2D_Number3GeV->Draw("COLZ");
+      //      DelayedHit2D_Number3GeV->Draw("COLZ");
+      DelayedHit2D_Number3GeV->ProfileX()->GetYaxis()->SetRangeUser(0,15);
+      DelayedHit2D_Number3GeV->ProfileX()->GetYaxis()->SetTitle("Number of Delayed Hits");
+      DelayedHit2D_Number3GeV->ProfileX()->Draw();
       gPad->SetLogz();
       c3->cd(2);
-      DelayedHit2D_Fraction3GeV->Draw("COLZ");
+      //      DelayedHit2D_Fraction3GeV->Draw("COLZ");
+      DelayedHit2D_Fraction3GeV->ProfileX()->GetYaxis()->SetRangeUser(0,1);
+      DelayedHit2D_Fraction3GeV->ProfileX()->GetYaxis()->SetTitle("Fraction of Delayed Hits");
+      DelayedHit2D_Fraction3GeV->ProfileX()->Draw();
       gPad->SetLogz();
       TCanvas *c4 = new TCanvas("c4","Graph Draw Options",200,10,1200,500);
       c4->Divide(2,1);
       c4->cd(1);
-      DelayedHit2D_Number4GeV->Draw("COLZ");
+      //      DelayedHit2D_Number4GeV->Draw("COLZ");
+      DelayedHit2D_Number4GeV->ProfileX()->GetYaxis()->SetRangeUser(0,15);
+      DelayedHit2D_Number4GeV->ProfileX()->GetYaxis()->SetTitle("Number of Delayed Hits");
+      DelayedHit2D_Number4GeV->ProfileX()->Draw();
       gPad->SetLogz();
       c4->cd(2);
-      DelayedHit2D_Fraction4GeV->Draw("COLZ");
+      //      DelayedHit2D_Fraction4GeV->Draw("COLZ");
+      DelayedHit2D_Fraction4GeV->ProfileX()->GetYaxis()->SetRangeUser(0,1);
+      DelayedHit2D_Fraction4GeV->ProfileX()->GetYaxis()->SetTitle("Fraction of Delayed Hits");
+      DelayedHit2D_Fraction4GeV->ProfileX()->Draw();
       gPad->SetLogz();
       if (inputFile.substr(3,3) == "QCD") {
+        c1->Print(Form("DelayedHit2D_Number1GeV_%s.pdf",inputFile.substr(3,3).c_str()));
         c2->Print(Form("DelayedHit2D_Number2GeV_%s.pdf",inputFile.substr(3,3).c_str()));
         c3->Print(Form("DelayedHit2D_Number3GeV_%s.pdf",inputFile.substr(3,3).c_str()));
         c4->Print(Form("DelayedHit2D_Number4GeV_%s.pdf",inputFile.substr(3,3).c_str()));
       }
       if (inputFile.substr(3,17) == "mh1000_pl500_noPU") {
+        c1->Print(Form("DelayedHit2D_Number1GeV_%s.pdf",inputFile.substr(3,17).c_str()));
         c2->Print(Form("DelayedHit2D_Number2GeV_%s.pdf",inputFile.substr(3,17).c_str()));
         c3->Print(Form("DelayedHit2D_Number3GeV_%s.pdf",inputFile.substr(3,17).c_str()));
         c4->Print(Form("DelayedHit2D_Number4GeV_%s.pdf",inputFile.substr(3,17).c_str()));
       }
       else {
-        c2->Print(Form("DelayedHit2D_Number2GeV_%s.pdf",inputFile.substr(3,12).c_str()));
-        c3->Print(Form("DelayedHit2D_Number3GeV_%s.pdf",inputFile.substr(3,12).c_str()));
-        c4->Print(Form("DelayedHit2D_Number4GeV_%s.pdf",inputFile.substr(3,12).c_str()));
+        c1->Print(Form("DelayedHit2D_Number1GeV_%s.pdf",inputFile.substr(3,14).c_str()));
+        c2->Print(Form("DelayedHit2D_Number2GeV_%s.pdf",inputFile.substr(3,14).c_str()));
+        c3->Print(Form("DelayedHit2D_Number3GeV_%s.pdf",inputFile.substr(3,14).c_str()));
+        c4->Print(Form("DelayedHit2D_Number4GeV_%s.pdf",inputFile.substr(3,14).c_str()));
       }
     }
     DelayedHit2D_Fraction2GeV->Write();
@@ -2285,11 +2486,32 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	c->Print(Form("NumberTPtiming_energy_%s.pdf",inputFile.substr(3,17).c_str()));
       }
       else {
-	NumberTPtiming_energy->SetTitle(Form("Number of Cells vs. Energy vs. TDC Values for %s, leading L1 Jet",inputFile.substr(3,12).c_str()));
-	c->Print(Form("NumberTPtiming_energy_%s.pdf",inputFile.substr(3,12).c_str()));
+	NumberTPtiming_energy->SetTitle(Form("Number of Cells vs. Energy vs. TDC Values for %s, leading L1 Jet",inputFile.substr(3,14).c_str()));
+	c->Print(Form("NumberTPtiming_energy_%s.pdf",inputFile.substr(3,14).c_str()));
       }
     }
     NumberTPtiming_energy->Write();
+
+    if (inputFile.substr(3,11) != "Neutrino") {
+      TCanvas *c = new TCanvas("c","Graph Draw Options",200,10,600,500);
+      c->cd();
+      NumberEvents_Fraction_Mult->Draw("COLZ");
+      //      gPad->SetLogz();
+      if (inputFile.substr(3,3) == "QCD") {
+        NumberEvents_Fraction_Mult->SetTitle(Form("Number of Events vs. Delayed Fraction vs. Hit Multiplicity for %s, leading L1 Jet",inputFile.substr(3,3).c_str()));
+        c->Print(Form("NumberEvents_Fraction_Mult_%s.pdf",inputFile.substr(3,3).c_str()));
+      }
+      if (inputFile.substr(3,17) == "mh1000_pl500_noPU") {
+        NumberEvents_Fraction_Mult->SetTitle(Form("Number of Events vs. Delayed Fraction vs. Hit Multiplicity for %s, leading L1 Jet",inputFile.substr(3,17).c_str()));
+        c->Print(Form("NumberEvents_Fraction_Mult_%s.pdf",inputFile.substr(3,17).c_str()));
+      }
+      else {
+        NumberEvents_Fraction_Mult->SetTitle(Form("Number of Events vs. Delayed Fraction vs. Hit Multiplicity for %s, leading L1 Jet",inputFile.substr(3,14).c_str()));
+        c->Print(Form("NumberEvents_Fraction_Mult_%s.pdf",inputFile.substr(3,14).c_str()));
+      }
+    }
+    NumberEvents_Fraction_Mult->Write();
+
 
     dt3GeV3nsHBJet1Mult_emu->Write();
     dt3GeV3nsHBJet2Mult_emu->Write();
@@ -2330,6 +2552,9 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     Energy_Depth_Jets_HighE->Write();
     Energy_DepthHB_Jets_HighE->Write();
     Energy_DepthHE_Jets_HighE->Write();
+    VolTiming_Depth_Jets->Write();
+    VolTiming_DepthHB_Jets->Write();
+    VolTiming_DepthHE_Jets->Write();
 
     Energy_Depth_avg->Write();
     Energy_DepthHE_avg->Write();
@@ -2344,6 +2569,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     Timing_Depth_avg_Jets->Write();
     Timing_DepthHE_avg_Jets->Write();
     Timing_DepthHB_avg_Jets->Write();
+
+    VolTiming_Depth_avg_Jets->Write();
+    VolTiming_DepthHE_avg_Jets->Write();
+    VolTiming_DepthHB_avg_Jets->Write();
 
     Ratio_Depth->Write();
     Ratio_DepthHE->Write();
