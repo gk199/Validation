@@ -4,12 +4,16 @@ scram b -j 8
 echo " "
 echo " "
 echo "Starting with running rates.cxx where all HCAL TPs in a DR cone of L1 jet are considered OR HCAL TP double counting is prevented -- change in code!"
+echo "LLP mh=1000 GeV, ctau=10 m"
+rates.exe new ../mh1000_pl10000/
+mv rates_new_cond.root rates_new_cond_pl10000_4L1Jets.root
+echo " "
 echo "LLP mh=1000 GeV, ctau=1 m"
-rates.exe new ../mh1000_pl1000/
+rates.exe new ../mh1000_pl1000_/
 mv rates_new_cond.root rates_new_cond_pl1000_4L1Jets.root
 echo " "
 echo "LLP mh=1000 GeV, ctau=0.5 m"
-rates.exe new ../mh1000_pl500/
+rates.exe new ../mh1000_pl500__/
 mv rates_new_cond.root rates_new_cond_pl500_4L1Jets.root
 echo " "
 echo "LLP mh=1000 GeV, ctau=0.5 m, no PU"
@@ -30,18 +34,60 @@ echo "Moving output plots to a new directory"
 mv plots/* plots_DRaroundTPandL1_mh1000/
 echo " "
 echo " "
+echo "LLP mh=350 GeV, ctau=10 m"
+rates.exe new ../mh350__pl10000_mx160/
+mv rates_new_cond.root rates_new_cond_pl10000_4L1Jets.root
+echo " "
 echo "LLP mh=350 GeV, ctau=1 m"
-rates.exe new ../mh350_pl1000_mx160/
+rates.exe new ../mh350__pl1000__mx160/
 mv rates_new_cond.root rates_new_cond_pl1000_4L1Jets.root
 echo " "
 echo "LLP mh=350 GeV, ctau=0.5 m"
-rates.exe new ../mh350_pl500_mx160/
+rates.exe new ../mh350__pl500___mx160/
 mv rates_new_cond.root rates_new_cond_pl500_4L1Jets.root
 echo " "
 echo "Making overlay plots from draw_rates.exe"
 draw_rates.exe
 echo "Moving output plots to a new directory"
 mv plots/* plots_DRaroundTPandL1_mh350/
+echo " "
+echo " "
+echo "LLP mh=250 GeV, ctau=10 m"
+rates.exe new ../mh250__pl10000/
+mv rates_new_cond.root rates_new_cond_pl10000_4L1Jets.root
+echo " "
+echo "LLP mh=250 GeV, ctau=1 m"
+rates.exe new ../mh250__pl1000_/
+mv rates_new_cond.root rates_new_cond_pl1000_4L1Jets.root
+echo " "
+echo "LLP mh=250 GeV, ctau=0.5 m"
+rates.exe new ../mh250__pl500__/
+mv rates_new_cond.root rates_new_cond_pl500_4L1Jets.root
+echo " "
+echo "Making overlay plots from draw_rates.exe"
+draw_rates.exe
+echo "Moving output plots to a new directory"
+mv plots/* plots_DRaroundTPandL1_mh250/
+echo " "
+echo " "
+echo "LLP mh=125 GeV, ctau=10 m"
+rates.exe new ../mh125__pl10000/
+mv rates_new_cond.root rates_new_cond_pl10000_4L1Jets.root
+echo " "
+echo "LLP mh=125 GeV, ctau=1 m"
+rates.exe new ../mh125__pl1000_/
+mv rates_new_cond.root rates_new_cond_pl1000_4L1Jets.root
+echo " "
+echo "LLP mh=125 GeV, ctau=0.5 m"
+rates.exe new ../mh125__pl500__/
+mv rates_new_cond.root rates_new_cond_pl500_4L1Jets.root
+echo " "
+echo "Making overlay plots from draw_rates.exe"
+draw_rates.exe
+echo "Moving output plots to a new directory"
+mv plots/* plots_DRaroundTPandL1_mh125/
+echo " "
+echo " "
 echo "Making overlay ROC curves"
 SignalBkgEff_DelayedHitFrac_Plot.exe
 echo " "
