@@ -4,6 +4,7 @@
   <bin file="draw_rates.cxx" name="draw_rates.exe"/>
   <bin file="SignalBkgEff_DelayedHitFrac_Plot.cxx" name="SignalBkgEff_DelayedHitFrac_Plot.exe"/>
   <bin file="RateEfficiencyPlots.cxx" name="RateEfficiencyPlots.exe"/>
+<bin file="RateEfficiencyPlots_MultFrac1Jet.cxx" name="RateEfficiencyPlots_MultFrac1Jet.exe"/>
   <bin file="rates.cxx" name="rates.exe"/>
   <bin file="rates_noHCALvol_QCD.cxx" name="rates_noHCALvol_QCD.exe"/>
   <bin file="rates_noGenMatching_nugun.cxx" name="rates_noGenMatching_nugun.exe"/>
