@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from root_numpy import hist2array, root2array, tree2array
 from root_numpy import testdata
 
-nvariables = 3
+nvariables = 4
 ndata = 2000
 
 # read in signal and background files
@@ -18,8 +18,8 @@ signal_tree = (signal_filename.Get("MultForTMVA"))
 #signal_hist = (signal_filename.Get("dt3GeV3nsHBJetMult_emu")) # Get() returns a ROOT.TH1F (correct)   
 signal_data = tree2array(signal_tree) # access histogram from the signal ROOT file  
 
-MethodNames = ["Fisher", "SVM", "BDT", "KNN"]
-methodOptions = {"BDT":"VarTransform=G", "Fisher":"VarTransform=G", "SVM":"C=1.0:Gamma=0.005:Tol=0.001:VarTransform=None", "KNN":"VarTransform=G"}
+MethodNames = ["Fisher", "SVM", "BDT"] #, "KNN"]
+methodOptions = {"BDT":"VarTransform=G", "Fisher":"VarTransform=G", "SVM":"C=1.0:Gamma=0.005:Tol=0.001:VarTransform=None"} #, "KNN":"VarTransform=G"}
 outputfile = "output.root"
 
 #ROOT Stuff
