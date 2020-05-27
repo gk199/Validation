@@ -361,6 +361,14 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F* htSum_th5_Rates_emu = new TH1F("htSum_th5_Rates_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
   TH1F* htSum_th6_Rates_emu = new TH1F("htSum_th6_Rates_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
   TH1F* htSum_th7_Rates_emu = new TH1F("htSum_th7_Rates_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
+  // for mult and frac around one jet
+  TH1F* htSum_timing1_Rates_emu = new TH1F("htSum_timing1_Rates_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
+  TH1F* htSum_timing2_Rates_emu = new TH1F("htSum_timing2_Rates_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
+  TH1F* htSum_timing3_Rates_emu = new TH1F("htSum_timing3_Rates_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
+  TH1F* htSum_timing4_Rates_emu = new TH1F("htSum_timing4_Rates_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
+  TH1F* htSum_timing5_Rates_emu = new TH1F("htSum_timing5_Rates_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
+  TH1F* htSum_timing6_Rates_emu = new TH1F("htSum_timing6_Rates_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
+  TH1F* htSum_timing7_Rates_emu = new TH1F("htSum_timing7_Rates_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
 
   TH1F* singleJetGlobalRates_emu = new TH1F("singleJetGlobalRates_emu", axR.c_str(), nJetBins, jetLo, jetHi);
   TH1F* doubleJetGlobalRates_emu = new TH1F("doubleJetGlobalRates_emu", axR.c_str(), nJetBins, jetLo, jetHi);
@@ -649,11 +657,18 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   double passedDelayedHitFraction2GeV[21] = {0};
   double passedDelayedHitFraction3GeV[21] = {0};
   double passedDelayedHitFraction4GeV[21] = {0};
+  double passedDelayedHitFraction1GeV_ht120[21] = {0};
+  double passedDelayedHitFraction2GeV_ht120[21] = {0};
+  double passedDelayedHitFraction3GeV_ht120[21] = {0};
+  double passedDelayedHitFraction4GeV_ht120[21] = {0};
   // change these variables to change the multiplicity thresholds that are set
   uint GeV3ns3Global_threshold = 3;
   //  uint GeV3ns0Jet_threshold = 3;
   uint GeV3ns3Jet_threshold = 2;
   double DR_threshold = 0.5;
+  double frac_delayed = 0.5;
+  uint min_num_delayed = 4;
+  uint min_num_delayed_jetsum = 2;
 
   /////////////////////////////////
   // loop through all the entries//
@@ -1501,8 +1516,9 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       if (genJetRequirementPassed > 0 ) totalJets += 1; // how many events had at least one jet passing gen matching requirements? used to compare with regional multiplicity sum that is jet matched
       if (totalGlobal != totalJets) std::cout << "still using gen matching requirements!" << std::endl;
 
-      double frac_delayed = 0.45;
-      int min_num_delayed = 6;
+      /*      double frac_delayed = 0.5;
+      int min_num_delayed = 4;
+      int min_num_delayed_jetsum = 6; */
       NumberEvents_Fraction_Mult->Fill(DelayedHitCounter3GeV[3] / AllHitCounter3GeV, DelayedHitCounter3GeV[3]+DelayedHitCounter3GeV_jet2[3], 1); // fraction, multiplicity, 1
 
       for (int i=1; i<8; i++) {
@@ -1518,83 +1534,121 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	if (DelayedHitCounter3GeV[i] > min_num_delayed) DelayedHitFraction3GeV[i]->Fill(DelayedHitCounter3GeV[i] / AllHitCounter3GeV);
 	if (DelayedHitCounter4GeV[i] > min_num_delayed) DelayedHitFraction4GeV[i]->Fill(DelayedHitCounter4GeV[i] / AllHitCounter4GeV);
       }
+      //      std::cout << mult2GeV_Jets[2] << " and delayed hit counter " << DelayedHitCounter2GeV[2] + DelayedHitCounter2GeV_jet2[2] + DelayedHitCounter2GeV_jet3[2] + DelayedHitCounter2GeV_jet4[2] << std::endl;
+      if (mult1GeVHB_Jets[2] >= min_num_delayed_jetsum) {
       for (int i=0; i<26; i++) {
 	if ( (DelayedHitCounter1GeV[i] > min_num_delayed && DelayedHitCounter1GeV[i]/AllHitCounter1GeV > frac_delayed) || (DelayedHitCounter1GeV_jet2[i] > min_num_delayed && DelayedHitCounter1GeV_jet2[i]/AllHitCounter1GeV_jet2 > frac_delayed) || (DelayedHitCounter1GeV_jet3[i] > min_num_delayed && DelayedHitCounter1GeV_jet3[i]/AllHitCounter1GeV_jet3 > frac_delayed) || (DelayedHitCounter1GeV_jet4[i] > min_num_delayed && DelayedHitCounter1GeV_jet4[i]/AllHitCounter1GeV_jet4 > frac_delayed) ) {
 	  passedDelayedHitFraction1GeV[i] += 1;
+          if (htSum > 120) passedDelayedHitFraction1GeV_ht120[i] += 1;
 	  if (DelayedHitCounter1GeV[i] > min_num_delayed && DelayedHitCounter1GeV[i]/AllHitCounter1GeV > frac_delayed ) {
-	    DelayedHit2D_Fraction1GeV->Fill(i,DelayedHitCounter1GeV[i]/AllHitCounter1GeV,1);
-	    DelayedHit2D_Number1GeV->Fill(i,DelayedHitCounter1GeV[i],1);
+	    //	    DelayedHit2D_Fraction1GeV->Fill(i,DelayedHitCounter1GeV[i]/AllHitCounter1GeV,1);
+	    //	    DelayedHit2D_Number1GeV->Fill(i,DelayedHitCounter1GeV[i],1);
 	  }
 	  else if (DelayedHitCounter1GeV_jet2[i] > min_num_delayed && DelayedHitCounter1GeV_jet2[i]/AllHitCounter1GeV_jet2 > frac_delayed ) {
-            DelayedHit2D_Fraction1GeV->Fill(i,DelayedHitCounter1GeV_jet2[i]/AllHitCounter1GeV_jet2,1);
-	    DelayedHit2D_Number1GeV->Fill(i,DelayedHitCounter1GeV_jet2[i],1);
+	    //            DelayedHit2D_Fraction1GeV->Fill(i,DelayedHitCounter1GeV_jet2[i]/AllHitCounter1GeV_jet2,1);
+	    //	    DelayedHit2D_Number1GeV->Fill(i,DelayedHitCounter1GeV_jet2[i],1);
 	  }
 	  else if (DelayedHitCounter1GeV_jet3[i] > min_num_delayed && DelayedHitCounter1GeV_jet3[i]/AllHitCounter1GeV_jet3 > frac_delayed ) {
-            DelayedHit2D_Fraction1GeV->Fill(i,DelayedHitCounter1GeV_jet3[i]/AllHitCounter1GeV_jet3,1);
-	    DelayedHit2D_Number1GeV->Fill(i,DelayedHitCounter1GeV_jet3[i],1);
+	    //            DelayedHit2D_Fraction1GeV->Fill(i,DelayedHitCounter1GeV_jet3[i]/AllHitCounter1GeV_jet3,1);
+	    //	    DelayedHit2D_Number1GeV->Fill(i,DelayedHitCounter1GeV_jet3[i],1);
           }
 	  else if (DelayedHitCounter1GeV_jet4[i] > min_num_delayed && DelayedHitCounter1GeV_jet4[i]/AllHitCounter1GeV_jet4 > frac_delayed ) {
-            DelayedHit2D_Fraction1GeV->Fill(i,DelayedHitCounter1GeV_jet4[i]/AllHitCounter1GeV_jet4,1);
-	    DelayedHit2D_Number1GeV->Fill(i,DelayedHitCounter1GeV_jet4[i],1);
+	    //            DelayedHit2D_Fraction1GeV->Fill(i,DelayedHitCounter1GeV_jet4[i]/AllHitCounter1GeV_jet4,1);
+	    //	    DelayedHit2D_Number1GeV->Fill(i,DelayedHitCounter1GeV_jet4[i],1);
           }
 	}
         if ( (DelayedHitCounter2GeV[i] > min_num_delayed && DelayedHitCounter2GeV[i]/AllHitCounter2GeV > frac_delayed) || (DelayedHitCounter2GeV_jet2[i] > min_num_delayed && DelayedHitCounter2GeV_jet2[i]/AllHitCounter2GeV_jet2 > frac_delayed) || (DelayedHitCounter2GeV_jet3[i] > min_num_delayed && DelayedHitCounter2GeV_jet3[i]/AllHitCounter2GeV_jet3 > frac_delayed) || (DelayedHitCounter2GeV_jet4[i] > min_num_delayed && DelayedHitCounter2GeV_jet4[i]/AllHitCounter2GeV_jet4 > frac_delayed) ) {
           passedDelayedHitFraction2GeV[i] += 1;
+          if (htSum > 120) passedDelayedHitFraction2GeV_ht120[i] += 1;
           if (DelayedHitCounter2GeV[i] > min_num_delayed && DelayedHitCounter2GeV[i]/AllHitCounter2GeV > frac_delayed ) {
-            DelayedHit2D_Fraction2GeV->Fill(i,DelayedHitCounter2GeV[i]/AllHitCounter2GeV,1);
-	    DelayedHit2D_Number2GeV->Fill(i,DelayedHitCounter2GeV[i],1);
+	    //            DelayedHit2D_Fraction2GeV->Fill(i,DelayedHitCounter2GeV[i]/AllHitCounter2GeV,1);
+	    //	    DelayedHit2D_Number2GeV->Fill(i,DelayedHitCounter2GeV[i],1);
           }
           else if (DelayedHitCounter2GeV_jet2[i] > min_num_delayed && DelayedHitCounter2GeV_jet2[i]/AllHitCounter2GeV_jet2 > frac_delayed ) {
-            DelayedHit2D_Fraction2GeV->Fill(i,DelayedHitCounter2GeV_jet2[i]/AllHitCounter2GeV_jet2,1);
-	    DelayedHit2D_Number2GeV->Fill(i,DelayedHitCounter2GeV_jet2[i],1);
+	    //            DelayedHit2D_Fraction2GeV->Fill(i,DelayedHitCounter2GeV_jet2[i]/AllHitCounter2GeV_jet2,1);
+	    //	    DelayedHit2D_Number2GeV->Fill(i,DelayedHitCounter2GeV_jet2[i],1);
           }
           else if (DelayedHitCounter2GeV_jet3[i] > min_num_delayed && DelayedHitCounter2GeV_jet3[i]/AllHitCounter2GeV_jet3 > frac_delayed ) {
-            DelayedHit2D_Fraction2GeV->Fill(i,DelayedHitCounter2GeV_jet3[i]/AllHitCounter2GeV_jet3,1);
-	    DelayedHit2D_Number2GeV->Fill(i,DelayedHitCounter2GeV_jet3[i],1);
+	    //            DelayedHit2D_Fraction2GeV->Fill(i,DelayedHitCounter2GeV_jet3[i]/AllHitCounter2GeV_jet3,1);
+	    //	    DelayedHit2D_Number2GeV->Fill(i,DelayedHitCounter2GeV_jet3[i],1);
           }
           else if (DelayedHitCounter2GeV_jet4[i] > min_num_delayed && DelayedHitCounter2GeV_jet4[i]/AllHitCounter2GeV_jet4 > frac_delayed ) {
-            DelayedHit2D_Fraction2GeV->Fill(i,DelayedHitCounter2GeV_jet4[i]/AllHitCounter2GeV_jet4,1);
-	    DelayedHit2D_Number2GeV->Fill(i,DelayedHitCounter2GeV_jet4[i],1);
+	    //            DelayedHit2D_Fraction2GeV->Fill(i,DelayedHitCounter2GeV_jet4[i]/AllHitCounter2GeV_jet4,1);
+	    //	    DelayedHit2D_Number2GeV->Fill(i,DelayedHitCounter2GeV_jet4[i],1);
           }
 	}
         if ( (DelayedHitCounter3GeV[i] > min_num_delayed && DelayedHitCounter3GeV[i]/AllHitCounter3GeV > frac_delayed) || (DelayedHitCounter3GeV_jet2[i] > min_num_delayed && DelayedHitCounter3GeV_jet2[i]/AllHitCounter3GeV_jet2 > frac_delayed) || (DelayedHitCounter3GeV_jet3[i] > min_num_delayed && DelayedHitCounter3GeV_jet3[i]/AllHitCounter3GeV_jet3 > frac_delayed) || (DelayedHitCounter3GeV_jet4[i] > min_num_delayed && DelayedHitCounter3GeV_jet4[i]/AllHitCounter3GeV_jet4 > frac_delayed) ) {
           passedDelayedHitFraction3GeV[i] += 1;
+	  if (htSum > 120) passedDelayedHitFraction3GeV_ht120[i] += 1;
           if (DelayedHitCounter3GeV[i] > min_num_delayed && DelayedHitCounter3GeV[i]/AllHitCounter3GeV > frac_delayed ) {
-            DelayedHit2D_Fraction3GeV->Fill(i,DelayedHitCounter3GeV[i]/AllHitCounter3GeV,1);
-	    DelayedHit2D_Number3GeV->Fill(i,DelayedHitCounter3GeV[i],1);
+	    //            DelayedHit2D_Fraction3GeV->Fill(i,DelayedHitCounter3GeV[i]/AllHitCounter3GeV,1);
+	    //	    DelayedHit2D_Number3GeV->Fill(i,DelayedHitCounter3GeV[i],1);
           }
           else if (DelayedHitCounter3GeV_jet2[i] > min_num_delayed && DelayedHitCounter3GeV_jet2[i]/AllHitCounter3GeV_jet2 > frac_delayed ) {
-            DelayedHit2D_Fraction3GeV->Fill(i,DelayedHitCounter3GeV_jet2[i]/AllHitCounter3GeV_jet2,1);
-	    DelayedHit2D_Number3GeV->Fill(i,DelayedHitCounter3GeV_jet2[i],1);
+	    //            DelayedHit2D_Fraction3GeV->Fill(i,DelayedHitCounter3GeV_jet2[i]/AllHitCounter3GeV_jet2,1);
+	    //	    DelayedHit2D_Number3GeV->Fill(i,DelayedHitCounter3GeV_jet2[i],1);
           }
           else if (DelayedHitCounter3GeV_jet3[i] > min_num_delayed && DelayedHitCounter3GeV_jet3[i]/AllHitCounter3GeV_jet3 > frac_delayed ) {
-            DelayedHit2D_Fraction3GeV->Fill(i,DelayedHitCounter3GeV_jet3[i]/AllHitCounter3GeV_jet3,1);
-	    DelayedHit2D_Number3GeV->Fill(i,DelayedHitCounter3GeV_jet3[i],1);
+	    //            DelayedHit2D_Fraction3GeV->Fill(i,DelayedHitCounter3GeV_jet3[i]/AllHitCounter3GeV_jet3,1);
+	    //	    DelayedHit2D_Number3GeV->Fill(i,DelayedHitCounter3GeV_jet3[i],1);
           }
           else if (DelayedHitCounter3GeV_jet4[i] > min_num_delayed && DelayedHitCounter3GeV_jet4[i]/AllHitCounter3GeV_jet4 > frac_delayed ) {
-            DelayedHit2D_Fraction3GeV->Fill(i,DelayedHitCounter3GeV_jet4[i]/AllHitCounter3GeV_jet4,1);
-	    DelayedHit2D_Number3GeV->Fill(i,DelayedHitCounter3GeV_jet4[i],1);
+	    //            DelayedHit2D_Fraction3GeV->Fill(i,DelayedHitCounter3GeV_jet4[i]/AllHitCounter3GeV_jet4,1);
+	    //	    DelayedHit2D_Number3GeV->Fill(i,DelayedHitCounter3GeV_jet4[i],1);
           }
 	}
         if ( (DelayedHitCounter4GeV[i] > min_num_delayed && DelayedHitCounter4GeV[i]/AllHitCounter4GeV > frac_delayed) || (DelayedHitCounter4GeV_jet2[i] > min_num_delayed && DelayedHitCounter4GeV_jet2[i]/AllHitCounter4GeV_jet2 > frac_delayed) || (DelayedHitCounter4GeV_jet3[i] > min_num_delayed && DelayedHitCounter4GeV_jet3[i]/AllHitCounter4GeV_jet3 > frac_delayed) || (DelayedHitCounter4GeV_jet4[i] > min_num_delayed && DelayedHitCounter4GeV_jet4[i]/AllHitCounter4GeV_jet4 > frac_delayed) ) {
           passedDelayedHitFraction4GeV[i] += 1;
+          if (htSum > 120) passedDelayedHitFraction4GeV_ht120[i] += 1;
           if (DelayedHitCounter4GeV[i] > min_num_delayed && DelayedHitCounter4GeV[i]/AllHitCounter4GeV > frac_delayed ) {
-            DelayedHit2D_Fraction4GeV->Fill(i,DelayedHitCounter4GeV[i]/AllHitCounter4GeV,1);
-            DelayedHit2D_Number4GeV->Fill(i,DelayedHitCounter4GeV[i],1);
+	    //            DelayedHit2D_Fraction4GeV->Fill(i,DelayedHitCounter4GeV[i]/AllHitCounter4GeV,1);
+	    //            DelayedHit2D_Number4GeV->Fill(i,DelayedHitCounter4GeV[i],1);
           }
           else if (DelayedHitCounter4GeV_jet2[i] > min_num_delayed && DelayedHitCounter4GeV_jet2[i]/AllHitCounter4GeV_jet2 > frac_delayed ) {
-            DelayedHit2D_Fraction4GeV->Fill(i,DelayedHitCounter4GeV_jet2[i]/AllHitCounter4GeV_jet2,1);
-            DelayedHit2D_Number4GeV->Fill(i,DelayedHitCounter4GeV_jet2[i],1);
+	    //            DelayedHit2D_Fraction4GeV->Fill(i,DelayedHitCounter4GeV_jet2[i]/AllHitCounter4GeV_jet2,1);
+	    //            DelayedHit2D_Number4GeV->Fill(i,DelayedHitCounter4GeV_jet2[i],1);
           }
           else if (DelayedHitCounter4GeV_jet3[i] > min_num_delayed && DelayedHitCounter4GeV_jet3[i]/AllHitCounter4GeV_jet3 > frac_delayed ) {
-            DelayedHit2D_Fraction4GeV->Fill(i,DelayedHitCounter4GeV_jet3[i]/AllHitCounter4GeV_jet3,1);
-            DelayedHit2D_Number4GeV->Fill(i,DelayedHitCounter4GeV_jet3[i],1);
+	    //            DelayedHit2D_Fraction4GeV->Fill(i,DelayedHitCounter4GeV_jet3[i]/AllHitCounter4GeV_jet3,1);
+	    //            DelayedHit2D_Number4GeV->Fill(i,DelayedHitCounter4GeV_jet3[i],1);
           }
           else if (DelayedHitCounter4GeV_jet4[i] > min_num_delayed && DelayedHitCounter4GeV_jet4[i]/AllHitCounter4GeV_jet4 > frac_delayed ) {
-            DelayedHit2D_Fraction4GeV->Fill(i,DelayedHitCounter4GeV_jet4[i]/AllHitCounter4GeV_jet4,1);
-            DelayedHit2D_Number4GeV->Fill(i,DelayedHitCounter4GeV_jet4[i],1);
+	    //            DelayedHit2D_Fraction4GeV->Fill(i,DelayedHitCounter4GeV_jet4[i]/AllHitCounter4GeV_jet4,1);
+	    //            DelayedHit2D_Number4GeV->Fill(i,DelayedHitCounter4GeV_jet4[i],1);
           }
 	}
+	DelayedHit2D_Fraction1GeV->Fill(i,DelayedHitCounter1GeV[i]/AllHitCounter1GeV,1);
+        DelayedHit2D_Number1GeV->Fill(i,DelayedHitCounter1GeV[i],1);
+        DelayedHit2D_Fraction1GeV->Fill(i,DelayedHitCounter1GeV_jet2[i]/AllHitCounter1GeV_jet2,1);
+        DelayedHit2D_Number1GeV->Fill(i,DelayedHitCounter1GeV_jet2[i],1);
+        DelayedHit2D_Fraction1GeV->Fill(i,DelayedHitCounter1GeV_jet3[i]/AllHitCounter1GeV_jet3,1);
+        DelayedHit2D_Number1GeV->Fill(i,DelayedHitCounter1GeV_jet3[i],1);
+        DelayedHit2D_Fraction1GeV->Fill(i,DelayedHitCounter1GeV_jet4[i]/AllHitCounter1GeV_jet4,1);
+        DelayedHit2D_Number1GeV->Fill(i,DelayedHitCounter1GeV_jet4[i],1);
+	DelayedHit2D_Fraction2GeV->Fill(i,DelayedHitCounter2GeV[i]/AllHitCounter2GeV,1);
+        DelayedHit2D_Number2GeV->Fill(i,DelayedHitCounter2GeV[i],1);
+        DelayedHit2D_Fraction2GeV->Fill(i,DelayedHitCounter2GeV_jet2[i]/AllHitCounter2GeV_jet2,1);
+        DelayedHit2D_Number2GeV->Fill(i,DelayedHitCounter2GeV_jet2[i],1);
+        DelayedHit2D_Fraction2GeV->Fill(i,DelayedHitCounter2GeV_jet3[i]/AllHitCounter2GeV_jet3,1);
+        DelayedHit2D_Number2GeV->Fill(i,DelayedHitCounter2GeV_jet3[i],1);
+        DelayedHit2D_Fraction2GeV->Fill(i,DelayedHitCounter2GeV_jet4[i]/AllHitCounter2GeV_jet4,1);
+        DelayedHit2D_Number2GeV->Fill(i,DelayedHitCounter2GeV_jet4[i],1);
+	DelayedHit2D_Fraction3GeV->Fill(i,DelayedHitCounter3GeV[i]/AllHitCounter3GeV,1);
+        DelayedHit2D_Number3GeV->Fill(i,DelayedHitCounter3GeV[i],1);
+        DelayedHit2D_Fraction3GeV->Fill(i,DelayedHitCounter3GeV_jet2[i]/AllHitCounter3GeV_jet2,1);
+        DelayedHit2D_Number3GeV->Fill(i,DelayedHitCounter3GeV_jet2[i],1);
+        DelayedHit2D_Fraction3GeV->Fill(i,DelayedHitCounter3GeV_jet3[i]/AllHitCounter3GeV_jet3,1);
+        DelayedHit2D_Number3GeV->Fill(i,DelayedHitCounter3GeV_jet3[i],1);
+        DelayedHit2D_Fraction3GeV->Fill(i,DelayedHitCounter3GeV_jet4[i]/AllHitCounter3GeV_jet4,1);
+        DelayedHit2D_Number3GeV->Fill(i,DelayedHitCounter3GeV_jet4[i],1);
+	DelayedHit2D_Fraction4GeV->Fill(i,DelayedHitCounter4GeV[i]/AllHitCounter4GeV,1);
+	DelayedHit2D_Number4GeV->Fill(i,DelayedHitCounter4GeV[i],1);
+	DelayedHit2D_Fraction4GeV->Fill(i,DelayedHitCounter4GeV_jet2[i]/AllHitCounter4GeV_jet2,1);
+	DelayedHit2D_Number4GeV->Fill(i,DelayedHitCounter4GeV_jet2[i],1);
+	DelayedHit2D_Fraction4GeV->Fill(i,DelayedHitCounter4GeV_jet3[i]/AllHitCounter4GeV_jet3,1);
+	DelayedHit2D_Number4GeV->Fill(i,DelayedHitCounter4GeV_jet3[i],1);
+	DelayedHit2D_Fraction4GeV->Fill(i,DelayedHitCounter4GeV_jet4[i]/AllHitCounter4GeV_jet4,1);
+	DelayedHit2D_Number4GeV->Fill(i,DelayedHitCounter4GeV_jet4[i],1);
 	/*
 	DelayedHit2D_Fraction2GeV->Fill(i,std::max(std::max(std::max(DelayedHitCounter2GeV[i]/AllHitCounter2GeV,DelayedHitCounter2GeV_jet2[i]/AllHitCounter2GeV_jet2),DelayedHitCounter2GeV_jet3[i]/AllHitCounter2GeV_jet3),DelayedHitCounter2GeV_jet4[i]/AllHitCounter2GeV_jet4),1);//std::max(DelayedHitCounter2GeV[i]/AllHitCounter2GeV,DelayedHitCounter2GeV_jet2[i]/AllHitCounter2GeV_jet2),1);
         DelayedHit2D_Fraction3GeV->Fill(i,std::max(std::max(std::max(DelayedHitCounter3GeV[i]/AllHitCounter3GeV,DelayedHitCounter3GeV_jet2[i]/AllHitCounter3GeV_jet2),DelayedHitCounter3GeV_jet3[i]/AllHitCounter3GeV_jet3),DelayedHitCounter3GeV_jet4[i]/AllHitCounter3GeV_jet4),1);
@@ -1604,6 +1658,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
         DelayedHit2D_Number3GeV->Fill(i,DelayedHitCounter3GeV[i],1);//+DelayedHitCounter3GeV_jet2[i],1);
         DelayedHit2D_Number4GeV->Fill(i,DelayedHitCounter4GeV[i],1);//+DelayedHitCounter4GeV_jet2[i],1);
 	*/
+      }
       }
 
 
@@ -1720,10 +1775,19 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	//	if( ((jetEt_2) >= (jetLo + bin*jetBinWidth)) && (mult0GeV3nsHB_Jets > GeV3ns0Jet_threshold) ) doubleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV  
 	//	if( ((jetEt_3) >= (jetLo + bin*jetBinWidth)) && (mult0GeV3nsHB_Jets > GeV3ns0Jet_threshold) ) tripleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV 
 	//	if( ((jetEt_4) >= (jetLo + bin*jetBinWidth)) && (mult0GeV3nsHB_Jets > GeV3ns0Jet_threshold) ) quadJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+
+	/*
 	if( ((jetEt_1) >= (jetLo + bin*jetBinWidth)) && (mult3GeVHB_Jets[3] > GeV3ns3Jet_threshold) ) singleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV     
 	if( ((jetEt_2) >= (jetLo + bin*jetBinWidth)) && (mult3GeVHB_Jets[3] > GeV3ns3Jet_threshold) ) doubleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV     
 	if( ((jetEt_3) >= (jetLo + bin*jetBinWidth)) && (mult3GeVHB_Jets[3] > GeV3ns3Jet_threshold) ) tripleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
 	if( ((jetEt_4) >= (jetLo + bin*jetBinWidth)) && (mult3GeVHB_Jets[3] > GeV3ns3Jet_threshold) ) quadJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV 
+	*/
+	if (mult1GeVHB_Jets[2] >= min_num_delayed_jetsum) {
+        if( ((jetEt_1) >= (jetLo + bin*jetBinWidth)) && ( (DelayedHitCounter2GeV[3] > min_num_delayed && DelayedHitCounter2GeV[3]/AllHitCounter2GeV > frac_delayed) || (DelayedHitCounter2GeV_jet2[3] > min_num_delayed && DelayedHitCounter2GeV_jet2[3]/AllHitCounter2GeV_jet2 > frac_delayed) || (DelayedHitCounter2GeV_jet3[3] > min_num_delayed && DelayedHitCounter2GeV_jet3[3]/AllHitCounter2GeV_jet3 > frac_delayed) || (DelayedHitCounter2GeV_jet4[3] > min_num_delayed && DelayedHitCounter2GeV_jet4[3]/AllHitCounter2GeV_jet4 > frac_delayed) )  ) singleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV  
+	if( ((jetEt_2) >= (jetLo + bin*jetBinWidth)) && ( (DelayedHitCounter2GeV[3] > min_num_delayed && DelayedHitCounter2GeV[3]/AllHitCounter2GeV > frac_delayed) || (DelayedHitCounter2GeV_jet2[3] > min_num_delayed && DelayedHitCounter2GeV_jet2[3]/AllHitCounter2GeV_jet2 > frac_delayed) || (DelayedHitCounter2GeV_jet3[3] > min_num_delayed && DelayedHitCounter2GeV_jet3[3]/AllHitCounter2GeV_jet3 > frac_delayed) || (DelayedHitCounter2GeV_jet4[3] > min_num_delayed && DelayedHitCounter2GeV_jet4[3]/AllHitCounter2GeV_jet4 > frac_delayed) ) ) doubleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));
+	if( ((jetEt_3) >= (jetLo + bin*jetBinWidth)) && ( (DelayedHitCounter2GeV[3] > min_num_delayed && DelayedHitCounter2GeV[3]/AllHitCounter2GeV > frac_delayed) || (DelayedHitCounter2GeV_jet2[3] > min_num_delayed && DelayedHitCounter2GeV_jet2[3]/AllHitCounter2GeV_jet2 > frac_delayed) || (DelayedHitCounter2GeV_jet3[3] > min_num_delayed && DelayedHitCounter2GeV_jet3[3]/AllHitCounter2GeV_jet3 > frac_delayed) || (DelayedHitCounter2GeV_jet4[3] > min_num_delayed && DelayedHitCounter2GeV_jet4[3]/AllHitCounter2GeV_jet4 > frac_delayed) ) ) tripleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));
+	if( ((jetEt_4) >= (jetLo + bin*jetBinWidth)) && ( (DelayedHitCounter2GeV[3] > min_num_delayed && DelayedHitCounter2GeV[3]/AllHitCounter2GeV > frac_delayed) || (DelayedHitCounter2GeV_jet2[3] > min_num_delayed && DelayedHitCounter2GeV_jet2[3]/AllHitCounter2GeV_jet2 > frac_delayed) || (DelayedHitCounter2GeV_jet3[3] > min_num_delayed && DelayedHitCounter2GeV_jet3[3]/AllHitCounter2GeV_jet3 > frac_delayed) || (DelayedHitCounter2GeV_jet4[3] > min_num_delayed && DelayedHitCounter2GeV_jet4[3]/AllHitCounter2GeV_jet4 > frac_delayed) ) ) quadJetRates_emu->Fill(jetLo+(bin*jetBinWidth));
+	}
 
 	if( ((jetEt_1) >= (jetLo + bin*jetBinWidth)) && (mult3GeVHB_Jets[3] > 1) ) singleJet_th1_Rates_emu->Fill(jetLo+(bin*jetBinWidth));
 	if( ((jetEt_1) >= (jetLo + bin*jetBinWidth)) && (mult3GeVHB_Jets[3] > 2) ) singleJet_th2_Rates_emu->Fill(jetLo+(bin*jetBinWidth));
@@ -1779,7 +1843,11 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 
       for(int bin=0; bin<nHtSumBins; bin++){
 	//        if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult0GeV3nsHB_Jets > GeV3ns0Jet_threshold) ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV
-        if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[3] > GeV3ns3Jet_threshold) ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV   
+
+	//        if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[3] > GeV3ns3Jet_threshold) ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV   
+	if (mult1GeVHB_Jets[2] >= min_num_delayed_jetsum) {
+        if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && ( (DelayedHitCounter2GeV[3] > min_num_delayed && DelayedHitCounter2GeV[3]/AllHitCounter2GeV > frac_delayed) || (DelayedHitCounter2GeV_jet2[3] > min_num_delayed && DelayedHitCounter2GeV_jet2[3]/AllHitCounter2GeV_jet2 > frac_delayed) || (DelayedHitCounter2GeV_jet3[3] > min_num_delayed && DelayedHitCounter2GeV_jet3[3]/AllHitCounter2GeV_jet3 > frac_delayed) || (DelayedHitCounter2GeV_jet4[3] > min_num_delayed && DelayedHitCounter2GeV_jet4[3]/AllHitCounter2GeV_jet4 > frac_delayed) ) ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV      
+	}
 
         if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[3] > 1) ) htSum_th1_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
 	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[3] > 2) ) htSum_th2_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
@@ -1788,6 +1856,16 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[3] > 5) ) htSum_th5_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
 	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[3] > 6) ) htSum_th6_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
 	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[3] > 7) ) htSum_th7_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
+
+	if (mult1GeVHB_Jets[2] >= min_num_delayed_jetsum) {
+        if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && ((DelayedHitCounter2GeV[1] > min_num_delayed && DelayedHitCounter2GeV[1]/AllHitCounter2GeV > frac_delayed) || (DelayedHitCounter2GeV_jet2[1] > min_num_delayed && DelayedHitCounter2GeV_jet2[1]/AllHitCounter2GeV_jet2 > frac_delayed) || (DelayedHitCounter2GeV_jet3[1] > min_num_delayed && DelayedHitCounter2GeV_jet3[1]/AllHitCounter2GeV_jet3 > frac_delayed) || (DelayedHitCounter2GeV_jet4[1] > min_num_delayed && DelayedHitCounter2GeV_jet4[1]/AllHitCounter2GeV_jet4 > frac_delayed) ) ) htSum_timing1_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
+        if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && ( (DelayedHitCounter2GeV[2] > min_num_delayed && DelayedHitCounter2GeV[2]/AllHitCounter2GeV > frac_delayed) || (DelayedHitCounter2GeV_jet2[2] > min_num_delayed && DelayedHitCounter2GeV_jet2[2]/AllHitCounter2GeV_jet2 > frac_delayed) || (DelayedHitCounter2GeV_jet3[2] > min_num_delayed && DelayedHitCounter2GeV_jet3[2]/AllHitCounter2GeV_jet3 > frac_delayed) || (DelayedHitCounter2GeV_jet4[2] > min_num_delayed && DelayedHitCounter2GeV_jet4[2]/AllHitCounter2GeV_jet4 > frac_delayed) ) ) htSum_timing2_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
+	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && ( (DelayedHitCounter2GeV[3] > min_num_delayed && DelayedHitCounter2GeV[3]/AllHitCounter2GeV > frac_delayed) || (DelayedHitCounter2GeV_jet2[3] > min_num_delayed && DelayedHitCounter2GeV_jet2[3]/AllHitCounter2GeV_jet2 > frac_delayed) || (DelayedHitCounter2GeV_jet3[3] > min_num_delayed && DelayedHitCounter2GeV_jet3[3]/AllHitCounter2GeV_jet3 > frac_delayed) || (DelayedHitCounter2GeV_jet4[3] > min_num_delayed && DelayedHitCounter2GeV_jet4[3]/AllHitCounter2GeV_jet4 > frac_delayed) ) ) htSum_timing3_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
+        if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && ( (DelayedHitCounter2GeV[4] > min_num_delayed && DelayedHitCounter2GeV[4]/AllHitCounter2GeV > frac_delayed) || (DelayedHitCounter2GeV_jet2[4] > min_num_delayed && DelayedHitCounter2GeV_jet2[4]/AllHitCounter2GeV_jet2 > frac_delayed) || (DelayedHitCounter2GeV_jet3[4] > min_num_delayed && DelayedHitCounter2GeV_jet3[4]/AllHitCounter2GeV_jet3 > frac_delayed) || (DelayedHitCounter2GeV_jet4[4] > min_num_delayed && DelayedHitCounter2GeV_jet4[4]/AllHitCounter2GeV_jet4 > frac_delayed) ) ) htSum_timing4_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
+        if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && ( (DelayedHitCounter2GeV[5] > min_num_delayed && DelayedHitCounter2GeV[5]/AllHitCounter2GeV > frac_delayed) || (DelayedHitCounter2GeV_jet2[5] > min_num_delayed && DelayedHitCounter2GeV_jet2[5]/AllHitCounter2GeV_jet2 > frac_delayed) || (DelayedHitCounter2GeV_jet3[5] > min_num_delayed && DelayedHitCounter2GeV_jet3[5]/AllHitCounter2GeV_jet3 > frac_delayed) || (DelayedHitCounter2GeV_jet4[5] > min_num_delayed && DelayedHitCounter2GeV_jet4[5]/AllHitCounter2GeV_jet4 > frac_delayed) ) ) htSum_timing5_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
+        if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && ( (DelayedHitCounter2GeV[6] > min_num_delayed && DelayedHitCounter2GeV[6]/AllHitCounter2GeV > frac_delayed) || (DelayedHitCounter2GeV_jet2[6] > min_num_delayed && DelayedHitCounter2GeV_jet2[6]/AllHitCounter2GeV_jet2 > frac_delayed) || (DelayedHitCounter2GeV_jet3[6] > min_num_delayed && DelayedHitCounter2GeV_jet3[6]/AllHitCounter2GeV_jet3 > frac_delayed) || (DelayedHitCounter2GeV_jet4[6] > min_num_delayed && DelayedHitCounter2GeV_jet4[6]/AllHitCounter2GeV_jet4 > frac_delayed) ) ) htSum_timing6_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
+        if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && ( (DelayedHitCounter2GeV[7] > min_num_delayed && DelayedHitCounter2GeV[7]/AllHitCounter2GeV > frac_delayed) || (DelayedHitCounter2GeV_jet2[7] > min_num_delayed && DelayedHitCounter2GeV_jet2[7]/AllHitCounter2GeV_jet2 > frac_delayed) || (DelayedHitCounter2GeV_jet3[7] > min_num_delayed && DelayedHitCounter2GeV_jet3[7]/AllHitCounter2GeV_jet3 > frac_delayed) || (DelayedHitCounter2GeV_jet4[7] > min_num_delayed && DelayedHitCounter2GeV_jet4[7]/AllHitCounter2GeV_jet4 > frac_delayed) ) ) htSum_timing7_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
+	}
 
         if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB[3] > GeV3ns3Global_threshold) ) htSumGlobalRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV  
 	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) ) htSumOriginalRates_emu->Fill(htSumLo+(bin*htSumBinWidth));
@@ -1799,7 +1877,12 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 
       for(int bin=0; bin<nEtSumBins; bin++){
 	//        if( ((etSum) >= etSumLo+(bin*etSumBinWidth)) && (mult0GeVHB_Jets[3] > GeV3ns0Jet_threshold) ) etSumRates_emu->Fill(etSumLo+(bin*etSumBinWidth)); //GeV   
-        if( ((etSum) >= etSumLo+(bin*etSumBinWidth)) && (mult3GeVHB_Jets[3] > GeV3ns3Jet_threshold) ) etSumRates_emu->Fill(etSumLo+(bin*etSumBinWidth)); //GeV           
+
+	//        if( ((etSum) >= etSumLo+(bin*etSumBinWidth)) && (mult3GeVHB_Jets[3] > GeV3ns3Jet_threshold) ) etSumRates_emu->Fill(etSumLo+(bin*etSumBinWidth)); //GeV           
+	if (mult1GeVHB_Jets[2] >= min_num_delayed_jetsum) {
+	if( ((etSum) >= etSumLo+(bin*etSumBinWidth)) && ( (DelayedHitCounter2GeV[3] > min_num_delayed && DelayedHitCounter2GeV[3]/AllHitCounter2GeV > frac_delayed) || (DelayedHitCounter2GeV_jet2[3] > min_num_delayed && DelayedHitCounter2GeV_jet2[3]/AllHitCounter2GeV_jet2 > frac_delayed) || (DelayedHitCounter2GeV_jet3[3] > min_num_delayed && DelayedHitCounter2GeV_jet3[3]/AllHitCounter2GeV_jet3 > frac_delayed) || (DelayedHitCounter2GeV_jet4[3] > min_num_delayed && DelayedHitCounter2GeV_jet4[3]/AllHitCounter2GeV_jet4 > frac_delayed) ) ) etSumRates_emu->Fill(etSumLo+(bin*etSumBinWidth)); //GeV
+	}
+
         if( ((etSum) >= etSumLo+(bin*etSumBinWidth)) && (mult3GeVHB[3] > GeV3ns3Global_threshold) ) etSumGlobalRates_emu->Fill(etSumLo+(bin*etSumBinWidth)); //GeV  
       }
 
@@ -2023,6 +2106,16 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       DelayedHitFrac_Background << passedDelayedHitFraction4GeV[i] / totalJets << std::endl;
     }
     DelayedHitFrac_Background.close();
+    std::ofstream DelayedHitFrac_ht120_Background;
+    DelayedHitFrac_ht120_Background.open("DelayedHitFrac_ht120_Background.txt", std::ios_base::trunc);
+    /*    for (int i=1; i<8; i++) {
+      DelayedHitFrac_ht120_Background << passedDelayedHitFraction1GeV_ht120[i] / totalJets << std::endl;
+      }*/
+    for (int i=1; i<8; i++) {
+      DelayedHitFrac_ht120_Background << passedDelayedHitFraction2GeV_ht120[i] / totalJets << std::endl;
+    }
+    DelayedHitFrac_ht120_Background << passedHtSum430/totalGlobal << std::endl; // efficiency for just a htSum>430 cut
+    DelayedHitFrac_ht120_Background.close();
     std::ofstream MultiplicityHits3GeV3ns_Background;
     MultiplicityHits3GeV3ns_Background.open("MultiplicityHits3GeV3ns_Background.txt",std::ios_base::trunc);
     MultiplicityHits3GeV3ns_Background << passedMultJets3GeV3_1/totalJets << std::endl;
@@ -2062,6 +2155,16 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       DelayedHitFrac_Signal << passedDelayedHitFraction4GeV[i] / totalJets << std::endl;
     }
     DelayedHitFrac_Signal.close();
+    std::ofstream DelayedHitFrac_ht120_Signal;
+    DelayedHitFrac_ht120_Signal.open(Form("DelayedHitFrac_ht120_Signal_%s.txt", inputFile.substr(3,14).c_str()), std::ios_base::trunc);
+    /*    for (int i=1; i<8; i++) {
+      DelayedHitFrac_ht120_Signal << passedDelayedHitFraction1GeV_ht120[i] / totalJets << std::endl;
+      }*/
+    for (int i=1; i<8; i++) {
+      DelayedHitFrac_ht120_Signal << passedDelayedHitFraction2GeV_ht120[i] / totalJets << std::endl;
+    }
+    DelayedHitFrac_ht120_Signal << passedHtSum430/totalGlobal << std::endl; // efficiency for just a htSum>430 cut
+    DelayedHitFrac_ht120_Signal.close();
     std::ofstream MultiplicityHits3GeV3ns_Signal;
     MultiplicityHits3GeV3ns_Signal.open(Form("MultiplicityHits3GeV3ns_Signal_%s.txt", inputFile.substr(3,14).c_str()),std::ios_base::trunc);
     MultiplicityHits3GeV3ns_Signal << passedMultJets3GeV3_1/totalJets << std::endl;
@@ -2118,6 +2221,13 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     htSum_th5_Rates_emu->Scale(norm);
     htSum_th6_Rates_emu->Scale(norm);
     htSum_th7_Rates_emu->Scale(norm);
+    htSum_timing1_Rates_emu->Scale(norm);
+    htSum_timing2_Rates_emu->Scale(norm);
+    htSum_timing3_Rates_emu->Scale(norm);
+    htSum_timing4_Rates_emu->Scale(norm);
+    htSum_timing5_Rates_emu->Scale(norm);
+    htSum_timing6_Rates_emu->Scale(norm);
+    htSum_timing7_Rates_emu->Scale(norm);
 
     singleJetGlobalRates_emu->Scale(norm);
     doubleJetGlobalRates_emu->Scale(norm);
@@ -2208,6 +2318,14 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       int htSum120GeV_l_th5 = htSum_th5_Rates_emu->GetBinContent(htSum_th5_Rates_emu->GetXaxis()->FindBin(120));
       int htSum120GeV_l_th6 = htSum_th6_Rates_emu->GetBinContent(htSum_th6_Rates_emu->GetXaxis()->FindBin(120));
       int htSum120GeV_l_th7 = htSum_th7_Rates_emu->GetBinContent(htSum_th7_Rates_emu->GetXaxis()->FindBin(120));
+      // frac mult around one jet
+      int htSum120GeV_l_timing1 = htSum_timing1_Rates_emu->GetBinContent(htSum_timing1_Rates_emu->GetXaxis()->FindBin(120));
+      int htSum120GeV_l_timing2 = htSum_timing2_Rates_emu->GetBinContent(htSum_timing2_Rates_emu->GetXaxis()->FindBin(120));
+      int htSum120GeV_l_timing3 = htSum_timing3_Rates_emu->GetBinContent(htSum_timing3_Rates_emu->GetXaxis()->FindBin(120));
+      int htSum120GeV_l_timing4 = htSum_timing4_Rates_emu->GetBinContent(htSum_timing4_Rates_emu->GetXaxis()->FindBin(120));
+      int htSum120GeV_l_timing5 = htSum_timing5_Rates_emu->GetBinContent(htSum_timing5_Rates_emu->GetXaxis()->FindBin(120));
+      int htSum120GeV_l_timing6 = htSum_timing6_Rates_emu->GetBinContent(htSum_timing6_Rates_emu->GetXaxis()->FindBin(120));
+      int htSum120GeV_l_timing7 = htSum_timing7_Rates_emu->GetBinContent(htSum_timing7_Rates_emu->GetXaxis()->FindBin(120));
 
       std::cout << "For L1 jet matched multiplicity threshold of > " << GeV3ns3Jet_threshold << " the single jet rate at 60 GeV = " << SJet60GeV_l << " and the quad jet rate = " << QJet60GeV_l << std::endl;
       std::cout << "For L1 jet matched multiplicity threshold of > " << GeV3ns3Jet_threshold << " the htSum=120 rate = " << htSum120GeV_l << " and htSum=350 rate = " << htSum350GeV_l << " and htSum=430 rate = " << htSum430GeV_l << std::endl;
@@ -2239,22 +2357,20 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       single_quad_htSum120_JetRate << htSum430GeV_original/1000 << std::endl;
       single_quad_htSum120_JetRate.close();
 
-      EffRate_file << "singleJetRate[" << GeV3ns3Jet_threshold-1 << "] = " << SJet60GeV_l/1000 << ";" << std::endl;
-      EffRate_file << "quadJetRate[" << GeV3ns3Jet_threshold-1 << "] = " << QJet60GeV_l/1000 << ";" << std::endl;
-      EffRate_file << "htSum120Rate[" << GeV3ns3Jet_threshold-1 << "] = " << htSum120GeV_l/1000 << ";" << std::endl;
-      EffRate_file << "htSum350Rate[" << GeV3ns3Jet_threshold-1 << "] = " << htSum350GeV_l/1000 << ";" << std::endl;
-      EffRate_file << "htSum430Rate[" << GeV3ns3Jet_threshold-1 << "] = " << htSum430GeV_l/1000 << ";" << std::endl;
+      std::cout << "saving to htsum timing file" << std::endl;
+      std::ofstream htSum120_Rate_1jet;
+      htSum120_Rate_1jet.open("htSum120_Rate_1jet.txt", std::ios_base::trunc);
+      htSum120_Rate_1jet << htSum120GeV_l_timing1/1000 << std::endl;
+      htSum120_Rate_1jet << htSum120GeV_l_timing2/1000 << std::endl;
+      htSum120_Rate_1jet << htSum120GeV_l_timing3/1000 << std::endl;
+      htSum120_Rate_1jet << htSum120GeV_l_timing4/1000 << std::endl;
+      htSum120_Rate_1jet << htSum120GeV_l_timing5/1000 << std::endl;
+      htSum120_Rate_1jet << htSum120GeV_l_timing6/1000 << std::endl;
+      htSum120_Rate_1jet << htSum120GeV_l_timing7/1000 << std::endl;
+      htSum120_Rate_1jet << htSum430GeV_original/1000 << std::endl;
+      htSum120_Rate_1jet.close();
 
-      EffRate_file << "singleJetRateGlobal[" << GeV3ns3Global_threshold-1 << "] = " << SJet60GeV/1000 << ";" << std::endl;
-      EffRate_file << "quadJetRateGlobal[" << GeV3ns3Global_threshold-1 << "] = " << QJet60GeV/1000 << ";" << std::endl;
-      EffRate_file << "htSumRate120Global[" << GeV3ns3Global_threshold-1 << "] = " << htSum120GeV/1000 << ";" << std::endl;
-      EffRate_file << "htSumRate350Global[" << GeV3ns3Global_threshold-1 << "] = " << htSum350GeV/1000 << ";" << std::endl;
-      EffRate_file << "htSumRate430Global[" << GeV3ns3Global_threshold-1 << "] = " << htSum430GeV/1000 << ";" << std::endl;
-
-      EffRate_file << "Original_htSumRate120 = " << htSum120GeV_original/1000 << ";" << std::endl;
-      EffRate_file << "Original_htSumRate350 = " << htSum350GeV_original/1000 << ";" << std::endl;
-      EffRate_file << "Original_htSumRate430 = " << htSum430GeV_original/1000 << ";" << std::endl;
-
+      std::cout << "saving factor changes" << std::endl;
       EffRate_file << "REGIONAL" << std::endl;
       EffRate_file << "Factor change in htSum Rate at 120 GeV = " << htSum120GeV_original/htSum120GeV_l << std::endl;
       EffRate_file << "Factor change in htSum Rate at 350 GeV = " << htSum350GeV_original/htSum350GeV_l << std::endl;
@@ -2270,51 +2386,21 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       EffRate_file << " " << std::endl;
     }
     if (inputFile.substr(0,16) == "../mh1000_pl500_" || inputFile.substr(0,16) == "../mh350__pl500_" ) {
-      EffRate_file << "EffPl500["<< GeV3ns3Jet_threshold-1 << "] = " << passedMultJets/totalJets << ";" <<std::endl;
-      EffRate_file << "EffPl500_120["<< GeV3ns3Jet_threshold-1 << "] = " << passedMultJets_120/totalJets << ";" <<std::endl;
-      EffRate_file << "EffPl500_350["<< GeV3ns3Jet_threshold-1 << "] = " << passedMultJets_350/totalJets << ";" <<std::endl;
       EffRate_file << "REGIONAL pl=0.5m, Factor reduction in eff with timing and ht=120 cuts as compared with only ht=430 threshold["<< GeV3ns3Jet_threshold-1 << "] = " << (passedMultJets_120/totalJets)/(passedHtSum430/totalGlobal) << ";" << std::endl;
-
-      EffRate_file << "EffPl500Global["<< GeV3ns3Global_threshold-1 << "] = " << passedMultGlobal/totalGlobal << ";" <<std::endl;
-      EffRate_file << "EffPl500Global_120["<< GeV3ns3Global_threshold-1 << "] = " << passedMultGlobal_120/totalGlobal << ";" <<std::endl;
-      EffRate_file << "EffPl500Global_350["<< GeV3ns3Global_threshold-1 << "] = " << passedMultGlobal_350/totalGlobal << ";" <<std::endl;
-      EffRate_file << "EffPl500_htSum120_Global = " << passedHtSum120/totalGlobal << ";" <<std::endl;
-      EffRate_file << "EffPl500_htSum350_Global = " << passedHtSum350/totalGlobal << ";" <<std::endl;
-      EffRate_file << "EffPl500_htSum430_Global = " << passedHtSum430/totalGlobal << ";" <<std::endl;
       EffRate_file << "GLOBAL pl=0.5m, Factor reduction in eff with timing and ht=120 cuts as compared with only ht=430 threshold["<< GeV3ns3Global_threshold-1 << "] = " << (passedMultGlobal/totalGlobal)/(passedHtSum430/totalGlobal) << ";" << std::endl;
       EffRate_file << " " << std::endl;
     }
     if (inputFile.substr(0,17) == "../mh1000_pl1000_" || inputFile.substr(0,17) == "../mh350__pl1000_" ) {
-      EffRate_file << "EffPl1000["<< GeV3ns3Jet_threshold-1 << "] = " << passedMultJets/totalJets << ";" <<std::endl;
-      EffRate_file << "EffPl1000_120["<< GeV3ns3Jet_threshold-1 << "] = " << passedMultJets_120/totalJets << ";" <<std::endl;
-      EffRate_file << "EffPl1000_350["<< GeV3ns3Jet_threshold-1 << "] = " << passedMultJets_350/totalJets << ";" <<std::endl;
       EffRate_file << "REGIONAL pl=1m, Factor reduction in eff with timing and ht=120 cuts as compared with only ht=430 threshold["<< GeV3ns3Jet_threshold-1 << "] = " << (passedMultJets_120/totalJets)/(passedHtSum430/totalGlobal) << ";" << std::endl;
-
-      EffRate_file << "EffPl1000Global["<< GeV3ns3Global_threshold-1 << "] = " << passedMultGlobal/totalGlobal << ";" <<std::endl;
-      EffRate_file << "EffPl1000Global_120["<< GeV3ns3Global_threshold-1 << "] = " << passedMultGlobal_120/totalGlobal << ";" <<std::endl;
-      EffRate_file << "EffPl1000Global_350["<< GeV3ns3Global_threshold-1 << "] = " << passedMultGlobal_350/totalGlobal << ";" <<std::endl;
-      EffRate_file << "EffPl1000_htSum120_Global = " << passedHtSum120/totalGlobal << ";" <<std::endl;
-      EffRate_file << "EffPl1000_htSum350_Global = " << passedHtSum350/totalGlobal << ";" <<std::endl;
-      EffRate_file << "EffPl1000_htSum430_Global = " << passedHtSum430/totalGlobal << ";" <<std::endl;
       EffRate_file << "GLOBAL pl=1m, Factor reduction in eff with timing and ht=120 cuts as compared with only ht=430 threshold["<< GeV3ns3Global_threshold-1 << "] = " << (passedMultGlobal/totalGlobal)/(passedHtSum430/totalGlobal) << ";" << std::endl;
       EffRate_file << " " << std::endl;
     }
     if (inputFile.substr(0,6) == "../QCD" ) {
-      EffRate_file << "EffQCD["<< GeV3ns3Jet_threshold-1 << "] = " << passedMultJets/totalJets << ";" <<std::endl;
-      EffRate_file << "EffQCD_120["<< GeV3ns3Jet_threshold-1 << "] = " << passedMultJets_120/totalGlobal << ";" <<std::endl;
-      EffRate_file << "EffQCD_350["<< GeV3ns3Jet_threshold-1 << "] = " << passedMultJets_350/totalGlobal << ";" <<std::endl;
       EffRate_file << "REGIONAL QCD, Factor reduction in eff with timing and ht=120 cuts as compared with only ht=430 threshold["<< GeV3ns3Jet_threshold-1 << "] = " << (passedMultJets_120/totalJets)/(passedHtSum430/totalGlobal) << ";" << std::endl;
-
-      EffRate_file << "EffQCDGlobal["<< GeV3ns3Global_threshold-1 << "] = " << passedMultGlobal/totalGlobal << ";" <<std::endl;
-      EffRate_file << "EffQCDGlobal_120["<< GeV3ns3Global_threshold-1 << "] = " << passedMultGlobal_120/totalGlobal << ";" <<std::endl;
-      EffRate_file << "EffQCDGlobal_350["<< GeV3ns3Global_threshold-1 << "] = " << passedMultGlobal_350/totalGlobal << ";" <<std::endl;
-      EffRate_file << "EffQCD_htSum120_Global = " << passedHtSum120/totalGlobal << ";" <<std::endl;
-      EffRate_file << "EffQCD_htSum350_Global = " << passedHtSum350/totalGlobal << ";" <<std::endl;
-      EffRate_file << "EffQCD_htSum430_Global = " << passedHtSum430/totalGlobal << ";" <<std::endl;
       EffRate_file << "GLOBAL QCD, Factor reduction in eff with timing and ht=120 cuts as compared with only ht=430 threshold["<< GeV3ns3Global_threshold-1 << "] = " << (passedMultGlobal/totalGlobal)/(passedHtSum430/totalGlobal) << ";" << std::endl;
       EffRate_file << " " << std::endl;
     }
-
+    std::cout << "writing histograms" <<std::endl;
     hJetEt->Write();
     hJetEt_1->Write();
     hJetEt_2->Write();
