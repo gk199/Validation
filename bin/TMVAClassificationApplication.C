@@ -79,7 +79,7 @@ void TMVAClassificationApplication( TString myMethodList = "" )
   Use["DNN_GPU"]         = 0; // Multi-core accelerated DNN.
   //
   // Support Vector Machine
-  Use["SVM"]             = 1;
+  Use["SVM"]             = 0;
   //
   // Boosted Decision Trees
   Use["BDT"]             = 1; // uses Adaptive Boost
@@ -121,11 +121,25 @@ void TMVAClassificationApplication( TString myMethodList = "" )
   TMVA::Reader *reader = new TMVA::Reader( "!Color:!Silent" );
   // Create a set of variables and declare them to the reader
   // - the variable names MUST corresponds in name and type to those given in the weight file(s) used
-  Float_t x0, x1, x2, x3;
+  Float_t x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17;
   reader->AddVariable( "x0", &x0 );
   reader->AddVariable( "x1", &x1 );
-  reader->AddVariable( "x2",                &x2 );
-  reader->AddVariable( "x3",                &x3 );
+  reader->AddVariable( "x2", &x2 );
+  reader->AddVariable( "x3", &x3 );
+  reader->AddVariable( "x4", &x4 );
+  reader->AddVariable( "x5", &x5 );
+  reader->AddVariable( "x6", &x6 );
+  reader->AddVariable( "x7", &x7 );
+  reader->AddVariable( "x8", &x8 );
+  reader->AddVariable( "x9", &x9 );
+  reader->AddVariable( "x10", &x10 );
+  reader->AddVariable( "x11", &x11 );
+  reader->AddVariable( "x12", &x12 );
+  reader->AddVariable( "x13", &x13 );
+  reader->AddVariable( "x14", &x14 );
+  reader->AddVariable( "x15", &x15 );
+  reader->AddVariable( "x16", &x16 );
+  reader->AddVariable( "x17", &x17 );
   // Spectator variables declared in the training have to be added to the reader, too
   /*
   Float_t spec1,spec2;
@@ -240,7 +254,7 @@ void TMVAClassificationApplication( TString myMethodList = "" )
   // we'll later on use only the "signal" events for the test in this example.
   //
   TFile *input(0);
-  TString fname = "output.root";// "./tmva_class_example.root"; // "output.root";
+  TString fname = "rates_new_cond_QCD_4L1Jets.root"; //"rates_new_cond_mh1000_pl1000_4L1Jets.root";// "./tmva_class_example.root"; // "output.root";
   if (!gSystem->AccessPathName( fname )) {
     input = TFile::Open( fname ); // check if file in local directory exists
   }
@@ -260,13 +274,27 @@ void TMVAClassificationApplication( TString myMethodList = "" )
   //   but of course you can use different ones and copy the values inside the event loop
   //
   std::cout << "--- Select signal sample" << std::endl;
-  TTree* theTree = (TTree*)input->Get("dataset/TrainTree"); // the InputVariables_Id direcory has the signal and background x0,x1,x2,x3 separately, but not a tree...not sure how to make analgous to the reference file
+  TTree* theTree = (TTree*)input->Get("MultForTMVA"); //dataset/TrainTree"); // the InputVariables_Id direcory has the signal and background x0,x1,x2,x3 separately, but not a tree...not sure how to make analgous to the reference file
   //  Float_t userVar1, userVar2;
   //  Float_t x0,x1,x2,x3;
   theTree->SetBranchAddress( "x0", &x0 );
   theTree->SetBranchAddress( "x1", &x1 );
   theTree->SetBranchAddress( "x2", &x2 );
   theTree->SetBranchAddress( "x3", &x3 );
+  theTree->SetBranchAddress( "x4", &x4 );
+  theTree->SetBranchAddress( "x5", &x5 );
+  theTree->SetBranchAddress( "x6", &x6 );
+  theTree->SetBranchAddress( "x7", &x7 );
+  theTree->SetBranchAddress( "x8", &x8 );
+  theTree->SetBranchAddress( "x9", &x9 );
+  theTree->SetBranchAddress( "x10", &x10 );
+  theTree->SetBranchAddress( "x11", &x11 );
+  theTree->SetBranchAddress( "x12", &x12 );
+  theTree->SetBranchAddress( "x13", &x13 );
+  theTree->SetBranchAddress( "x14", &x14 );
+  theTree->SetBranchAddress( "x15", &x15 );
+  theTree->SetBranchAddress( "x16", &x16 );
+  theTree->SetBranchAddress( "x17", &x17 );
   // Efficiency calculator for cut method
   Int_t    nSelCutsGA = 0;
   Double_t effS       = 0.7;

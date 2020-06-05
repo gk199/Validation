@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from root_numpy import hist2array, root2array, tree2array
 from root_numpy import testdata
 
-nvariables = 4
+nvariables = 18
 ndata = 2000
 
 # read in signal and background files
@@ -13,13 +13,13 @@ background_filename = ROOT.TFile("rates_new_cond_QCD_4L1Jets.root")
 background_tree = (background_filename.Get("MultForTMVA")) # Get() returns a ROOT.TTree, which is correct
 #background_hist = (background_filename.Get("dt3GeV3nsHBJetMult_emu")) # Get() returns a ROOT.TH1F (correct)
 background_data = tree2array(background_tree) # access histogram from the bkg ROOT file
-signal_filename = ROOT.TFile("rates_new_cond_pl1000_4L1Jets.root") 
+signal_filename = ROOT.TFile("rates_new_cond_mh125_pl1000_4L1Jets.root") 
 signal_tree = (signal_filename.Get("MultForTMVA"))
 #signal_hist = (signal_filename.Get("dt3GeV3nsHBJetMult_emu")) # Get() returns a ROOT.TH1F (correct)   
 signal_data = tree2array(signal_tree) # access histogram from the signal ROOT file  
 
-MethodNames = ["Fisher", "SVM", "BDT"] #, "KNN"]
-methodOptions = {"BDT":"VarTransform=G", "Fisher":"VarTransform=G", "SVM":"C=1.0:Gamma=0.005:Tol=0.001:VarTransform=None"} #, "KNN":"VarTransform=G"}
+MethodNames = ["BDT"] #"Fisher", "SVM", "KNN"]
+methodOptions = {"BDT":"VarTransform=G"} #, "Fisher":"VarTransform=G", "SVM":"C=1.0:Gamma=0.005:Tol=0.001:VarTransform=None"} #, "KNN":"VarTransform=G"}
 outputfile = "output.root"
 
 #ROOT Stuff
