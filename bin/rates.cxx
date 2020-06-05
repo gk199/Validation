@@ -641,16 +641,53 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   // Create a TTree Object so multiplicities can be sent to TMVA analyzer
   TTree *tree = new TTree("MultForTMVA","MultForTMVA");
   //  Int_t event;
-  Float_t mult_Jet1, mult_Jet2, mult_Jet3, mult_Jet4, ET_Jet1(0); // mult_Global;
-  Int_t event;
+  //  Float_t mult_Jet1, mult_Jet2, mult_Jet3, mult_Jet4;
+  //  Float_t event_htSum, AllHits2GeV, AllHits2GeV_jet2, AllHits2GeV_jet3, AllHits2GeV_jet4;
+  //  Float_t DelayedHits2GeV, DelayedHits2GeV_jet2, DelayedHits2GeV_jet3, DelayedHits2GeV_jet4;
+  //  Float_t Jet1eta, Jet2eta, Jet3eta, Jet4eta;
+  //  Float_t  ET_Jet1(0); 
+  //  Int_t event;
+  Float_t x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17, x18;
+  tree->Branch("x0",&x0,"x0/F"); // mult_Jet1
+  tree->Branch("x1",&x1,"x1/F"); // mult_Jet2
+  tree->Branch("x2",&x2,"x2/F"); // mult_Jet3
+  tree->Branch("x3",&x3,"x3/F"); // mult_Jet4
+  tree->Branch("x4",&x4,"x4/F"); // event_htSum
+  tree->Branch("x5",&x5,"x5/F"); // AllHits2GeV
+  tree->Branch("x6",&x6,"x6/F"); // AllHits2GeV_jet2
+  tree->Branch("x7",&x7,"x7/F"); // AllHits2GeV_jet3
+  tree->Branch("x8",&x8,"x8/F"); // AllHits2GeV_jet4
+  tree->Branch("x9",&x9,"x9/F"); // DelayedHits2GeV
+  tree->Branch("x10",&x10,"x10/F"); // DelayedHits2GeV_jet2
+  tree->Branch("x11",&x11,"x11/F"); // DelayedHits2GeV_jet3
+  tree->Branch("x12",&x12,"x12/F"); // DelayedHits2GeV_jet4
+  tree->Branch("x13",&x13,"x13/F"); // Jet1eta
+  tree->Branch("x14",&x14,"x14/F"); // Jet2eta
+  tree->Branch("x15",&x15,"x15/F"); // Jet3eta
+  tree->Branch("x16",&x16,"x16/F"); // Jet4eta
+  tree->Branch("x17",&x17,"x17/F"); // jetEt_1
+  tree->Branch("x18",&x18,"x18/F"); // event
+  /*
   tree->Branch("mult_Jet1",&mult_Jet1,"mult_Jet1/F");
   tree->Branch("mult_Jet2",&mult_Jet2,"mult_Jet2/F");
   tree->Branch("mult_Jet3",&mult_Jet3,"mult_Jet3/F");
   tree->Branch("mult_Jet4",&mult_Jet4,"mult_Jet4/F");
-  //  tree->Branch("mult_Global",&mult_Global,"mult_Global/F");
+  tree->Branch("event_htSum",&event_htSum,"event_htSum/F");
+  tree->Branch("AllHits2GeV",&AllHits2GeV,"AllHits2GeV/F");
+  tree->Branch("AllHits2GeV_jet2",&AllHits2GeV_jet2,"AllHits2GeV_jet2/F");
+  tree->Branch("AllHits2GeV_jet3",&AllHits2GeV_jet3,"AllHits2GeV_jet3/F");
+  tree->Branch("AllHits2GeV_jet4",&AllHits2GeV_jet4,"AllHits2GeV_jet4/F");
+  tree->Branch("DelayedHits2GeV",&DelayedHits2GeV,"DelayedHits2GeV/F");
+  tree->Branch("DelayedHits2GeV_jet2",&DelayedHits2GeV_jet2,"DelayedHits2GeV_jet2/F");
+  tree->Branch("DelayedHits2GeV_jet3",&DelayedHits2GeV_jet3,"DelayedHits2GeV_jet3/F");
+  tree->Branch("DelayedHits2GeV_jet4",&DelayedHits2GeV_jet4,"DelayedHits2GeV_jet4/F");
+  tree->Branch("Jet1eta",&Jet1eta,"Jet1eta/F");
+  tree->Branch("Jet2eta",&Jet2eta,"Jet2eta/F");
+  tree->Branch("Jet3eta",&Jet3eta,"Jet3eta/F");
+  tree->Branch("Jet4eta",&Jet4eta,"Jet4eta/F");
   tree->Branch("ET_Jet1",&ET_Jet1,"ET_Jet1/F");
   tree->Branch("event",&event,"event/I");
-
+  */
   // counting LLP efficiencies -- need to reset on a per event basis
   double totalJets(0), passedMultJets(0), passedMultJets_120(0), passedMultJets_350(0);
   double passedMultJets3GeV3_1(0), passedMultJets3GeV3_2(0), passedMultJets3GeV3_3(0), passedMultJets3GeV3_4(0), passedMultJets3GeV3_5(0), passedMultJets3GeV3_6(0), passedMultJets3GeV3_7(0);
@@ -673,8 +710,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   double frac_delayed = 0.6;
   uint frac_delayed_x10 = 6;
   uint min_num_delayed_scan[11] = {0,1,2,3,4,5,6,7,8,9,10};
-  uint min_num_delayed = 6;
-  uint min_num_delayed_jetsum = 0;
+  uint min_num_delayed = 5;
+  uint min_num_delayed_jetsum = 2;
   int min_num_jets_passed = 1;
 
   /////////////////////////////////
@@ -856,12 +893,12 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       //      double TDC_HitCounter2GeV[21] = {0};
       //      double TDC_HitCounter3GeV[21] = {0};
       //      double TDC_HitCounter4GeV[21] = {0};
-      double AllHitCounter1GeV(0), AllHitCounter2GeV(0), AllHitCounter3GeV(0), AllHitCounter4GeV(0), AllHitCounter1GeV_jet2(0), AllHitCounter2GeV_jet2(0), AllHitCounter3GeV_jet2(0), AllHitCounter4GeV_jet2(0), AllHitCounter1GeV_jet3(0), AllHitCounter2GeV_jet3(0), AllHitCounter3GeV_jet3(0), AllHitCounter4GeV_jet3(0), AllHitCounter1GeV_jet4(0), AllHitCounter2GeV_jet4(0), AllHitCounter3GeV_jet4(0), AllHitCounter4GeV_jet4(0);
+      double AllHitCounter0GeV(0), AllHitCounter1GeV(0), AllHitCounter2GeV(0), AllHitCounter3GeV(0), AllHitCounter4GeV(0), AllHitCounter0GeV_jet2(0), AllHitCounter1GeV_jet2(0), AllHitCounter2GeV_jet2(0), AllHitCounter3GeV_jet2(0), AllHitCounter4GeV_jet2(0), AllHitCounter0GeV_jet3(0), AllHitCounter1GeV_jet3(0), AllHitCounter2GeV_jet3(0), AllHitCounter3GeV_jet3(0), AllHitCounter4GeV_jet3(0), AllHitCounter0GeV_jet4(0), AllHitCounter1GeV_jet4(0), AllHitCounter2GeV_jet4(0), AllHitCounter3GeV_jet4(0), AllHitCounter4GeV_jet4(0);
 
       // loop over L1 jets, and only do first four (4 highest energy L1 jets from 4 leptons)
       for(uint jetIt=0; jetIt < nJetemu && jetIt < 4; jetIt++){
 	hJetEt->Fill(l1emu_->jetEt[jetIt]); // these are already in order of highest E_T
-	if ((jetIt == 0) && (l1emu_->jetEt[jetIt] < 1000) ) ET_Jet1 = l1emu_->jetEt[jetIt];
+	//	if ((jetIt == 0) && (l1emu_->jetEt[jetIt] < 1000) ) ET_Jet1 = l1emu_->jetEt[jetIt];
         if (jetIt == 0 ) hJetEt_1->Fill(l1emu_->jetEt[jetIt]);
         if (jetIt == 1 ) hJetEt_2->Fill(l1emu_->jetEt[jetIt]);
         if (jetIt == 2 ) hJetEt_3->Fill(l1emu_->jetEt[jetIt]);
@@ -1331,6 +1368,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	  if ( ( hcalTPtiming[depthIt] >= 0 ) && ( abs(tpEtaemu) < 29 ) ) {
 	    // delayed hit fraction calculation, over entire HCAL, near most energetic L1 jet
 	    if (closestJet == 0 ) {
+	      if (hcalTPdepth[depthIt] > 0 ) AllHitCounter0GeV +=1;
 	      NumberTPtiming_energy->Fill(hcalTPtiming[depthIt], hcalTPdepth[depthIt],1);
 	      for (int GeV=0; GeV<6; GeV++) {
 		if (hcalTPdepth[depthIt] > GeV ) NumberTPtiming[GeV]->Fill(hcalTPtiming[depthIt],1); // add one to the # of TP cells at the timing value
@@ -1363,6 +1401,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	    }
 	    
 	    if (closestJet == 1) {
+	      if (hcalTPdepth[depthIt] > 0 ) AllHitCounter0GeV_jet2 +=1;
 	      if (hcalTPdepth[depthIt] > 1) {
 		for (int i=0; i<26; i++) {
 		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter1GeV_jet2[i] += 1; // iterator counts the TDC value
@@ -1391,6 +1430,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	    }
 	    
 	    if (closestJet == 2) {
+	      if (hcalTPdepth[depthIt] > 0 ) AllHitCounter0GeV_jet3 +=1;
 	      if (hcalTPdepth[depthIt] > 1) {
 		for (int i=0; i<26; i++) {
 		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter1GeV_jet3[i] += 1; // iterator counts the TDC value
@@ -1418,6 +1458,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	    }
 	    
 	    if (closestJet == 3) {
+	      if (hcalTPdepth[depthIt] > 0 ) AllHitCounter0GeV_jet4 +=1;
 	      if (hcalTPdepth[depthIt] > 1) {
 		for (int i=0; i<26; i++) {
 		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter1GeV_jet4[i] += 1; // iterator counts the TDC value
@@ -1526,21 +1567,12 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       else NumberEvents_Fraction_Mult->Fill(DelayedHitCounter1GeV_jet4[2] / AllHitCounter1GeV_jet4, DelayedHitCounter1GeV_jet4[2], 1);
 
       for (int i=1; i<8; i++) {
-	/*
-	if (((DelayedHitCounter1GeV[i]+DelayedHitCounter1GeV_jet2[i])>min_num_delayed) && ((DelayedHitCounter1GeV[i] / AllHitCounter1GeV >= frac_delayed) || (DelayedHitCounter1GeV_jet2[i] / AllHitCounter1GeV_jet2 >= frac_delayed)) ) passedDelayedHitFraction1GeV[i] += 1;
-	if (((DelayedHitCounter2GeV[i]+DelayedHitCounter2GeV_jet2[i])>min_num_delayed) && ((DelayedHitCounter2GeV[i] / AllHitCounter2GeV >= frac_delayed) || (DelayedHitCounter2GeV_jet2[i] / AllHitCounter2GeV_jet2 >= frac_delayed)) ) passedDelayedHitFraction2GeV[i] += 1;
-	if (((DelayedHitCounter3GeV[i]+DelayedHitCounter3GeV_jet2[i])>min_num_delayed) && ((DelayedHitCounter3GeV[i] / AllHitCounter3GeV >= frac_delayed) || (DelayedHitCounter3GeV_jet2[i] / AllHitCounter3GeV_jet2 >= frac_delayed)) ) passedDelayedHitFraction3GeV[i] += 1;
-	if (((DelayedHitCounter4GeV[i]+DelayedHitCounter4GeV_jet2[i])>min_num_delayed) && ((DelayedHitCounter4GeV[i] / AllHitCounter4GeV >= frac_delayed) || (DelayedHitCounter3GeV_jet2[i] / AllHitCounter4GeV_jet2 >= frac_delayed)) ) passedDelayedHitFraction4GeV[i] += 1;
-	*/
-      }
-      for (int i=1; i<8; i++) {
         if (DelayedHitCounter1GeV[i] > min_num_delayed) DelayedHitFraction1GeV[i]->Fill(DelayedHitCounter1GeV[i] / AllHitCounter1GeV);
 	if (DelayedHitCounter2GeV[i] > min_num_delayed) DelayedHitFraction2GeV[i]->Fill(DelayedHitCounter2GeV[i] / AllHitCounter2GeV);
 	if (DelayedHitCounter3GeV[i] > min_num_delayed) DelayedHitFraction3GeV[i]->Fill(DelayedHitCounter3GeV[i] / AllHitCounter3GeV);
 	if (DelayedHitCounter4GeV[i] > min_num_delayed) DelayedHitFraction4GeV[i]->Fill(DelayedHitCounter4GeV[i] / AllHitCounter4GeV);
       }
-      //      std::cout << mult2GeV_Jets[2] << " and delayed hit counter " << DelayedHitCounter2GeV[2] + DelayedHitCounter2GeV_jet2[2] + DelayedHitCounter2GeV_jet3[2] + DelayedHitCounter2GeV_jet4[2] << std::endl;
-      //      std::cout << mult2GeV_Jets[2] << " all; HB + HE = " << mult2GeVHB_Jets[2]  + mult2GeVHE_Jets[2] << " and HB, HE = " << mult2GeVHB_Jets[2] << ", " << mult2GeVHE_Jets[2]  << std::endl;
+      //      if ( htSum > 120 && htSum < 430) std::cout << DelayedHitCounter2GeV[1] << ", " << DelayedHitCounter2GeV_jet2[1] << ", " << DelayedHitCounter2GeV_jet3[1] << ", " << DelayedHitCounter2GeV_jet4[1] << " delayed hits, and delayed fraction = " << DelayedHitCounter2GeV[1]/AllHitCounter2GeV << ", " << DelayedHitCounter2GeV_jet2[1]/AllHitCounter2GeV_jet2 << ", " << DelayedHitCounter2GeV_jet3[1]/AllHitCounter2GeV_jet3 << ", " << DelayedHitCounter2GeV_jet4[1]/AllHitCounter2GeV_jet4 << std::endl;
 
       if (mult1GeVHB_Jets[2] >= min_num_delayed_jetsum) {
 	for (int percent = 0; percent < 11; percent++ ) { // 0.3, 0.4, 0.5, 0.6, 0.7
@@ -1670,23 +1702,23 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       if ( (mult3GeVHB[3] > GeV3ns3Global_threshold) && (htSum > 120) ) passedMultGlobal_120 += 1;
       if ( (mult3GeVHB[3] > GeV3ns3Global_threshold) && (htSum > 350) ) passedMultGlobal_350 += 1;
       //      if (mult0GeV3nsHB_Jets > GeV3ns0Jet_threshold ) passedMultJets += 1;
-      if (mult3GeVHB_Jets[3] > GeV3ns3Jet_threshold ) passedMultJets += 1;
-      if (mult3GeVHB_Jets[3] > 1) passedMultJets3GeV3_1 += 1;
-      if (mult3GeVHB_Jets[3] > 2) passedMultJets3GeV3_2 += 1;
-      if (mult3GeVHB_Jets[3] > 3) passedMultJets3GeV3_3 += 1;
-      if (mult3GeVHB_Jets[3] > 4) passedMultJets3GeV3_4 += 1;
-      if (mult3GeVHB_Jets[3] > 5) passedMultJets3GeV3_5 += 1;
-      if (mult3GeVHB_Jets[3] > 6) passedMultJets3GeV3_6 += 1;
-      if (mult3GeVHB_Jets[3] > 7) passedMultJets3GeV3_7 += 1;
-      if ((htSum > 120) && mult3GeVHB_Jets[3] > 1) passedMultJets3GeV3_ht120_1 += 1;
-      if ((htSum > 120) && mult3GeVHB_Jets[3] > 2) passedMultJets3GeV3_ht120_2 += 1;
-      if ((htSum > 120) && mult3GeVHB_Jets[3] > 3) passedMultJets3GeV3_ht120_3 += 1;
-      if ((htSum > 120) && mult3GeVHB_Jets[3] > 4) passedMultJets3GeV3_ht120_4 += 1;
-      if ((htSum > 120) && mult3GeVHB_Jets[3] > 5) passedMultJets3GeV3_ht120_5 += 1;
-      if ((htSum > 120) && mult3GeVHB_Jets[3] > 6) passedMultJets3GeV3_ht120_6 += 1;
-      if ((htSum > 120) && mult3GeVHB_Jets[3] > 7) passedMultJets3GeV3_ht120_7 += 1;
-      if ( (mult3GeVHB_Jets[3] > GeV3ns3Jet_threshold) && (htSum > 120) ) passedMultJets_120 += 1;
-      if ( (mult3GeVHB_Jets[3] > GeV3ns3Jet_threshold) && (htSum > 350) ) passedMultJets_350 += 1;
+      if (mult3GeVHB_Jets[3] + mult3GeVHE_Jets[3] > GeV3ns3Jet_threshold ) passedMultJets += 1;
+      if (mult3GeVHB_Jets[3] + mult3GeVHE_Jets[3] > 1) passedMultJets3GeV3_1 += 1;
+      if (mult3GeVHB_Jets[3] + mult3GeVHE_Jets[3] > 2) passedMultJets3GeV3_2 += 1;
+      if (mult3GeVHB_Jets[3] + mult3GeVHE_Jets[3] > 3) passedMultJets3GeV3_3 += 1;
+      if (mult3GeVHB_Jets[3] + mult3GeVHE_Jets[3] > 4) passedMultJets3GeV3_4 += 1;
+      if (mult3GeVHB_Jets[3] + mult3GeVHE_Jets[3] > 5) passedMultJets3GeV3_5 += 1;
+      if (mult3GeVHB_Jets[3] + mult3GeVHE_Jets[3] > 6) passedMultJets3GeV3_6 += 1;
+      if (mult3GeVHB_Jets[3] + mult3GeVHE_Jets[3] > 7) passedMultJets3GeV3_7 += 1;
+      if ((htSum > 120) && mult3GeVHB_Jets[2] + mult3GeVHE_Jets[2] > 1+7) passedMultJets3GeV3_ht120_1 += 1;
+      if ((htSum > 120) && mult3GeVHB_Jets[2] + mult3GeVHE_Jets[2] > 2+7) passedMultJets3GeV3_ht120_2 += 1;
+      if ((htSum > 120) && mult3GeVHB_Jets[2] + mult3GeVHE_Jets[2] > 3+7) passedMultJets3GeV3_ht120_3 += 1;
+      if ((htSum > 120) && mult3GeVHB_Jets[2] + mult3GeVHE_Jets[2] > 4+7) passedMultJets3GeV3_ht120_4 += 1;
+      if ((htSum > 120) && mult3GeVHB_Jets[2] + mult3GeVHE_Jets[2] > 5+7) passedMultJets3GeV3_ht120_5 += 1;
+      if ((htSum > 120) && mult3GeVHB_Jets[2] + mult3GeVHE_Jets[2] > 6+7) passedMultJets3GeV3_ht120_6 += 1;
+      if ((htSum > 120) && mult3GeVHB_Jets[2] + mult3GeVHE_Jets[2] > 7+7) passedMultJets3GeV3_ht120_7 += 1;
+      if ( (mult3GeVHB_Jets[3] + mult3GeVHE_Jets[3] > GeV3ns3Jet_threshold) && (htSum > 120) ) passedMultJets_120 += 1;
+      if ( (mult3GeVHB_Jets[3] + mult3GeVHE_Jets[3] > GeV3ns3Jet_threshold) && (htSum > 350) ) passedMultJets_350 += 1;
       if (htSum > 430 ) passedHtSum430 += 1;
       if (htSum > 350 ) passedHtSum350 += 1;
       if (htSum > 120 ) passedHtSum120 += 1;
@@ -1738,12 +1770,25 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	}
       }
       // setting the things for the tree used with TMVA, ET_Jet1 has already been set at the top of the event and jet loop
-      event = jentry;
-      mult_Jet1= mult3GeV3nsHB_Jet0;
-      mult_Jet2= mult3GeV3nsHB_Jet1;
-      mult_Jet3= mult3GeV3nsHB_Jet2;
-      mult_Jet4= mult3GeV3nsHB_Jet3;
-      //      mult_Global = mult3GeV3nsHB;
+      x0= mult3GeV3nsHB_Jet0;
+      x1= mult3GeV3nsHB_Jet1;
+      x2= mult3GeV3nsHB_Jet2;
+      x3= mult3GeV3nsHB_Jet3;
+      x4= htSum;
+      x5= AllHitCounter2GeV;
+      x6= AllHitCounter2GeV_jet2;
+      x7= AllHitCounter2GeV_jet3;
+      x8= AllHitCounter2GeV_jet4;
+      x9= DelayedHitCounter2GeV[2];
+      x10= DelayedHitCounter2GeV_jet2[2];
+      x11= DelayedHitCounter2GeV_jet3[2];
+      x12= DelayedHitCounter2GeV_jet4[2];
+      x13= JetEta1;
+      x14= JetEta2;
+      x15= JetEta3;
+      x16= JetEta4;
+      x17= jetEt_1;
+      x18= jentry;
       tree->Fill();
     
       // for each bin fill according to whether our object has a larger corresponding energy
@@ -1828,14 +1873,15 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	//        if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult0GeV3nsHB_Jets > GeV3ns0Jet_threshold) ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV
 
 	//	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[3] > GeV3ns3Jet_threshold) ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV   
+	if ( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[2] + mult3GeVHE_Jets[2] > 10 ) ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth));
 
-        if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[3] > 1) ) htSum_th1_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
-	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[3] > 2) ) htSum_th2_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
-	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[3] > 3) ) htSum_th3_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
-	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[3] > 4) ) htSum_th4_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
-	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[3] > 5) ) htSum_th5_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
-	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[3] > 6) ) htSum_th6_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
-	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[3] > 7) ) htSum_th7_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
+        if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[2] + mult3GeVHE_Jets[2] > 1+7) ) htSum_th1_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
+	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[2] + mult3GeVHE_Jets[2] > 2+7) ) htSum_th2_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
+	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[2] + mult3GeVHE_Jets[2] > 3+7) ) htSum_th3_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
+	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[2] + mult3GeVHE_Jets[2] > 4+7) ) htSum_th4_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
+	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[2] + mult3GeVHE_Jets[2] > 5+7) ) htSum_th5_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
+	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[2] + mult3GeVHE_Jets[2] > 6+7) ) htSum_th6_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
+	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[2] + mult3GeVHE_Jets[2] > 7+7) ) htSum_th7_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
 
 	if (mult1GeVHB_Jets[2] >= min_num_delayed_jetsum) {
 	  for (int TDCns=1; TDCns <8; TDCns++) {
@@ -1852,7 +1898,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
             if (DelayedHitCounter2GeV_jet4[TDCns] > min_num_delayed && DelayedHitCounter2GeV_jet4[TDCns]/AllHitCounter2GeV_jet4 > frac_delayed) jets_passed_2GeV += 1;
             if (jets_passed_2GeV >= min_num_jets_passed && ((htSum) >= htSumLo+(bin*htSumBinWidth))) {
 	      htSum_timing_2GeV_Rates_emu[TDCns]->Fill(htSumLo+(bin*htSumBinWidth));
-	      if (TDCns == 2) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth));
+	      //	      if (TDCns == 2) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth));
 	    }
             int jets_passed_3GeV = 0;
             if (DelayedHitCounter3GeV[TDCns] > min_num_delayed && DelayedHitCounter3GeV[TDCns]/AllHitCounter3GeV > frac_delayed) jets_passed_3GeV += 1;
