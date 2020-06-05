@@ -48,6 +48,7 @@ TMVA is the [Toolkit for Multivariate Data Analysis with ROOT](https://root.cern
 ```
 python mvaAnalysisTemplate_multiplicity.py
 root
-TMVA::TMVAGui(output.root)
+TMVA::TMVAGui("output.root")
+root -l -b -q TMVAClassificationApplication.C
 ```
-Which opens the GUI to see the classifier cut efficiencies. Data from ROOT files is read in to the analysis template with 'background_filename' and 'signal_filename'.
+Which opens the GUI to see the classifier cut efficiencies. Data from ROOT files is read in to the analysis template with 'background_filename' and 'signal_filename'. TMVAClassificationApplication.C outputs a single root file, TMVApp.root with a discriminator distribution for the input file, using the trained classifier and weights files in dataset/weights.
