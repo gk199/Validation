@@ -227,7 +227,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F* doubleISOEgRates_emu = new TH1F("doubleISOEgRates_emu", axR.c_str(), nEgBins, egLo, egHi);
   TH1F* singleISOTauRates_emu = new TH1F("singleISOTauRates_emu", axR.c_str(), nTauBins, tauLo, tauHi);
   TH1F* doubleISOTauRates_emu = new TH1F("doubleISOTauRates_emu", axR.c_str(), nTauBins, tauLo, tauHi);
-  TH1F* htSumRates_emu = new TH1F("htSumRates_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
+  TH1F* htSum1jetRates_emu = new TH1F("htSum1jetRates_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
+  TH1F* htSum4jetRates_emu = new TH1F("htSum4jetRates_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
   TH1F* htSumGlobalRates_emu = new TH1F("htSumGlobalRates_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
   TH1F* mhtSumRates_emu = new TH1F("mhtSumRates_emu",axR.c_str(), nMhtSumBins, mhtSumLo, mhtSumHi);
   TH1F* etSumRates_emu = new TH1F("etSumRates_emu",axR.c_str(), nEtSumBins, etSumLo, etSumHi);
@@ -251,7 +252,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F* doubleISOEgRates_hw = new TH1F("doubleISOEgRates_hw", axR.c_str(), nEgBins, egLo, egHi);
   TH1F* singleISOTauRates_hw = new TH1F("singleISOTauRates_hw", axR.c_str(), nTauBins, tauLo, tauHi);
   TH1F* doubleISOTauRates_hw = new TH1F("doubleISOTauRates_hw", axR.c_str(), nTauBins, tauLo, tauHi);
-  TH1F* htSumRates_hw = new TH1F("htSumRates_hw",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
+  TH1F* htSum1jetRates_hw = new TH1F("htSum1jetRates_hw",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
+  TH1F* htSum4jetRates_hw = new TH1F("htSum4jetRates_hw",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
   TH1F* htSumGlobalRates_hw = new TH1F("htSumGlobalRates_hw",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
   TH1F* mhtSumRates_hw = new TH1F("mhtSumRates_hw",axR.c_str(), nMhtSumBins, mhtSumLo, mhtSumHi);
   TH1F* etSumRates_hw = new TH1F("etSumRates_hw",axR.c_str(), nEtSumBins, etSumLo, etSumHi);
@@ -435,7 +437,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       } 
 
       for(int bin=0; bin<nHtSumBins; bin++){
-        if( (htSum) >= htSumLo+(bin*htSumBinWidth) ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV
+        if( (htSum) >= htSumLo+(bin*htSumBinWidth) ) htSum1jetRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV
+        if( (htSum) >= htSumLo+(bin*htSumBinWidth) ) htSum4jetRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV 
 	if( (htSum) >= htSumLo+(bin*htSumBinWidth) ) htSumGlobalRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV   
       }
 
@@ -634,7 +637,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       } 
 
       for(int bin=0; bin<nHtSumBins; bin++){
-        if( (htSum) >= htSumLo+(bin*htSumBinWidth) ) htSumRates_hw->Fill(htSumLo+(bin*htSumBinWidth)); //GeV
+        if( (htSum) >= htSumLo+(bin*htSumBinWidth) ) htSum1jetRates_hw->Fill(htSumLo+(bin*htSumBinWidth)); //GeV
+        if( (htSum) >= htSumLo+(bin*htSumBinWidth) ) htSum4jetRates_hw->Fill(htSumLo+(bin*htSumBinWidth)); //GeV
         if( (htSum) >= htSumLo+(bin*htSumBinWidth) ) htSumGlobalRates_hw->Fill(htSumLo+(bin*htSumBinWidth)); //GeV   
       }
 
@@ -681,7 +685,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     doubleISOEgRates_emu->Scale(norm);
     singleISOTauRates_emu->Scale(norm);
     doubleISOTauRates_emu->Scale(norm);
-    htSumRates_emu->Scale(norm);
+    htSum1jetRates_emu->Scale(norm);
+    htSum4jetRates_emu->Scale(norm);
     htSumGlobalRates_emu->Scale(norm);
     mhtSumRates_emu->Scale(norm);
     etSumRates_emu->Scale(norm);
@@ -710,7 +715,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     doubleISOEgRates_emu->Write();
     singleISOTauRates_emu->Write();
     doubleISOTauRates_emu->Write();
-    htSumRates_emu->Write();
+    htSum1jetRates_emu->Write();
+    htSum4jetRates_emu->Write();
     htSumGlobalRates_emu->Write();
     mhtSumRates_emu->Write();
     etSumRates_emu->Write();
@@ -737,7 +743,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     doubleISOEgRates_hw->Scale(norm);
     singleISOTauRates_hw->Scale(norm);
     doubleISOTauRates_hw->Scale(norm);
-    htSumRates_hw->Scale(norm);
+    htSum1jetRates_hw->Scale(norm);
+    htSum4jetRates_hw->Scale(norm);
     htSumGlobalRates_hw->Scale(norm);
     mhtSumRates_hw->Scale(norm);
     etSumRates_hw->Scale(norm);
@@ -763,7 +770,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     doubleISOEgRates_hw->Write();
     singleISOTauRates_hw->Write();
     doubleISOTauRates_hw->Write();
-    htSumRates_hw->Write();
+    htSum1jetRates_hw->Write();
+    htSum4jetRates_hw->Write();
     htSumGlobalRates_hw->Write();
     mhtSumRates_hw->Write();
     etSumRates_hw->Write();
