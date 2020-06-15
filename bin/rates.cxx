@@ -514,6 +514,11 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F * dt3GeV3nsHBJet2Mult_emu = new TH1F("dt3GeV3nsHBJet2Mult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HB, all TPs within DR<0.5 2nd L1Jet);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
   TH1F * dt3GeV3nsHBJet3Mult_emu = new TH1F("dt3GeV3nsHBJet3Mult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HB, all TPs within DR<0.5 3rd L1Jet);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
   TH1F * dt3GeV3nsHBJet4Mult_emu = new TH1F("dt3GeV3nsHBJet4Mult_emu","Multiplicity of 3ns delayed cells above 3 GeV (HB, all TPs within DR<0.5 4th L1Jet);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
+  TH1F * dt3GeV2nsHBQuadJet_depth1_Mult_emu = new TH1F("dt3GeV2nsHBQuadJet_depth1_Mult_emu","Quad Jet Multiplicity of 2ns delayed cells above 3 GeV (HB, dR(TP,L1Jet)<0.5, depth 1);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
+  TH1F * dt3GeV2nsHBQuadJet_depth2_Mult_emu = new TH1F("dt3GeV2nsHBQuadJet_depth2_Mult_emu","Quad Jet Multiplicity of 2ns delayed cells above 3 GeV (HB, dR(TP,L1Jet)<0.5, depth 2);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
+  TH1F * dt3GeV2nsHBQuadJet_depth3_Mult_emu = new TH1F("dt3GeV2nsHBQuadJet_depth3_Mult_emu","Quad Jet Multiplicity of 2ns delayed cells above 3 GeV (HB, dR(TP,L1Jet)<0.5, depth 3);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
+  TH1F * dt3GeV2nsHBQuadJet_depth4_Mult_emu = new TH1F("dt3GeV2nsHBQuadJet_depth4_Mult_emu","Quad Jet Multiplicity of 2ns delayed cells above 3 GeV (HB, dR(TP,L1Jet)<0.5, depth 4);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
+
 
   // include all HCAL TPs included in DR cone of a L1 jet
   TH1F * dt0GeV5nsHBQuadJetMult_emu = new TH1F("dt0GeV5nsHBQuadJetMult_emu","Quad Jet Sum Multiplicity of 5ns delayed cells above 0 GeV (HB, dR(TP,L1Jet)<0.5);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
@@ -555,8 +560,12 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH2F * Energy_Depth_Jets = new TH2F("Energy_Depth_Jets", "TP Energy Fraction vs. Depth (TP matched w/ L1 Jets);HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 1.2);
   TH2F * Timing_Depth_Jets = new TH2F("Timing_Depth_Jets", "TP Timing Value vs. Depth (TP matched w/ L1 Jets);HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5, 60, 0, 30);
   TH2F * Energy_DepthHE_Jets = new TH2F("Energy_DepthHE_Jets", "TP Energy Fraction vs. Depth in HE (TP matched w/ L1 Jets);HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 1.2);
+  TH2F * Energy_DepthHE_Jets_1ns = new TH2F("Energy_DepthHE_Jets_1ns", "TP Energy Fraction vs. Depth in HE (TP matched w/ L1 Jets, hits over 1ns);HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 20);
+  TH2F * Energy_DepthHE_Jets_2ns = new TH2F("Energy_DepthHE_Jets_2ns", "TP Energy Fraction vs. Depth in HE (TP matched w/ L1 Jets, hits over 2ns);HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 20);
   TH2F * Timing_DepthHE_Jets = new TH2F("Timing_DepthHE_Jets", "TP Timing Value vs. Depth in HE (TP matched w/ L1 Jets);HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5, 60, 0, 30);
   TH2F * Energy_DepthHB_Jets = new TH2F("Energy_DepthHB_Jets", "TP Energy Fraction vs. Depth in HB (TP matched w/ L1 Jets);HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 1.2);
+  TH2F * Energy_DepthHB_Jets_1ns = new TH2F("Energy_DepthHB_Jets_1ns", "TP Energy Fraction vs. Depth in HB (TP matched w/ L1 Jets, hits over 1ns);HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 20);
+  TH2F * Energy_DepthHB_Jets_2ns = new TH2F("Energy_DepthHB_Jets_2ns", "TP Energy Fraction vs. Depth in HB (TP matched w/ L1 Jets, hits over 2ns);HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 20);
   TH2F * Timing_DepthHB_Jets = new TH2F("Timing_DepthHB_Jets", "TP Timing Value vs. Depth in HB (TP matched w/ L1 Jets);HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5, 60, 0, 30);
   // TH2F for energy depth, where matched to jets for high energy TPs
   TH2F * Energy_Depth_Jets_HighE = new TH2F("Energy_Depth_Jets_HighE", "TP Energy Fraction vs. Depth for TP E_{T} > 10 GeV (TP matched w/ L1 Jets);HCAL Depth;Energy Fraction", 8, -0.5, 7.5, 60, 0, 1.2);
@@ -577,8 +586,12 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1D * Energy_Depth_avg_Jets = new TH1D("Energy_Depth_avg_Jets", "TP Avg Energy Fraction vs. Depth (TP matched w/ L1 Jets);HCAL Depth;Energy Fraction", 8, -0.5, 7.5);
   TH1D * Timing_Depth_avg_Jets = new TH1D("Timing_Depth_avg_Jets", "TP Avg Timing Value vs. Depth (TP matched w/ L1 Jets);HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5);
   TH1D * Energy_DepthHE_avg_Jets = new TH1D("Energy_DepthHE_avg_Jets", "TP Avg Energy Fraction vs. Depth in HE (TP matched w/ L1 Jets);HCAL Depth;Energy Fraction", 8, -0.5, 7.5);
+  TH1D * Energy_DepthHE_avg_Jets_1ns = new TH1D("Energy_DepthHE_avg_Jets_1ns", "TP Avg Energy Fraction vs. Depth in HE (TP matched w/ L1 Jets, hits over 1ns);HCAL Depth;Energy Fraction", 8, -0.5, 7.5);
+  TH1D * Energy_DepthHE_avg_Jets_2ns = new TH1D("Energy_DepthHE_avg_Jets_2ns", "TP Avg Energy Fraction vs. Depth in HE (TP matched w/ L1 Jets, hits over 2ns);HCAL Depth;Energy Fraction", 8, -0.5, 7.5);
   TH1D * Timing_DepthHE_avg_Jets = new TH1D("Timing_DepthHE_avg_Jets", "TP Avg Timing Value vs. Depth in HE (TP matched w/ L1 Jets);HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5);
   TH1D * Energy_DepthHB_avg_Jets = new TH1D("Energy_DepthHB_avg_Jets", "TP Avg Energy Fraction vs. Depth in HB (TP matched w/ L1 Jets);HCAL Depth;Energy Fraction", 8, -0.5, 7.5);
+  TH1D * Energy_DepthHB_avg_Jets_1ns = new TH1D("Energy_DepthHB_avg_Jets_1ns", "TP Avg Energy Fraction vs. Depth in HB (TP matched w/ L1 Jets, hits over 1ns);HCAL Depth;Energy Fraction", 8, -0.5, 7.5);
+  TH1D * Energy_DepthHB_avg_Jets_2ns = new TH1D("Energy_DepthHB_avg_Jets_2ns", "TP Avg Energy Fraction vs. Depth in HB (TP matched w/ L1 Jets, hits over 2ns);HCAL Depth;Energy Fraction", 8, -0.5, 7.5);
   TH1D * Timing_DepthHB_avg_Jets = new TH1D("Timing_DepthHB_avg_Jets", "TP Avg Timing Value vs. Depth in HB (TP matched w/ L1 Jets);HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5);
   TH1D * VolTiming_Depth_avg_Jets = new TH1D("VolTiming_Depth_avg_Jets", "TP Avg Timing Value vs. Depth  in HCAL Volume (TP matched w/ L1 Jets);HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5);
   TH1D * VolTiming_DepthHE_avg_Jets = new TH1D("VolTiming_DepthHE_avg_Jets", "TP Avg Timing Value vs. Depth in HCAL Volume, HE (TP matched w/ L1 Jets);HCAL Depth;Timing Value (ns)", 8, -0.5, 7.5);
@@ -855,6 +868,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       double mult1GeVcaloT4(0), mult2GeVcaloT4(0), mult3GeVcaloT4(0); // abs(ieta) between 13-16
 
       // multiplicity for when HCAL TP is matched with Jets
+      double mult3GeV2ns_Jets_depth1(0), mult3GeV2ns_Jets_depth2(0), mult3GeV2ns_Jets_depth3(0), mult3GeV2ns_Jets_depth4(0);
       double mult3GeV_Jets[6] = {0};
       double mult3GeVHE_Jets[6]= {0};
       double mult3GeVHB_Jets[6]= {0};
@@ -1327,17 +1341,21 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	      if (hcalTPtiming[depthIt] > 0) VolTiming_Depth_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]);
 	    }
 	    if (abs(tpEtaemu) < 16) {
-	      if (min_deltaR_partonGenHCAL_L1jet < 1) Energy_DepthHB_Jets->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
+	      if (hcalTPtiming[depthIt] > 1) Energy_DepthHB_Jets_1ns->Fill(depthIt+1,hcalTPdepth[depthIt]); // not normalized by total energy of TP tower
+              if (hcalTPtiming[depthIt] > 2) Energy_DepthHB_Jets_2ns->Fill(depthIt+1,hcalTPdepth[depthIt]);
 	      if (hcalTPtiming[depthIt] > 0) Timing_DepthHB_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]);
 	      if (min_deltaR_partonGenHCAL_L1jet < 1) {
+		Energy_DepthHB_Jets->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
 		if (tpEtemu > 10 ) Energy_DepthHB_Jets_HighE->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
 		if (hcalTPtiming[depthIt] > 0) VolTiming_DepthHB_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]);
 	      }
 	    }
 	    if (abs(tpEtaemu) >= 16 && abs(tpEtaemu) < 29 ) {
-	      if (min_deltaR_partonGenHCAL_L1jet < 1) Energy_DepthHE_Jets->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
+	      if (hcalTPtiming[depthIt] > 1) Energy_DepthHE_Jets_1ns->Fill(depthIt+1,hcalTPdepth[depthIt]);
+	      if (hcalTPtiming[depthIt] > 2) Energy_DepthHE_Jets_2ns->Fill(depthIt+1,hcalTPdepth[depthIt]);
 	      if (hcalTPtiming[depthIt] > 0) Timing_DepthHE_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]);
 	      if (min_deltaR_partonGenHCAL_L1jet < 1) {
+		Energy_DepthHE_Jets->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
 		if (tpEtemu > 10 ) Energy_DepthHE_Jets_HighE->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
 		if (hcalTPtiming[depthIt] > 0) VolTiming_DepthHE_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]);
 	      }
@@ -1351,6 +1369,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
               Energy_Depth_Jets_HighE->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu); // restricting to high energy HCAL TPs                                               
             }
             if (abs(tpEtaemu) < 16) {
+	      if (hcalTPtiming[depthIt] > 1) Energy_DepthHB_Jets_1ns->Fill(depthIt+1,hcalTPdepth[depthIt]);
+              if (hcalTPtiming[depthIt] > 2) Energy_DepthHB_Jets_2ns->Fill(depthIt+1,hcalTPdepth[depthIt]);
               Energy_DepthHB_Jets->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
               if (hcalTPtiming[depthIt] > 0) Timing_DepthHB_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]);
 	      if (hcalTPtiming[depthIt] > 0) VolTiming_DepthHB_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]);
@@ -1359,6 +1379,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
               }
             }
             if (abs(tpEtaemu) >= 16 && abs(tpEtaemu) < 29 ) {
+	      if (hcalTPtiming[depthIt] > 1) Energy_DepthHE_Jets_1ns->Fill(depthIt+1,hcalTPdepth[depthIt]);
+              if (hcalTPtiming[depthIt] > 2) Energy_DepthHE_Jets_2ns->Fill(depthIt+1,hcalTPdepth[depthIt]);
               Energy_DepthHE_Jets->Fill(depthIt+1,hcalTPdepth[depthIt]/tpEtemu);
               if (hcalTPtiming[depthIt] > 0) Timing_DepthHE_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]);
 	      if (hcalTPtiming[depthIt] > 0) VolTiming_DepthHE_Jets->Fill(depthIt+1,hcalTPtiming[depthIt]);
@@ -1516,6 +1538,12 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	  if (hcalTPdepth[depthIt] > 3){
 	    for (int TDCns = 1; TDCns <= 5; TDCns++) {
 	      if (hcalTPtiming[depthIt] > TDCns ) {
+		if (TDCns == 2)	{
+		  if (depthIt == 0 ) mult3GeV2ns_Jets_depth1 += 1;
+		  if (depthIt == 1 ) mult3GeV2ns_Jets_depth2 += 1;
+		  if (depthIt == 2 ) mult3GeV2ns_Jets_depth3 += 1;
+		  if (depthIt == 3 ) mult3GeV2ns_Jets_depth4 += 1;
+		}
 		mult3GeV_Jets[TDCns] += 1;
 		if ( (abs(tpEtaemu) < 16) ) mult3GeVHB_Jets[TDCns] += 1; // 3 GeV HB regions
 		if ( (abs(tpEtaemu) >= 16) && (abs(tpEtaemu) < 29) ) mult3GeVHE_Jets[TDCns] += 1; // 3 GeV HE regions
@@ -1690,6 +1718,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
         dt0GeV5nsHBTripleJetMult_emu->Fill(mult0GeV5nsHB_Jet0+mult0GeV5nsHB_Jet1+mult0GeV5nsHB_Jet2);
         dt0GeV5nsHBDoubleJetMult_emu->Fill(mult0GeV5nsHB_Jet0+mult0GeV5nsHB_Jet1);
         dt0GeV5nsHBSingleJetMult_emu->Fill(mult0GeV5nsHB_Jet0);
+	dt3GeV2nsHBQuadJet_depth1_Mult_emu->Fill(mult3GeV2ns_Jets_depth1);
+	dt3GeV2nsHBQuadJet_depth2_Mult_emu->Fill(mult3GeV2ns_Jets_depth2);
+	dt3GeV2nsHBQuadJet_depth3_Mult_emu->Fill(mult3GeV2ns_Jets_depth3);
+	dt3GeV2nsHBQuadJet_depth4_Mult_emu->Fill(mult3GeV2ns_Jets_depth4);
       }
       min_DR_L1_TP += 0;    
 
@@ -1764,6 +1796,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
           dt0GeVHBJetMult_emu[i]->Fill(mult0GeVHB_Jets[i]); // 0 GeV
 	}
       }
+
       // setting the things for the tree used with TMVA, ET_Jet1 has already been set at the top of the event and jet loop
       x0= mult3GeV3nsHB_Jet0;
       x1= mult3GeV3nsHB_Jet1;
@@ -2340,7 +2373,11 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     // for the ones matched with L1 jets
     Energy_Depth_avg_Jets = Energy_Depth_Jets->ProfileX();
     Energy_DepthHE_avg_Jets = Energy_DepthHE_Jets->ProfileX();
+    Energy_DepthHE_avg_Jets_1ns = Energy_DepthHE_Jets_1ns->ProfileX();
+    Energy_DepthHE_avg_Jets_2ns = Energy_DepthHE_Jets_2ns->ProfileX();
     Energy_DepthHB_avg_Jets = Energy_DepthHB_Jets->ProfileX();
+    Energy_DepthHB_avg_Jets_1ns = Energy_DepthHB_Jets_1ns->ProfileX();
+    Energy_DepthHB_avg_Jets_2ns = Energy_DepthHB_Jets_2ns->ProfileX();
     Timing_Depth_avg_Jets = Timing_Depth_Jets->ProfileX();
     Timing_DepthHE_avg_Jets = Timing_DepthHE_Jets->ProfileX();
     Timing_DepthHB_avg_Jets = Timing_DepthHB_Jets->ProfileX();
@@ -2707,6 +2744,11 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     dt3GeV3nsHBDoubleJetMult_emu->Write();
     dt3GeV3nsHBSingleJetMult_emu->Write();
 
+    dt3GeV2nsHBQuadJet_depth1_Mult_emu->Write();
+    dt3GeV2nsHBQuadJet_depth2_Mult_emu->Write();
+    dt3GeV2nsHBQuadJet_depth3_Mult_emu->Write();
+    dt3GeV2nsHBQuadJet_depth4_Mult_emu->Write();
+
     dt0GeV5nsHBJet1Mult_emu->Write();
     dt0GeV5nsHBJet2Mult_emu->Write();
     dt0GeV5nsHBJet3Mult_emu->Write();
@@ -2730,8 +2772,12 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     Energy_Depth_Jets->Write();
     Timing_Depth_Jets->Write();
     Energy_DepthHB_Jets->Write();
+    Energy_DepthHB_Jets_1ns->Write();
+    Energy_DepthHB_Jets_2ns->Write();
     Timing_DepthHB_Jets->Write();
     Energy_DepthHE_Jets->Write();
+    Energy_DepthHE_Jets_1ns->Write();
+    Energy_DepthHE_Jets_2ns->Write();
     Timing_DepthHE_Jets->Write();
 
     Energy_Depth_Jets_HighE->Write();
@@ -2750,7 +2796,11 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 
     Energy_Depth_avg_Jets->Write();
     Energy_DepthHE_avg_Jets->Write();
+    Energy_DepthHE_avg_Jets_1ns->Write();
+    Energy_DepthHE_avg_Jets_2ns->Write();
     Energy_DepthHB_avg_Jets->Write();
+    Energy_DepthHB_avg_Jets_1ns->Write();
+    Energy_DepthHB_avg_Jets_2ns->Write();
     Timing_Depth_avg_Jets->Write();
     Timing_DepthHE_avg_Jets->Write();
     Timing_DepthHB_avg_Jets->Write();

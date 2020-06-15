@@ -33,52 +33,60 @@
 					 "singleJetGlobal", "doubleJetGlobal", "tripleJetGlobal", "quadJetGlobal",
 					 "singleEg", "singleISOEg", "doubleEg", "doubleISOEg",
 					 "singleTau", "singleISOTau", "doubleTau", "doubleISOTau",
-					 "htSum", "etSum", "metSum", "metHFSum",
+					 "htSum1jet", "htSum4jet", "etSum", "metSum", "metHFSum",
 					 "htSumGlobal", "etSumGlobal"};
    // files for multiplicity overlay plots
-   //   std::vector<std::string> mult_filenames = {"rates_new_cond_pl10000_1L1Jet.root", "rates_new_cond_pl1000_1L1Jet.root", "rates_new_cond_pl500_1L1Jet.root", "rates_new_cond_QCD_1L1Jet.root"};
-   std::vector<std::string> mult_filenames = {"rates_new_cond_pl500_noPU_4L1Jets.root", "rates_new_cond_pl1000_4L1Jets.root", "rates_new_cond_pl500_4L1Jets.root", "rates_new_cond_QCD_4L1Jets.root"};
+   std::vector<std::string> mult_filenames = {"rates_new_cond_pl10000_4L1Jets.root", "rates_new_cond_pl1000_4L1Jets.root", "rates_new_cond_pl500_4L1Jets.root", "rates_new_cond_QCD_4L1Jets.root"};
+   //   std::vector<std::string> mult_filenames = {"rates_new_cond_pl500_noPU_4L1Jets.root", "rates_new_cond_pl1000_4L1Jets.root", "rates_new_cond_pl500_4L1Jets.root", "rates_new_cond_QCD_4L1Jets.root"};
    // these are multiplicity files (used for timescan and overlay plots) as well as ratio type plts
-   std::vector<std::string> multTypes = {//"dt3GeV1ns","dt3GeV2ns","dt3GeV3ns","dt3GeV4ns","dt3GeV5ns",
-					 //					 "dt3GeV1nsHE","dt3GeV2nsHE","dt3GeV3nsHE","dt3GeV4nsHE","dt3GeV5nsHE",
+   std::vector<std::string> multTypes = {"dt3GeV1ns","dt3GeV2ns","dt3GeV3ns","dt3GeV4ns","dt3GeV5ns",
+					 "dt3GeV1nsHE","dt3GeV2nsHE","dt3GeV3nsHE","dt3GeV4nsHE","dt3GeV5nsHE",
 					 "dt3GeV1nsHB","dt3GeV2nsHB","dt3GeV3nsHB","dt3GeV4nsHB","dt3GeV5nsHB",
-					 //					 "dt2GeV1ns","dt2GeV2ns","dt2GeV3ns","dt2GeV4ns","dt2GeV5ns",
-					 //					 "dt2GeV1nsHE","dt2GeV2nsHE","dt2GeV3nsHE","dt2GeV4nsHE","dt2GeV5nsHE",
+					 "dt2GeV1ns","dt2GeV2ns","dt2GeV3ns","dt2GeV4ns","dt2GeV5ns",
+					 "dt2GeV1nsHE","dt2GeV2nsHE","dt2GeV3nsHE","dt2GeV4nsHE","dt2GeV5nsHE",
 					 "dt2GeV1nsHB","dt2GeV2nsHB","dt2GeV3nsHB","dt2GeV4nsHB","dt2GeV5nsHB",
-					 //					 "dt1GeV1ns","dt1GeV2ns","dt1GeV3ns","dt1GeV4ns","dt1GeV5ns",
-					 //					 "dt1GeV1nsHE","dt1GeV2nsHE","dt1GeV3nsHE","dt1GeV4nsHE","dt1GeV5nsHE",
+					 "dt1GeV1ns","dt1GeV2ns","dt1GeV3ns","dt1GeV4ns","dt1GeV5ns",
+					 "dt1GeV1nsHE","dt1GeV2nsHE","dt1GeV3nsHE","dt1GeV4nsHE","dt1GeV5nsHE",
 					 "dt1GeV1nsHB","dt1GeV2nsHB","dt1GeV3nsHB","dt1GeV4nsHB","dt1GeV5nsHB",
-					 //					 "dt3GeV1nsJet","dt3GeV2nsJet","dt3GeV3nsJet","dt3GeV4nsJet","dt3GeV5nsJet",
-					 //					 "dt3GeV1nsHEJet","dt3GeV2nsHEJet","dt3GeV3nsHEJet","dt3GeV4nsHEJet","dt3GeV5nsHEJet",
+					 "dt3GeV1nsJet","dt3GeV2nsJet","dt3GeV3nsJet","dt3GeV4nsJet","dt3GeV5nsJet",
+					 "dt3GeV1nsHEJet","dt3GeV2nsHEJet","dt3GeV3nsHEJet","dt3GeV4nsHEJet","dt3GeV5nsHEJet",
 					 "dt3GeV1nsHBJet","dt3GeV2nsHBJet","dt3GeV3nsHBJet","dt3GeV4nsHBJet","dt3GeV5nsHBJet",
                                          "dt0GeV1nsHBJet","dt0GeV2nsHBJet","dt0GeV3nsHBJet","dt0GeV4nsHBJet","dt0GeV5nsHBJet",
 					 //					 "dt3GeV3nsHBnearJet","dt3GeV3nsHBnearJet1","dt3GeV3nsHBnearJet2","dt3GeV3nsHBnearJet3","dt3GeV3nsHBnearJet4",
 					 "dt3GeV3nsHBJet1","dt3GeV3nsHBJet2","dt3GeV3nsHBJet3","dt3GeV3nsHBJet4",
 					 "dt3GeV3nsHBQuadJet","dt3GeV3nsHBTripleJet","dt3GeV3nsHBDoubleJet","dt3GeV3nsHBSingleJet",
+					 "dt3GeV2nsHBQuadJet_depth1_","dt3GeV2nsHBQuadJet_depth2_","dt3GeV2nsHBQuadJet_depth3_","dt3GeV2nsHBQuadJet_depth4_",
                                          "dt0GeV5nsHBJet1","dt0GeV5nsHBJet2","dt0GeV5nsHBJet3","dt0GeV5nsHBJet4",
                                          "dt0GeV5nsHBQuadJet","dt0GeV5nsHBTripleJet","dt0GeV5nsHBDoubleJet","dt0GeV5nsHBSingleJet",
-					 //					 "dt2GeV1nsJet","dt2GeV2nsJet","dt2GeV3nsJet","dt2GeV4nsJet","dt2GeV5nsJet",
-					 //					 "dt2GeV1nsHEJet","dt2GeV2nsHEJet","dt2GeV3nsHEJet","dt2GeV4nsHEJet","dt2GeV5nsHEJet",
+					 "dt2GeV1nsJet","dt2GeV2nsJet","dt2GeV3nsJet","dt2GeV4nsJet","dt2GeV5nsJet",
+					 "dt2GeV1nsHEJet","dt2GeV2nsHEJet","dt2GeV3nsHEJet","dt2GeV4nsHEJet","dt2GeV5nsHEJet",
 					 "dt2GeV1nsHBJet","dt2GeV2nsHBJet","dt2GeV3nsHBJet","dt2GeV4nsHBJet","dt2GeV5nsHBJet",
-					 //					 "dt1GeV1nsJet","dt1GeV2nsJet","dt1GeV3nsJet","dt1GeV4nsJet","dt1GeV5nsJet",
-					 //					 "dt1GeV1nsHEJet","dt1GeV2nsHEJet","dt1GeV3nsHEJet","dt1GeV4nsHEJet","dt1GeV5nsHEJet",
+					 "dt1GeV1nsJet","dt1GeV2nsJet","dt1GeV3nsJet","dt1GeV4nsJet","dt1GeV5nsJet",
+					 "dt1GeV1nsHEJet","dt1GeV2nsHEJet","dt1GeV3nsHEJet","dt1GeV4nsHEJet","dt1GeV5nsHEJet",
 					 "dt1GeV1nsHBJet","dt1GeV2nsHBJet","dt1GeV3nsHBJet","dt1GeV4nsHBJet","dt1GeV5nsHBJet",
 					 "Ratio_Depth", "Ratio_DepthHE", "Ratio_DepthHB","Ratio_Depth_Jets", "Ratio_DepthHE_Jets", "Ratio_DepthHB_Jets","centralTiming",
 					 "DepthVariable",
-					 "DelayedHitFraction2GeV1ns","DelayedHitFraction2GeV2ns","DelayedHitFraction2GeV3ns","DelayedHitFraction2GeV4ns","DelayedHitFraction2GeV5ns","DelayedHitFraction2GeV6ns","DelayedHitFraction2GeV7ns",
-					 "DelayedHitFraction3GeV1ns","DelayedHitFraction3GeV2ns","DelayedHitFraction3GeV3ns","DelayedHitFraction3GeV4ns","DelayedHitFraction3GeV5ns","DelayedHitFraction3GeV6ns","DelayedHitFraction3GeV7ns",
-					 "DelayedHitFraction4GeV1ns","DelayedHitFraction4GeV2ns","DelayedHitFraction4GeV3ns","DelayedHitFraction4GeV4ns","DelayedHitFraction4GeV5ns","DelayedHitFraction4GeV6ns","DelayedHitFraction4GeV7ns",
+					 "DelayedHitFraction1GeV1ns","DelayedHitFraction1GeV2ns","DelayedHitFraction1GeV3ns","DelayedHitFraction1GeV4ns","DelayedHitFraction1GeV5ns",
+					 "DelayedHitFraction2GeV1ns","DelayedHitFraction2GeV2ns","DelayedHitFraction2GeV3ns","DelayedHitFraction2GeV4ns","DelayedHitFraction2GeV5ns",
+					 "DelayedHitFraction3GeV1ns","DelayedHitFraction3GeV2ns","DelayedHitFraction3GeV3ns","DelayedHitFraction3GeV4ns","DelayedHitFraction3GeV5ns",
+					 "DelayedHitFraction4GeV1ns","DelayedHitFraction4GeV2ns","DelayedHitFraction4GeV3ns","DelayedHitFraction4GeV4ns","DelayedHitFraction4GeV5ns",
+					 "NumberTPtiming_0GeV","NumberTPtiming_1GeV","NumberTPtiming_2GeV","NumberTPtiming_3GeV","NumberTPtiming_4GeV","NumberTPtiming_5GeV",
+                                         "NumberTPtiming_0GeV_depth1","NumberTPtiming_1GeV_depth1","NumberTPtiming_2GeV_depth1","NumberTPtiming_3GeV_depth1","NumberTPtiming_4GeV_depth1","NumberTPtiming_5GeV_depth1",
+                                         "NumberTPtiming_0GeV_depth2","NumberTPtiming_1GeV_depth2","NumberTPtiming_2GeV_depth2","NumberTPtiming_3GeV_depth2","NumberTPtiming_4GeV_depth2","NumberTPtiming_5GeV_depth2",
+                                         "NumberTPtiming_0GeV_depth3","NumberTPtiming_1GeV_depth3","NumberTPtiming_2GeV_depth3","NumberTPtiming_3GeV_depth3","NumberTPtiming_4GeV_depth3","NumberTPtiming_5GeV_depth3",
+                                         "NumberTPtiming_0GeV_depth4","NumberTPtiming_1GeV_depth4","NumberTPtiming_2GeV_depth4","NumberTPtiming_3GeV_depth4","NumberTPtiming_4GeV_depth4","NumberTPtiming_5GeV_depth4",
 					 "dt1GeVcaloT1","dt1GeVcaloT2","dt1GeVcaloT3","dt1GeVcaloT4",
 					 "dt2GeVcaloT1","dt2GeVcaloT2","dt2GeVcaloT3","dt2GeVcaloT4",
-					 "dt3GeVcaloT1","dt3GeVcaloT2","dt3GeVcaloT3","dt3GeVcaloT4"};
+					 "dt3GeVcaloT1","dt3GeVcaloT2","dt3GeVcaloT3","dt3GeVcaloT4"
+					 };
 
-   std::vector<std::string> EDepthTypes = {"Timing_Depth","Timing_DepthHE","Timing_DepthHB","Energy_Depth_HighE","Energy_DepthHE_HighE","Energy_DepthHB_HighE","Timing_Depth_Jets","Timing_DepthHE_Jets","Timing_DepthHB_Jets","Energy_Depth_Jets_HighE","Energy_DepthHE_Jets_HighE","Energy_DepthHB_Jets_HighE"};
+   std::vector<std::string> EDepthTypes = {"Timing_Depth","Timing_DepthHE","Timing_DepthHB","Energy_Depth_HighE","Energy_DepthHE_HighE","Energy_DepthHB_HighE","Timing_Depth_Jets","Timing_DepthHE_Jets","Timing_DepthHB_Jets","Energy_Depth_Jets_HighE","Energy_DepthHE_Jets_HighE","Energy_DepthHB_Jets_HighE","VolTiming_Depth_Jets","VolTiming_DepthHE_Jets","VolTiming_DepthHB_Jets","Energy_DepthHE_Jets_1ns","Energy_DepthHE_Jets_2ns","Energy_DepthHB_Jets_1ns","Energy_DepthHB_Jets_2ns"};
 
    std::vector<std::string> RatioTypes = {"Ratio_Depth", "Ratio_DepthHE", "Ratio_DepthHB","Ratio_Depth_Jets", "Ratio_DepthHE_Jets", "Ratio_DepthHB_Jets"};
 
   std::map<std::string, int> histColor;
   histColor["singleJet"] = histColor["singleJetGlobal"] = histColor["singleEg"] = histColor["singleTau"] = histColor["etSum"] = histColor["etSumGlobal"] = histColor["metSum"] = histColor["dt3GeV1ns"] = histColor["dt3GeV1nsHE"] =histColor["dt3GeV1nsHB"] = histColor["dt2GeV1ns"] = histColor["dt2GeV1nsHE"] = histColor["dt2GeV1nsHB"] = histColor["dt1GeV1ns"] = histColor["dt1GeV1nsHE"] = histColor["dt1GeV1nsHB"] = histColor["dt3GeV1nsJet"] = histColor["dt3GeV1nsHEJet"] =histColor["dt3GeV1nsHBJet"] = histColor["dt2GeV1nsJet"] = histColor["dt2GeV1nsHEJet"] = histColor["dt2GeV1nsHBJet"] = histColor["dt1GeV1nsJet"] = histColor["dt1GeV1nsHEJet"] = histColor["dt1GeV1nsHBJet"] = kRed;
-  histColor["doubleJet"] = histColor["doubleJetGlobal"] = histColor["singleISOEg"] = histColor["singleISOTau"] = histColor["htSum"] = histColor["htSumGlobal"] = histColor["metHFSum"] = histColor["dt3GeV2ns"] = histColor["dt3GeV2nsHE"] = histColor["dt3GeV2nsHB"] = histColor["dt2GeV2ns"] = histColor["dt2GeV2nsHE"] = histColor["dt2GeV2nsHB"] = histColor["dt1GeV2ns"] = histColor["dt1GeV2nsHE"] = histColor["dt1GeV2nsHB"] = histColor["dt3GeV2nsJet"] = histColor["dt3GeV2nsHEJet"] = histColor["dt3GeV2nsHBJet"] = histColor["dt2GeV2nsJet"] = histColor["dt2GeV2nsHEJet"] = histColor["dt2GeV2nsHBJet"] = histColor["dt1GeV2nsJet"] = histColor["dt1GeV2nsHEJet"] = histColor["dt1GeV2nsHBJet"] = kBlue;
+  histColor["doubleJet"] = histColor["doubleJetGlobal"] = histColor["singleISOEg"] = histColor["singleISOTau"] = histColor["htSum1jet"] = histColor["htSum4jet"] = histColor["htSumGlobal"] = histColor["metHFSum"] = histColor["dt3GeV2ns"] = histColor["dt3GeV2nsHE"] = histColor["dt3GeV2nsHB"] = histColor["dt2GeV2ns"] = histColor["dt2GeV2nsHE"] = histColor["dt2GeV2nsHB"] = histColor["dt1GeV2ns"] = histColor["dt1GeV2nsHE"] = histColor["dt1GeV2nsHB"] = histColor["dt3GeV2nsJet"] = histColor["dt3GeV2nsHEJet"] = histColor["dt3GeV2nsHBJet"] = histColor["dt2GeV2nsJet"] = histColor["dt2GeV2nsHEJet"] = histColor["dt2GeV2nsHBJet"] = histColor["dt1GeV2nsJet"] = histColor["dt1GeV2nsHEJet"] = histColor["dt1GeV2nsHBJet"] = kBlue;
   histColor["tripleJet"] = histColor["tripleJetGlobal"] = histColor["doubleEg"] = histColor["doubleTau"] = histColor["dt3GeV3ns"] = histColor["dt3GeV3nsHE"] = histColor["dt3GeV3nsHB"] = histColor["dt2GeV3ns"] = histColor["dt1GeV3ns"] =histColor["dt2GeV3nsHE"] = histColor["dt1GeV3nsHE"] = histColor["dt2GeV3nsHB"] = histColor["dt1GeV3nsHB"] = histColor["dt3GeV3nsJet"] = histColor["dt3GeV3nsHEJet"] = histColor["dt3GeV3nsHBJet"] = histColor["dt0GeV1nsHBJet"] =histColor["dt0GeV2nsHBJet"] =histColor["dt0GeV3nsHBJet"] =histColor["dt0GeV4nsHBJet"] =histColor["dt0GeV5nsHBJet"] = histColor["dt3GeV3nsHBJet1"] = histColor["dt3GeV3nsHBJet2"]= histColor["dt3GeV3nsHBJet3"] = histColor["dt3GeV3nsHBJet4"] = histColor["dt2GeV3nsJet"] = histColor["dt1GeV3nsJet"] =histColor["dt2GeV3nsHEJet"] = histColor["dt1GeV3nsHEJet"] = histColor["dt2GeV3nsHBJet"] = histColor["dt1GeV3nsHBJet"] =histColor["dt0GeV5nsHBJet1"] = histColor["dt0GeV5nsHBJet2"]= histColor["dt0GeV5nsHBJet3"] = histColor["dt0GeV5nsHBJet4"] = kGreen+1;
   histColor["quadJet"] = histColor["quadJetGlobal"] = histColor["doubleISOEg"] = histColor["doubleISOTau"] = histColor["dt3GeV4ns"] = histColor["dt3GeV4nsHE"] = histColor["dt3GeV4nsHB"] = histColor["dt2GeV4ns"] = histColor["dt1GeV4ns"] = histColor["dt2GeV4nsHE"] = histColor["dt1GeV4nsHE"] = histColor["dt2GeV4nsHB"] = histColor["dt1GeV4nsHB"] = histColor["dt3GeV4nsJet"] = histColor["dt3GeV4nsHEJet"] = histColor["dt3GeV4nsHBJet"] = histColor["dt2GeV4nsJet"] = histColor["dt1GeV4nsJet"] = histColor["dt2GeV4nsHEJet"] = histColor["dt1GeV4nsHEJet"] = histColor["dt2GeV4nsHBJet"] = histColor["dt1GeV4nsHBJet"] = kBlack;
   histColor["dt3GeV5ns"] = histColor["dt3GeV5nsHE"] = histColor["dt3GeV5nsHB"] = histColor["dt2GeV5ns"] = histColor["dt1GeV5ns"]  = histColor["dt2GeV5nsHE"] = histColor["dt1GeV5nsHE"] = histColor["dt2GeV5nsHB"] = histColor["dt1GeV5nsHB"] = histColor["dt3GeV5nsJet"] = histColor["dt3GeV5nsHEJet"] = histColor["dt3GeV5nsHBJet"] = histColor["dt2GeV5nsJet"] = histColor["dt1GeV5nsJet"]  = histColor["dt2GeV5nsHEJet"] = histColor["dt1GeV5nsHEJet"] = histColor["dt2GeV5nsHBJet"] = histColor["dt1GeV5nsHBJet"] = kCyan;
@@ -143,7 +151,7 @@
       int xval = rateHists_new_cond[rateType]->GetXaxis()->FindBin(60); // get x value of bin of interest   
       SJet60GeV_l = rateHists_new_cond[rateType]->GetBinContent(xval);
     }
-    if ( rateType == "htSum" ) {
+    if ( rateType == "htSum1jet" || rateType == "htSum4jet" ) {
       int xval = rateHists_new_cond[rateType]->GetXaxis()->FindBin(350);
       htSum350GeV_l = rateHists_new_cond[rateType]->GetBinContent(xval);
     }
@@ -160,11 +168,11 @@
     rateHistsRatio[rateType]->SetMinimum(-0.2);    // -0.5 for singleJet  // previously 0.6
     rateHistsRatio[rateType]->SetMaximum(1.4);    // 80 for singleJet // previously 1.4
     if ((rateType == "singleJet") || (rateType ==  "doubleJet") || (rateType ==  "tripleJet") || (rateType ==  "quadJet")) {
-      rateHistsRatio[rateType]->SetMaximum(0.4);
+      rateHistsRatio[rateType]->SetMaximum(1); // 0.4
       rateHistsRatio[rateType]->SetMinimum(0);
     }
-    if ((rateType ==  "htSum") || (rateType ==  "etSum")) {
-      rateHistsRatio[rateType]->SetMaximum(0.04);
+    if ((rateType ==  "htSum1jet") || (rateType == "htSum4jet") || (rateType ==  "etSum")) {
+      rateHistsRatio[rateType]->SetMaximum(1); // 0.04 // 0.4 // 1
       rateHistsRatio[rateType]->SetMinimum(0);
     }
     rateHistsRatio[rateType]->SetLineWidth(2);    
@@ -220,7 +228,9 @@
   std::vector<std::string> jetPlotsGlobal = {"singleJetGlobal", "doubleJetGlobal", "tripleJetGlobal", "quadJetGlobal"};
   std::vector<std::string> egPlots = {"singleEg", "singleISOEg", "doubleEg", "doubleISOEg"};
   std::vector<std::string> tauPlots = {"singleTau", "singleISOTau", "doubleTau", "doubleISOTau"};
-  std::vector<std::string> scalarSumPlots = {"etSum", "htSum"};
+  //  std::vector<std::string> scalarSumPlots = {"etSum", "htSum"};
+  std::vector<std::string> scalarSumPlots1 = {"htSum1jet"};
+  std::vector<std::string> scalarSumPlots4 = {"htSum4jet"};
   std::vector<std::string> scalarSumPlotsGlobal = {"etSumGlobal", "htSumGlobal"};
   std::vector<std::string> vectorSumPlots = {"metSum", "metHFSum"};
   // multiplicity plot types 
@@ -256,7 +266,8 @@
   plots["jetGlobal"] = jetPlotsGlobal;
   plots["eg"] = egPlots;
   plots["tau"] = tauPlots;
-  plots["scalarSum"] = scalarSumPlots;
+  plots["scalarSum1"] = scalarSumPlots1;
+  plots["scalarSum4"] = scalarSumPlots4;
   plots["scalarSumGlobal"] = scalarSumPlotsGlobal;
   plots["vectorSum"] = vectorSumPlots;
 
@@ -389,7 +400,7 @@
     pad1.back()->Draw();
     pad1.back()->cd();
     multHists_LLP10000[iplot.second.front()]->Scale(1./multHists_LLP10000[iplot.second.front()]->Integral());
-    //multHists_LLP10000[iplot.second.front()]->Draw("hist");
+    multHists_LLP10000[iplot.second.front()]->Draw("hist");
     TLegend *leg = new TLegend(0.65, 1.1 - 0.1*iplot.second.size(), 0.95, 0.93);
     for (auto hist : iplot.second) {
       // rebin histograms for 2 GeV energy cut, as the x-axis extends further as compared to 3 GeV                                
@@ -404,7 +415,7 @@
       yMax = multHists_LLP10000[hist]->GetMaximum();
       multHists_LLP10000[hist]->GetYaxis()->SetRangeUser(0,1.2*yMax);
       multHists_LLP10000[hist]->Scale(1./multHists_LLP10000[hist]->Integral());
-      //multHists_LLP10000[hist]->Draw("hist same");
+      multHists_LLP10000[hist]->Draw("hist same");
       TString name(multHists_LLP10000[hist]->GetName());
       leg->AddEntry(multHists_LLP10000[hist], name(6,3) + " ", "L");
       multHists_LLP10000[hist]->SetTitle("Multiplicity for LLP c#scale[1.2]{#tau}=10m, timing scan at " + name(2,4)+", TP matched w/" + name(9,3));
@@ -583,11 +594,11 @@
     multHists_LLP1000[hist]->Draw("hist same");
     multHists_LLP10000[hist]->SetLineColor(kRed); // not using LLP with ctau = 10m, very far out
     multHists_LLP10000[hist]->Scale(1./multHists_LLP10000[hist]->Integral());
-    //multHists_LLP10000[hist]->Draw("hist same");
+    multHists_LLP10000[hist]->Draw("hist same");
     leg->AddEntry(multHists_QCD[hist],"QCD", "F");
     leg->AddEntry(multHists_LLP500[hist],"LLP, c#scale[1.2]{#tau}=0.5m", "L");
     leg->AddEntry(multHists_LLP1000[hist], "LLP, c#scale[1.2]{#tau}=1m", "L");
-    //    leg->AddEntry(multHists_LLP10000[hist], "LLP, c#scale[1.2]{#tau}=0.5m, noPU", "L");
+    leg->AddEntry(multHists_LLP10000[hist], "LLP, c#scale[1.2]{#tau}=10m", "L");
     multHists_QCD[hist]->GetYaxis()->CenterTitle(true);
     multHists_QCD[hist]->SetTitle("Multiplicity at " + name(2,4) + " and " + name(6,3)+", TP matched w/" + name (9,3)); // general name "mult at 3 GeV and 1 ns, TP matched w/jet"
     if (name(9,3) != "Jet" ) multHists_QCD[hist]->SetTitle("Multiplicity at " + name(2,4) + " and " + name(6,3)); // "mult at 3 GeV and 1 ns"
@@ -595,6 +606,15 @@
     if (name(0,11) == "DelayedHitF" ) {
       multHists_QCD[hist]->SetTitle("Delayed Hit Fraction " + name(18,7));
       multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1);
+    }
+    if (name(0,14) == "NumberTPtiming" ) {
+      multHists_QCD[hist]->SetTitle("Timing Value for Cells above "+name(15,4)+" within DR<0.5 of Leading L1 Jet");//" within DR<0.5 of Leading L1 Jet");
+      if (name(20,5) == "depth") multHists_QCD[hist]->SetTitle("Timing Value for Cells above "+name(15,4)+" within DR<0.5 of Leading L1 Jet, Depth "+name(25,1));
+      multHists_QCD[hist]->GetYaxis()->SetTitle("Number of Cells (AU)");
+      multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,0.6);
+      multHists_LLP500[hist]->SetLineWidth(3);
+      multHists_LLP1000[hist]->SetLineWidth(3);
+      pad1.back()->SetGrid(0,0);
     }
     if ( name(9,2) == "HE" || name(9,2) == "HB" ){ // setting range and name of histograms for HCAL barrel and endcap regions
       multHists_QCD[hist]->SetTitle("Multiplicity at " + name(2,4) + " and " + name(6,3) + " in " + name(9,2)+", TP matched w/" + name(11,3));
@@ -650,11 +670,21 @@
       y2 = 0.93;
       energy_profile_QCD->GetYaxis()->SetRangeUser(0,1);
       energy_profile_QCD->GetYaxis()->SetTitle("Average Energy Fraction");
+      if (hist.substr(14,6) == "_Jets_") {
+	energy_profile_QCD->GetYaxis()->SetRangeUser(0,4);
+	energy_profile_QCD->GetYaxis()->SetTitle("Average Energy Value");
+      }
     }
     if (hist.substr(0,6) == "Timing") {
       y1 = 0.15;
       y2 = 0.35;
       energy_profile_QCD->GetYaxis()->SetRangeUser(0,10);
+      energy_profile_QCD->GetYaxis()->SetTitle("Average Timing (ns)");
+    }
+    if (hist.substr(0,3) == "Vol") {
+      y1 = 0.15;
+      y2 = 0.35;
+      energy_profile_QCD->GetYaxis()->SetRangeUser(0,12);
       energy_profile_QCD->GetYaxis()->SetTitle("Average Timing (ns)");
     }
     energy_profile_QCD->GetYaxis()->CenterTitle(true);
@@ -679,11 +709,11 @@
     energy_profile_LLP10000->SetLineColor(kRed);
     energy_profile_LLP10000->SetDirectory(0);
     energy_profile_LLP10000->SetLineWidth(2);
-    //    energy_profile_LLP10000->Draw("ehist same");
+    energy_profile_LLP10000->Draw("ehist same");
     leg->AddEntry(energy_profile_QCD,"QCD","F");
     leg->AddEntry(energy_profile_LLP500,"LLP, c#scale[1.2]{#tau}=0.5m", "L");
     leg->AddEntry(energy_profile_LLP1000, "LLP, c#scale[1.2]{#tau}=1m", "L");
-    //    leg->AddEntry(energy_profile_LLP10000, "LLP, c#scale[1.2]{#tau}=0.5m, noPU", "L");
+    leg->AddEntry(energy_profile_LLP10000, "LLP, c#scale[1.2]{#tau}=0.5m, noPU", "L");
     energy_profile_QCD->GetXaxis()->SetLabelSize(0.03);
     energy_profile_QCD->GetYaxis()->SetLabelSize(0.03);
     energy_profile_QCD->GetXaxis()->SetTitleSize(0.04);
@@ -993,7 +1023,7 @@
   gr_120_LLP->GetXaxis()->SetLimits(0.,1.);
   //  m_LLP_htSum350->Draw();
   m_LLP_htSum430->Draw();
-  gr_120_LLP->GetHistogram()->SetMinimum(1.);
+  gr_120_LLP->GetHistogram()->SetMinimum(1.); 
   gr_120_LLP->GetHistogram()->SetMaximum(10000.);
   c1_350_120->SetLogy(); 
   c1_350_120->SetGrid();
