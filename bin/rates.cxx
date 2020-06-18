@@ -456,12 +456,23 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 
   // Number of TPs above energy threshold as a function of timing values
   //  TH2F * NumberTPtiming_3GeV = new TH2F("NumberTPtiming_3GeV","Number of TPs Above 3GeV vs. TDC Values;TDC Value;Number of TPs",20,0,20,100,0,100);
-  std::map<int, TH1F*> NumberTPtiming, NumberTPtiming_depth1, NumberTPtiming_depth2, NumberTPtiming_depth3, NumberTPtiming_depth4;
-  for (int GeV=0; GeV<6; GeV++) NumberTPtiming[GeV] = new TH1F(Form("NumberTPtiming_%dGeV",GeV),Form("Number of Cells Above %dGeV vs. Timing Value;Timing (ns);Number of Cells",GeV),25,0,25);
-  for (int GeV=0; GeV<6; GeV++) NumberTPtiming_depth1[GeV] = new TH1F(Form("NumberTPtiming_%dGeV_depth1",GeV),Form("Number of Cells Above %dGeV vs. Timing Value;Timing (ns);Number of Cells",GeV),25,0,25);
-  for (int GeV=0; GeV<6; GeV++) NumberTPtiming_depth2[GeV] = new TH1F(Form("NumberTPtiming_%dGeV_depth2",GeV),Form("Number of Cells Above %dGeV vs. Timing Value;Timing (ns);Number of Cells",GeV),25,0,25);
-  for (int GeV=0; GeV<6; GeV++) NumberTPtiming_depth3[GeV] = new TH1F(Form("NumberTPtiming_%dGeV_depth3",GeV),Form("Number of Cells Above %dGeV vs. Timing Value;Timing (ns);Number of Cells",GeV),25,0,25);
-  for (int GeV=0; GeV<6; GeV++) NumberTPtiming_depth4[GeV] = new TH1F(Form("NumberTPtiming_%dGeV_depth4",GeV),Form("Number of Cells Above %dGeV vs. Timing Value;Timing (ns);Number of Cells",GeV),25,0,25);
+  std::map<int, TH1F*> NumberTPtiming, NumberTPavgtiming_jet1, NumberTPavgtiming_jet2, NumberTPavgtiming_jet3, NumberTPavgtiming_jet4, NumberTPavgtiming_jetMax, NumberTPtotalhits_jet1, NumberTPtotalhits_jet2, NumberTPtotalhits_jet3, NumberTPtotalhits_jet4, NumberTPtiming_depth1, NumberTPtiming_depth2, NumberTPtiming_depth3, NumberTPtiming_depth4;
+  for (int GeV=0; GeV<6; GeV++) {
+    NumberTPtiming[GeV] = new TH1F(Form("NumberTPtiming_%dGeV",GeV),Form("Number of Cells Above %dGeV vs. Timing Value;Timing (ns);Number of Cells",GeV),25,0,25);
+    NumberTPavgtiming_jet1[GeV] = new TH1F(Form("NumberTPavgtiming_jet1_%dGeV",GeV),Form("Number of Events Above %dGeV vs. Average Timing Value;Average Timing (ns);Number of Events",GeV),25,0,25);
+    NumberTPavgtiming_jet2[GeV] = new TH1F(Form("NumberTPavgtiming_jet2_%dGeV",GeV),Form("Number of Events Above %dGeV vs. Average Timing Value;Average Timing (ns);Number of Events",GeV),25,0,25);
+    NumberTPavgtiming_jet3[GeV] = new TH1F(Form("NumberTPavgtiming_jet3_%dGeV",GeV),Form("Number of Events Above %dGeV vs. Average Timing Value;Average Timing (ns);Number of Events",GeV),25,0,25);
+    NumberTPavgtiming_jet4[GeV] = new TH1F(Form("NumberTPavgtiming_jet4_%dGeV",GeV),Form("Number of Events Above %dGeV vs. Average Timing Value;Average Timing (ns);Number of Events",GeV),25,0,25);
+    NumberTPavgtiming_jetMax[GeV] = new TH1F(Form("NumberTPavgtiming_jetMax_%dGeV",GeV),Form("Number of Events Above %dGeV vs. Average Timing Value;Average Timing (ns);Number of Events",GeV),25,0,25);
+    NumberTPtotalhits_jet1[GeV] = new TH1F(Form("NumberTPtotalhits_jet1_%dGeV",GeV),Form("Number of Events Above %dGeV vs. Average Timing Value;Number hits;Number of Events",GeV),25,0,25);
+    NumberTPtotalhits_jet2[GeV] = new TH1F(Form("NumberTPtotalhits_jet2_%dGeV",GeV),Form("Number of Events Above %dGeV vs. Average Timing Value;Number hits;Number of Events",GeV),25,0,25);
+    NumberTPtotalhits_jet3[GeV] = new TH1F(Form("NumberTPtotalhits_jet3_%dGeV",GeV),Form("Number of Events Above %dGeV vs. Average Timing Value;Number hits;Number of Events",GeV),25,0,25);
+    NumberTPtotalhits_jet4[GeV] = new TH1F(Form("NumberTPtotalhits_jet4_%dGeV",GeV),Form("Number of Events Above %dGeV vs. Average Timing Value;Number hits;Number of Events",GeV),25,0,25);
+    NumberTPtiming_depth1[GeV] = new TH1F(Form("NumberTPtiming_%dGeV_depth1",GeV),Form("Number of Cells Above %dGeV vs. Timing Value;Timing (ns);Number of Cells",GeV),25,0,25);
+    NumberTPtiming_depth2[GeV] = new TH1F(Form("NumberTPtiming_%dGeV_depth2",GeV),Form("Number of Cells Above %dGeV vs. Timing Value;Timing (ns);Number of Cells",GeV),25,0,25);
+    NumberTPtiming_depth3[GeV] = new TH1F(Form("NumberTPtiming_%dGeV_depth3",GeV),Form("Number of Cells Above %dGeV vs. Timing Value;Timing (ns);Number of Cells",GeV),25,0,25);
+    NumberTPtiming_depth4[GeV] = new TH1F(Form("NumberTPtiming_%dGeV_depth4",GeV),Form("Number of Cells Above %dGeV vs. Timing Value;Timing (ns);Number of Cells",GeV),25,0,25);
+  }
 
   TH2F * NumberTPtiming_energy = new TH2F("NumberTPtiming_energy","Number of Cells vs. Energy vs. Timing Value;Timing (ns);Cell Energy Value",30,0,30,45,0,45);
   TH2F * NumberEvents_Fraction_Mult = new TH2F("NumberEvents_Fraction_Mult","Number of Events vs. Delayed Fraction vs. Delayed Hit Count;Delayed Fraction;Number of Delayed Hits",50,0,1,40,0,40);
@@ -518,7 +529,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F * dt3GeV2nsHBQuadJet_depth2_Mult_emu = new TH1F("dt3GeV2nsHBQuadJet_depth2_Mult_emu","Quad Jet Multiplicity of 2ns delayed cells above 3 GeV (HB, dR(TP,L1Jet)<0.5, depth 2);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
   TH1F * dt3GeV2nsHBQuadJet_depth3_Mult_emu = new TH1F("dt3GeV2nsHBQuadJet_depth3_Mult_emu","Quad Jet Multiplicity of 2ns delayed cells above 3 GeV (HB, dR(TP,L1Jet)<0.5, depth 3);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
   TH1F * dt3GeV2nsHBQuadJet_depth4_Mult_emu = new TH1F("dt3GeV2nsHBQuadJet_depth4_Mult_emu","Quad Jet Multiplicity of 2ns delayed cells above 3 GeV (HB, dR(TP,L1Jet)<0.5, depth 4);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
-
+  TH1F * dt3GeV2nsHBHEQuadJet_depth1_Mult_emu = new TH1F("dt3GeV2nsHBHEQuadJet_depth1_Mult_emu","Quad Jet Multiplicity of 2ns delayed cells above 3 GeV (HBHE, dR(TP,L1Jet)<0.5, depth 1);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
+  TH1F * dt3GeV2nsHBHEQuadJet_depth2_Mult_emu = new TH1F("dt3GeV2nsHBHEQuadJet_depth2_Mult_emu","Quad Jet Multiplicity of 2ns delayed cells above 3 GeV (HBHE, dR(TP,L1Jet)<0.5, depth 2);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
+  TH1F * dt3GeV2nsHBHEQuadJet_depth3_Mult_emu = new TH1F("dt3GeV2nsHBHEQuadJet_depth3_Mult_emu","Quad Jet Multiplicity of 2ns delayed cells above 3 GeV (HBHE, dR(TP,L1Jet)<0.5, depth 3);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
+  TH1F * dt3GeV2nsHBHEQuadJet_depth4_Mult_emu = new TH1F("dt3GeV2nsHBHEQuadJet_depth4_Mult_emu","Quad Jet Multiplicity of 2ns delayed cells above 3 GeV (HBHE, dR(TP,L1Jet)<0.5, depth 4);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
 
   // include all HCAL TPs included in DR cone of a L1 jet
   TH1F * dt0GeV5nsHBQuadJetMult_emu = new TH1F("dt0GeV5nsHBQuadJetMult_emu","Quad Jet Sum Multiplicity of 5ns delayed cells above 0 GeV (HB, dR(TP,L1Jet)<0.5);Hit Multiplicity;Fraction of Entries (normalized)",120,0,120);
@@ -633,6 +647,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F * DeltaR_L1Jets_2_3 = new TH1F("DeltaR_L1Jets_2_3", "DeltaR Between 2nd and 3rd L1 Jets;DeltaR;Number of Events",90,0,6);
   TH1F * DeltaR_L1Jets_2_4 = new TH1F("DeltaR_L1Jets_2_4", "DeltaR Between 2nd and 4th L1 Jets;DeltaR;Number of Events",90,0,6);
   TH1F * DeltaR_L1Jets_3_4 = new TH1F("DeltaR_L1Jets_3_4", "DeltaR Between 3rd and 4th L1 Jets;DeltaR;Number of Events",90,0,6);
+  // plot how many LLPs decay in HCAL
+  TH1F * LLPdecayDetAcceptance = new TH1F("LLPdecayDetAcceptance", "LLPs decaying within detector acceptance; Number of LLPs;Number of Events",5,0,5);
+  TH2F * LLPdecayRadiusDetAcceptance = new TH2F("LLPdecayRadiusDetAcceptance", "Decay Radius for LLPs within detector acceptance;Decay Position (z); Decay Radius (cm)",100,0,600,50,0,300);
+  TH1F * LLPdecayXyzDetAcceptance = new TH1F("LLPdecayXyzDetAcceptance", "LLPs decaying within detector acceptance;Decay Radius (x,y,z);Number of Events",100,0,600);
   // timing values for center of barrel
   TH1F * centralTiming = new TH1F("centralTiming", "Time of arrival - TOF (central barrel iEta);Time (ns);Number of Events",50,-10,40);
   // eta, ieta, phi, iphi plots to check 
@@ -667,7 +685,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   //  Float_t Jet1eta, Jet2eta, Jet3eta, Jet4eta;
   //  Float_t  ET_Jet1(0); 
   //  Int_t event;
-  Float_t x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17, x18;
+  Float_t x0, x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17, x18, x19, x20;
   tree->Branch("x0",&x0,"x0/F"); // mult_Jet1
   tree->Branch("x1",&x1,"x1/F"); // mult_Jet2
   tree->Branch("x2",&x2,"x2/F"); // mult_Jet3
@@ -687,6 +705,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   tree->Branch("x16",&x16,"x16/F"); // Jet4eta
   tree->Branch("x17",&x17,"x17/F"); // jetEt_1
   tree->Branch("x18",&x18,"x18/F"); // event
+  tree->Branch("x19",&x19,"x19/F"); // 3GeV 2ns HE
+  tree->Branch("x20",&x20,"x20/F"); // 3GeV 3ns HE
   /*
   tree->Branch("mult_Jet1",&mult_Jet1,"mult_Jet1/F");
   tree->Branch("mult_Jet2",&mult_Jet2,"mult_Jet2/F");
@@ -709,10 +729,11 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   tree->Branch("event",&event,"event/I");
   */
   // counting LLP efficiencies -- need to reset on a per event basis
+  double passedAvgTimeCut(0);
   double totalJets(0), passedMultJets(0), passedMultJets_120(0), passedMultJets_350(0);
   double passedMultJets3GeV3_1(0), passedMultJets3GeV3_2(0), passedMultJets3GeV3_3(0), passedMultJets3GeV3_4(0), passedMultJets3GeV3_5(0), passedMultJets3GeV3_6(0), passedMultJets3GeV3_7(0);
   double passedMultJets3GeV3_ht120_1(0), passedMultJets3GeV3_ht120_2(0), passedMultJets3GeV3_ht120_3(0), passedMultJets3GeV3_ht120_4(0), passedMultJets3GeV3_ht120_5(0), passedMultJets3GeV3_ht120_6(0), passedMultJets3GeV3_ht120_7(0);
-  double totalGlobal(0), passedMultGlobal(0), passedMultGlobal_120(0), passedMultGlobal_350(0), passedHtSum120(0), passedHtSum350(0), passedHtSum430(0);
+  double totalGlobal(0), passedMultGlobal(0), passedMultGlobal_120(0), passedMultGlobal_350(0), passedHtSum120(0), passedHtSum350(0), passedHtSum360(0);
   double passedDelayedHitFraction1GeV_ht120[11][11][25] = {{{0}}}; // [frac delayed][number delayed][ns delayed]
   double passedDelayedHitFraction2GeV_ht120[11][11][25] = {{{0}}};
   double passedDelayedHitFraction3GeV_ht120[11][11][25] = {{{0}}};
@@ -869,6 +890,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 
       // multiplicity for when HCAL TP is matched with Jets
       double mult3GeV2ns_Jets_depth1(0), mult3GeV2ns_Jets_depth2(0), mult3GeV2ns_Jets_depth3(0), mult3GeV2ns_Jets_depth4(0);
+      double mult3GeV2ns_Jets_depth1HB(0), mult3GeV2ns_Jets_depth2HB(0), mult3GeV2ns_Jets_depth3HB(0), mult3GeV2ns_Jets_depth4HB(0);
       double mult3GeV_Jets[6] = {0};
       double mult3GeVHE_Jets[6]= {0};
       double mult3GeVHB_Jets[6]= {0};
@@ -902,15 +924,16 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       double DelayedHitCounter2GeV_jet4[26] = {0};
       double DelayedHitCounter3GeV_jet4[26] = {0};
       double DelayedHitCounter4GeV_jet4[26] = {0};
-      //      int jets_passed_1GeV[11][11][25] = {{{0}}};
-      //      int jets_passed_2GeV[11][11][25] = {{{0}}};
-      //      int jets_passed_3GeV[11][11][25] = {{{0}}};
-      //      int jets_passed_4GeV[11][11][25] = {{{0}}};
 
-      //      double TDC_HitCounter2GeV[21] = {0};
-      //      double TDC_HitCounter3GeV[21] = {0};
-      //      double TDC_HitCounter4GeV[21] = {0};
       double AllHitCounter0GeV(0), AllHitCounter1GeV(0), AllHitCounter2GeV(0), AllHitCounter3GeV(0), AllHitCounter4GeV(0), AllHitCounter0GeV_jet2(0), AllHitCounter1GeV_jet2(0), AllHitCounter2GeV_jet2(0), AllHitCounter3GeV_jet2(0), AllHitCounter4GeV_jet2(0), AllHitCounter0GeV_jet3(0), AllHitCounter1GeV_jet3(0), AllHitCounter2GeV_jet3(0), AllHitCounter3GeV_jet3(0), AllHitCounter4GeV_jet3(0), AllHitCounter0GeV_jet4(0), AllHitCounter1GeV_jet4(0), AllHitCounter2GeV_jet4(0), AllHitCounter3GeV_jet4(0), AllHitCounter4GeV_jet4(0);
+      double avgTimeJet1[6] = {0};
+      double numHitsJet1[6] = {0};
+      double avgTimeJet2[6] = {0};
+      double numHitsJet2[6] = {0};
+      double avgTimeJet3[6] = {0};
+      double numHitsJet3[6] = {0};
+      double avgTimeJet4[6] = {0};
+      double numHitsJet4[6] = {0};
 
       // loop over L1 jets, and only do first four (4 highest energy L1 jets from 4 leptons)
       for(uint jetIt=0; jetIt < nJetemu && jetIt < 4; jetIt++){
@@ -1075,6 +1098,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       DeltaR_L1Jets_3_4->Fill(deltaR(JetEta3,JetPhi3,JetEta4,JetPhi4));
 
       double min_DR_L1_TP = 100;
+      int LLPdecayDetAcc = 0; // count how many LLPs decay before end of detector acceptance 
 
       // HCAL TP loop
       // Used for plots with all HCAL TPs (not matched to L1 jets), and when each HCAL TP is associated to one L1 Jet + apply DR restrictions (in L1 jet loop inside of HCAL TP loop)
@@ -1221,7 +1245,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	  } // closing 1 GeV energy cut loop
 	} // closing HCAL depths loop
 	// here have calculated multiplicity for a single HCAL TP in an event
-         
+
         // *********************** GEN MATCHED PLOTS FOR MULTIPLICITY, TIMING, AND ENERGY DEPTH ************************ 
         // these plots are made from gen matched L1 jets (have a parton within DR<0.3), and only associating each HCAL TP to a single L1 jet
         // ************************************************************************************************************* 
@@ -1253,32 +1277,62 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	  // find overall smallest DR between leading L1 jet and HCAL TP on a per event basis
 	  if ((jetIt == 0) && (DeltaR < min_DR_L1_TP)) min_DR_L1_TP = DeltaR;
 	} // closing the L1 jet loop
-
+      
 	// ************* GEN PARTICLE MATCHING CODE ******************                                                         
 	// already got the entries from genTree at start of event loop                  
 	double min_deltaR_partonGen_L1jet = 1000;
 	double min_deltaR_partonGenHCAL_L1jet = 1000; // min dR defined per each L1 jet
+	double min_deltaR_partonGen1m_L1jet = 1000;
+       	double parton1vertex = 0;
+      	double parton1number = 0;
+        LLPdecayDetAcc = 0; // count how many LLPs decay before end of detector acceptance
 	for (int partonN = 0; partonN < generator_->nPart; partonN ++) {
 	  // reset values for eta, phi of partons (w/ and w/o requirement of vertex within HCAL volume), and for dR between parton and L1 jet on a per-parton basis
 	  double partonEta = 1000;
 	  double partonPhi = 1000;
 	  double partonEtaHCAL = 1000;
 	  double partonPhiHCAL = 1000;
+          double partonEta1m = 1000;
+          double partonPhi1m = 1000;
 	  double deltaR_partonGen_L1jet = 1000;
 	  double deltaR_partonGenHCAL_L1jet = 1000;
+          double deltaR_partonGen1m_L1jet = 1000;
+
 	  if (generator_->partHardProcess[partonN] == 0 ) continue; // require hard process - this is what LLP results from 
 	  if ( (abs(generator_->partId[partonN]) >= 1 && abs(generator_->partId[partonN]) <=5 ) || (abs(generator_->partId[partonN]) == 21) ) { // only consider generator particles that are partons (quarks, gluons) from the LLP decay. Top quark is unstable 
 	    // detector cuts for the HB and HE regions
 	    //    if (generator_->partPt[partonN] < 20) continue; // require pT > 20 GeV -- remove requirement since some jets could come from low energy partons
-	    if ( abs(intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[0]) < 3 ) { // require parton is in the HE HB region
+	    if ( abs(intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[0]) <= 3 ) { // require parton is in the HE HB region
 	      //      std::cout << generator_->partId[partonN] << std::endl;
 	      partonEta = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[0];
 	      partonPhi = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[1];
+	      // see if LLP decayed anywhere in detector acceptance (HCAL, ECAL, tracker) since that is what is relevant for studies
+	      double radius = sqrt(generator_->partVx[partonN]*generator_->partVx[partonN] + generator_->partVy[partonN]*generator_->partVy[partonN]);
+	      if ( radius < 295 && abs(generator_->partVz[partonN]) < 568 ) LLPdecayDetAcc += 1; // if a LLP decays before end of HCAL, increment this variable                                  
+	      // specifically choose partons that decay with a certain distance to consider time values from this as a check
+	      if (sqrt(generator_->partVx[partonN]*generator_->partVx[partonN] + generator_->partVy[partonN]*generator_->partVy[partonN] + generator_->partVz[partonN]*generator_->partVz[partonN]) > 100 ) {
+		partonEta1m = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[0];
+		partonPhi1m = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[1];
+	      }
+	      if (HcalTPIt == 1) {
+		double vertex = sqrt(generator_->partVx[partonN]*generator_->partVx[partonN] + generator_->partVy[partonN]*generator_->partVy[partonN] + generator_->partVz[partonN]*generator_->partVz[partonN]);
+		//		  std::cout << vertex << " ----- " << parton1vertex << std::endl;
+		if ( parton1vertex == vertex && parton1number+1 == partonN ) { // means found second b quark with same vertex 
+		  double genLLPBeta = sqrt((generator_->partPx[partonN-1] + generator_->partPx[partonN])*(generator_->partPx[partonN-1] + generator_->partPx[partonN]) + (generator_->partPy[partonN-1] + generator_->partPy[partonN])*(generator_->partPy[partonN-1] + generator_->partPy[partonN]) + (generator_->partPz[partonN-1] + generator_->partPz[partonN])*(generator_->partPz[partonN-1] + generator_->partPz[partonN])) / (generator_->partE[partonN-1] + generator_->partE[partonN]);
+		  double genLLPGamma = 1./TMath::Sqrt(1.-genLLPBeta*genLLPBeta);
+		  LLPdecayRadiusDetAcceptance->Fill(radius,abs(generator_->partVz[partonN]),1); // fill the radius for events that have LLP decaying anywhere in HCAL or earlier
+		  LLPdecayXyzDetAcceptance->Fill(vertex / (genLLPBeta * genLLPGamma));
+		  //		    std::cout << radius << " radius, and entry = " << jentry << " and parton number = " << partonN << std::endl;
+		}
+		else {
+		  parton1vertex = vertex;
+		  parton1number = partonN;
+		}
+	      }
 	      // see if LLP decayed in HCAL volume
 	      // requiring quark gen vertex to be in the HCAL volume
 	      // HE region 3.88 - 5.68 m and out to 2.95 m radius
 	      // HB region z below 3.88m, radius 1.79 - 2.95m
-	      double radius = sqrt(generator_->partVx[partonN]*generator_->partVx[partonN] + generator_->partVy[partonN]*generator_->partVy[partonN]);
 	      if ( abs(generator_->partVz[partonN]) < 568 && (radius < 295) && ( (abs(generator_->partVz[partonN]) > 388) || radius > 179 ) ) {
 		partonEtaHCAL = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[0];
 		partonPhiHCAL = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[1];
@@ -1290,10 +1344,12 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	  if (deltaR_partonGen_L1jet < min_deltaR_partonGen_L1jet ) min_deltaR_partonGen_L1jet = deltaR_partonGen_L1jet; // find the min dR between each L1 jet and the gen partons. Use this for gen matching criterion
 	  deltaR_partonGenHCAL_L1jet = deltaR(closest_Jet_eta,closest_Jet_phi,partonEtaHCAL,partonPhiHCAL);
           if (deltaR_partonGenHCAL_L1jet < min_deltaR_partonGenHCAL_L1jet ) min_deltaR_partonGenHCAL_L1jet = deltaR_partonGenHCAL_L1jet; // find the min dR between each L1 jet and the gen partons. Use this for gen matching criterion, when LLP decays in HCAL volume
+	  deltaR_partonGen1m_L1jet = deltaR(closest_Jet_eta,closest_Jet_phi,partonEta1m,partonPhi1m);
+	  if (deltaR_partonGen1m_L1jet < min_deltaR_partonGen1m_L1jet ) min_deltaR_partonGen1m_L1jet = deltaR_partonGen1m_L1jet;
 	} // end parton loop
-
 	// ********************************************* GEN MATCHING REQUIREMENT *****************************************
 	//        if (min_deltaR_partonGen_L1jet > 0.3) continue;  // require that the L1 jet has a generator parton nearby
+	//      	if (inputFile.substr(0,5) == "../mh" &&  min_deltaR_partonGen1m_L1jet > 0.3 ) continue; // only look at L1 jets resulting from a LLP that lasted 1m or more
 
 	genJetRequirementPassed += 1; // how many L1 jets this event passed the generator matching requirement? without gen matching this should be same as total number of events
         // loop over L1 jets to find DR between L1 jet and each TP, given that they are gen matched
@@ -1396,7 +1452,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	      if (hcalTPdepth[depthIt] > 0 ) AllHitCounter0GeV +=1;
 	      NumberTPtiming_energy->Fill(hcalTPtiming[depthIt], hcalTPdepth[depthIt],1);
 	      for (int GeV=0; GeV<6; GeV++) { // scan over energy 0-5 GeV for the cells near L1 jet
-		if (hcalTPdepth[depthIt] > GeV ) { // is cell over set energy value?
+		if (hcalTPdepth[depthIt] > GeV && depthIt > 0 ) { // is cell over set energy value?  exclude first depth layer 
+		  avgTimeJet1[GeV] += hcalTPtiming[depthIt];
+		  numHitsJet1[GeV] += 1;
+
 		  NumberTPtiming[GeV]->Fill(hcalTPtiming[depthIt],1); // add one to the # of TP cells at the timing value
 		  if (depthIt == 0 ) NumberTPtiming_depth1[GeV]->Fill(hcalTPtiming[depthIt],1); // depth 1
 		  if (depthIt == 1 ) NumberTPtiming_depth2[GeV]->Fill(hcalTPtiming[depthIt],1); 
@@ -1405,113 +1464,99 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 		}
  	      }
 	      if (hcalTPdepth[depthIt] > 1) {
-		for (int i=0; i<26; i++) {
-		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter1GeV[i] += 1; // iterator counts the TDC value 
-		}
+		for (int i=0; i<26; i++)  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter1GeV[i] += 1; // iterator counts the TDC value
 		AllHitCounter1GeV += 1;
 	      }
 	      if (hcalTPdepth[depthIt] > 2) {
-		for (int i=0; i<26; i++) {
-		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter2GeV[i] += 1; // iterator counts the TDC value
-		}
-		//	      std::cout << "jet 1 timing, energy = " << hcalTPtiming[depthIt] << ", " << hcalTPdepth[depthIt]<< std::endl;
+		for (int i=0; i<26; i++) if (hcalTPtiming[depthIt] > i ) DelayedHitCounter2GeV[i] += 1; // iterator counts the TDC value
+		//		std::cout << "jet 1 timing, energy = " << hcalTPtiming[depthIt] << ", " << hcalTPdepth[depthIt]<< std::endl;
 		AllHitCounter2GeV += 1;
 	      }
 	      if (hcalTPdepth[depthIt] > 3) {
-		for (int i=0; i<26; i++) {
-		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter3GeV[i] += 1;
-		}
+		for (int i=0; i<26; i++) if (hcalTPtiming[depthIt] > i ) DelayedHitCounter3GeV[i] += 1;
 		AllHitCounter3GeV += 1;
 	      }
 	      if (hcalTPdepth[depthIt] > 4) {
-		for (int i=0; i<26; i++) {
-		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter4GeV[i] += 1;
-		}
+		for (int i=0; i<26; i++)  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter4GeV[i] += 1;
 		AllHitCounter4GeV += 1;
 	      }
 	    }
 	    
 	    if (closestJet == 1) {
 	      if (hcalTPdepth[depthIt] > 0 ) AllHitCounter0GeV_jet2 +=1;
-	      if (hcalTPdepth[depthIt] > 1) {
-		for (int i=0; i<26; i++) {
-		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter1GeV_jet2[i] += 1; // iterator counts the TDC value
+	      for (int GeV=0; GeV<6; GeV++) { // scan over energy 0-5 GeV for the cells near L1 jet                                                                      
+                if (hcalTPdepth[depthIt] > GeV && depthIt > 0 ) { // is cell over set energy value?  first depth layer is excluded      
+                    avgTimeJet2[GeV] += hcalTPtiming[depthIt];
+                    numHitsJet2[GeV] += 1;
+                  }
 		}
+	      if (hcalTPdepth[depthIt] > 1) {
+		for (int i=0; i<26; i++) if (hcalTPtiming[depthIt] > i ) DelayedHitCounter1GeV_jet2[i] += 1; // iterator counts the TDC value
 		AllHitCounter1GeV_jet2 += 1;
 	      }
 	      if (hcalTPdepth[depthIt] > 2) {
-		for (int i=0; i<26; i++) {
-		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter2GeV_jet2[i] += 1; // iterator counts the TDC value 
-		}
-		//	      std::cout << "jet 2 timing, energy = " << hcalTPtiming[depthIt] << ", " << hcalTPdepth[depthIt] << std::endl;
+		for (int i=0; i<26; i++) if (hcalTPtiming[depthIt] > i ) DelayedHitCounter2GeV_jet2[i] += 1; // iterator counts the TDC value 
+		//		std::cout << "jet 2 timing, energy = " << hcalTPtiming[depthIt] << ", " << hcalTPdepth[depthIt] << std::endl;
 		AllHitCounter2GeV_jet2 += 1;
 	      }
 	      if (hcalTPdepth[depthIt] > 3) {
-		for (int i=0; i<26; i++) {
-		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter3GeV_jet2[i] += 1;
-		}
+		for (int i=0; i<26; i++) if (hcalTPtiming[depthIt] > i ) DelayedHitCounter3GeV_jet2[i] += 1;
 		AllHitCounter3GeV_jet2 += 1;
 	      }
 	      if (hcalTPdepth[depthIt] > 4) {
-		for (int i=0; i<26; i++) {
-		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter4GeV_jet2[i] += 1;
-		}
+		for (int i=0; i<26; i++) if (hcalTPtiming[depthIt] > i ) DelayedHitCounter4GeV_jet2[i] += 1;
 		AllHitCounter4GeV_jet2 += 1;
 	      }
 	    }
 	    
 	    if (closestJet == 2) {
 	      if (hcalTPdepth[depthIt] > 0 ) AllHitCounter0GeV_jet3 +=1;
-	      if (hcalTPdepth[depthIt] > 1) {
-		for (int i=0; i<26; i++) {
-		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter1GeV_jet3[i] += 1; // iterator counts the TDC value
+              for (int GeV=0; GeV<6; GeV++) { // scan over energy 0-5 GeV for the cells near L1 jet 
+                if (hcalTPdepth[depthIt] > GeV && depthIt > 0 ) { // is cell over set energy value?  first depth layer is excluded 
+		  avgTimeJet3[GeV] += hcalTPtiming[depthIt];
+		  numHitsJet3[GeV] += 1;
 		}
+	      }
+	      if (hcalTPdepth[depthIt] > 1) {
+		for (int i=0; i<26; i++) if (hcalTPtiming[depthIt] > i ) DelayedHitCounter1GeV_jet3[i] += 1; // iterator counts the TDC value
 		AllHitCounter1GeV_jet3 += 1;
 	      }
 	      if (hcalTPdepth[depthIt] > 2) {
-		for (int i=0; i<26; i++) {
-		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter2GeV_jet3[i] += 1; // iterator counts the TDC value
-		}
+		for (int i=0; i<26; i++) if (hcalTPtiming[depthIt] > i ) DelayedHitCounter2GeV_jet3[i] += 1; // iterator counts the TDC value
 		AllHitCounter2GeV_jet3 += 1;
 	      }
 	      if (hcalTPdepth[depthIt] > 3) {
-		for (int i=0; i<26; i++) {
-		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter3GeV_jet3[i] += 1;
-		}
+		for (int i=0; i<26; i++) if (hcalTPtiming[depthIt] > i ) DelayedHitCounter3GeV_jet3[i] += 1;
 		AllHitCounter3GeV_jet3 += 1;
 	      }
 	      if (hcalTPdepth[depthIt] > 4) {
-		for (int i=0; i<26; i++) {
-		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter4GeV_jet3[i] += 1;
-		}
+		for (int i=0; i<26; i++) if (hcalTPtiming[depthIt] > i ) DelayedHitCounter4GeV_jet3[i] += 1;
 		AllHitCounter4GeV_jet3 += 1;
 	      }
 	    }
 	    
 	    if (closestJet == 3) {
 	      if (hcalTPdepth[depthIt] > 0 ) AllHitCounter0GeV_jet4 +=1;
-	      if (hcalTPdepth[depthIt] > 1) {
-		for (int i=0; i<26; i++) {
-		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter1GeV_jet4[i] += 1; // iterator counts the TDC value
+              for (int GeV=0; GeV<6; GeV++) { // scan over energy 0-5 GeV for the cells near L1 jet 
+                if (hcalTPdepth[depthIt] > GeV && depthIt > 0 ) { // is cell over set energy value?  first depth layer is excluded
+		  avgTimeJet4[GeV] += hcalTPtiming[depthIt];
+		  numHitsJet4[GeV] += 1;
 		}
+	      }
+	      if (hcalTPdepth[depthIt] > 1) {
+		for (int i=0; i<26; i++) if (hcalTPtiming[depthIt] > i ) DelayedHitCounter1GeV_jet4[i] += 1; // iterator counts the TDC value
 		AllHitCounter1GeV_jet4 += 1;
 	      }
 	      if (hcalTPdepth[depthIt] > 2) {
-		for (int i=0; i<26; i++) {
-		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter2GeV_jet4[i] += 1; // iterator counts the TDC value
-		}
+		for (int i=0; i<26; i++) if (hcalTPtiming[depthIt] > i ) DelayedHitCounter2GeV_jet4[i] += 1; // iterator counts the TDC value
 		AllHitCounter2GeV_jet4 += 1;
 	      }
 	      if (hcalTPdepth[depthIt] > 3) {
-		for (int i=0; i<26; i++) {
-		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter3GeV_jet4[i] += 1;
-		}
+		for (int i=0; i<26; i++) if (hcalTPtiming[depthIt] > i ) DelayedHitCounter3GeV_jet4[i] += 1;
 		AllHitCounter3GeV_jet4 += 1;
 	      }
 	      if (hcalTPdepth[depthIt] > 4) {
-		for (int i=0; i<26; i++) {
-		  if (hcalTPtiming[depthIt] > i ) DelayedHitCounter4GeV_jet4[i] += 1;
-		}
+		for (int i=0; i<26; i++) if (hcalTPtiming[depthIt] > i ) DelayedHitCounter4GeV_jet4[i] += 1;
 		AllHitCounter4GeV_jet4 += 1;
 	      }
 	    }
@@ -1539,17 +1584,23 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	    for (int TDCns = 1; TDCns <= 5; TDCns++) {
 	      if (hcalTPtiming[depthIt] > TDCns ) {
 		if (TDCns == 2)	{
-		  if (depthIt == 0 ) mult3GeV2ns_Jets_depth1 += 1;
+		  if (depthIt == 0 ) mult3GeV2ns_Jets_depth1 += 1; // used for depth comparisons, this is HB + HE
 		  if (depthIt == 1 ) mult3GeV2ns_Jets_depth2 += 1;
 		  if (depthIt == 2 ) mult3GeV2ns_Jets_depth3 += 1;
 		  if (depthIt == 3 ) mult3GeV2ns_Jets_depth4 += 1;
-		}
+		  if ( (abs(tpEtaemu) < 16) ) {
+		    if (depthIt == 0 ) mult3GeV2ns_Jets_depth1HB += 1;
+		    if (depthIt == 1 ) mult3GeV2ns_Jets_depth2HB += 1;
+		    if (depthIt == 2 ) mult3GeV2ns_Jets_depth3HB += 1;
+		    if (depthIt == 3 ) mult3GeV2ns_Jets_depth4HB += 1;
+		  } // closing HB only statement
+		} // closing TDC = 2ns statement for depth studies
 		mult3GeV_Jets[TDCns] += 1;
 		if ( (abs(tpEtaemu) < 16) ) mult3GeVHB_Jets[TDCns] += 1; // 3 GeV HB regions
 		if ( (abs(tpEtaemu) >= 16) && (abs(tpEtaemu) < 29) ) mult3GeVHE_Jets[TDCns] += 1; // 3 GeV HE regions
-	      }
-	    }
-	  } // closing 3 GeV energy cut loop
+	      } // require timing is greater than TDC ns (1-5ns)
+	    } // close TDC ns 1-5 loop
+	  } // closing 3 GeV energy cut statement
 
 	  // 0 GeV energy cut
 	  if ( (abs(tpEtaemu) < 16) ) {
@@ -1591,6 +1642,11 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
         // *************************************************************************************************************
 
       } // closing HCAL TP loop
+      LLPdecayDetAcceptance->Fill(LLPdecayDetAcc);
+
+      //      std::cout << LLPdecayDetAcc << " LLPs decayed in det volume" << std::endl;
+      //      std::cout << "entry = " << jentry << std::endl;
+
       // htSum histogram to see distribution
       htSumDistribution->Fill(htSum);
       totalGlobal += 1; // how many total events were there? used to compare with global multiplicity sum   
@@ -1609,7 +1665,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	if (DelayedHitCounter3GeV[i] > min_num_delayed) DelayedHitFraction3GeV[i]->Fill(DelayedHitCounter3GeV[i] / AllHitCounter3GeV);
 	if (DelayedHitCounter4GeV[i] > min_num_delayed) DelayedHitFraction4GeV[i]->Fill(DelayedHitCounter4GeV[i] / AllHitCounter4GeV);
       }
-      //      if ( htSum > 120 && htSum < 430) std::cout << DelayedHitCounter2GeV[1] << ", " << DelayedHitCounter2GeV_jet2[1] << ", " << DelayedHitCounter2GeV_jet3[1] << ", " << DelayedHitCounter2GeV_jet4[1] << " delayed hits, and delayed fraction = " << DelayedHitCounter2GeV[1]/AllHitCounter2GeV << ", " << DelayedHitCounter2GeV_jet2[1]/AllHitCounter2GeV_jet2 << ", " << DelayedHitCounter2GeV_jet3[1]/AllHitCounter2GeV_jet3 << ", " << DelayedHitCounter2GeV_jet4[1]/AllHitCounter2GeV_jet4 << std::endl;
+      //      if ( htSum > 120 && htSum < 360) std::cout << DelayedHitCounter2GeV[1] << ", " << DelayedHitCounter2GeV_jet2[1] << ", " << DelayedHitCounter2GeV_jet3[1] << ", " << DelayedHitCounter2GeV_jet4[1] << " delayed hits, and delayed fraction = " << DelayedHitCounter2GeV[1]/AllHitCounter2GeV << ", " << DelayedHitCounter2GeV_jet2[1]/AllHitCounter2GeV_jet2 << ", " << DelayedHitCounter2GeV_jet3[1]/AllHitCounter2GeV_jet3 << ", " << DelayedHitCounter2GeV_jet4[1]/AllHitCounter2GeV_jet4 << std::endl;
 
       if (mult1GeVHB_Jets[2] >= min_num_delayed_jetsum) {
 	for (int percent = 0; percent < 11; percent++ ) { // 0.3, 0.4, 0.5, 0.6, 0.7
@@ -1620,7 +1676,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	      if (DelayedHitCounter1GeV_jet2[i] > min_num_delayed_scan[number] && DelayedHitCounter1GeV_jet2[i]/AllHitCounter1GeV_jet2 > frac_delayed_scan[percent]) jets_passed_1GeV += 1;
 	      if (DelayedHitCounter1GeV_jet3[i] > min_num_delayed_scan[number] && DelayedHitCounter1GeV_jet3[i]/AllHitCounter1GeV_jet3 > frac_delayed_scan[percent]) jets_passed_1GeV += 1;
 	      if (DelayedHitCounter1GeV_jet4[i] > min_num_delayed_scan[number] && DelayedHitCounter1GeV_jet4[i]/AllHitCounter1GeV_jet4 > frac_delayed_scan[percent]) jets_passed_1GeV += 1;
-	      if ( ((jets_passed_1GeV >= min_num_jets_passed) && (htSum > 120)) || (htSum > 430) ) passedDelayedHitFraction1GeV_ht120[percent][number][i] += 1;
+	      if ( ((jets_passed_1GeV >= min_num_jets_passed) && (htSum > 120)) || (htSum > 360) ) passedDelayedHitFraction1GeV_ht120[percent][number][i] += 1;
 	      if (DelayedHitCounter1GeV[i] > min_num_delayed_scan[number] && DelayedHitCounter1GeV[i]/AllHitCounter1GeV > frac_delayed_scan[percent] ) {
 		}
 	      else if (DelayedHitCounter1GeV_jet2[i] > min_num_delayed_scan[number] && DelayedHitCounter1GeV_jet2[i]/AllHitCounter1GeV_jet2 > frac_delayed_scan[percent] ) {
@@ -1637,21 +1693,21 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
               if (DelayedHitCounter2GeV_jet2[i] > min_num_delayed_scan[number] && DelayedHitCounter2GeV_jet2[i]/AllHitCounter2GeV_jet2 > frac_delayed_scan[percent]) jets_passed_2GeV += 1;
               if (DelayedHitCounter2GeV_jet3[i] > min_num_delayed_scan[number] && DelayedHitCounter2GeV_jet3[i]/AllHitCounter2GeV_jet3 > frac_delayed_scan[percent]) jets_passed_2GeV += 1;
               if (DelayedHitCounter2GeV_jet4[i] > min_num_delayed_scan[number] && DelayedHitCounter2GeV_jet4[i]/AllHitCounter2GeV_jet4 > frac_delayed_scan[percent]) jets_passed_2GeV += 1;
-              if ( ((jets_passed_2GeV >= min_num_jets_passed) && (htSum > 120)) || (htSum > 430) ) passedDelayedHitFraction2GeV_ht120[percent][number][i] += 1;
+              if ( ((jets_passed_2GeV >= min_num_jets_passed) && (htSum > 120)) || (htSum > 360) ) passedDelayedHitFraction2GeV_ht120[percent][number][i] += 1;
 	   
 	      int jets_passed_3GeV = 0;
               if (DelayedHitCounter3GeV[i] > min_num_delayed_scan[number] && DelayedHitCounter3GeV[i]/AllHitCounter3GeV > frac_delayed_scan[percent]) jets_passed_3GeV += 1;
               if (DelayedHitCounter3GeV_jet2[i] > min_num_delayed_scan[number] && DelayedHitCounter3GeV_jet2[i]/AllHitCounter3GeV_jet2 > frac_delayed_scan[percent]) jets_passed_3GeV += 1;
               if (DelayedHitCounter3GeV_jet3[i] > min_num_delayed_scan[number] && DelayedHitCounter3GeV_jet3[i]/AllHitCounter3GeV_jet3 > frac_delayed_scan[percent]) jets_passed_3GeV += 1;
               if (DelayedHitCounter3GeV_jet4[i] > min_num_delayed_scan[number] && DelayedHitCounter3GeV_jet4[i]/AllHitCounter3GeV_jet4 > frac_delayed_scan[percent]) jets_passed_3GeV += 1;
-	      if ( ((jets_passed_3GeV >= min_num_jets_passed) && (htSum > 120)) || (htSum > 430) ) passedDelayedHitFraction3GeV_ht120[percent][number][i] += 1;
+	      if ( ((jets_passed_3GeV >= min_num_jets_passed) && (htSum > 120)) || (htSum > 360) ) passedDelayedHitFraction3GeV_ht120[percent][number][i] += 1;
 	      
 	      int jets_passed_4GeV = 0;
               if (DelayedHitCounter4GeV[i] > min_num_delayed_scan[number] && DelayedHitCounter4GeV[i]/AllHitCounter4GeV > frac_delayed_scan[percent]) jets_passed_4GeV += 1;
               if (DelayedHitCounter4GeV_jet2[i] > min_num_delayed_scan[number] && DelayedHitCounter4GeV_jet2[i]/AllHitCounter4GeV_jet2 > frac_delayed_scan[percent]) jets_passed_4GeV += 1;
               if (DelayedHitCounter4GeV_jet3[i] > min_num_delayed_scan[number] && DelayedHitCounter4GeV_jet3[i]/AllHitCounter4GeV_jet3 > frac_delayed_scan[percent]) jets_passed_4GeV += 1;
               if (DelayedHitCounter4GeV_jet4[i] > min_num_delayed_scan[number] && DelayedHitCounter4GeV_jet4[i]/AllHitCounter4GeV_jet4 > frac_delayed_scan[percent]) jets_passed_4GeV += 1;
-	      if ( ((jets_passed_4GeV >= min_num_jets_passed) && (htSum > 120)) || (htSum > 430) ) passedDelayedHitFraction4GeV_ht120[percent][number][i] += 1;
+	      if ( ((jets_passed_4GeV >= min_num_jets_passed) && (htSum > 120)) || (htSum > 360) ) passedDelayedHitFraction4GeV_ht120[percent][number][i] += 1;
 	      
 	      DelayedHit2D_Fraction1GeV->Fill(i,DelayedHitCounter1GeV[i]/AllHitCounter1GeV,1);
 	      DelayedHit2D_Number1GeV->Fill(i,DelayedHitCounter1GeV[i],1);
@@ -1685,15 +1741,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	      DelayedHit2D_Number4GeV->Fill(i,DelayedHitCounter4GeV_jet3[i],1);
 	      DelayedHit2D_Fraction4GeV->Fill(i,DelayedHitCounter4GeV_jet4[i]/AllHitCounter4GeV_jet4,1);
 	      DelayedHit2D_Number4GeV->Fill(i,DelayedHitCounter4GeV_jet4[i],1);
-	      /*
-		DelayedHit2D_Fraction2GeV->Fill(i,std::max(std::max(std::max(DelayedHitCounter2GeV[i]/AllHitCounter2GeV,DelayedHitCounter2GeV_jet2[i]/AllHitCounter2GeV_jet2),DelayedHitCounter2GeV_jet3[i]/AllHitCounter2GeV_jet3),DelayedHitCounter2GeV_jet4[i]/AllHitCounter2GeV_jet4),1);//std::max(DelayedHitCounter2GeV[i]/AllHitCounter2GeV,DelayedHitCounter2GeV_jet2[i]/AllHitCounter2GeV_jet2),1);
-		DelayedHit2D_Fraction3GeV->Fill(i,std::max(std::max(std::max(DelayedHitCounter3GeV[i]/AllHitCounter3GeV,DelayedHitCounter3GeV_jet2[i]/AllHitCounter3GeV_jet2),DelayedHitCounter3GeV_jet3[i]/AllHitCounter3GeV_jet3),DelayedHitCounter3GeV_jet4[i]/AllHitCounter3GeV_jet4),1);
-		DelayedHit2D_Fraction4GeV->Fill(i,std::max(std::max(std::max(DelayedHitCounter4GeV[i]/AllHitCounter4GeV,DelayedHitCounter4GeV_jet2[i]/AllHitCounter4GeV_jet2),DelayedHitCounter4GeV_jet3[i]/AllHitCounter4GeV_jet3),DelayedHitCounter4GeV_jet4[i]/AllHitCounter4GeV_jet4),1);
-		
-		DelayedHit2D_Number2GeV->Fill(i,DelayedHitCounter2GeV[i],1);//+DelayedHitCounter2GeV_jet2[i],1);
-		DelayedHit2D_Number3GeV->Fill(i,DelayedHitCounter3GeV[i],1);//+DelayedHitCounter3GeV_jet2[i],1);
-		DelayedHit2D_Number4GeV->Fill(i,DelayedHitCounter4GeV[i],1);//+DelayedHitCounter4GeV_jet2[i],1);
-	      */
 	    }
 	  }
 	}
@@ -1718,10 +1765,14 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
         dt0GeV5nsHBTripleJetMult_emu->Fill(mult0GeV5nsHB_Jet0+mult0GeV5nsHB_Jet1+mult0GeV5nsHB_Jet2);
         dt0GeV5nsHBDoubleJetMult_emu->Fill(mult0GeV5nsHB_Jet0+mult0GeV5nsHB_Jet1);
         dt0GeV5nsHBSingleJetMult_emu->Fill(mult0GeV5nsHB_Jet0);
-	dt3GeV2nsHBQuadJet_depth1_Mult_emu->Fill(mult3GeV2ns_Jets_depth1);
-	dt3GeV2nsHBQuadJet_depth2_Mult_emu->Fill(mult3GeV2ns_Jets_depth2);
-	dt3GeV2nsHBQuadJet_depth3_Mult_emu->Fill(mult3GeV2ns_Jets_depth3);
-	dt3GeV2nsHBQuadJet_depth4_Mult_emu->Fill(mult3GeV2ns_Jets_depth4);
+	dt3GeV2nsHBQuadJet_depth1_Mult_emu->Fill(mult3GeV2ns_Jets_depth1HB);
+	dt3GeV2nsHBQuadJet_depth2_Mult_emu->Fill(mult3GeV2ns_Jets_depth2HB);
+	dt3GeV2nsHBQuadJet_depth3_Mult_emu->Fill(mult3GeV2ns_Jets_depth3HB);
+	dt3GeV2nsHBQuadJet_depth4_Mult_emu->Fill(mult3GeV2ns_Jets_depth4HB);
+        dt3GeV2nsHBHEQuadJet_depth1_Mult_emu->Fill(mult3GeV2ns_Jets_depth1);
+        dt3GeV2nsHBHEQuadJet_depth2_Mult_emu->Fill(mult3GeV2ns_Jets_depth2);
+        dt3GeV2nsHBHEQuadJet_depth3_Mult_emu->Fill(mult3GeV2ns_Jets_depth3);
+        dt3GeV2nsHBHEQuadJet_depth4_Mult_emu->Fill(mult3GeV2ns_Jets_depth4);
       }
       min_DR_L1_TP += 0;    
 
@@ -1737,16 +1788,16 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       if (mult3GeVHB_Jets[3] + mult3GeVHE_Jets[3] > 5) passedMultJets3GeV3_5 += 1;
       if (mult3GeVHB_Jets[3] + mult3GeVHE_Jets[3] > 6) passedMultJets3GeV3_6 += 1;
       if (mult3GeVHB_Jets[3] + mult3GeVHE_Jets[3] > 7) passedMultJets3GeV3_7 += 1;
-      if ( ((htSum > 120) && mult3GeVHB_Jets[2] > 1) || (htSum > 430)) passedMultJets3GeV3_ht120_1 += 1; // 2] + mult3GeVHE_Jets[2] > 1+7) || (htSum > 430)) passedMultJets3GeV3_ht120_1 += 1;
-      if ( ((htSum > 120) && mult3GeVHB_Jets[2] > 2) || (htSum > 430)) passedMultJets3GeV3_ht120_2 += 1; // 2] + mult3GeVHE_Jets[2] > 2+7) || (htSum > 430)) passedMultJets3GeV3_ht120_2 += 1;
-      if ( ((htSum > 120) && mult3GeVHB_Jets[2] > 3) || (htSum > 430)) passedMultJets3GeV3_ht120_3 += 1; // 2] + mult3GeVHE_Jets[2] > 3+7) || (htSum > 430)) passedMultJets3GeV3_ht120_3 += 1;
-      if ( ((htSum > 120) && mult3GeVHB_Jets[2] > 4) || (htSum > 430)) passedMultJets3GeV3_ht120_4 += 1; // 2] + mult3GeVHE_Jets[2] > 4+7) || (htSum > 430)) passedMultJets3GeV3_ht120_4 += 1;
-      if ( ((htSum > 120) && mult3GeVHB_Jets[2] > 5) || (htSum > 430)) passedMultJets3GeV3_ht120_5 += 1; // 2] + mult3GeVHE_Jets[2] > 5+7) || (htSum > 430)) passedMultJets3GeV3_ht120_5 += 1;
-      if ( ((htSum > 120) && mult3GeVHB_Jets[2] > 6) || (htSum > 430)) passedMultJets3GeV3_ht120_6 += 1; // 2] + mult3GeVHE_Jets[2] > 6+7) || (htSum > 430)) passedMultJets3GeV3_ht120_6 += 1;
-      if ( ((htSum > 120) && mult3GeVHB_Jets[2] > 7) || (htSum > 430)) passedMultJets3GeV3_ht120_7 += 1; // 2] + mult3GeVHE_Jets[2] > 7+7) || (htSum > 430)) passedMultJets3GeV3_ht120_7 += 1;
-      if ( ((mult3GeVHB_Jets[3] + mult3GeVHE_Jets[3] > GeV3ns3Jet_threshold) && (htSum > 120) ) || (htSum > 430)) passedMultJets_120 += 1;
-      if ( ((mult3GeVHB_Jets[3] + mult3GeVHE_Jets[3] > GeV3ns3Jet_threshold) && (htSum > 350) ) || (htSum > 430)) passedMultJets_350 += 1;
-      if (htSum > 430 ) passedHtSum430 += 1;
+      if ( ((htSum > 120) && mult3GeVHB_Jets[2] > 1) || (htSum > 360)) passedMultJets3GeV3_ht120_1 += 1; // 2] + mult3GeVHE_Jets[2] > 1+7) || (htSum > 360)) passedMultJets3GeV3_ht120_1 += 1;
+      if ( ((htSum > 120) && mult3GeVHB_Jets[2] > 2) || (htSum > 360)) passedMultJets3GeV3_ht120_2 += 1; // 2] + mult3GeVHE_Jets[2] > 2+7) || (htSum > 360)) passedMultJets3GeV3_ht120_2 += 1;
+      if ( ((htSum > 120) && mult3GeVHB_Jets[2] > 3) || (htSum > 360)) passedMultJets3GeV3_ht120_3 += 1; // 2] + mult3GeVHE_Jets[2] > 3+7) || (htSum > 360)) passedMultJets3GeV3_ht120_3 += 1;
+      if ( ((htSum > 120) && mult3GeVHB_Jets[2] > 4) || (htSum > 360)) passedMultJets3GeV3_ht120_4 += 1; // 2] + mult3GeVHE_Jets[2] > 4+7) || (htSum > 360)) passedMultJets3GeV3_ht120_4 += 1;
+      if ( ((htSum > 120) && mult3GeVHB_Jets[2] > 5) || (htSum > 360)) passedMultJets3GeV3_ht120_5 += 1; // 2] + mult3GeVHE_Jets[2] > 5+7) || (htSum > 360)) passedMultJets3GeV3_ht120_5 += 1;
+      if ( ((htSum > 120) && mult3GeVHB_Jets[2] > 6) || (htSum > 360)) passedMultJets3GeV3_ht120_6 += 1; // 2] + mult3GeVHE_Jets[2] > 6+7) || (htSum > 360)) passedMultJets3GeV3_ht120_6 += 1;
+      if ( ((htSum > 120) && mult3GeVHB_Jets[2] > 7) || (htSum > 360)) passedMultJets3GeV3_ht120_7 += 1; // 2] + mult3GeVHE_Jets[2] > 7+7) || (htSum > 360)) passedMultJets3GeV3_ht120_7 += 1;
+      if ( ((mult3GeVHB_Jets[3] + mult3GeVHE_Jets[3] > GeV3ns3Jet_threshold) && (htSum > 120) ) || (htSum > 360)) passedMultJets_120 += 1;
+      if ( ((mult3GeVHB_Jets[3] + mult3GeVHE_Jets[3] > GeV3ns3Jet_threshold) && (htSum > 350) ) || (htSum > 360)) passedMultJets_350 += 1;
+      if (htSum > 360 ) passedHtSum360 += 1;
       if (htSum > 350 ) passedHtSum350 += 1;
       if (htSum > 120 ) passedHtSum120 += 1;
 
@@ -1797,6 +1848,22 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	}
       }
 
+      for (int GeV=0; GeV<6; GeV++) {
+	NumberTPavgtiming_jet1[GeV]->Fill(avgTimeJet1[GeV]/numHitsJet1[GeV]);
+	NumberTPtotalhits_jet1[GeV]->Fill(numHitsJet1[GeV]);
+        NumberTPavgtiming_jet2[GeV]->Fill(avgTimeJet2[GeV]/numHitsJet2[GeV]);
+        NumberTPtotalhits_jet2[GeV]->Fill(numHitsJet2[GeV]);
+        NumberTPavgtiming_jet3[GeV]->Fill(avgTimeJet3[GeV]/numHitsJet3[GeV]);
+        NumberTPtotalhits_jet3[GeV]->Fill(numHitsJet3[GeV]);
+        NumberTPavgtiming_jet4[GeV]->Fill(avgTimeJet4[GeV]/numHitsJet4[GeV]);
+        NumberTPtotalhits_jet4[GeV]->Fill(numHitsJet4[GeV]);
+	if (avgTimeJet1[GeV] > avgTimeJet2[GeV] && avgTimeJet1[GeV] > avgTimeJet3[GeV] && avgTimeJet1[GeV] > avgTimeJet4[GeV] && numHitsJet1[GeV] > 2 ) NumberTPavgtiming_jetMax[GeV]->Fill(avgTimeJet1[GeV]/numHitsJet1[GeV]);
+	else if (avgTimeJet2[GeV] > avgTimeJet1[GeV] && avgTimeJet2[GeV] > avgTimeJet3[GeV] && avgTimeJet2[GeV] > avgTimeJet4[GeV] && numHitsJet2[GeV] > 2 ) NumberTPavgtiming_jetMax[GeV]->Fill(avgTimeJet2[GeV]/numHitsJet2[GeV]);
+        else if (avgTimeJet3[GeV] > avgTimeJet1[GeV] && avgTimeJet3[GeV] > avgTimeJet2[GeV] && avgTimeJet3[GeV] > avgTimeJet4[GeV] && numHitsJet3[GeV] > 2 ) NumberTPavgtiming_jetMax[GeV]->Fill(avgTimeJet3[GeV]/numHitsJet3[GeV]);
+        else if (avgTimeJet4[GeV] > avgTimeJet1[GeV] && avgTimeJet4[GeV] > avgTimeJet2[GeV] && avgTimeJet4[GeV] > avgTimeJet3[GeV] && numHitsJet4[GeV] > 2 ) NumberTPavgtiming_jetMax[GeV]->Fill(avgTimeJet4[GeV]/numHitsJet4[GeV]);
+	if (GeV == 3 && avgTimeJet1[GeV]/numHitsJet1[GeV] >=3 ) passedAvgTimeCut += 1;
+      }
+
       // setting the things for the tree used with TMVA, ET_Jet1 has already been set at the top of the event and jet loop
       x0= mult3GeV3nsHB_Jet0;
       x1= mult3GeV3nsHB_Jet1;
@@ -1817,6 +1884,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       x16= JetEta4;
       x17= jetEt_1;
       x18= jentry;
+      x19= mult3GeVHE_Jets[2];
+      x20= mult3GeVHE_Jets[3];
       tree->Fill();
     
       // for each bin fill according to whether our object has a larger corresponding energy
@@ -1900,15 +1969,15 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       for(int bin=0; bin<nHtSumBins; bin++){
 	//        if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult0GeV3nsHB_Jets > GeV3ns0Jet_threshold) ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV
 	//	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[3] > GeV3ns3Jet_threshold) ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV   
-	if ( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[2] > GeV3ns3Jet_threshold || htSum>430 ) ) htSum4jetRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); // 2] + mult3GeVHE_Jets[2] > 10 || htSum>430 ) ) htSum4jetRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); // rates for 4 jet sum approach
+	if ( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[2] > GeV3ns3Jet_threshold || htSum>360 ) ) htSum4jetRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); // 2] + mult3GeVHE_Jets[2] > 10 || htSum>360 ) ) htSum4jetRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); // rates for 4 jet sum approach
 
-	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[2] > 1 || htSum>430) ) htSum_th1_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //2] + mult3GeVHE_Jets[2] > 1+7 || htSum>430) ) htSum_th1_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
-	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[2] > 2 || htSum>430) ) htSum_th2_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));//2] + mult3GeVHE_Jets[2] > 2+7 || htSum>430) ) htSum_th2_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
-	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[2] > 3 || htSum>430) ) htSum_th3_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));//2] + mult3GeVHE_Jets[2] > 3+7 || htSum>430) ) htSum_th3_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
-	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[2] > 4 || htSum>430) ) htSum_th4_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));//2] + mult3GeVHE_Jets[2] > 4+7 || htSum>430) ) htSum_th4_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
-	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[2] > 5 || htSum>430) ) htSum_th5_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));//2] + mult3GeVHE_Jets[2] > 5+7 || htSum>430) ) htSum_th5_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
-	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[2] > 6 || htSum>430) ) htSum_th6_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));//2] + mult3GeVHE_Jets[2] > 6+7 || htSum>430) ) htSum_th6_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
-	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[2] > 7 || htSum>430) ) htSum_th7_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));//2] + mult3GeVHE_Jets[2] > 7+7 || htSum>430) ) htSum_th7_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
+	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[2] > 1 || htSum>360) ) htSum_th1_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //2] + mult3GeVHE_Jets[2] > 1+7 || htSum>360) ) htSum_th1_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
+	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[2] > 2 || htSum>360) ) htSum_th2_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));//2] + mult3GeVHE_Jets[2] > 2+7 || htSum>360) ) htSum_th2_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
+	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[2] > 3 || htSum>360) ) htSum_th3_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));//2] + mult3GeVHE_Jets[2] > 3+7 || htSum>360) ) htSum_th3_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
+	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[2] > 4 || htSum>360) ) htSum_th4_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));//2] + mult3GeVHE_Jets[2] > 4+7 || htSum>360) ) htSum_th4_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
+	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[2] > 5 || htSum>360) ) htSum_th5_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));//2] + mult3GeVHE_Jets[2] > 5+7 || htSum>360) ) htSum_th5_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
+	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[2] > 6 || htSum>360) ) htSum_th6_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));//2] + mult3GeVHE_Jets[2] > 6+7 || htSum>360) ) htSum_th6_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
+	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && (mult3GeVHB_Jets[2] > 7 || htSum>360) ) htSum_th7_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));//2] + mult3GeVHE_Jets[2] > 7+7 || htSum>360) ) htSum_th7_Rates_emu->Fill(htSumLo+(bin*htSumBinWidth));
 
 	if (mult1GeVHB_Jets[2] >= min_num_delayed_jetsum) {
 	  for (int TDCns=1; TDCns <8; TDCns++) {
@@ -1917,13 +1986,13 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	    if (DelayedHitCounter1GeV_jet2[TDCns] > min_num_delayed && DelayedHitCounter1GeV_jet2[TDCns]/AllHitCounter1GeV_jet2 > frac_delayed) jets_passed_1GeV += 1;
 	    if (DelayedHitCounter1GeV_jet3[TDCns] > min_num_delayed && DelayedHitCounter1GeV_jet3[TDCns]/AllHitCounter1GeV_jet3 > frac_delayed) jets_passed_1GeV += 1;
 	    if (DelayedHitCounter1GeV_jet4[TDCns] > min_num_delayed && DelayedHitCounter1GeV_jet4[TDCns]/AllHitCounter1GeV_jet4 > frac_delayed) jets_passed_1GeV += 1;
-	    if ((jets_passed_1GeV >= min_num_jets_passed || htSum>430) && ((htSum) >= htSumLo+(bin*htSumBinWidth))) htSum_timing_1GeV_Rates_emu[TDCns]->Fill(htSumLo+(bin*htSumBinWidth)); // rates for scan over energy, timing for fraction delayed approach cut on one jet
+	    if ((jets_passed_1GeV >= min_num_jets_passed || htSum>360) && ((htSum) >= htSumLo+(bin*htSumBinWidth))) htSum_timing_1GeV_Rates_emu[TDCns]->Fill(htSumLo+(bin*htSumBinWidth)); // rates for scan over energy, timing for fraction delayed approach cut on one jet
             int jets_passed_2GeV = 0;
             if (DelayedHitCounter2GeV[TDCns] > min_num_delayed && DelayedHitCounter2GeV[TDCns]/AllHitCounter2GeV > frac_delayed) jets_passed_2GeV += 1;
             if (DelayedHitCounter2GeV_jet2[TDCns] > min_num_delayed && DelayedHitCounter2GeV_jet2[TDCns]/AllHitCounter2GeV_jet2 > frac_delayed) jets_passed_2GeV += 1;
             if (DelayedHitCounter2GeV_jet3[TDCns] > min_num_delayed && DelayedHitCounter2GeV_jet3[TDCns]/AllHitCounter2GeV_jet3 > frac_delayed) jets_passed_2GeV += 1;
             if (DelayedHitCounter2GeV_jet4[TDCns] > min_num_delayed && DelayedHitCounter2GeV_jet4[TDCns]/AllHitCounter2GeV_jet4 > frac_delayed) jets_passed_2GeV += 1;
-            if ((jets_passed_2GeV >= min_num_jets_passed || htSum>430) && ((htSum) >= htSumLo+(bin*htSumBinWidth))) {
+            if ((jets_passed_2GeV >= min_num_jets_passed || htSum>360) && ((htSum) >= htSumLo+(bin*htSumBinWidth))) {
 	      htSum_timing_2GeV_Rates_emu[TDCns]->Fill(htSumLo+(bin*htSumBinWidth));
 	      if (TDCns == 2) htSum1jetRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); // htSum rates plot for single jet tight restriction approach
 	    }
@@ -1932,17 +2001,17 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
             if (DelayedHitCounter3GeV_jet2[TDCns] > min_num_delayed && DelayedHitCounter3GeV_jet2[TDCns]/AllHitCounter3GeV_jet2 > frac_delayed) jets_passed_3GeV += 1;
             if (DelayedHitCounter3GeV_jet3[TDCns] > min_num_delayed && DelayedHitCounter3GeV_jet3[TDCns]/AllHitCounter3GeV_jet3 > frac_delayed) jets_passed_3GeV += 1;
             if (DelayedHitCounter3GeV_jet4[TDCns] > min_num_delayed && DelayedHitCounter3GeV_jet4[TDCns]/AllHitCounter3GeV_jet4 > frac_delayed) jets_passed_3GeV += 1;
-            if ((jets_passed_3GeV >= min_num_jets_passed || htSum>430) && ((htSum) >= htSumLo+(bin*htSumBinWidth))) htSum_timing_3GeV_Rates_emu[TDCns]->Fill(htSumLo+(bin*htSumBinWidth));
+            if ((jets_passed_3GeV >= min_num_jets_passed || htSum>360) && ((htSum) >= htSumLo+(bin*htSumBinWidth))) htSum_timing_3GeV_Rates_emu[TDCns]->Fill(htSumLo+(bin*htSumBinWidth));
             int jets_passed_4GeV = 0;
             if (DelayedHitCounter4GeV[TDCns] > min_num_delayed && DelayedHitCounter4GeV[TDCns]/AllHitCounter4GeV > frac_delayed) jets_passed_4GeV += 1;
             if (DelayedHitCounter4GeV_jet2[TDCns] > min_num_delayed && DelayedHitCounter4GeV_jet2[TDCns]/AllHitCounter4GeV_jet2 > frac_delayed) jets_passed_4GeV += 1;
             if (DelayedHitCounter4GeV_jet3[TDCns] > min_num_delayed && DelayedHitCounter4GeV_jet3[TDCns]/AllHitCounter4GeV_jet3 > frac_delayed) jets_passed_4GeV += 1;
             if (DelayedHitCounter4GeV_jet4[TDCns] > min_num_delayed && DelayedHitCounter4GeV_jet4[TDCns]/AllHitCounter4GeV_jet4 > frac_delayed) jets_passed_4GeV += 1;
-            if ((jets_passed_4GeV >= min_num_jets_passed || htSum>430) && ((htSum) >= htSumLo+(bin*htSumBinWidth))) htSum_timing_4GeV_Rates_emu[TDCns]->Fill(htSumLo+(bin*htSumBinWidth));
+            if ((jets_passed_4GeV >= min_num_jets_passed || htSum>360) && ((htSum) >= htSumLo+(bin*htSumBinWidth))) htSum_timing_4GeV_Rates_emu[TDCns]->Fill(htSumLo+(bin*htSumBinWidth));
 	  }
 	}
 
-        if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && ((mult3GeVHB[2] + mult3GeVHE[2] > GeV3ns3Global_threshold) || (htSum>430)) ) htSumGlobalRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV  // htSum rates plot for four jet multiplicity sum approach (GLOBAL)
+        if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) && ((mult3GeVHB[2] + mult3GeVHE[2] > GeV3ns3Global_threshold) || (htSum>360)) ) htSumGlobalRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV  // htSum rates plot for four jet multiplicity sum approach (GLOBAL)
 	if( ((htSum) >= htSumLo+(bin*htSumBinWidth)) ) htSumOriginalRates_emu->Fill(htSumLo+(bin*htSumBinWidth));
       }
 
@@ -2163,6 +2232,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       } 
     }// closes if 'hwOn' is true
   }// closes loop through events
+  std::cout << "num events passed avg time cut 3GeV, >=3ns = " << passedAvgTimeCut << std::endl;
 
   // saving efficiencies in txt files to be read by plotting macros
   if (inputFile.substr(0,6) == "../QCD" ) {
@@ -2185,19 +2255,19 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     std::ofstream DelayedHitFrac_ht120_Background;
     DelayedHitFrac_ht120_Background.open("DelayedHitFrac_ht120_Background_1GeV.txt", std::ios_base::trunc);
     for (int i=1; i<8; i++) DelayedHitFrac_ht120_Background << passedDelayedHitFraction1GeV_ht120[frac_delayed_x10][min_num_delayed][i] / totalJets << std::endl;
-    DelayedHitFrac_ht120_Background << passedHtSum430/totalGlobal << std::endl; // efficiency for just a htSum>430 cut
+    DelayedHitFrac_ht120_Background << passedHtSum360/totalGlobal << std::endl; // efficiency for just a htSum>360 cut
     DelayedHitFrac_ht120_Background.close();
     DelayedHitFrac_ht120_Background.open("DelayedHitFrac_ht120_Background_2GeV.txt", std::ios_base::trunc);
     for (int i=1; i<8; i++) DelayedHitFrac_ht120_Background << passedDelayedHitFraction2GeV_ht120[frac_delayed_x10][min_num_delayed][i] / totalJets << std::endl;
-    DelayedHitFrac_ht120_Background << passedHtSum430/totalGlobal << std::endl; // efficiency for just a htSum>430 cut
+    DelayedHitFrac_ht120_Background << passedHtSum360/totalGlobal << std::endl; // efficiency for just a htSum>360 cut
     DelayedHitFrac_ht120_Background.close();
     DelayedHitFrac_ht120_Background.open("DelayedHitFrac_ht120_Background_3GeV.txt", std::ios_base::trunc);
     for (int i=1; i<8; i++) DelayedHitFrac_ht120_Background << passedDelayedHitFraction3GeV_ht120[frac_delayed_x10][min_num_delayed][i] / totalJets << std::endl;
-    DelayedHitFrac_ht120_Background << passedHtSum430/totalGlobal << std::endl; // efficiency for just a htSum>430 cut
+    DelayedHitFrac_ht120_Background << passedHtSum360/totalGlobal << std::endl; // efficiency for just a htSum>360 cut
     DelayedHitFrac_ht120_Background.close();
     DelayedHitFrac_ht120_Background.open("DelayedHitFrac_ht120_Background_4GeV.txt", std::ios_base::trunc);
     for (int i=1; i<8; i++) DelayedHitFrac_ht120_Background << passedDelayedHitFraction4GeV_ht120[frac_delayed_x10][min_num_delayed][i] / totalJets << std::endl;
-    DelayedHitFrac_ht120_Background << passedHtSum430/totalGlobal << std::endl; // efficiency for just a htSum>430 cut
+    DelayedHitFrac_ht120_Background << passedHtSum360/totalGlobal << std::endl; // efficiency for just a htSum>360 cut
     DelayedHitFrac_ht120_Background.close();
     for (int percent = 0; percent < 11; percent++ ) {
       for (int number = 0; number < 11; number++ ) {
@@ -2205,7 +2275,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	for (int i=1; i<8; i++) {
 	  DelayedHitFrac_ht120_Background << passedDelayedHitFraction2GeV_ht120[percent][number][i] / totalJets << std::endl;
 	}
-	DelayedHitFrac_ht120_Background << passedHtSum430/totalGlobal << std::endl; // efficiency for just a htSum>430 cut
+	DelayedHitFrac_ht120_Background << passedHtSum360/totalGlobal << std::endl; // efficiency for just a htSum>360 cut
 	DelayedHitFrac_ht120_Background.close();
       }
     }
@@ -2228,7 +2298,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     MultiplicityHits3GeV3ns_ht120_Background << passedMultJets3GeV3_ht120_5/totalJets << std::endl;
     MultiplicityHits3GeV3ns_ht120_Background << passedMultJets3GeV3_ht120_6/totalJets << std::endl;
     MultiplicityHits3GeV3ns_ht120_Background << passedMultJets3GeV3_ht120_7/totalJets << std::endl;
-    MultiplicityHits3GeV3ns_ht120_Background << passedHtSum430/totalGlobal << std::endl; // efficiency for just a htSum>430 cut
+    MultiplicityHits3GeV3ns_ht120_Background << passedHtSum360/totalGlobal << std::endl; // efficiency for just a htSum>360 cut
     MultiplicityHits3GeV3ns_ht120_Background.close();
   }
 
@@ -2251,19 +2321,19 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     std::ofstream DelayedHitFrac_ht120_Signal;
     DelayedHitFrac_ht120_Signal.open(Form("DelayedHitFrac_ht120_Signal_1GeV_%s.txt",inputFile.substr(3,14).c_str()), std::ios_base::trunc);
     for (int i=1; i<8; i++) DelayedHitFrac_ht120_Signal << passedDelayedHitFraction1GeV_ht120[frac_delayed_x10][min_num_delayed][i] / totalJets << std::endl;
-    DelayedHitFrac_ht120_Signal << passedHtSum430/totalGlobal << std::endl;
+    DelayedHitFrac_ht120_Signal << passedHtSum360/totalGlobal << std::endl;
     DelayedHitFrac_ht120_Signal.close();
     DelayedHitFrac_ht120_Signal.open(Form("DelayedHitFrac_ht120_Signal_2GeV_%s.txt",inputFile.substr(3,14).c_str()), std::ios_base::trunc);
     for (int i=1; i<8; i++) DelayedHitFrac_ht120_Signal << passedDelayedHitFraction2GeV_ht120[frac_delayed_x10][min_num_delayed][i] / totalJets << std::endl;
-    DelayedHitFrac_ht120_Signal << passedHtSum430/totalGlobal << std::endl;
+    DelayedHitFrac_ht120_Signal << passedHtSum360/totalGlobal << std::endl;
     DelayedHitFrac_ht120_Signal.close();
     DelayedHitFrac_ht120_Signal.open(Form("DelayedHitFrac_ht120_Signal_3GeV_%s.txt",inputFile.substr(3,14).c_str()), std::ios_base::trunc);
     for (int i=1; i<8; i++) DelayedHitFrac_ht120_Signal << passedDelayedHitFraction3GeV_ht120[frac_delayed_x10][min_num_delayed][i] / totalJets << std::endl;
-    DelayedHitFrac_ht120_Signal << passedHtSum430/totalGlobal << std::endl;
+    DelayedHitFrac_ht120_Signal << passedHtSum360/totalGlobal << std::endl;
     DelayedHitFrac_ht120_Signal.close();
     DelayedHitFrac_ht120_Signal.open(Form("DelayedHitFrac_ht120_Signal_4GeV_%s.txt",inputFile.substr(3,14).c_str()), std::ios_base::trunc);
     for (int i=1; i<8; i++) DelayedHitFrac_ht120_Signal << passedDelayedHitFraction4GeV_ht120[frac_delayed_x10][min_num_delayed][i] / totalJets << std::endl;
-    DelayedHitFrac_ht120_Signal << passedHtSum430/totalGlobal << std::endl;
+    DelayedHitFrac_ht120_Signal << passedHtSum360/totalGlobal << std::endl;
     DelayedHitFrac_ht120_Signal.close();
     // saving efficiences for scanned fraction and number delayed
     for (int percent = 0; percent < 11; percent++ ) {
@@ -2272,7 +2342,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	for (int i=1; i<8; i++) {
 	  DelayedHitFrac_ht120_Signal << passedDelayedHitFraction2GeV_ht120[percent][number][i] / totalJets << std::endl;
 	}
-	DelayedHitFrac_ht120_Signal << passedHtSum430/totalGlobal << std::endl; // efficiency for just a htSum>430 cut
+	DelayedHitFrac_ht120_Signal << passedHtSum360/totalGlobal << std::endl; // efficiency for just a htSum>360 cut
 	DelayedHitFrac_ht120_Signal.close();
       }
     }
@@ -2295,7 +2365,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     MultiplicityHits3GeV3ns_ht120_Signal << passedMultJets3GeV3_ht120_5/totalJets << std::endl;
     MultiplicityHits3GeV3ns_ht120_Signal << passedMultJets3GeV3_ht120_6/totalJets << std::endl;
     MultiplicityHits3GeV3ns_ht120_Signal << passedMultJets3GeV3_ht120_7/totalJets << std::endl;
-    MultiplicityHits3GeV3ns_ht120_Signal << passedHtSum430/totalGlobal << std::endl; // efficiency for just a htSum>430 cut 
+    MultiplicityHits3GeV3ns_ht120_Signal << passedHtSum360/totalGlobal << std::endl; // efficiency for just a htSum>360 cut 
     MultiplicityHits3GeV3ns_ht120_Signal.close();
   }
 
@@ -2396,13 +2466,13 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       int QJet60GeV_original = quadJetOriginalRates_emu->GetBinContent(quadJetOriginalRates_emu->GetXaxis()->FindBin(60)); // get rate value for quad jet at 60 GeV ET threshold 
       int htSum120GeV = htSumGlobalRates_emu->GetBinContent(htSumGlobalRates_emu->GetXaxis()->FindBin(120)); // get rate value for ht sum rate at 120 GeV ET threshold
       int htSum350GeV = htSumGlobalRates_emu->GetBinContent(htSumGlobalRates_emu->GetXaxis()->FindBin(350)); // get rate value for ht sum rate at 350 GeV ET threshold
-      int htSum430GeV = htSumGlobalRates_emu->GetBinContent(htSumGlobalRates_emu->GetXaxis()->FindBin(430)); // get rate value for ht sum rate at 430 GeV ET threshold     
+      int htSum360GeV = htSumGlobalRates_emu->GetBinContent(htSumGlobalRates_emu->GetXaxis()->FindBin(360)); // get rate value for ht sum rate at 360 GeV ET threshold     
       int htSum120GeV_original = htSumOriginalRates_emu->GetBinContent(htSumOriginalRates_emu->GetXaxis()->FindBin(120)); // get rate value for ht sum rate at 120 GeV ET threshold on the original rates plot
       int htSum350GeV_original = htSumOriginalRates_emu->GetBinContent(htSumOriginalRates_emu->GetXaxis()->FindBin(350)); // get rate value for ht sum rate at 350 GeV ET threshold on the original rates plot
-      int htSum430GeV_original = htSumOriginalRates_emu->GetBinContent(htSumOriginalRates_emu->GetXaxis()->FindBin(430)); // get rate value for ht sum rate at 430 GeV ET threshold on the original rates plot
+      int htSum360GeV_original = htSumOriginalRates_emu->GetBinContent(htSumOriginalRates_emu->GetXaxis()->FindBin(360)); // get rate value for ht sum rate at 360 GeV ET threshold on the original rates plot
       std::cout << "For global multiplicity threshold of >" << GeV3ns3Global_threshold << " the single jet rate at 60 GeV = " << SJet60GeV << " and the quad jet rate = " << QJet60GeV << std::endl;
-      std::cout << "For global multiplicity threshold of >" << GeV3ns3Global_threshold << " the htSum=120 rate = " << htSum120GeV <<  " and htSum=350 rate = " << htSum350GeV << " and htSum=430 rate = " << htSum430GeV  << std::endl;
-      std::cout << "Original htSum rate at 430 GeV = " << htSum430GeV_original << std::endl;
+      std::cout << "For global multiplicity threshold of >" << GeV3ns3Global_threshold << " the htSum=120 rate = " << htSum120GeV <<  " and htSum=350 rate = " << htSum350GeV << " and htSum=360 rate = " << htSum360GeV  << std::endl;
+      std::cout << "Original htSum rate at 360 GeV = " << htSum360GeV_original << std::endl;
       std::cout << "Original htSum rate at 350 GeV = " << htSum350GeV_original << std::endl;     
       std::cout << "Original htSum rate at 120 GeV = " << htSum120GeV_original << std::endl;
 
@@ -2413,7 +2483,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       std::cout << "new htSum rate 4 jet at 120 GeV = " << htSum120GeV_l << std::endl;
       std::cout << "new htSum rate 1 jet at 120 GeV = " << htSum120GeV_l_single << std::endl;
       int htSum350GeV_l = htSum4jetRates_emu->GetBinContent(htSum4jetRates_emu->GetXaxis()->FindBin(350)); // get rate value for ht sum rate at 350 GeV ET threshold
-      int htSum430GeV_l = htSum4jetRates_emu->GetBinContent(htSum4jetRates_emu->GetXaxis()->FindBin(430)); // get rate value for ht sum rate at 430 GeV ET threshold  
+      int htSum360GeV_l = htSum4jetRates_emu->GetBinContent(htSum4jetRates_emu->GetXaxis()->FindBin(360)); // get rate value for ht sum rate at 360 GeV ET threshold  
 
       int SJet60GeV_l_th1 = singleJet_th1_Rates_emu->GetBinContent(singleJet_th1_Rates_emu->GetXaxis()->FindBin(60));
       int SJet60GeV_l_th2 = singleJet_th2_Rates_emu->GetBinContent(singleJet_th2_Rates_emu->GetXaxis()->FindBin(60));
@@ -2449,7 +2519,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       }
 
       std::cout << "For L1 jet matched multiplicity threshold of > " << GeV3ns3Jet_threshold << " the single jet rate at 60 GeV = " << SJet60GeV_l << " and the quad jet rate = " << QJet60GeV_l << std::endl;
-      std::cout << "For L1 jet matched multiplicity threshold of > " << GeV3ns3Jet_threshold << " the htSum=120 rate = " << htSum120GeV_l << " and htSum=350 rate = " << htSum350GeV_l << " and htSum=430 rate = " << htSum430GeV_l << std::endl;
+      std::cout << "For L1 jet matched multiplicity threshold of > " << GeV3ns3Jet_threshold << " the htSum=120 rate = " << htSum120GeV_l << " and htSum=350 rate = " << htSum350GeV_l << " and htSum=360 rate = " << htSum360GeV_l << std::endl;
       std::cout << inputFile << std::endl;
 
       std::ofstream single_quad_htSum120_JetRate;
@@ -2475,60 +2545,63 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       single_quad_htSum120_JetRate << htSum120GeV_l_th5/1000 <<std::endl;
       single_quad_htSum120_JetRate << htSum120GeV_l_th6/1000 <<std::endl;
       single_quad_htSum120_JetRate << htSum120GeV_l_th7/1000 <<std::endl;
-      single_quad_htSum120_JetRate << htSum430GeV_original/1000 << std::endl;
+      single_quad_htSum120_JetRate << htSum360GeV_original/1000 << std::endl;
       single_quad_htSum120_JetRate.close();
 
       std::cout << "saving to htsum timing file" << std::endl;
       std::ofstream htSum120_Rate_1jet;
       htSum120_Rate_1jet.open("htSum120_Rate_1jet_1GeV.txt", std::ios_base::trunc);
       for (int TDCns = 1; TDCns < 8; TDCns ++) htSum120_Rate_1jet << htSum120GeV_l_timing_1GeV[TDCns]/1000 << std::endl;
-      htSum120_Rate_1jet << htSum430GeV_original/1000 << std::endl;
+      htSum120_Rate_1jet << htSum360GeV_original/1000 << std::endl;
       htSum120_Rate_1jet.close();
       htSum120_Rate_1jet.open("htSum120_Rate_1jet_2GeV.txt", std::ios_base::trunc);
       for (int TDCns = 1; TDCns < 8; TDCns ++) htSum120_Rate_1jet << htSum120GeV_l_timing_2GeV[TDCns]/1000 << std::endl;
-      htSum120_Rate_1jet << htSum430GeV_original/1000 << std::endl;
+      htSum120_Rate_1jet << htSum360GeV_original/1000 << std::endl;
       htSum120_Rate_1jet.close();
       htSum120_Rate_1jet.open("htSum120_Rate_1jet_3GeV.txt", std::ios_base::trunc);
       for (int TDCns = 1; TDCns < 8; TDCns ++) htSum120_Rate_1jet << htSum120GeV_l_timing_3GeV[TDCns]/1000 << std::endl;
-      htSum120_Rate_1jet << htSum430GeV_original/1000 << std::endl;
+      htSum120_Rate_1jet << htSum360GeV_original/1000 << std::endl;
       htSum120_Rate_1jet.close();
       htSum120_Rate_1jet.open("htSum120_Rate_1jet_4GeV.txt", std::ios_base::trunc);
       for (int TDCns = 1; TDCns < 8; TDCns ++) htSum120_Rate_1jet << htSum120GeV_l_timing_4GeV[TDCns]/1000 << std::endl;
-      htSum120_Rate_1jet << htSum430GeV_original/1000 << std::endl;
+      htSum120_Rate_1jet << htSum360GeV_original/1000 << std::endl;
       htSum120_Rate_1jet.close();
 
       std::cout << "saving factor changes" << std::endl;
       EffRate_file << "REGIONAL" << std::endl;
       EffRate_file << "Factor change in htSum Rate at 120 GeV = " << htSum120GeV_original/htSum120GeV_l << std::endl;
       EffRate_file << "Factor change in htSum Rate at 350 GeV = " << htSum350GeV_original/htSum350GeV_l << std::endl;
-      EffRate_file << "Factor change in htSum Rate at 430 GeV = " << htSum430GeV_original/htSum430GeV_l << std::endl;
+      EffRate_file << "Factor change in htSum Rate at 360 GeV = " << htSum360GeV_original/htSum360GeV_l << std::endl;
       EffRate_file << "Factor change in single jet rate at 60 GeV = " << SJet60GeV_original/SJet60GeV_l << std::endl;
       EffRate_file << "Factor change in quad jet rate at 60 GeV = " << QJet60GeV_original/QJet60GeV_l << std::endl;
       EffRate_file << "GLOBAL" << std::endl;
       EffRate_file << "Factor change in htSum Rate at 120 GeV = " << htSum120GeV_original/htSum120GeV << std::endl;
       EffRate_file << "Factor change in htSum Rate at 350 GeV = " << htSum350GeV_original/htSum350GeV << std::endl;
-      EffRate_file << "Factor change in htSum Rate at 430 GeV = " << htSum430GeV_original/htSum430GeV << std::endl;
+      EffRate_file << "Factor change in htSum Rate at 360 GeV = " << htSum360GeV_original/htSum360GeV << std::endl;
       EffRate_file << "Factor change in single jet rate at 60 GeV = " << SJet60GeV_original/SJet60GeV << std::endl;
       EffRate_file << "Factor change in quad jet rate at 60 GeV = " << QJet60GeV_original/QJet60GeV << std::endl;
       EffRate_file << " " << std::endl;
     }
     if (inputFile.substr(0,16) == "../mh1000_pl500_" || inputFile.substr(0,16) == "../mh350__pl500_" ) {
-      EffRate_file << "REGIONAL pl=0.5m, Factor reduction in eff with timing and ht=120 cuts as compared with only ht=430 threshold["<< GeV3ns3Jet_threshold-1 << "] = " << (passedMultJets_120/totalJets)/(passedHtSum430/totalGlobal) << ";" << std::endl;
-      EffRate_file << "GLOBAL pl=0.5m, Factor reduction in eff with timing and ht=120 cuts as compared with only ht=430 threshold["<< GeV3ns3Global_threshold-1 << "] = " << (passedMultGlobal/totalGlobal)/(passedHtSum430/totalGlobal) << ";" << std::endl;
+      EffRate_file << "REGIONAL pl=0.5m, Factor reduction in eff with timing and ht=120 cuts as compared with only ht=360 threshold["<< GeV3ns3Jet_threshold-1 << "] = " << (passedMultJets_120/totalJets)/(passedHtSum360/totalGlobal) << ";" << std::endl;
+      EffRate_file << "GLOBAL pl=0.5m, Factor reduction in eff with timing and ht=120 cuts as compared with only ht=360 threshold["<< GeV3ns3Global_threshold-1 << "] = " << (passedMultGlobal/totalGlobal)/(passedHtSum360/totalGlobal) << ";" << std::endl;
       EffRate_file << " " << std::endl;
     }
     if (inputFile.substr(0,17) == "../mh1000_pl1000_" || inputFile.substr(0,17) == "../mh350__pl1000_" ) {
-      EffRate_file << "REGIONAL pl=1m, Factor reduction in eff with timing and ht=120 cuts as compared with only ht=430 threshold["<< GeV3ns3Jet_threshold-1 << "] = " << (passedMultJets_120/totalJets)/(passedHtSum430/totalGlobal) << ";" << std::endl;
-      EffRate_file << "GLOBAL pl=1m, Factor reduction in eff with timing and ht=120 cuts as compared with only ht=430 threshold["<< GeV3ns3Global_threshold-1 << "] = " << (passedMultGlobal/totalGlobal)/(passedHtSum430/totalGlobal) << ";" << std::endl;
+      EffRate_file << "REGIONAL pl=1m, Factor reduction in eff with timing and ht=120 cuts as compared with only ht=360 threshold["<< GeV3ns3Jet_threshold-1 << "] = " << (passedMultJets_120/totalJets)/(passedHtSum360/totalGlobal) << ";" << std::endl;
+      EffRate_file << "GLOBAL pl=1m, Factor reduction in eff with timing and ht=120 cuts as compared with only ht=360 threshold["<< GeV3ns3Global_threshold-1 << "] = " << (passedMultGlobal/totalGlobal)/(passedHtSum360/totalGlobal) << ";" << std::endl;
       EffRate_file << " " << std::endl;
     }
     if (inputFile.substr(0,6) == "../QCD" ) {
-      EffRate_file << "REGIONAL QCD, Factor reduction in eff with timing and ht=120 cuts as compared with only ht=430 threshold["<< GeV3ns3Jet_threshold-1 << "] = " << (passedMultJets_120/totalJets)/(passedHtSum430/totalGlobal) << ";" << std::endl;
-      EffRate_file << "GLOBAL QCD, Factor reduction in eff with timing and ht=120 cuts as compared with only ht=430 threshold["<< GeV3ns3Global_threshold-1 << "] = " << (passedMultGlobal/totalGlobal)/(passedHtSum430/totalGlobal) << ";" << std::endl;
+      EffRate_file << "REGIONAL QCD, Factor reduction in eff with timing and ht=120 cuts as compared with only ht=360 threshold["<< GeV3ns3Jet_threshold-1 << "] = " << (passedMultJets_120/totalJets)/(passedHtSum360/totalGlobal) << ";" << std::endl;
+      EffRate_file << "GLOBAL QCD, Factor reduction in eff with timing and ht=120 cuts as compared with only ht=360 threshold["<< GeV3ns3Global_threshold-1 << "] = " << (passedMultGlobal/totalGlobal)/(passedHtSum360/totalGlobal) << ";" << std::endl;
       EffRate_file << " " << std::endl;
     }
     std::cout << "writing histograms" <<std::endl;
     htSumDistribution->Write();
+    LLPdecayDetAcceptance->Write();
+    LLPdecayRadiusDetAcceptance->Write();
+    LLPdecayXyzDetAcceptance->Write();
     hJetEt->Write();
     hJetEt_1->Write();
     hJetEt_2->Write();
@@ -2609,6 +2682,15 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     }
     for (int GeV=0; GeV<6; GeV++) {
       NumberTPtiming[GeV]->Write();
+      NumberTPavgtiming_jet1[GeV]->Write();
+      NumberTPavgtiming_jet2[GeV]->Write();
+      NumberTPavgtiming_jet3[GeV]->Write();
+      NumberTPavgtiming_jet4[GeV]->Write();
+      NumberTPavgtiming_jetMax[GeV]->Write();
+      NumberTPtotalhits_jet1[GeV]->Write();
+      NumberTPtotalhits_jet2[GeV]->Write();
+      NumberTPtotalhits_jet3[GeV]->Write();
+      NumberTPtotalhits_jet4[GeV]->Write();
       NumberTPtiming_depth1[GeV]->Write();
       NumberTPtiming_depth2[GeV]->Write();
       NumberTPtiming_depth3[GeV]->Write();
@@ -2748,6 +2830,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     dt3GeV2nsHBQuadJet_depth2_Mult_emu->Write();
     dt3GeV2nsHBQuadJet_depth3_Mult_emu->Write();
     dt3GeV2nsHBQuadJet_depth4_Mult_emu->Write();
+    dt3GeV2nsHBHEQuadJet_depth1_Mult_emu->Write();
+    dt3GeV2nsHBHEQuadJet_depth2_Mult_emu->Write();
+    dt3GeV2nsHBHEQuadJet_depth3_Mult_emu->Write();
+    dt3GeV2nsHBHEQuadJet_depth4_Mult_emu->Write();
 
     dt0GeV5nsHBJet1Mult_emu->Write();
     dt0GeV5nsHBJet2Mult_emu->Write();
