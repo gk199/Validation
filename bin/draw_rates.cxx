@@ -56,6 +56,7 @@
 					 "dt3GeV3nsHBJet1","dt3GeV3nsHBJet2","dt3GeV3nsHBJet3","dt3GeV3nsHBJet4",
 					 "dt3GeV3nsHBQuadJet","dt3GeV3nsHBTripleJet","dt3GeV3nsHBDoubleJet","dt3GeV3nsHBSingleJet",
 					 "dt3GeV2nsHBQuadJet_depth1_","dt3GeV2nsHBQuadJet_depth2_","dt3GeV2nsHBQuadJet_depth3_","dt3GeV2nsHBQuadJet_depth4_",
+                                         "dt3GeV2nsHBHEQuadJet_depth1_","dt3GeV2nsHBHEQuadJet_depth2_","dt3GeV2nsHBHEQuadJet_depth3_","dt3GeV2nsHBHEQuadJet_depth4_",
                                          "dt0GeV5nsHBJet1","dt0GeV5nsHBJet2","dt0GeV5nsHBJet3","dt0GeV5nsHBJet4",
                                          "dt0GeV5nsHBQuadJet","dt0GeV5nsHBTripleJet","dt0GeV5nsHBDoubleJet","dt0GeV5nsHBSingleJet",
 					 "dt2GeV1nsJet","dt2GeV2nsJet","dt2GeV3nsJet","dt2GeV4nsJet","dt2GeV5nsJet",
@@ -70,6 +71,15 @@
 					 "DelayedHitFraction2GeV1ns","DelayedHitFraction2GeV2ns","DelayedHitFraction2GeV3ns","DelayedHitFraction2GeV4ns","DelayedHitFraction2GeV5ns",
 					 "DelayedHitFraction3GeV1ns","DelayedHitFraction3GeV2ns","DelayedHitFraction3GeV3ns","DelayedHitFraction3GeV4ns","DelayedHitFraction3GeV5ns",
 					 "DelayedHitFraction4GeV1ns","DelayedHitFraction4GeV2ns","DelayedHitFraction4GeV3ns","DelayedHitFraction4GeV4ns","DelayedHitFraction4GeV5ns",
+					 "NumberTPtotalhits_jet1_0GeV","NumberTPtotalhits_jet1_1GeV","NumberTPtotalhits_jet1_2GeV","NumberTPtotalhits_jet1_3GeV","NumberTPtotalhits_jet1_4GeV","NumberTPtotalhits_jet1_5GeV",
+                                         "NumberTPtotalhits_jet2_0GeV","NumberTPtotalhits_jet2_1GeV","NumberTPtotalhits_jet2_2GeV","NumberTPtotalhits_jet2_3GeV","NumberTPtotalhits_jet2_4GeV","NumberTPtotalhits_jet2_5GeV",
+                                         "NumberTPtotalhits_jet3_0GeV","NumberTPtotalhits_jet3_1GeV","NumberTPtotalhits_jet3_2GeV","NumberTPtotalhits_jet3_3GeV","NumberTPtotalhits_jet3_4GeV","NumberTPtotalhits_jet3_5GeV",
+                                         "NumberTPtotalhits_jet4_0GeV","NumberTPtotalhits_jet4_1GeV","NumberTPtotalhits_jet4_2GeV","NumberTPtotalhits_jet4_3GeV","NumberTPtotalhits_jet4_4GeV","NumberTPtotalhits_jet4_5GeV",
+                                         "NumberTPavgtiming_jet1_0GeV","NumberTPavgtiming_jet1_1GeV","NumberTPavgtiming_jet1_2GeV","NumberTPavgtiming_jet1_3GeV","NumberTPavgtiming_jet1_4GeV","NumberTPavgtiming_jet1_5GeV",
+                                         "NumberTPavgtiming_jet2_0GeV","NumberTPavgtiming_jet2_1GeV","NumberTPavgtiming_jet2_2GeV","NumberTPavgtiming_jet2_3GeV","NumberTPavgtiming_jet2_4GeV","NumberTPavgtiming_jet2_5GeV",
+                                         "NumberTPavgtiming_jet3_0GeV","NumberTPavgtiming_jet3_1GeV","NumberTPavgtiming_jet3_2GeV","NumberTPavgtiming_jet3_3GeV","NumberTPavgtiming_jet3_4GeV","NumberTPavgtiming_jet3_5GeV",
+                                         "NumberTPavgtiming_jet4_0GeV","NumberTPavgtiming_jet4_1GeV","NumberTPavgtiming_jet4_2GeV","NumberTPavgtiming_jet4_3GeV","NumberTPavgtiming_jet4_4GeV","NumberTPavgtiming_jet4_5GeV",
+					 "NumberTPavgtiming_jetMax_0GeV","NumberTPavgtiming_jetMax_1GeV","NumberTPavgtiming_jetMax_2GeV","NumberTPavgtiming_jetMax_3GeV","NumberTPavgtiming_jetMax_4GeV","NumberTPavgtiming_jetMax_5GeV",
 					 "NumberTPtiming_0GeV","NumberTPtiming_1GeV","NumberTPtiming_2GeV","NumberTPtiming_3GeV","NumberTPtiming_4GeV","NumberTPtiming_5GeV",
                                          "NumberTPtiming_0GeV_depth1","NumberTPtiming_1GeV_depth1","NumberTPtiming_2GeV_depth1","NumberTPtiming_3GeV_depth1","NumberTPtiming_4GeV_depth1","NumberTPtiming_5GeV_depth1",
                                          "NumberTPtiming_0GeV_depth2","NumberTPtiming_1GeV_depth2","NumberTPtiming_2GeV_depth2","NumberTPtiming_3GeV_depth2","NumberTPtiming_4GeV_depth2","NumberTPtiming_5GeV_depth2",
@@ -616,11 +626,27 @@
       multHists_LLP1000[hist]->SetLineWidth(3);
       pad1.back()->SetGrid(0,0);
     }
+    if (name(0,14) == "NumberTPavgtim" ) {
+      multHists_QCD[hist]->SetTitle("Average Timing Value for Cells above "+name(23,4)+" within DR<0.5 of Jet "+name(21,1));
+      multHists_QCD[hist]->GetYaxis()->SetTitle("Number of Events (AU)");
+      multHists_LLP500[hist]->SetLineWidth(3);
+      multHists_LLP1000[hist]->SetLineWidth(3);
+      pad1.back()->SetGrid(0,0);
+    }
+    if (name(0,14) == "NumberTPtotalh" ) {
+      multHists_QCD[hist]->SetTitle("Hits for Cells above "+name(23,4)+" within DR<0.5 of Jet "+name(21,1));
+      multHists_QCD[hist]->GetYaxis()->SetTitle("Number of Events (AU)");
+      multHists_LLP500[hist]->SetLineWidth(3);
+      multHists_LLP1000[hist]->SetLineWidth(3);
+      pad1.back()->SetGrid(0,0);
+    }
     if ( name(9,2) == "HE" || name(9,2) == "HB" ){ // setting range and name of histograms for HCAL barrel and endcap regions
       multHists_QCD[hist]->SetTitle("Multiplicity at " + name(2,4) + " and " + name(6,3) + " in " + name(9,2)+", TP matched w/" + name(11,3));
       if (name(11,3) != "Jet" ) multHists_QCD[hist]->SetTitle("Multiplicity at " + name(2,4) + " and " + name(6,3) + " in " + name(9,2));
       if (name(9,5) == "HBSin" || name(9,5) == "HBDou" || name(9,5) == "HBTri" ) multHists_QCD[hist]->SetTitle(name(11,6) + " Jet Hit Multiplicity at " + name(2,4) + " and " + name(6,3));
       if (name(9,5) == "HBQua" ) multHists_QCD[hist]->SetTitle(name(11,4) + " Jet Hit Multiplicity at " + name(2,4) + " and " + name(6,3));
+      if (name(19,5) == "depth" ) multHists_QCD[hist]->SetTitle("Quad Jet Hit Mult at " + name(2,4) + " and " + name(6,3) + " in HB, Depth=" + name(24,1) ); // depth investigations, multiplicity
+      if (name(21,5) == "depth" ) multHists_QCD[hist]->SetTitle("Quad Jet Hit Mult at " + name(2,4) + " and " + name(6,3) + " in HB+HE, Depth=" + name(26,1) );
       if (hist.substr(0,3) == "dt0" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,100);
       if (hist.substr(0,3) == "dt1" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,100);
       if (hist.substr(0,3) == "dt2" && name(9,2) == "HB" ) multHists_QCD[hist]->GetXaxis()->SetRangeUser(0,70);
@@ -793,10 +819,10 @@
     energy_profile_LLP10000->SetTitle("TP Energy Fraction vs. Depth for LLP c#scale[1.2]{#tau}=10m");
     //    canvases.back()->Print(Form("plots/%s_LLP10000.pdf", hist.c_str()));
   }
-
+  
   std::cout << "Global multiplicity: single jet rate = " << SJet60GeV << " and htSum rate = " << htSum350GeV << std::endl;
   std::cout << "Jet matched multiplicity: single jet rate = " << SJet60GeV_l << " and htSum rate = " << htSum350GeV_l << std::endl;
-
+  /*
   Double_t EffPl500_120[6], EffPl500_350[6], EffPl500Mh350_120[6], EffPl500Mh350_350[6], EffQCD_120[6], EffQCD_350[6], singleJetRate[6], quadJetRate[6], htSum120Rate[6], htSum350Rate[6];
   Double_t EffPl500Global[6], EffPl500Mh350Global[6], EffQCDGlobal[6], singleJetRateGlobal[6], quadJetRateGlobal[6], htSumRate120Global[6], htSumRate350Global[6];
   double EffPl500Mh1000_htSum120_Global, EffPl500Mh1000_htSum350_Global, EffPl500Mh1000_htSum430_Global, EffQCD_htSum120_Global, EffQCD_htSum350_Global, EffQCD_htSum430_Global, Original_htSumRate120, Original_htSumRate350, Original_htSumRate430;
@@ -1214,32 +1240,6 @@
   gr_global_sing_QCD->GetXaxis()->SetLimits(0.,1.);
   c2_global_sing_quad->SaveAs("plots/NuGun_JetRates_vs_BackgroundEff_Global.pdf");
 
-  TCanvas *c2_global_350_120 = new TCanvas("c2_global_120","Graph Draw Options",200,10,600,400);
-  gr_global_120_QCD->SetLineColor(4); // blue    
-  gr_global_120_QCD->GetHistogram()->SetMinimum(-5.);
-  gr_global_350_QCD->GetHistogram()->SetMinimum(-5.);
-  gr_global_120_QCD->Draw("AC*");
-  gr_global_120_QCD->GetXaxis()->SetLimits(0.,1.);
-  gr_global_120_QCD->SetTitle("htSum Rate vs. Background Efficiency for Global Multiplicity Cut;QCD Efficiency;Neutrino Gun Rate (kHz, unnorm)   ");
-  gr_global_350_QCD->SetLineColor(2); // red     
-  //  gr_global_350_QCD->Draw("C*");
-  m_QCD_htSum120->SetMarkerStyle(21);
-  m_QCD_htSum120->SetMarkerColor(4);
-  m_QCD_htSum350->SetMarkerStyle(21);
-  m_QCD_htSum350->SetMarkerColor(2);
-  m_QCD_htSum430->SetMarkerStyle(21);
-  m_QCD_htSum430->SetMarkerColor(3);
-  m_QCD_htSum120->Draw();
-  //  m_QCD_htSum350->Draw();
-  m_QCD_htSum430->Draw();
-  auto legend2_global_350_120 = new TLegend(0.15,0.7,0.5,0.9);
-  legend2_global_350_120->AddEntry(gr_global_120_QCD,"H_{T}>120 GeV, with timing cuts");
-  //  legend2_global_350_120->AddEntry(gr_global_350_QCD,"H_{T}>350 GeV, with timing cuts");
-  //  legend2_global_350_120->AddEntry(m_LLP_htSum350,"H_{T}>350 GeV, no timing cuts");
-  legend2_global_350_120->AddEntry(m_LLP_htSum430,"H_{T}>430 GeV, no timing cuts");
-  legend2_global_350_120->Draw();
-  gr_global_120_QCD->GetXaxis()->SetLimits(0.,1.);
-  c2_global_350_120->SaveAs("plots/NuGun_htSumRates_vs_BackgroundEff_Global.pdf");
-
+  */
   return 0;
 }
