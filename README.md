@@ -18,6 +18,8 @@ cmssw/SimCalorimetry/HcalTrigPrimAlgos/src/HcalTimingBit.cc
 ```
 The loop and cuts can be modified to check different multiplicity definitions.
 
+Many output plots and results are saved [here](https://gkopp.web.cern.ch/gkopp/HCAL_LLP/).
+
 # HCAL Rates and Multiplicity Studies
 The script that submit CRAB jobs is called `submit_jobs.py`. Its required arguments are a good run lumimask, a dataset name, the new HcalL1TriggerObjects tag, and the storage site for the output. For example:
 ```
