@@ -11,14 +11,14 @@ COND_LIST = ['def']
 #COND_LIST = ['def', 'new_cond']
 # Relatively stable parameters can have defaults.
 # era should never change within a year
-ERA = 'Run2_2018'
+ERA = 'Run3'
 # current data global tag
-CONDITIONS = '101X_dataRun2_HLT_v7'
+CONDITIONS = '106X_upgrade2021_realistic_v4'
 # L1 calibrations; needs to be updated when L1 calibrations change
-CALOSTAGE2PARAMS = '2018_v1_3'
+CALOSTAGE2PARAMS = '2018_v1_4'
 # dummy value needed so that cmsDriver.py will
 # assume that there is an input file
-DEFAULTINPUT = '/store/express/Run2017B/ExpressPhysics/FEVT/Express-v1/000/297/562/00000/EE1F5F26-145B-E711-A146-02163E019C23.root'
+DEFAULTINPUT = '/store/relval/CMSSW_10_6_0_pre4/RelValQCD_FlatPt_15_3000HS_13/GEN-SIM-DIGI-RAW/PU25ns_106X_upgrade2021_realistic_v4-v1/20000/FD9083D9-8366-E74A-B617-AA81ECF03A85.root'
 # frontier database (needs to be specified when overriding conditions)
 FRONTIER = 'frontier://FrontierProd/CMS_CONDITIONS'
 
@@ -66,7 +66,7 @@ PARSER = argparse.ArgumentParser()
 PARSER.add_argument('-g', '--globaltag')
 # new L1TriggerObjects tag
 PARSER.add_argument('-t', '--newtag', required=False)
-PARSER.add_argument('-l', '--lumimask', required=True)
+PARSER.add_argument('-l', '--lumimask', required=False)
 PARSER.add_argument('-d', '--dataset', required=True)
 PARSER.add_argument('-o', '--outputsite', required=True)
 PARSER.add_argument('-n', '--no_exec')
@@ -76,16 +76,17 @@ ARGS = PARSER.parse_args()
 # check environment setup
 check_setup()
 
-FILE = file(ARGS.lumimask)
-GOOD_RUN_STRING = FILE.read()
-GOOD_RUN_DATA = json.loads(GOOD_RUN_STRING)
-if(ARGS.globaltag):
-    CONDITIONS = ARGS.globaltag
-if(ARGS.caloparams):
-    CALOSTAGE2PARAMS = ARGS.caloparams   
-if len(GOOD_RUN_DATA) != 1:
-    sys.exit("Only running on a single run at a time is supported.")
-RUN = GOOD_RUN_DATA.keys()[0]
+#FILE = file(ARGS.lumimask)
+#GOOD_RUN_STRING = FILE.read()
+#GOOD_RUN_DATA = json.loads(GOOD_RUN_STRING)
+#if(ARGS.globaltag):
+#    CONDITIONS = ARGS.globaltag
+#if(ARGS.caloparams):
+#    CALOSTAGE2PARAMS = ARGS.caloparams   
+#if len(GOOD_RUN_DATA) != 1:
+#    sys.exit("Only running on a single run at a time is supported.")
+#RUN = GOOD_RUN_DATA.keys()[0]
+#print RUN
 # generate configs both for default and new conditions
 #for jobtype in ['def', 'new_cond']:
 if ARGS.newtag>0:
@@ -94,18 +95,18 @@ if ARGS.newtag>0:
 for jobtype in COND_LIST:
     tmpfile = 'submit_tmp.py'
     crab_submit_script = open(tmpfile, 'w')
-    crab_submit_script.write("RUN = " + str(RUN) + '\n')
+#    crab_submit_script.write("RUN = " + str(RUN) + '\n')
     if jobtype == 'def':
         crab_submit_script.write("NEWCONDITIONS = False\n")
     else:
         crab_submit_script.write("NEWCONDITIONS = True\n")
     crab_submit_script.write("OUTPUTSITE = '" + ARGS.outputsite + "'\n")
-    crab_submit_script.write("LUMIMASK = '" + ARGS.lumimask + "'\n")
+#    crab_submit_script.write("LUMIMASK = '" + ARGS.lumimask + "'\n")
     crab_submit_script.write("DATASET = '" + ARGS.dataset + "'\n\n")
     crab_submit_script.close()
     
     # concatenate crab submission file with template
-    filename = 'submit_run_' + str(RUN) + '_' + jobtype + '.py'
+    filename = 'submit_run_' + 'MCrun' + '_' + jobtype + '.py'
     command = "cat submit_tmp.py ntuple_submit_template.py > " + filename
     os.system(command)
     os.remove(tmpfile)

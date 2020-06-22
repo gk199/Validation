@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Submit rate histogram jobs"""
+"""Submit analysis histogram jobs"""
 import argparse
 import os
 
@@ -17,13 +17,13 @@ BASECMD = "bsub -q " + QUEUE
 
 if(ARGS.default):
     cmd = BASECMD
-    cmd += " -o def.log \'rates.exe def "
+    cmd += " -o def.log \'llp_analysis.exe def "
     cmd += ARGS.default
-    cmd += "; cp rates_def.root '`pwd`"
+    cmd += "; cp llpanalysis_def.root '`pwd`"
     os.system(cmd)
-if(ARGS.new):
-    cmd = BASECMD
-    cmd += " -o new.log \'rates.exe new "
-    cmd += ARGS.new
-    cmd += "; cp rates_new_cond.root '`pwd`"
-    os.system(cmd)
+#if(ARGS.new):
+#    cmd = BASECMD
+#    cmd += " -o new.log \'rates.exe new "
+#    cmd += ARGS.new
+#    cmd += "; cp rates_new_cond.root '`pwd`"
+#    os.system(cmd)
