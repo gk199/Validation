@@ -12,7 +12,6 @@
 #include "L1Trigger/L1TNtuples/interface/L1AnalysisL1UpgradeDataFormat.h"
 #include "L1Trigger/L1TNtuples/interface/L1AnalysisRecoVertexDataFormat.h"
 #include "L1Trigger/L1TNtuples/interface/L1AnalysisCaloTPDataFormat.h"
-#include "L1Trigger/L1TNtuples/interface/L1AnalysisGeneratorDataFormat.h"
 
 
 /* TODO: put errors in rates...
@@ -29,7 +28,7 @@ nb: for 2&3 I have provided the info in runInfoForRates.txt
 */
 
 // configurable parameters
-double numBunch = 2556; //1537; //the number of bunches colliding for the run of interest
+double numBunch = 1537; //the number of bunches colliding for the run of interest
 double runLum = 0.02; // 0.44: 275783  0.58:  276363 //luminosity of the run of interest (*10^34)
 double expectedLum = 1.15; //expected luminosity of 2016 runs (*10^34)
 
@@ -74,102 +73,6 @@ bool isGoodLumiSection(int lumiBlock)
   return false;
 }
 
-// functions to calculate eta from ieta, phi from iphi, delta eta, delta phi, and deltaR. Code from https://github.com/gk199/cms-hcal-debug/blob/PulseShape/plugins/HcalCompareUpgradeChains.cc#L894-L954
-double etaVal(int ieta) { // calculate eta given ieta
-  double etavl;
-  if (ieta <= -24){
-    etavl = .1695*ieta + 1.9931;
-  }
-  else if (ieta <= -1){
-    etavl = .0875*ieta + .0489;
-  }
-  else if (ieta < 24){
-    etavl = .0875*ieta - .0489;
-  }
-  else {
-    etavl = .1695*ieta - 1.9931;
-  }
-  return etavl;
-}
-
-double phiVal(int iphi) { // calculate phi given iphi
-  double phiBins=72.;
-  double phivl;
-  phivl=double(iphi)*(2.*TMath::Pi()/phiBins);
-  if (iphi > 36) phivl -= 2.*TMath::Pi();
-  return phivl;
-}
-
-double deltaPhi(double phi1, double phi2) {  // calculate delta phi given two phi values
-  double result = phi1 - phi2;
-  if(fabs(result) > 9999) return result;
-  while (result > TMath::Pi()) result -= 2*TMath::Pi();
-  while (result <= -TMath::Pi()) result += 2*TMath::Pi();
-  return result;
-}
-
-double deltaR(double eta1, double phi1, double eta2, double phi2) { // calculate deltaR given two eta and phi values
-  double deta = eta1 - eta2;
-  double dphi = deltaPhi(phi1, phi2);
-  return sqrt(deta*deta + dphi*dphi);
-}
-
-std::vector<double> intersect(double vx, double vy,double vz, double px, double py, double pz) {
-  double lightSpeed = 29979245800;
-  double radius = 179; // 130 for calorimeters (ECAL + HCAL)
-  double length = 388; // 300 for calorimeters (ECAL + HCAL)
-  double energy = sqrt(px*px + py*py + pz*pz);
-  // First work out intersection with cylinder (barrel)        
-  double a = (px*px + py*py)*lightSpeed*lightSpeed/(energy*energy);
-  double b = 2*(vx*px + vy*py)*lightSpeed/energy;
-  double c = (vx*vx + vy*vy) - radius*radius;
-  double sqrt_disc = sqrt(b*b - 4*a*c);
-  double tCircle1 = (-b + sqrt_disc)/(2*a);
-  double tCircle2 = (-b - sqrt_disc)/(2*a);
-  // If intersection in the past it doesn't count         
-  if (tCircle1 < 0) tCircle1 = 1E9;
-  if (tCircle2 < 0) tCircle2 = 1E9;
-  // If the intsersection occurs outside the barrel length it doesn't count                       
-  double zPosCircle1 = tCircle1*(pz/energy)*lightSpeed + vz;
-  double zPosCircle2 = tCircle2*(pz/energy)*lightSpeed + vz;
-  if (zPosCircle1 > length) tCircle1 = 1E9;
-  if (zPosCircle2 > length) tCircle2 = 1E9;
-  // Now work out if it intersects the endcap                      
-  double tPlane1 = (length-vz)*energy/(pz*lightSpeed);
-  double tPlane2 = (-length-vz)*energy/(pz*lightSpeed);
-  // If intersection in the past it doesn't count                     
-  if (tPlane1 < 0) tPlane1 = 1E9;
-  if (tPlane2 < 0) tPlane2 = 1E9;
-  double xPosPlane1 = tPlane1*(px/energy)*lightSpeed + vx;
-  double yPosPlane1 = tPlane1*(py/energy)*lightSpeed + vy;
-  double xPosPlane2 = tPlane2*(px/energy)*lightSpeed + vx;
-  double yPosPlane2 = tPlane2*(py/energy)*lightSpeed + vy;
-  // If the intsersection occurs outside the endcap radius it doesn't count     
-  if (sqrt(xPosPlane1*xPosPlane1 + yPosPlane1*yPosPlane1) > radius) tPlane1 = 1E9;
-  if (sqrt(xPosPlane2*xPosPlane2+yPosPlane2*yPosPlane2) > radius) tPlane2 = 1E9;
-  // Find the first intersection                          
-  double tInter = std::min({tCircle1,tCircle2,tPlane1,tPlane2});
-  // Return 1000,1000 if not intersection with barrel or endcap             
-  std::vector<double> etaphi;
-  if (tInter > 1E6)
-    {
-      etaphi.push_back(1000);
-      etaphi.push_back(1000);
-      return etaphi;
-    }
-  // Find position of intersection                          
-  double xPos = tInter*(px/energy)*lightSpeed + vx;
-  double yPos = tInter*(py/energy)*lightSpeed + vy;
-  double zPos = tInter*(pz/energy)*lightSpeed + vz;
-  // Find eta/phi of intersection                          
-  double phi = atan2(yPos,xPos); // return the arc tan in radians                                                                                                                               
-  double theta = acos(zPos/sqrt(xPos*xPos + yPos*yPos + zPos*zPos));
-  double eta = -log(tan(theta/2.));
-  etaphi.push_back(eta);
-  etaphi.push_back(phi);
-  return etaphi;
-}
-
 void rates(bool newConditions, const std::string& inputFileDirectory){
   
   bool hwOn = true;   //are we using data from hardware? (upgrade trigger had to be running!!!)
@@ -204,20 +107,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   }
   TChain * eventTree = new TChain("l1EventTree/L1EventTree");
   eventTree->Add(inputFile.c_str());
-  TChain * treeL1TPemu = new TChain("l1CaloTowerEmuTree/L1CaloTowerTree");
-  if (emuOn){
-    treeL1TPemu->Add(inputFile.c_str());
-  }
-  TChain * treeL1TPhw = new TChain("l1CaloTowerTree/L1CaloTowerTree");
-  if (hwOn){
-    treeL1TPhw->Add(inputFile.c_str());
-  }
-  TChain * treeL1CaloTPemu = new TChain("l1CaloTowerEmuTree/L1CaloTowerTree");
-  if (emuOn){
-    treeL1CaloTPemu->Add(inputFile.c_str());
-  }
-  TChain * genTree = new TChain("l1GeneratorTree/L1GenTree");
-  genTree->Add(inputFile.c_str());
 
   // In case you want to include PU info
   // TChain * vtxTree = new TChain("l1RecoTree/RecoTree");
@@ -225,23 +114,31 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   //   vtxTree->Add(inputFile.c_str());
   // }
 
-  // These are the branches on the above trees, so can use multiple branches on same tree
+
+  TChain * treeL1TPemu = new TChain("l1CaloTowerEmuTree/L1CaloTowerTree");
+  if (emuOn){
+    treeL1TPemu->Add(inputFile.c_str());
+  }
+
+  TChain * treeL1TPhw = new TChain("l1CaloTowerTree/L1CaloTowerTree");
+  if (hwOn){
+    treeL1TPhw->Add(inputFile.c_str());
+  }
+
   L1Analysis::L1AnalysisL1UpgradeDataFormat    *l1emu_ = new L1Analysis::L1AnalysisL1UpgradeDataFormat();
   treeL1emu->SetBranchAddress("L1Upgrade", &l1emu_);
   L1Analysis::L1AnalysisL1UpgradeDataFormat    *l1hw_ = new L1Analysis::L1AnalysisL1UpgradeDataFormat();
   treeL1hw->SetBranchAddress("L1Upgrade", &l1hw_);
   L1Analysis::L1AnalysisEventDataFormat    *event_ = new L1Analysis::L1AnalysisEventDataFormat();
   eventTree->SetBranchAddress("Event", &event_);
+  // L1Analysis::L1AnalysisRecoVertexDataFormat    *vtx_ = new L1Analysis::L1AnalysisRecoVertexDataFormat();
+  // vtxTree->SetBranchAddress("Vertex", &vtx_);
+
   L1Analysis::L1AnalysisCaloTPDataFormat    *l1TPemu_ = new L1Analysis::L1AnalysisCaloTPDataFormat();
   treeL1TPemu->SetBranchAddress("CaloTP", &l1TPemu_);
   L1Analysis::L1AnalysisCaloTPDataFormat    *l1TPhw_ = new L1Analysis::L1AnalysisCaloTPDataFormat();
   treeL1TPhw->SetBranchAddress("CaloTP", &l1TPhw_);
-  L1Analysis::L1AnalysisCaloTPDataFormat *l1CaloTPemu_ = new L1Analysis::L1AnalysisCaloTPDataFormat();
-  treeL1CaloTPemu->SetBranchAddress("CaloTP", &l1CaloTPemu_);
-  L1Analysis::L1AnalysisGeneratorDataFormat    *generator_ = new L1Analysis::L1AnalysisGeneratorDataFormat();
-  genTree->SetBranchAddress("Generator", &generator_);
-  // L1Analysis::L1AnalysisRecoVertexDataFormat    *vtx_ = new L1Analysis::L1AnalysisRecoVertexDataFormat();
-  // vtxTree->SetBranchAddress("Vertex", &vtx_); 
+
 
   // get number of entries
   Long64_t nentries;
@@ -355,11 +252,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F* hcalTP_hw = new TH1F("hcalTP_hw", ";TP E_{T}; # Entries", nTpBins, tpLo, tpHi);
   TH1F* ecalTP_hw = new TH1F("ecalTP_hw", ";TP E_{T}; # Entries", nTpBins, tpLo, tpHi);
 
-  // histograms based on hit multiplicity from the timing bit
-  TH1F * ADC50_3ns_4JetMultHB_emu = new TH1F("ADC50_3ns_4JetMultHB_emu","Number of cells >=50 ADC and >=3ns near 4 L1 Jets (HB, dR(TP,L1Jet)<0.5);Number of cells;Fraction of Entries (normalized)",40,0,40);
-  TH1F * ADC50_3ns_4JetMultHE_emu = new TH1F("ADC50_3ns_4JetMultHE_emu","Number of cells >=50 ADC and >=3ns near 4 L1 Jets (HE, dR(TP,L1Jet)<0.5);Number of cells;Fraction of Entries (normalized)",80,0,80);
-  TH1F * ADC50_3ns_4JetMultHBHE_emu = new TH1F("ADC50_3ns_4JetMultHBHE_emu","Number of cells >=50 ADC and >=3ns near 4 L1 Jets (HBHE, dR(TP,L1Jet)<0.5);Number of cells;Fraction of Entries (normalized)",80,0,80);
-
   /////////////////////////////////
   // loop through all the entries//
   /////////////////////////////////
@@ -376,9 +268,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     //do routine for L1 emulator quantites
     if (emuOn){
 
-      // get entries from the trees
-      treeL1CaloTPemu->GetEntry(jentry);
-      genTree->GetEntry(jentry); // used for gen particle matching later 
       treeL1TPemu->GetEntry(jentry);
       double tpEt(0.);
       
@@ -537,95 +426,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
         if( (metHFSum) >= metHFSumLo+(bin*metHFSumBinWidth) ) metHFSumRates_emu->Fill(metHFSumLo+(bin*metHFSumBinWidth)); //GeV           
       }
 
-      //////////////////////////////////////
-      ////////// HCAL TP Loop //////////
-      //////////////////////////////////////
-      double nCaloTPemu = l1CaloTPemu_->nHCALTP; // number of TPs varies from 400-1400 per event, approximately Gaussian
-      uint nJetemu = l1emu_->nJets; // number of jets per event
-      int SumTimingBitJet1_HB = 0;
-      int SumTimingBitJet2_HB = 0;
-      int SumTimingBitJet3_HB = 0;
-      int SumTimingBitJet4_HB = 0;
-      int SumTimingBitJet1_HE = 0;
-      int SumTimingBitJet2_HE = 0;
-      int SumTimingBitJet3_HE = 0;
-      int SumTimingBitJet4_HE = 0;
-      for (int HcalTPIt = 0; HcalTPIt < nCaloTPemu; HcalTPIt++){
-	// eta and phi of the HCAL TP
-	double tpEtaemu = l1CaloTPemu_->hcalTPieta[HcalTPIt]; // ieta
-	if (abs(tpEtaemu) > 28 ) continue; // don't consider HCAL TPs outside of HB or HE
-	double tpPhiemu = l1CaloTPemu_->hcalTPCaliphi[HcalTPIt]; // iphi
-	double TP_Eta = etaVal(tpEtaemu); // eta
-	double TP_Phi = phiVal(tpPhiemu); // phi
-        // for each HCAL TP, find the closest L1 jet   
-	double min_DeltaR = 100;
-	double DeltaR = 100;
-	int closestJet = -1;
-	for (uint jetIt = 0; (jetIt < nJetemu) && (jetIt < 4); jetIt++){ // loop over L1 jets, and only do first four (4 highest energy L1 jets from 4 leptons)
-      	  if (l1emu_->jetEt[jetIt] < 20 ) continue; // require jet is greater than 20 GeV to attempt matching to HCAL TP
-	  double Jet_eta;
-	  double Jet_phi;
-	  Jet_eta = l1emu_->jetEta[jetIt];
-	  Jet_phi = l1emu_->jetPhi[jetIt];
-	  DeltaR = deltaR(Jet_eta,Jet_phi,TP_Eta,TP_Phi);   // this is DeltaR for the HCAL TPs to L1 Jet 
-	  if (DeltaR < min_DeltaR) {
-	    min_DeltaR = DeltaR; // find min delta R between L1 Jet and HCAL TPs -- this is reset for each HCAL TP, so is which jet is closest to the TP
-	    closestJet = jetIt; // record which L1 jet is the closest to the HCAL TP under consideration
-	  }
-	} // closing L1 jet loop
-	if (min_DeltaR > 0.5 ) continue; // don't consider HCAL TPs that are greater than DR 0.5 from a L1 jet
-	int TP_TimingBit = l1CaloTPemu_->hcalTPTimingBit[HcalTPIt];
-	if (abs(tpEtaemu) <= 16 ) {
-	  if (closestJet == 0 ) SumTimingBitJet1_HB += TP_TimingBit;
-          if (closestJet == 1 ) SumTimingBitJet2_HB += TP_TimingBit;
-          if (closestJet == 2 ) SumTimingBitJet3_HB += TP_TimingBit;
-          if (closestJet == 3 ) SumTimingBitJet4_HB += TP_TimingBit;
-	}
-	if (abs(tpEtaemu) > 16 && abs(tpEtaemu) <= 28 ) {
-          if (closestJet == 0 ) SumTimingBitJet1_HE += TP_TimingBit;
-          if (closestJet == 1 ) SumTimingBitJet2_HE += TP_TimingBit;
-          if (closestJet == 2 ) SumTimingBitJet3_HE += TP_TimingBit;
-          if (closestJet == 3 ) SumTimingBitJet4_HE += TP_TimingBit;
-	}
-      	// each TP has the Timing Bit set with the multiplicity for that tower
-      } // closing HCAL TP loop
-      //      std::cout << SumTimingBitJet1 << ", " << SumTimingBitJet2 << ", " << SumTimingBitJet3 << ", " << SumTimingBitJet4 << ", " << SumTimingBitJet5 << ", " << SumTimingBitJet6 << ", " << SumTimingBitJet7 << ", " << SumTimingBitJet8 << ", " << SumTimingBitJet9 << ", " << SumTimingBitJet10 << ", " << SumTimingBitJet11 << ", " << SumTimingBitJet12 << std::endl;
-      //      std::cout << SumTimingBitJet1+SumTimingBitJet2+SumTimingBitJet3+SumTimingBitJet4 << std::endl;
-      ADC50_3ns_4JetMultHB_emu->Fill(SumTimingBitJet1_HB+SumTimingBitJet2_HB+SumTimingBitJet3_HB+SumTimingBitJet4_HB);
-      ADC50_3ns_4JetMultHE_emu->Fill(SumTimingBitJet1_HE+SumTimingBitJet2_HE+SumTimingBitJet3_HE+SumTimingBitJet4_HE);
-      ADC50_3ns_4JetMultHBHE_emu->Fill(SumTimingBitJet1_HB+SumTimingBitJet2_HB+SumTimingBitJet3_HB+SumTimingBitJet4_HB + SumTimingBitJet1_HE+SumTimingBitJet2_HE+SumTimingBitJet3_HE+SumTimingBitJet4_HE);
-
-      /* // gen matching work
-      for (int partonN = 0; partonN < generator_->nPart; partonN ++) {
-	double partonEta = 1000;
-	double partonPhi = 1000;
-	if (generator_->partHardProcess[partonN] == 0 ) continue;
-	if ( (abs(generator_->partId[partonN]) >= 1 && abs(generator_->partId[partonN]) <=5 ) || (abs(generator_->partId[partonN]) == 21) ) {
-	  if (generator_->partParent[partonN] == 9000006|| generator_->partParent[partonN] == 9000007 ) {
-	    partonEta = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[0];
-	    partonPhi = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[1];
-	    double min_DeltaR = 100;
-	    double DeltaR = 100;
-	    //	    int closestJet = -1;
-	    for (uint jetIt = 0; (jetIt < nJetemu) && (jetIt < 4); jetIt++){ // loop over L1 jets, and only do first four (4 highest energy L1 jets from 4 leptons)
-	      if (l1emu_->jetEt[jetIt] < 20 ) continue; // require jet is greater than 20 GeV to attempt matching to HCAL TP 
-	      double Jet_eta;
-	      double Jet_phi;
-	      Jet_eta = l1emu_->jetEta[jetIt];
-	      Jet_phi = l1emu_->jetPhi[jetIt];
-	      DeltaR = deltaR(Jet_eta,Jet_phi,partonEta,partonPhi);
-	      if (DeltaR < min_DeltaR) {
-		min_DeltaR = DeltaR; // find min delta R between L1 Jet and HCAL TPs -- this is reset for each HCAL TP, so is which jet is closest to the TP
-		closestJet = jetIt; // record which L1 jet is the closest 
-	      }
-	    } // closing L1 jet loop                     
-	    std::cout << "energy of closest jet = " << l1emu_->jetEt[closestJet] << std::endl;
-	    std::cout << "the closest jet is = " << closestJet << " with a delta R to the LLP parton of " << min_DeltaR << std::endl; 
-	  }
-	}
-      } // closing parton loop
-      std::cout << jentry << std::endl;
-      */ //end of gen matching section
 
     }// closes if 'emuOn' is true
 
@@ -861,11 +661,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     etSumRates_emu->Write();
     metSumRates_emu->Write();
     metHFSumRates_emu->Write();
-
-    // write histograms based on timing bit
-    ADC50_3ns_4JetMultHB_emu->Write();
-    ADC50_3ns_4JetMultHE_emu->Write();
-    ADC50_3ns_4JetMultHBHE_emu->Write();
   }
 
   if (hwOn){

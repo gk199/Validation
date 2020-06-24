@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 
+#include <iostream>
 
 int main()
 {
@@ -128,7 +129,10 @@ int main()
     }
 
     if(includeHW) canvases.back()->Print(Form("plots/%sRates_hw.pdf", iplot.first.c_str()));
-    else canvases.back()->Print(Form("plots/%sRates_emu.pdf", iplot.first.c_str()));
+    else {
+      canvases.back()->Print(Form("plots/%sRates_emu.pdf", iplot.first.c_str()));
+      canvases.back()->Print(Form("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/%sRates_emu.pdf", iplot.first.c_str()));
+    }
   }
 
   return 0;
