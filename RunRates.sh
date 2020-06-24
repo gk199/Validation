@@ -19,8 +19,13 @@ echo "QCD"
 rates.exe new QCD
 mv rates_new_cond.root rates_new_cond_QCD.root
 echo " "
-echo "Neutrino gun new conditions"
+echo "Neutrino gun new and old conditions"
 rates.exe new NeutrinoGun
+rates_original.exe def NeutrinoGun
+echo " "
+echo " "
+echo "Rates plots from draw_rates.exe"
+draw_rates.exe
 echo " "
 echo "Making overlay plots from draw_timingbit.exe"
 draw_timingbit.exe

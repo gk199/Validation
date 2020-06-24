@@ -79,6 +79,7 @@ int main()
   std::vector<std::string> egPlots = {"singleEg", "singleISOEg", "doubleEg", "doubleISOEg"};
   std::vector<std::string> tauPlots = {"singleTau", "singleISOTau", "doubleTau", "doubleISOTau"};
   std::vector<std::string> scalarSumPlots = {"etSum", "htSum"};
+  std::vector<std::string> scalarHTSumPlots = {"htSum"};
   std::vector<std::string> vectorSumPlots = {"metSum", "metHFSum"};
 
   std::vector<TCanvas*> canvases;
@@ -89,6 +90,7 @@ int main()
   plots["eg"] = egPlots;
   plots["tau"] = tauPlots;
   plots["scalarSum"] = scalarSumPlots;
+  plots["HTSum"] = scalarHTSumPlots;
   plots["vectorSum"] = vectorSumPlots;
 
   for(auto iplot : plots) {
@@ -109,6 +111,10 @@ int main()
     TLegend *leg = new TLegend(0.55, 0.9 - 0.1*iplot.second.size(), 0.95, 0.93);
     for(auto hist : iplot.second) {
       rateHists_def[hist]->Draw("hist same");
+      if ( strcmp(iplot.first.c_str(), "HTSum") == 0 ) {
+	rateHists_def[hist]->GetYaxis()->SetRangeUser(1000, 100000000);
+        rateHists_def[hist]->GetXaxis()->SetRangeUser(0, 1000);
+      }
       if(includeHW) rateHists_hw[hist]->Draw("hist same");
       rateHists_new_cond[hist]->Draw("hist same");
       TString name(rateHists_def[hist]->GetName());
@@ -121,6 +127,9 @@ int main()
     leg->Draw();
     
     pad2.back()->cd();
+    if ( strcmp(iplot.first.c_str(), "HTSum") == 0 ) {
+      rateHistsRatio[iplot.second.front()]->GetYaxis()->SetRangeUser(0,0.5);
+    } 
     rateHistsRatio[iplot.second.front()]->Draw("hist");
     if(includeHW) rateHistsRatio[iplot.second.front()]->GetYaxis()->SetTitle("Current/HW");
     else rateHistsRatio[iplot.second.front()]->GetYaxis()->SetTitle("New/Current");

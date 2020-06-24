@@ -28,7 +28,7 @@ nb: for 2&3 I have provided the info in runInfoForRates.txt
 */
 
 // configurable parameters
-double numBunch = 1537; //the number of bunches colliding for the run of interest
+double numBunch = 2556; // 1537; //the number of bunches colliding for the run of interest, from Run2 settings https://home.cern/news/news/accelerators/lhc-report-full-house-lhc
 double runLum = 0.02; // 0.44: 275783  0.58:  276363 //luminosity of the run of interest (*10^34)
 double expectedLum = 1.15; //expected luminosity of 2016 runs (*10^34)
 
@@ -172,9 +172,9 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   float tauBinWidth = (tauHi-tauLo)/nTauBins;
 
   // htSum bins
-  int nHtSumBins = 600;
+  int nHtSumBins = 1200;
   float htSumLo = 0.;
-  float htSumHi = 600.;
+  float htSumHi = 1200.;
   float htSumBinWidth = (htSumHi-htSumLo)/nHtSumBins;
 
   // mhtSum bins
