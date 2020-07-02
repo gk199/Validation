@@ -1,9 +1,11 @@
+// 2020: edited by Gillian Kopp for HCAL L1 LLP trigger studies, based on using a timing bit set by TP cell multiplicity
 // Script for calculating rate histograms
 // Originally from Aaron Bundock
 #include "TMath.h"
 #include "TFile.h"
 #include "TTree.h"
 #include "TH1F.h"
+#include "TH2F.h"
 #include "TChain.h"
 #include <iostream>
 #include <fstream>
@@ -360,6 +362,26 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F * ADC50_3ns_4JetMultHE_emu = new TH1F("ADC50_3ns_4JetMultHE_emu","Number of cells >=50 ADC and >=3ns near 4 L1 Jets (HE, dR(TP,L1Jet)<0.5);Number of cells;Fraction of Entries (normalized)",80,0,80);
   TH1F * ADC50_3ns_4JetMultHBHE_emu = new TH1F("ADC50_3ns_4JetMultHBHE_emu","Number of cells >=50 ADC and >=3ns near 4 L1 Jets (HBHE, dR(TP,L1Jet)<0.5);Number of cells;Fraction of Entries (normalized)",80,0,80);
 
+  // HT sum rate distributions to use in rate vs eff plots. Need HT > 360 rate, and HT > 120 + timing cut rate
+  TH1F* htSumRates_original_emu = new TH1F("htSumRates_original_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
+  TH1F* htSumRates_120timingOR360_emu = new TH1F("htSumRates_120timingOR360_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
+
+  // GeV / ADC ratios
+  std::map<int, TH1F*> GeV_ADC_ratio_HB, GeV_ADC_ratio_HE;
+  for (int iEta = 1; iEta <= 16; iEta++) GeV_ADC_ratio_HB[iEta] = new TH1F(Form("GeV_ADC_ratio_HB_%d",iEta),"Energy (GeV) / ADC measurement in HB;Ratio;Number of Entries",50,0,.1);
+  for (int iEta = 17; iEta <= 28; iEta++) GeV_ADC_ratio_HE[iEta] = new TH1F(Form("GeV_ADC_ratio_HE_%d",iEta),"Energy (GeV) / ADC measurement in HE;Ratio;Number of Entries",50,0,.1);
+  TH2F* ADC_vs_GeV_percell = new TH2F("ADC_vs_GeV_percell","ADC vs. GeV values per cell;ADC;Energy (GeV)",500,0,500,160,0,40);
+  TH2F* ADC_vs_GeV_percell_HBHE20 = new TH2F("ADC_vs_GeV_percell_HBHE20","ADC vs. GeV values per cell, iEta<=20;ADC;Energy (GeV)",500,0,500,160,0,40);
+  TH2F* ADC_vs_GeV_percell_HE21 = new TH2F("ADC_vs_GeV_percell_HE21","ADC vs. GeV values per cell in HE, iEta>=21;ADC;Energy (GeV)",500,0,500,160,0,40);
+  TH2F* GeV_ADC_byTPET = new TH2F("GeV_ADC_byTPET","GeV/ADC per cell as a function of TP ET;TP ET (GeV);GeV/ADC per cell",100,0,100,50,0,0.1);
+  TH2F* GeV_ADC_byTPET_HBHE20 = new TH2F("GeV_ADC_byTPET_HBHE20","GeV/ADC per cell as a function of TP ET, iEta<=20;TP ET (GeV);GeV/ADC per cell",100,0,100,50,0,0.1);
+  TH2F* GeV_ADC_byTPET_HE21 = new TH2F("GeV_ADC_byTPET_HE21","GeV/ADC per cell as a function of TP ET in HE, iEta>=21;TP ET (GeV);GeV/ADC per cell",100,0,100,50,0,0.1);
+
+  // saving rate and efficiencies 
+  double passed4JetMult_HBHE_ht120(0); //, passed4JetMult_HB_ht120(0),passed4JetMult_HE_ht120(0);
+  double passedHtSum360(0);
+  double totalEvents(0);
+
   /////////////////////////////////
   // loop through all the entries//
   /////////////////////////////////
@@ -536,7 +558,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       for(int bin=0; bin<nMetHFSumBins; bin++){
         if( (metHFSum) >= metHFSumLo+(bin*metHFSumBinWidth) ) metHFSumRates_emu->Fill(metHFSumLo+(bin*metHFSumBinWidth)); //GeV           
       }
-
+    
       //////////////////////////////////////
       ////////// HCAL TP Loop //////////
       //////////////////////////////////////
@@ -573,6 +595,84 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	    closestJet = jetIt; // record which L1 jet is the closest to the HCAL TP under consideration
 	  }
 	} // closing L1 jet loop
+	/*
+	// checking timing bit calculation
+	if (abs(tpEtaemu) <= 4) {
+	  std::cout << "timing bit = " << l1CaloTPemu_->hcalTPTimingBit[HcalTPIt] << " and eta, phi = " << tpEtaemu << ", " << tpPhiemu << std::endl;
+	  double hcalTPdepth[7] = {0};
+	  double hcalTPtiming[7] = {0};
+	  hcalTPdepth[0] = l1CaloTPemu_->hcalTPDepth1[HcalTPIt];
+	  hcalTPdepth[1] = l1CaloTPemu_->hcalTPDepth2[HcalTPIt];
+	  hcalTPdepth[2] = l1CaloTPemu_->hcalTPDepth3[HcalTPIt];
+	  hcalTPdepth[3] = l1CaloTPemu_->hcalTPDepth4[HcalTPIt];
+	  hcalTPdepth[4] = l1CaloTPemu_->hcalTPDepth5[HcalTPIt];
+	  hcalTPdepth[5] = l1CaloTPemu_->hcalTPDepth6[HcalTPIt];
+	  hcalTPdepth[6] = l1CaloTPemu_->hcalTPDepth7[HcalTPIt];
+	  // timing info for each layer, in 25 ns with resolution 0.5 ns, with the expected time subtracted off
+	  hcalTPtiming[0] = l1CaloTPemu_->hcalTPtiming1[HcalTPIt];
+	  hcalTPtiming[1] = l1CaloTPemu_->hcalTPtiming2[HcalTPIt];
+	  hcalTPtiming[2] = l1CaloTPemu_->hcalTPtiming3[HcalTPIt];
+	  hcalTPtiming[3] = l1CaloTPemu_->hcalTPtiming4[HcalTPIt];
+	  hcalTPtiming[4] = l1CaloTPemu_->hcalTPtiming5[HcalTPIt];
+	  hcalTPtiming[5] = l1CaloTPemu_->hcalTPtiming6[HcalTPIt];
+	  hcalTPtiming[6] = l1CaloTPemu_->hcalTPtiming7[HcalTPIt];
+	  for (int depthIt = 0; depthIt < 7; depthIt++) {
+	    if (hcalTPtiming[depthIt] >= 3 && hcalTPdepth[depthIt] >= 3 ) std::cout << "depth loop = " << depthIt << ", has a cell above 3GeV, 3ns" << std::endl;
+	  }
+	}
+	*/
+	// HE and HB GEV / ADC ratios, filled by iEta regions
+	if (abs(tpEtaemu) <= 16 ) GeV_ADC_ratio_HB[abs(tpEtaemu)]->Fill( (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] + l1CaloTPemu_->hcalTPDepth2[HcalTPIt] + l1CaloTPemu_->hcalTPDepth3[HcalTPIt] + l1CaloTPemu_->hcalTPDepth4[HcalTPIt]) / (l1CaloTPemu_->hcalTPADC1[HcalTPIt] + l1CaloTPemu_->hcalTPADC2[HcalTPIt] + l1CaloTPemu_->hcalTPADC3[HcalTPIt] + l1CaloTPemu_->hcalTPADC4[HcalTPIt]));
+        if (abs(tpEtaemu) > 16 && abs(tpEtaemu) <=28 ) GeV_ADC_ratio_HE[abs(tpEtaemu)]->Fill( (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] + l1CaloTPemu_->hcalTPDepth2[HcalTPIt] + l1CaloTPemu_->hcalTPDepth3[HcalTPIt] +l1CaloTPemu_->hcalTPDepth4[HcalTPIt] + l1CaloTPemu_->hcalTPDepth5[HcalTPIt] + l1CaloTPemu_->hcalTPDepth6[HcalTPIt] + l1CaloTPemu_->hcalTPDepth7[HcalTPIt]) / (l1CaloTPemu_->hcalTPADC1[HcalTPIt] + l1CaloTPemu_->hcalTPADC2[HcalTPIt] + l1CaloTPemu_->hcalTPADC3[HcalTPIt] + l1CaloTPemu_->hcalTPADC4[HcalTPIt] + l1CaloTPemu_->hcalTPADC5[HcalTPIt] + l1CaloTPemu_->hcalTPADC6[HcalTPIt] + l1CaloTPemu_->hcalTPADC7[HcalTPIt] ));
+
+	ADC_vs_GeV_percell->Fill(l1CaloTPemu_->hcalTPADC1[HcalTPIt],l1CaloTPemu_->hcalTPDepth1[HcalTPIt]);
+        ADC_vs_GeV_percell->Fill(l1CaloTPemu_->hcalTPADC2[HcalTPIt],l1CaloTPemu_->hcalTPDepth2[HcalTPIt]);
+        ADC_vs_GeV_percell->Fill(l1CaloTPemu_->hcalTPADC3[HcalTPIt],l1CaloTPemu_->hcalTPDepth3[HcalTPIt]);
+        ADC_vs_GeV_percell->Fill(l1CaloTPemu_->hcalTPADC4[HcalTPIt],l1CaloTPemu_->hcalTPDepth4[HcalTPIt]);
+        ADC_vs_GeV_percell->Fill(l1CaloTPemu_->hcalTPADC5[HcalTPIt],l1CaloTPemu_->hcalTPDepth5[HcalTPIt]);
+        ADC_vs_GeV_percell->Fill(l1CaloTPemu_->hcalTPADC6[HcalTPIt],l1CaloTPemu_->hcalTPDepth6[HcalTPIt]);
+        ADC_vs_GeV_percell->Fill(l1CaloTPemu_->hcalTPADC7[HcalTPIt],l1CaloTPemu_->hcalTPDepth7[HcalTPIt]);
+      
+	GeV_ADC_byTPET->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] / l1CaloTPemu_->hcalTPADC1[HcalTPIt]));
+        GeV_ADC_byTPET->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] / l1CaloTPemu_->hcalTPADC2[HcalTPIt]));
+        GeV_ADC_byTPET->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] / l1CaloTPemu_->hcalTPADC3[HcalTPIt]));
+        GeV_ADC_byTPET->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] / l1CaloTPemu_->hcalTPADC4[HcalTPIt]));
+        GeV_ADC_byTPET->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth5[HcalTPIt] / l1CaloTPemu_->hcalTPADC5[HcalTPIt]));
+        GeV_ADC_byTPET->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth6[HcalTPIt] / l1CaloTPemu_->hcalTPADC6[HcalTPIt]));
+        GeV_ADC_byTPET->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth7[HcalTPIt] / l1CaloTPemu_->hcalTPADC7[HcalTPIt]));
+
+	if (abs(tpEtaemu) <= 20 ) {
+	  ADC_vs_GeV_percell_HBHE20->Fill(l1CaloTPemu_->hcalTPADC1[HcalTPIt],l1CaloTPemu_->hcalTPDepth1[HcalTPIt]);
+	  ADC_vs_GeV_percell_HBHE20->Fill(l1CaloTPemu_->hcalTPADC2[HcalTPIt],l1CaloTPemu_->hcalTPDepth2[HcalTPIt]);
+	  ADC_vs_GeV_percell_HBHE20->Fill(l1CaloTPemu_->hcalTPADC3[HcalTPIt],l1CaloTPemu_->hcalTPDepth3[HcalTPIt]);
+	  ADC_vs_GeV_percell_HBHE20->Fill(l1CaloTPemu_->hcalTPADC4[HcalTPIt],l1CaloTPemu_->hcalTPDepth4[HcalTPIt]);
+	  ADC_vs_GeV_percell_HBHE20->Fill(l1CaloTPemu_->hcalTPADC5[HcalTPIt],l1CaloTPemu_->hcalTPDepth5[HcalTPIt]);
+	  ADC_vs_GeV_percell_HBHE20->Fill(l1CaloTPemu_->hcalTPADC6[HcalTPIt],l1CaloTPemu_->hcalTPDepth6[HcalTPIt]);
+	  ADC_vs_GeV_percell_HBHE20->Fill(l1CaloTPemu_->hcalTPADC7[HcalTPIt],l1CaloTPemu_->hcalTPDepth7[HcalTPIt]);
+	  GeV_ADC_byTPET_HBHE20->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] / l1CaloTPemu_->hcalTPADC1[HcalTPIt]));
+	  GeV_ADC_byTPET_HBHE20->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] / l1CaloTPemu_->hcalTPADC2[HcalTPIt]));
+	  GeV_ADC_byTPET_HBHE20->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] / l1CaloTPemu_->hcalTPADC3[HcalTPIt]));
+	  GeV_ADC_byTPET_HBHE20->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] / l1CaloTPemu_->hcalTPADC4[HcalTPIt]));
+	  GeV_ADC_byTPET_HBHE20->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth5[HcalTPIt] / l1CaloTPemu_->hcalTPADC5[HcalTPIt]));
+	  GeV_ADC_byTPET_HBHE20->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth6[HcalTPIt] / l1CaloTPemu_->hcalTPADC6[HcalTPIt]));
+	  GeV_ADC_byTPET_HBHE20->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth7[HcalTPIt] / l1CaloTPemu_->hcalTPADC7[HcalTPIt]));
+	}
+        if (abs(tpEtaemu) > 20 && abs(tpEtaemu) <=28 ) {
+          ADC_vs_GeV_percell_HE21->Fill(l1CaloTPemu_->hcalTPADC1[HcalTPIt],l1CaloTPemu_->hcalTPDepth1[HcalTPIt]);
+          ADC_vs_GeV_percell_HE21->Fill(l1CaloTPemu_->hcalTPADC2[HcalTPIt],l1CaloTPemu_->hcalTPDepth2[HcalTPIt]);
+          ADC_vs_GeV_percell_HE21->Fill(l1CaloTPemu_->hcalTPADC3[HcalTPIt],l1CaloTPemu_->hcalTPDepth3[HcalTPIt]);
+          ADC_vs_GeV_percell_HE21->Fill(l1CaloTPemu_->hcalTPADC4[HcalTPIt],l1CaloTPemu_->hcalTPDepth4[HcalTPIt]);
+          ADC_vs_GeV_percell_HE21->Fill(l1CaloTPemu_->hcalTPADC5[HcalTPIt],l1CaloTPemu_->hcalTPDepth5[HcalTPIt]);
+          ADC_vs_GeV_percell_HE21->Fill(l1CaloTPemu_->hcalTPADC6[HcalTPIt],l1CaloTPemu_->hcalTPDepth6[HcalTPIt]);
+          ADC_vs_GeV_percell_HE21->Fill(l1CaloTPemu_->hcalTPADC7[HcalTPIt],l1CaloTPemu_->hcalTPDepth7[HcalTPIt]);
+          GeV_ADC_byTPET_HE21->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] / l1CaloTPemu_->hcalTPADC1[HcalTPIt]));
+          GeV_ADC_byTPET_HE21->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] / l1CaloTPemu_->hcalTPADC2[HcalTPIt]));
+          GeV_ADC_byTPET_HE21->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] / l1CaloTPemu_->hcalTPADC3[HcalTPIt]));
+          GeV_ADC_byTPET_HE21->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] / l1CaloTPemu_->hcalTPADC4[HcalTPIt]));
+          GeV_ADC_byTPET_HE21->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth5[HcalTPIt] / l1CaloTPemu_->hcalTPADC5[HcalTPIt]));
+          GeV_ADC_byTPET_HE21->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth6[HcalTPIt] / l1CaloTPemu_->hcalTPADC6[HcalTPIt]));
+          GeV_ADC_byTPET_HE21->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth7[HcalTPIt] / l1CaloTPemu_->hcalTPADC7[HcalTPIt]));
+        }
 	if (min_DeltaR > 0.5 ) continue; // don't consider HCAL TPs that are greater than DR 0.5 from a L1 jet
 	int TP_TimingBit = l1CaloTPemu_->hcalTPTimingBit[HcalTPIt];
 	if (abs(tpEtaemu) <= 16 ) {
@@ -589,52 +689,26 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	}
       	// each TP has the Timing Bit set with the multiplicity for that tower
       } // closing HCAL TP loop
-      //      std::cout << SumTimingBitJet1 << ", " << SumTimingBitJet2 << ", " << SumTimingBitJet3 << ", " << SumTimingBitJet4 << ", " << SumTimingBitJet5 << ", " << SumTimingBitJet6 << ", " << SumTimingBitJet7 << ", " << SumTimingBitJet8 << ", " << SumTimingBitJet9 << ", " << SumTimingBitJet10 << ", " << SumTimingBitJet11 << ", " << SumTimingBitJet12 << std::endl;
-      //      std::cout << SumTimingBitJet1+SumTimingBitJet2+SumTimingBitJet3+SumTimingBitJet4 << std::endl;
-      ADC50_3ns_4JetMultHB_emu->Fill(SumTimingBitJet1_HB+SumTimingBitJet2_HB+SumTimingBitJet3_HB+SumTimingBitJet4_HB);
-      ADC50_3ns_4JetMultHE_emu->Fill(SumTimingBitJet1_HE+SumTimingBitJet2_HE+SumTimingBitJet3_HE+SumTimingBitJet4_HE);
-      ADC50_3ns_4JetMultHBHE_emu->Fill(SumTimingBitJet1_HB+SumTimingBitJet2_HB+SumTimingBitJet3_HB+SumTimingBitJet4_HB + SumTimingBitJet1_HE+SumTimingBitJet2_HE+SumTimingBitJet3_HE+SumTimingBitJet4_HE);
 
-      /* // gen matching work
-      for (int partonN = 0; partonN < generator_->nPart; partonN ++) {
-	double partonEta = 1000;
-	double partonPhi = 1000;
-	if (generator_->partHardProcess[partonN] == 0 ) continue;
-	if ( (abs(generator_->partId[partonN]) >= 1 && abs(generator_->partId[partonN]) <=5 ) || (abs(generator_->partId[partonN]) == 21) ) {
-	  if (generator_->partParent[partonN] == 9000006|| generator_->partParent[partonN] == 9000007 ) {
-	    partonEta = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[0];
-	    partonPhi = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[1];
-	    double min_DeltaR = 100;
-	    double DeltaR = 100;
-	    //	    int closestJet = -1;
-	    for (uint jetIt = 0; (jetIt < nJetemu) && (jetIt < 4); jetIt++){ // loop over L1 jets, and only do first four (4 highest energy L1 jets from 4 leptons)
-	      if (l1emu_->jetEt[jetIt] < 20 ) continue; // require jet is greater than 20 GeV to attempt matching to HCAL TP 
-	      double Jet_eta;
-	      double Jet_phi;
-	      Jet_eta = l1emu_->jetEta[jetIt];
-	      Jet_phi = l1emu_->jetPhi[jetIt];
-	      DeltaR = deltaR(Jet_eta,Jet_phi,partonEta,partonPhi);
-	      if (DeltaR < min_DeltaR) {
-		min_DeltaR = DeltaR; // find min delta R between L1 Jet and HCAL TPs -- this is reset for each HCAL TP, so is which jet is closest to the TP
-		closestJet = jetIt; // record which L1 jet is the closest 
-	      }
-	    } // closing L1 jet loop                     
-	    std::cout << "energy of closest jet = " << l1emu_->jetEt[closestJet] << std::endl;
-	    std::cout << "the closest jet is = " << closestJet << " with a delta R to the LLP parton of " << min_DeltaR << std::endl; 
-	  }
-	}
-      } // closing parton loop
-      std::cout << jentry << std::endl;
-      */ //end of gen matching section
+      // filling histograms for number of cells above energy and timing threshold set by the timing bit (50 ADC, 3 ns)
+      int Sum4Jet_HBHE = SumTimingBitJet1_HB+SumTimingBitJet2_HB+SumTimingBitJet3_HB+SumTimingBitJet4_HB + SumTimingBitJet1_HE+SumTimingBitJet2_HE+SumTimingBitJet3_HE+SumTimingBitJet4_HE;
+      int Sum4Jet_HB = SumTimingBitJet1_HB+SumTimingBitJet2_HB+SumTimingBitJet3_HB+SumTimingBitJet4_HB;
+      int Sum4Jet_HE = SumTimingBitJet1_HE+SumTimingBitJet2_HE+SumTimingBitJet3_HE+SumTimingBitJet4_HE;
+      ADC50_3ns_4JetMultHB_emu->Fill(Sum4Jet_HB);
+      ADC50_3ns_4JetMultHE_emu->Fill(Sum4Jet_HE);
+      ADC50_3ns_4JetMultHBHE_emu->Fill(Sum4Jet_HBHE);
+
+      // saving number of events passed cell multiplicity cuts. These are efficiency values used in rate vs eff plots
+      totalEvents += 1; // counting total events for efficiency calculations
+      if ( ((htSum > 120) && ( Sum4Jet_HBHE >= 10 )) || (htSum > 360) ) passed4JetMult_HBHE_ht120 += 1;
+      if (htSum > 360) passedHtSum360 += 1;
 
       for(int bin=0; bin<nHtSumBins; bin++){
-        if( (htSum) >= htSumLo+(bin*htSumBinWidth) && (SumTimingBitJet1_HB+SumTimingBitJet2_HB+SumTimingBitJet3_HB+SumTimingBitJet4_HB + SumTimingBitJet1_HE+SumTimingBitJet2_HE+SumTimingBitJet3_HE+SumTimingBitJet4_HE)>=10 ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV                                                                                                            
+        if( (htSum) >= htSumLo+(bin*htSumBinWidth) && (Sum4Jet_HBHE)>=10 ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV, compare to original rates in plot
+        if( (htSum) >= htSumLo+(bin*htSumBinWidth) ) htSumRates_original_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV, use for ht > 360 original rates in rate vs. eff plots
+        if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (Sum4Jet_HBHE)>=10 || htSum > 360 ) ) htSumRates_120timingOR360_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV, use for ht > 120 + timing OR ht > 360 rates in rate vs. eff plots
       }
-
     }// closes if 'emuOn' is true
-
-
-
 
 
     //do routine for L1 hardware quantities
@@ -870,7 +944,21 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     ADC50_3ns_4JetMultHB_emu->Write();
     ADC50_3ns_4JetMultHE_emu->Write();
     ADC50_3ns_4JetMultHBHE_emu->Write();
+
+    htSumRates_original_emu->Scale(norm);
+    htSumRates_120timingOR360_emu->Scale(norm);
+
+    // write histograms for energy / ADC
+    for (int iEta = 1; iEta <= 16; iEta ++) GeV_ADC_ratio_HB[iEta]->Write();
+    for (int iEta = 17; iEta <= 28; iEta ++) GeV_ADC_ratio_HE[iEta]->Write();
   }
+  ADC_vs_GeV_percell->Write();
+  ADC_vs_GeV_percell_HBHE20->Write();
+  ADC_vs_GeV_percell_HE21->Write();
+  GeV_ADC_byTPET->Write();
+  GeV_ADC_byTPET_HBHE20->Write();
+  GeV_ADC_byTPET_HE21->Write();
+
 
   if (hwOn){
 
@@ -912,6 +1000,40 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     metSumRates_hw->Write();
     metHFSumRates_hw->Write();
   }
+
+  std::cout << passed4JetMult_HBHE_ht120 << std::endl;
+  std::cout << passedHtSum360 << std::endl;
+  std::cout << totalEvents << std::endl;
+
+  // saving efficiencies and rates in txt files to be read by rate vs eff plotting macros
+  // signal efficiencies
+  if (inputFile.substr(0,2) == "mh" ) {
+    std::ofstream MultiplicityHits50ADC3ns_ht120_Signal;
+    MultiplicityHits50ADC3ns_ht120_Signal.open(Form("MultiplicityHits50ADC3ns_ht120_Signal_%s.txt", inputFile.substr(0,20).c_str()),std::ios_base::trunc);
+    MultiplicityHits50ADC3ns_ht120_Signal << passed4JetMult_HBHE_ht120 / totalEvents << std::endl; // efficiency at HT 120+timing OR HT 360
+    MultiplicityHits50ADC3ns_ht120_Signal << passedHtSum360 / totalEvents << std::endl; // efficiency at HT 360
+    MultiplicityHits50ADC3ns_ht120_Signal.close();
+  }
+  // background efficiencies 
+  if (inputFile.substr(0,3) == "QCD" ) {
+    std::ofstream MultiplicityHits50ADC3ns_ht120_Background;
+    MultiplicityHits50ADC3ns_ht120_Background.open("MultiplicityHits50ADC3ns_ht120_Background.txt");
+    MultiplicityHits50ADC3ns_ht120_Background << passed4JetMult_HBHE_ht120 / totalEvents << std::endl; // efficiency at HT 120+timing OR HT 360  
+    MultiplicityHits50ADC3ns_ht120_Background << passedHtSum360 / totalEvents << std::endl; // efficiency at HT 360  
+    MultiplicityHits50ADC3ns_ht120_Background.close();
+  }
+  // neutrino gun rates
+  if (inputFile.substr(0,8) == "Neutrino" ) {
+    int htSum_120timingOR360_120 = htSumRates_120timingOR360_emu->GetBinContent(htSumRates_120timingOR360_emu->GetXaxis()->FindBin(120));
+    int htSum_original_360 = htSumRates_original_emu->GetBinContent(htSumRates_original_emu->GetXaxis()->FindBin(360));
+    std::ofstream NuGunRates;
+    NuGunRates.open("NuGunRates.txt");
+    NuGunRates << htSum_120timingOR360_120 << std::endl; // rate at HT 120 
+    NuGunRates << htSum_original_360 << std::endl; // rate at HT 360 without timing cuts
+    NuGunRates.close();
+  }
+
+
   myfile << "using the following ntuple: " << inputFile << std::endl;
   myfile << "number of colliding bunches = " << numBunch << std::endl;
   myfile << "run luminosity = " << runLum << std::endl;

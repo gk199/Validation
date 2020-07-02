@@ -7,6 +7,7 @@
   <bin file="draw_1mtimingbit.cxx" name="draw_1mtimingbit.exe"/>
   <bin file="rates.cxx" name="rates.exe"/>
   <bin file="rates_original.cxx" name="rates_original.exe"/>
+  <bin file="RateEfficiencyPlots.cxx" name="RateEfficiencyPlots.exe"/>
   <bin file="draw_l1analysis.cxx" name="draw_l1analysis.exe"/>
   <bin file="l1jetanalysis.cxx" name="l1jetanalysis.exe"/>
 </environment>

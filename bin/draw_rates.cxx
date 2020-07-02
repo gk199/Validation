@@ -129,6 +129,7 @@ int main()
     pad2.back()->cd();
     if ( strcmp(iplot.first.c_str(), "HTSum") == 0 ) {
       rateHistsRatio[iplot.second.front()]->GetYaxis()->SetRangeUser(0,0.5);
+      rateHistsRatio[iplot.second.front()]->GetXaxis()->SetRangeUser(0, 1000);
     } 
     rateHistsRatio[iplot.second.front()]->Draw("hist");
     if(includeHW) rateHistsRatio[iplot.second.front()]->GetYaxis()->SetTitle("Current/HW");
@@ -140,7 +141,7 @@ int main()
     if(includeHW) canvases.back()->Print(Form("plots/%sRates_hw.pdf", iplot.first.c_str()));
     else {
       canvases.back()->Print(Form("plots/%sRates_emu.pdf", iplot.first.c_str()));
-      canvases.back()->Print(Form("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/%sRates_emu.pdf", iplot.first.c_str()));
+      canvases.back()->Print(Form("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns/%sRates_emu.pdf", iplot.first.c_str()));
     }
   }
 
