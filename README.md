@@ -4,10 +4,13 @@ These scripts use the L1Ntuple framework, which should be set up as described he
 To include the timing and depth branch with the timing bit set (calculates the multiplicity per TP, based on cells above a time and energy value), after compiling the L1Ntuple environment, do (first option in 10_6_X)
 ```
 git cms-merge-topic --unsafe lwang046:upgradeHcalTPs-timeingbit-106X 
+git cms-merge-topic --unsafe lwang046:upgradeHcalTPs-timeingbit-110X
+scram b -j 8
 ```
 After compiling with the L1Ntuple environment and the upgrade timing and depth branch, issue the following:
 ```
 git clone git@github.com:cms-hcal-trigger/Validation.git HcalTrigger/Validation
+scram b -j 8
 ```
 To have timing and energy information in the HCAL depth layers, note that L1Ntuples will need to be processed in this directory with the inclusion of Georgia's / Long's upgrade HCAL TPs branch. L1Ntuples are made with `ntuple_maker_def.py`.
 
