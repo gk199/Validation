@@ -377,6 +377,16 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH2F* GeV_ADC_byTPET_HBHE20 = new TH2F("GeV_ADC_byTPET_HBHE20","GeV/ADC per cell as a function of TP ET, abs(iEta)<=20;TP ET (GeV);GeV/ADC per cell",100,0,100,50,0,0.1);
   TH2F* GeV_ADC_byTPET_HE21 = new TH2F("GeV_ADC_byTPET_HE21","GeV/ADC per cell as a function of TP ET in HE, abs(iEta)>=21;TP ET (GeV);GeV/ADC per cell",100,0,100,50,0,0.1);
 
+  // gen matching distrbutions
+  TH1F* nJet_pt20GeV = new TH1F("nJet_pt20GeV","Number of Jets with a pT > 20 GeV; Number of Jets; Number of Events",15,0,15);
+  TH1F* DeltaR_parton_L1jet = new TH1F("DeltaR_parton_L1jet", "Minimum Delta R between a parton and a L1 Jet;DeltaR;Number of Entries",50,0,5);
+  std::map<int, TH1F*> DeltaR_parton_L1jet_closest;
+  for (int closestJet = 0; closestJet < 15; closestJet++) DeltaR_parton_L1jet_closest[closestJet] = new TH1F(Form("DeltaR_parton_L1jet_closest_Jet%d",closestJet), "Minimum Delta R between a parton and a L1 Jet;DeltaR;Number of Entries",50,0,5);
+  TH2F * LLPdecayRadiusDetAcceptance = new TH2F("LLPdecayRadiusDetAcceptance", "Decay Radius for LLPs within detector acceptance;Decay Position (z); Decay Radius (cm)",100,0,600,50,0,300);
+  TH1F * LLPdecayXyzDetAcceptance = new TH1F("LLPdecayXyzDetAcceptance", "LLPs decaying within detector acceptance;Decay Radius (x,y,z);Number of Events",100,0,600);
+
+  TH1F * htSumDistribution = new TH1F("htSumDistribution","htSum Distribution;HT Sum;Number of Events",100,0,1000);
+
   // saving rate and efficiencies 
   double passed4JetMult_HBHE_ht120(0); //, passed4JetMult_HB_ht120(0),passed4JetMult_HE_ht120(0);
   double passedHtSum360(0);
@@ -667,19 +677,27 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       	// each TP has the Timing Bit set with the multiplicity for that tower
       } // closing HCAL TP loop
 
-      // ************* GEN PARTICLE MATCHING CODE ****************** 
+      // ************* GEN PARTICLE MATCHING CODE ******************
       for (int partonN = 0; partonN < generator_->nPart; partonN ++) {
 	double partonEta = 1000;
         double partonPhi = 1000;
         if (generator_->partHardProcess[partonN] == 0 ) continue;                  
         if ( (abs(generator_->partId[partonN]) >= 1 && abs(generator_->partId[partonN]) <=5 ) || (abs(generator_->partId[partonN]) == 21) ) { 
-          if (generator_->partParent[partonN] == 9000006|| generator_->partParent[partonN] == 9000007 ) { // 6000113 possibly 
+          if ( (generator_->partParent[partonN] == 9000006) || (generator_->partParent[partonN] == 9000007) || (generator_->partParent[partonN] == 6000113) ) { // 6000113 possibly, or 9000007, or 9000006
             partonEta = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[0];
             partonPhi = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[1];
-            double min_DeltaR = 100;    
+	    double radius = sqrt(generator_->partVx[partonN]*generator_->partVx[partonN] + generator_->partVy[partonN]*generator_->partVy[partonN]);
+	    double vertex = sqrt(generator_->partVx[partonN]*generator_->partVx[partonN] + generator_->partVy[partonN]*generator_->partVy[partonN] + generator_->partVz[partonN]*generator_->partVz[partonN]);
+	    double genLLPBeta = sqrt((generator_->partPx[partonN-1] + generator_->partPx[partonN])*(generator_->partPx[partonN-1] + generator_->partPx[partonN]) + (generator_->partPy[partonN-1] + generator_->partPy[partonN])*(generator_->partPy[partonN-1] + generator_->partPy[partonN]) + (generator_->partPz[partonN-1] + generator_->partPz[partonN])*(generator_->partPz[partonN-1] + generator_->partPz[partonN])) / (generator_->partE[partonN-1] + generator_->partE[partonN]);
+	    double genLLPGamma = 1./TMath::Sqrt(1.-genLLPBeta*genLLPBeta);
+	    LLPdecayRadiusDetAcceptance->Fill(radius,abs(generator_->partVz[partonN]),1); // fill the radius and z position for LLP decay
+	    LLPdecayXyzDetAcceptance->Fill(vertex / (genLLPBeta * genLLPGamma));
+	    double min_DeltaR = 100;    
 	    int closestJet = -1;
+	    int nJet = 0;
             for (uint jetIt = 0; jetIt < nJetemu; jetIt++){ // loop over L1 jets, and only do first four (4 highest energy L1 jets from 4 leptons)
               if (l1emu_->jetEt[jetIt] < 20 ) continue; // require jet is greater than 20 GeV to attempt matching to parton
+	      nJet += 1;
               double Jet_eta = l1emu_->jetEta[jetIt];                 
               double Jet_phi = l1emu_->jetPhi[jetIt];                      
               double DeltaR = deltaR(Jet_eta,Jet_phi,partonEta,partonPhi); // distance between L1 jet and a parton
@@ -688,6 +706,11 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
                 closestJet = jetIt; // record which L1 jet is the closest to the parton
               }
             } // closing L1 jet loop   
+	    nJet_pt20GeV->Fill(nJet);
+	    if (min_DeltaR < 100) {
+	      DeltaR_parton_L1jet->Fill(min_DeltaR); // filled per parton
+	      DeltaR_parton_L1jet_closest[closestJet]->Fill(min_DeltaR); // fill just for which jet is closest
+	    }
 	    //	    std::cout << "energy of closest jet = " << l1emu_->jetEt[closestJet] << std::endl;  
 	    //	    std::cout << "the closest jet is = " << closestJet << " with a delta R to the LLP parton of " << min_DeltaR << std::endl;
           } // LLP PDG ID
@@ -705,6 +728,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 
       // saving number of events passed cell multiplicity cuts. These are efficiency values used in rate vs eff plots
       totalEvents += 1; // counting total events for efficiency calculations
+      htSumDistribution->Fill(htSum);
+
       if ( ((htSum > 120) && ( Sum4Jet_HBHE >= 10 )) || (htSum > 360) ) passed4JetMult_HBHE_ht120 += 1;
       if (htSum > 360) passedHtSum360 += 1;
 
@@ -949,6 +974,14 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     ADC50_3ns_4JetMultHB_emu->Write();
     ADC50_3ns_4JetMultHE_emu->Write();
     ADC50_3ns_4JetMultHBHE_emu->Write();
+    // gen matched plots
+    nJet_pt20GeV->Write();
+    DeltaR_parton_L1jet->Write();
+    for (int closestJet = 0; closestJet < 15; closestJet++) DeltaR_parton_L1jet_closest[closestJet]->Write();
+    LLPdecayRadiusDetAcceptance->Write();
+    LLPdecayXyzDetAcceptance->Write();
+
+    htSumDistribution->Write();
 
     htSumRates_original_emu->Scale(norm);
     htSumRates_120timingOR360_emu->Scale(norm);
