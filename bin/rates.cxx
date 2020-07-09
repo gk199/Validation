@@ -385,13 +385,13 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F* DeltaR_parton_L1jet = new TH1F("DeltaR_parton_L1jet", "Delta R between parton and closest L1 Jet;DeltaR;Number of Entries",50,0,5);
   std::map<int, TH1F*> DeltaR_parton_L1jet_closest;
   for (int closestJet = 0; closestJet < 15; closestJet++) DeltaR_parton_L1jet_closest[closestJet] = new TH1F(Form("DeltaR_parton_L1jet_closest_Jet%d",closestJet), Form("Delta R between a parton and closest L1 Jet (Jet %d);DeltaR;Number of Entries",closestJet),50,0,5);
-  TH2F * LLPdecayRadius = new TH2F("LLPdecayRadius", "Decay Radius;Decay Position in cm (z); Decay Radius (cm)",100,0,600,50,0,300);
-  TH1F * LLPdecayXyz = new TH1F("LLPdecayXyz", "LLPs decay position;Decay Radius in cm (x,y,z);Number of Events",100,0,600);
-  TH2F * LLPdecayRadiusTrigAcceptance = new TH2F("LLPdecayRadiusTrigAcceptance", "Decay Radius for LLPs within trigger acceptance;Decay Position in cm (z); Decay Radius (cm)",100,0,600,50,0,300);
-  TH1F * LLPdecayXyzTrigAcceptance = new TH1F("LLPdecayXyzTrigAcceptance", "LLPs decay position within trigger acceptance;Decay Radius in cm (x,y,z);Number of Events",100,0,600);
+  TH2F * LLPdecayRadius = new TH2F("LLPdecayRadius", "Decay Radius;Decay Position in cm (z); Decay Radius (cm)",150,-400,400,100,0,250);
+  TH1F * LLPdecayXyz = new TH1F("LLPdecayXyz", "LLP ctau;ctau in cm (displacement / beta*gamma);Number of Events",100,0,600);
+  TH2F * LLPdecayRadiusTrigAcceptance = new TH2F("LLPdecayRadiusTrigAcceptance", "Decay Radius for LLPs within trigger acceptance;Decay Position in cm (z); Decay Radius (cm)",150,-400,400,100,0,250);
+  TH1F * LLPdecayXyzTrigAcceptance = new TH1F("LLPdecayXyzTrigAcceptance", "ctau of LLPs within trigger acceptance;ctau in cm (displacement / beta * gamma);Number of Events",100,0,600);
   TH1F * TOF_LLP_quark = new TH1F("TOF_LLP_quark", "TOF_LLP + TOF_bQuark - TOF_expected; TOF (ns); Number of Events",100,-1,15);
   TH1F * TOF_expected = new TH1F("TOF_expected", "TOF_expected; TOF (ns); Number of Events",100,-5,20);
-  TH2F * TOF_vs_TDC = new TH2F("TOF_vs_TDC", "TOF_LLP + TOF_bQuark - TOF_expected vs HCAL TDC within DR<0.5; TOF_LLP + TOF_bQuark - TOF_expected (ns); TDC; Number of Events",100,-5,20,100,-5,20);
+  TH2F * TOF_vs_TDC = new TH2F("TOF_vs_TDC", "TOF_LLP + TOF_bQuark - TOF_expected vs HCAL TDC within DR<0.2; TOF_LLP + TOF_bQuark - TOF_expected (ns); TDC; Number of Events",100,-5,20,100,-5,20);
 
   TH1F * htSumDistribution = new TH1F("htSumDistribution","htSum Distribution;HT Sum;Number of Events",100,0,1000);
 
@@ -714,11 +714,11 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	      // makes sure found two quarks resulting from LLP decay since they have the same vertex, two b quarks are always separated by 1 in the partonN loop
 	      double genLLPBeta = sqrt((generator_->partPx[partonN-1] + generator_->partPx[partonN])*(generator_->partPx[partonN-1] + generator_->partPx[partonN]) + (generator_->partPy[partonN-1] + generator_->partPy[partonN])*(generator_->partPy[partonN-1] + generator_->partPy[partonN]) + (generator_->partPz[partonN-1] + generator_->partPz[partonN])*(generator_->partPz[partonN-1] + generator_->partPz[partonN])) / (generator_->partE[partonN-1] + generator_->partE[partonN]); // beta of LLP considering momentum and energy of two b quarks
 	      double genLLPGamma = 1./TMath::Sqrt(1.-genLLPBeta*genLLPBeta);
-	      LLPdecayRadius->Fill(radius,abs(generator_->partVz[partonN]),1); // fill the radius and z position for LLP decay
+	      LLPdecayRadius->Fill(generator_->partVz[partonN],radius); // fill the radius and z position for LLP decay
 	      LLPdecayXyz->Fill(vertex / (genLLPBeta * genLLPGamma)); // ctau traveled in lab frame
 
 	      if (Sum4Jet_HBHE >= 10 && htSum > 120) {
-		LLPdecayRadiusTrigAcceptance->Fill(radius,abs(generator_->partVz[partonN]),1); // fill the radius and z position for LLP decay given that event passes trigger selection
+		LLPdecayRadiusTrigAcceptance->Fill(generator_->partVz[partonN],radius); // fill the radius and z position for LLP decay given that event passes trigger selection
 		LLPdecayXyzTrigAcceptance->Fill(vertex / (genLLPBeta * genLLPGamma));
 	      }
 

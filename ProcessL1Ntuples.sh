@@ -36,10 +36,26 @@ echo "LLP mh=1000 GeV, ctau=0.5 m"
 cmsRun ntuple_maker_def_mh1000_pl500.py
 mv L1Ntuple.root L1Ntuple_mh1000_mx450_pl500.root
 echo " "
+echo "LLP mh=350 GeV, ctau=10 m"
+cmsRun ntuple_maker_def_mh350_pl10000.py
+mv L1Ntuple.root L1Ntuple_mh350_mx160_pl10000.root
+echo " "
 echo "LLP mh=350 GeV, ctau=1 m"
 cmsRun ntuple_maker_def_mh350_pl1000.py
 mv L1Ntuple.root L1Ntuple_mh350_mx160_pl1000.root
 echo " "
+echo "LLP mh=350 GeV, ctau=0.5 m"
+cmsRun ntuple_maker_def_mh350_pl500.py
+mv L1Ntuple.root L1Ntuple_mh350_mx160_pl500.root
+echo " "
+echo "LLP mh=250 GeV, ctau=10 m"
+cmsRun ntuple_maker_def_mh250_pl10000.py
+mv L1Ntuple.root L1Ntuple_mh250_mx120_pl10000.root
+echo " "
 echo "LLP mh=250 GeV, ctau=1 m"
 cmsRun ntuple_maker_def_mh250_pl1000.py
 mv L1Ntuple.root L1Ntuple_mh250_mx120_pl1000.root
+echo " "
+echo "LLP mh=250 GeV, ctau=0.5 m"
+cmsRun ntuple_maker_def_mh250_pl500.py
+mv L1Ntuple.root L1Ntuple_mh250_mx120_pl500.root
