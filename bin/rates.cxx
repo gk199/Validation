@@ -742,7 +742,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 		double tpPhiemu = l1CaloTPemu_->hcalTPCaliphi[HcalTPIt]; // iphi
 		double TP_Eta = etaVal(tpEtaemu); // eta
 		double TP_Phi = phiVal(tpPhiemu); // phi
-<<<<<<< HEAD
 		if (deltaR(partonEta1, partonPhi1, TP_Eta, TP_Phi) < 0.2 ) {
 		  if ( l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >=0 ) TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark1 - TOF_expected1,l1CaloTPemu_->hcalTPtiming1[HcalTPIt]);
                   if ( l1CaloTPemu_->hcalTPtiming2[HcalTPIt] >=0 )TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark1 - TOF_expected1,l1CaloTPemu_->hcalTPtiming2[HcalTPIt]);
@@ -760,25 +759,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
                   if ( l1CaloTPemu_->hcalTPtiming5[HcalTPIt] >=0 )TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark2 - TOF_expected2,l1CaloTPemu_->hcalTPtiming5[HcalTPIt]);
                   if ( l1CaloTPemu_->hcalTPtiming6[HcalTPIt] >=0 )TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark2 - TOF_expected2,l1CaloTPemu_->hcalTPtiming6[HcalTPIt]);
                   if ( l1CaloTPemu_->hcalTPtiming7[HcalTPIt] >=0 )TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark2 - TOF_expected2,l1CaloTPemu_->hcalTPtiming7[HcalTPIt]);
-=======
-		if (deltaR(partonEta1, partonPhi1, TP_Eta, TP_Phi) < 0.1 ) {
-		  TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark1 - TOF_expected1,l1CaloTPemu_->hcalTPtiming1[HcalTPIt]);
-                  TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark1 - TOF_expected1,l1CaloTPemu_->hcalTPtiming2[HcalTPIt]);
-                  TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark1 - TOF_expected1,l1CaloTPemu_->hcalTPtiming3[HcalTPIt]);
-                  TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark1 - TOF_expected1,l1CaloTPemu_->hcalTPtiming4[HcalTPIt]);
-                  TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark1 - TOF_expected1,l1CaloTPemu_->hcalTPtiming5[HcalTPIt]);
-                  TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark1 - TOF_expected1,l1CaloTPemu_->hcalTPtiming6[HcalTPIt]);
-                  TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark1 - TOF_expected1,l1CaloTPemu_->hcalTPtiming7[HcalTPIt]);
-		}
-                if (deltaR(partonEta2, partonPhi2, TP_Eta, TP_Phi) < 0.1 ) {
-                  TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark2 - TOF_expected2,l1CaloTPemu_->hcalTPtiming1[HcalTPIt]);
-                  TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark2 - TOF_expected2,l1CaloTPemu_->hcalTPtiming2[HcalTPIt]);
-                  TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark2 - TOF_expected2,l1CaloTPemu_->hcalTPtiming3[HcalTPIt]);
-                  TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark2 - TOF_expected2,l1CaloTPemu_->hcalTPtiming4[HcalTPIt]);
-                  TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark2 - TOF_expected2,l1CaloTPemu_->hcalTPtiming5[HcalTPIt]);
-                  TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark2 - TOF_expected2,l1CaloTPemu_->hcalTPtiming6[HcalTPIt]);
-                  TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark2 - TOF_expected2,l1CaloTPemu_->hcalTPtiming7[HcalTPIt]);
->>>>>>> 705b37cc12b0392d0491bb37242dd59b2eba55e4
 		}
 	      }
 	    }
