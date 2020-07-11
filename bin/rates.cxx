@@ -175,6 +175,37 @@ std::vector<double> intersect(double vx, double vy,double vz, double px, double 
   return etaphi;
 }
 
+
+std::vector<double> closestParton(int L1Jet, L1Analysis::L1AnalysisL1UpgradeDataFormat *l1emu_, L1Analysis::L1AnalysisGeneratorDataFormat *generator_) { 
+  // find DR between L1 jet (argument) and a b quark from the LLP 
+  double min_dR = 1000;
+  double partonNum = -1;
+  for (int partonN = 0; partonN < generator_->nPart; partonN ++) {
+    double partonEta = 1000;
+    double partonPhi = 1000;
+    if (generator_->partHardProcess[partonN] == 0 ) continue; 
+    if ( (abs(generator_->partId[partonN]) >= 1 && abs(generator_->partId[partonN]) <=5 ) || (abs(generator_->partId[partonN]) == 21) ) { 
+      if ( (generator_->partParent[partonN] == 9000006) || (generator_->partParent[partonN] == 9000007) || (generator_->partParent[partonN] == 6000113) ) {
+	partonEta = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[0];
+	partonPhi = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[1];
+	if (l1emu_->jetEt[L1Jet] >= 20 ) {
+	  double distance = deltaR(l1emu_->jetEta[L1Jet], l1emu_->jetPhi[L1Jet], partonEta, partonPhi);
+	  if (distance < min_dR ) {
+	    min_dR = distance;
+	    partonNum = (double)partonN;
+	  }
+	}
+      }
+    }
+  }
+  std::vector<double> DR_partonNum;
+  DR_partonNum.push_back(min_dR);
+  DR_partonNum.push_back(partonNum);
+  return DR_partonNum;
+}
+// need to write another function returning the z and radius position of the LLP associated with the parton closest to this jet
+// then make useful distributions based on this gen matching
+
 void rates(bool newConditions, const std::string& inputFileDirectory){
   
   bool hwOn = true;   //are we using data from hardware? (upgrade trigger had to be running!!!)
@@ -614,7 +645,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	  }
 	} // closing L1 jet loop
 	// HE and HB GEV / ADC ratios, filled by iEta regions
-	if (inputFile.substr(0,3) == "QCD" ) { // currently only QCD and nugun have ADC stored in the L1Ntuples
+	if (inputFile.substr(27,3) == "QCD" ) { // currently only QCD and nugun have ADC stored in the L1Ntuples
 	  if (abs(tpEtaemu) <= 16 ) GeV_ADC_ratio_HB[abs(tpEtaemu)]->Fill( (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] + l1CaloTPemu_->hcalTPDepth2[HcalTPIt] + l1CaloTPemu_->hcalTPDepth3[HcalTPIt] + l1CaloTPemu_->hcalTPDepth4[HcalTPIt]) / (l1CaloTPemu_->hcalTPADC1[HcalTPIt] + l1CaloTPemu_->hcalTPADC2[HcalTPIt] + l1CaloTPemu_->hcalTPADC3[HcalTPIt] + l1CaloTPemu_->hcalTPADC4[HcalTPIt]));
 	  if (abs(tpEtaemu) > 16 && abs(tpEtaemu) <=28 ) GeV_ADC_ratio_HE[abs(tpEtaemu)]->Fill( (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] + l1CaloTPemu_->hcalTPDepth2[HcalTPIt] + l1CaloTPemu_->hcalTPDepth3[HcalTPIt] +l1CaloTPemu_->hcalTPDepth4[HcalTPIt] + l1CaloTPemu_->hcalTPDepth5[HcalTPIt] + l1CaloTPemu_->hcalTPDepth6[HcalTPIt] + l1CaloTPemu_->hcalTPDepth7[HcalTPIt]) / (l1CaloTPemu_->hcalTPADC1[HcalTPIt] + l1CaloTPemu_->hcalTPADC2[HcalTPIt] + l1CaloTPemu_->hcalTPADC3[HcalTPIt] + l1CaloTPemu_->hcalTPADC4[HcalTPIt] + l1CaloTPemu_->hcalTPADC5[HcalTPIt] + l1CaloTPemu_->hcalTPADC6[HcalTPIt] + l1CaloTPemu_->hcalTPADC7[HcalTPIt] ));
 
@@ -687,8 +718,11 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       int Sum4Jet_HBHE = SumTimingBitJet1_HB+SumTimingBitJet2_HB+SumTimingBitJet3_HB+SumTimingBitJet4_HB + SumTimingBitJet1_HE+SumTimingBitJet2_HE+SumTimingBitJet3_HE+SumTimingBitJet4_HE;
       int Sum4Jet_HB = SumTimingBitJet1_HB+SumTimingBitJet2_HB+SumTimingBitJet3_HB+SumTimingBitJet4_HB;
       int Sum4Jet_HE = SumTimingBitJet1_HE+SumTimingBitJet2_HE+SumTimingBitJet3_HE+SumTimingBitJet4_HE;
-
+    
       // ************* GEN PARTICLE MATCHING CODE ******************
+      //      for (uint jetIt = 0; jetIt < nJetemu; jetIt++)  std::cout << closestParton(jetIt, l1emu_, generator_)[0] << " " << closestParton(jetIt, l1emu_, generator_)[1] << std::endl;
+      //      std::cout << " " << std::endl;
+
       for (int partonN = 0; partonN < generator_->nPart; partonN ++) {
 	double partonEta = 1000;
         double partonPhi = 1000;
@@ -1118,15 +1152,15 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 
   // saving efficiencies and rates in txt files to be read by rate vs eff plotting macros
   // signal efficiencies
-  if (inputFile.substr(0,2) == "mh" ) {
+  if (inputFile.substr(27,2) == "mh" ) {
     std::ofstream MultiplicityHits50ADC3ns_ht120_Signal;
-    MultiplicityHits50ADC3ns_ht120_Signal.open(Form("MultiplicityHits50ADC3ns_ht120_Signal_%s.txt", inputFile.substr(0,20).c_str()),std::ios_base::trunc);
+    MultiplicityHits50ADC3ns_ht120_Signal.open(Form("MultiplicityHits50ADC3ns_ht120_Signal_%s.txt", inputFile.substr(27,20).c_str()),std::ios_base::trunc);
     MultiplicityHits50ADC3ns_ht120_Signal << passed4JetMult_HBHE_ht120 / totalEvents << std::endl; // efficiency at HT 120+timing OR HT 360
     MultiplicityHits50ADC3ns_ht120_Signal << passedHtSum360 / totalEvents << std::endl; // efficiency at HT 360
     MultiplicityHits50ADC3ns_ht120_Signal.close();
   }
   // background efficiencies 
-  if (inputFile.substr(0,3) == "QCD" ) {
+  if (inputFile.substr(27,3) == "QCD" ) {
     std::ofstream MultiplicityHits50ADC3ns_ht120_Background;
     MultiplicityHits50ADC3ns_ht120_Background.open("MultiplicityHits50ADC3ns_ht120_Background.txt");
     MultiplicityHits50ADC3ns_ht120_Background << passed4JetMult_HBHE_ht120 / totalEvents << std::endl; // efficiency at HT 120+timing OR HT 360  
@@ -1134,7 +1168,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     MultiplicityHits50ADC3ns_ht120_Background.close();
   }
   // neutrino gun rates
-  if (inputFile.substr(0,8) == "Neutrino" ) {
+  if (inputFile.substr(27,8) == "Neutrino" ) {
     int htSum_120timingOR360_120 = htSumRates_120timingOR360_emu->GetBinContent(htSumRates_120timingOR360_emu->GetXaxis()->FindBin(120));
     int htSum_original_360 = htSumRates_original_emu->GetBinContent(htSumRates_original_emu->GetXaxis()->FindBin(360));
     std::ofstream NuGunRates;
