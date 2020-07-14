@@ -23,13 +23,19 @@ https://twiki.cern.ch/twiki/bin/view/Sandbox/L1TriggerAtHCALdays2019#HCAL_condit
 Towards a new L1 seed to trigger on LLP signatures with HCAL using H/E + depth 
 
 Start with L1Ntuple framework, and setup the L1T environment as here:
+
 https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideL1TStage2Instructions#Environment_Setup_with_Integrati
 
 In 11_0_X:
+```
 git cms-merge-topic --unsafe georgia14:upgradeHcalTPs-l1t-110X
 git clone git@github.com:cms-hcal-trigger/validation.git HcalTrigger/Validation 
+```
 
-Example of energy depth profiles are done here: https://github.com/gk199/Validation/blob/TimingAndDepth/bin/rates.cxx#L1168-L1189 
+Example of energy depth profiles of HCAL TPs is shown here: 
+
+https://github.com/gk199/Validation/blob/TimingAndDepth/bin/rates.cxx#L1168-L1189 
 
 H/E on L1Jets can be applied as here:
+
 https://github.com/gk199/Validation/blob/HoE_RatesWork/bin/rates.cxx#L373-L434
