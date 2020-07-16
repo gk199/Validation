@@ -85,4 +85,5 @@ mv plots/ADC50_3ns_4JetMultHBHEOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/Timing
 echo " "
 echo "Efficiency vs. rate plots"
 RateEfficiencyPlots.exe 
+RateEfficiencyPlots_LLP_ctau.exe
 mv /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate* /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns/

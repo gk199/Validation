@@ -118,8 +118,8 @@ double deltaR(double eta1, double phi1, double eta2, double phi2) { // calculate
 
 std::vector<double> intersect(double vx, double vy,double vz, double px, double py, double pz) {
   double lightSpeed = 29979245800; // speed of light in cm/s
-  double radius = 179; // 130 for calorimeters (ECAL + HCAL) in cm
-  double length = 388; // 300 for calorimeters (ECAL + HCAL) in cm
+  double radius = 179; //295; //179; // 130 for calorimeters (ECAL + HCAL) in cm
+  double length = 388; //568; //388; // 300 for calorimeters (ECAL + HCAL) in cm
   double energy = sqrt(px*px + py*py + pz*pz);
   // First work out intersection with cylinder (barrel)        
   double a = (px*px + py*py)*lightSpeed*lightSpeed/(energy*energy);
@@ -188,15 +188,16 @@ std::vector<double> closestParton(int L1Jet, L1Analysis::L1AnalysisL1UpgradeData
       if ( (generator_->partParent[partonN] == 9000006) || (generator_->partParent[partonN] == 9000007) || (generator_->partParent[partonN] == 6000113) ) {
 	partonEta = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[0];
 	partonPhi = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[1];
-	if (l1emu_->jetEt[L1Jet] >= 20 ) {
-	  double distance = deltaR(l1emu_->jetEta[L1Jet], l1emu_->jetPhi[L1Jet], partonEta, partonPhi);
-	  if (distance < min_dR ) {
-	    min_dR = distance;
-	    partonNum = (double)partonN;
-	  }
+	//	if (l1emu_->jetEt[L1Jet] >= 20 ) {
+	double distance = deltaR(l1emu_->jetEta[L1Jet], l1emu_->jetPhi[L1Jet], partonEta, partonPhi);
+	if (distance < min_dR ) {
+	  min_dR = distance;
+	  partonNum = (double)partonN;
 	}
+	  //	}
       }
     }
+    //    if (min_dR <=10 && generator_->partVz[partonNum] > 380 ) std::cout <<generator_->partVz[partonNum] << std::endl; // by this point, no partons with z > 388, plenty of events with z < -388 (when have restriction DR < 0.5)
   }
   std::vector<double> DR_partonNum;
   DR_partonNum.push_back(min_dR);
@@ -446,16 +447,19 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH2F* GeV_ADC_byTPET_HBHE20 = new TH2F("GeV_ADC_byTPET_HBHE20","GeV/ADC per cell as a function of TP ET, abs(iEta)<=20;TP ET (GeV);GeV/ADC per cell",100,0,100,50,0,0.1);
   TH2F* GeV_ADC_byTPET_HE21 = new TH2F("GeV_ADC_byTPET_HE21","GeV/ADC per cell as a function of TP ET in HE, abs(iEta)>=21;TP ET (GeV);GeV/ADC per cell",100,0,100,50,0,0.1);
 
+  // jet checks
+  TH1F * nJet_pt20GeV = new TH1F("nJet_pt20GeV","Number of Jets with a pT > 20 GeV; Number of Jets; Number of Events",15,0,15);
+  std::map<int,  TH1F*> Jet_DR;
+  for (int Jet = 0; Jet <4; Jet++) Jet_DR[Jet] = new TH1F(Form("Jet_%d_DR",Jet),Form("DeltaR between %d L1 jet and closest L1 jet (considering 4 leading L1 jets); DeltaR; Entries",Jet),50,0,5);
   // gen matching distrbutions
-  TH1F* nJet_pt20GeV = new TH1F("nJet_pt20GeV","Number of Jets with a pT > 20 GeV; Number of Jets; Number of Events",15,0,15);
   TH1F* DeltaR_parton_L1jet = new TH1F("DeltaR_parton_L1jet", "Delta R between parton and closest L1 Jet;DeltaR;Number of Entries",50,0,5);
   std::map<int, TH1F*> DeltaR_parton_L1jet_closest;
   for (int closestJet = 0; closestJet < 15; closestJet++) DeltaR_parton_L1jet_closest[closestJet] = new TH1F(Form("DeltaR_parton_L1jet_closest_Jet%d",closestJet), Form("Delta R between a parton and closest L1 Jet (Jet %d);DeltaR;Number of Entries",closestJet),50,0,5);
-  TH2F * LLPdecayRadius = new TH2F("LLPdecayRadius", "Decay Radius;Decay Position in cm (z); Decay Radius (cm)",150,-400,400,100,0,250);
+  TH2F * LLPdecayRadius = new TH2F("LLPdecayRadius", "Decay Radius;Decay Position in cm (z); Decay Radius (cm)",150,-600,600,100,0,300);
   TH1F * LLPdecayXyz = new TH1F("LLPdecayXyz", "LLP ctau;ctau in cm (displacement / beta*gamma);Number of Events",100,0,600);
-  TH2F * LLPdecayRadiusTrigAcceptance = new TH2F("LLPdecayRadiusTrigAcceptance", "Decay Radius for LLPs within trigger acceptance;Decay Position in cm (z); Decay Radius (cm)",150,-400,400,100,0,250);
+  TH2F * LLPdecayRadiusTrigAcceptance = new TH2F("LLPdecayRadiusTrigAcceptance", "Decay Radius for LLPs within trigger acceptance;Decay Position in cm (z); Decay Radius (cm)",150,-600,600,100,0,300);
   TH1F * LLPdecayXyzTrigAcceptance = new TH1F("LLPdecayXyzTrigAcceptance", "ctau of LLPs within trigger acceptance;ctau in cm (displacement / beta * gamma);Number of Events",100,0,600);
-  TH2F * LLPdecayRadiusJetMatched = new TH2F("LLPdecayRadiusJetMatched", "Decay Radius for LLPs with b-quark within DR 0.5 of L1 jet;Decay Position in cm (z); Decay Radius (cm)",150,-400,400,100,0,250);
+  TH2F * LLPdecayRadiusJetMatched = new TH2F("LLPdecayRadiusJetMatched", "Decay Radius for LLPs with b-quark within DR 0.5 of L1 jet;Decay Position in cm (z); Decay Radius (cm)",150,-600,600,100,0,300);
   TH1F * LLPdecayXyzJetMatched = new TH1F("LLPdecayXyzJetMatched", "ctau of LLPs with b-quark within DR 0.5 of L1 jet;ctau in cm (displacement / beta * gamma);Number of Events",100,0,600);
   TH1F * TOF_LLP_quark = new TH1F("TOF_LLP_quark", "TOF_LLP + TOF_bQuark - TOF_expected; TOF (ns); Number of Events",100,-1,15);
   TH1F * TOF_expected = new TH1F("TOF_expected", "TOF_expected; TOF (ns); Number of Events",100,-5,20);
@@ -463,6 +467,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   std::map<int, TH1F*> L1Jet_to_Parton;
   for (int Jet = 0; Jet < 4; Jet++) L1Jet_to_Parton[Jet] = new TH1F(Form("L1Jet_%d_to_Parton",Jet),Form("Delta R Between Leading L1 Jet (#%d) and Closest b-quark;Delta R; Number of Entries",Jet),50,0,5);
   TH1F * L1JetMatchingEff = new TH1F("L1JetMatchingEff", "Number of 4 Leading L1 Jets with DR<0.5 to a b-quark; Number of Jets; Number of Entries",5,0,5);
+  TH2F * TOF_vs_TDC_JetMatched = new TH2F("TOF_vs_TDC_JetMatched", "TOF_LLP + TOF_bQuark - TOF_expected vs HCAL TDC in DR<0.5 of a L1 Jet that matched to gen parton; TOF_LLP + TOF_bQuark - TOF_expected (ns); TDC; Number of Events",100,-5,20,100,-5,20);
 
   TH1F * htSumDistribution = new TH1F("htSumDistribution","htSum Distribution;HT Sum;Number of Events",100,0,1000);
 
@@ -653,6 +658,20 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       //////////////////////////////////////
       double nCaloTPemu = l1CaloTPemu_->nHCALTP; // number of TPs varies from 400-1400 per event, approximately Gaussian
       uint nJetemu = l1emu_->nJets; // number of jets per event
+      for (uint jetIt = 0; (jetIt < nJetemu) && (jetIt < 4); jetIt++) { //std::cout << l1emu_->jetEt[jetIt] << std::endl;
+	// given a L1 jet, find the DR to the closest L1 jet
+	double Jet_eta;
+	double Jet_phi;
+	Jet_eta = l1emu_->jetEta[jetIt];
+	Jet_phi = l1emu_->jetPhi[jetIt];
+	double min_DeltaR_L1jets = 100;
+	for (uint jet2 = 0; (jet2 < nJetemu) && (jet2 < 4); jet2++) { // consider any of other 4 leading jets
+	  if (jet2 == jetIt) continue; // skip if same jet
+	  double DeltaR = deltaR(Jet_eta,Jet_phi,l1emu_->jetEta[jet2],l1emu_->jetPhi[jet2]);
+	  if (DeltaR < min_DeltaR_L1jets ) min_DeltaR_L1jets = DeltaR;
+	}
+	Jet_DR[jetIt]->Fill(min_DeltaR_L1jets);
+      }
       int SumTimingBitJet1_HB = 0;
       int SumTimingBitJet2_HB = 0;
       int SumTimingBitJet3_HB = 0;
@@ -673,7 +692,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	double DeltaR = 100;
 	int closestJet = -1;
 	for (uint jetIt = 0; (jetIt < nJetemu) && (jetIt < 4); jetIt++){ // loop over L1 jets, and only do first four (4 highest energy L1 jets from 4 leptons)
-      	  if (l1emu_->jetEt[jetIt] < 20 ) continue; // require jet is greater than 20 GeV to attempt matching to HCAL TP
+	  //	  std::cout << l1emu_->jetEt[jetIt] << std::endl;
+	  //      	  if (l1emu_->jetEt[jetIt] < 20 ) continue; // require jet is greater than 20 GeV to attempt matching to HCAL TP
 	  double Jet_eta;
 	  double Jet_phi;
 	  Jet_eta = l1emu_->jetEta[jetIt];
@@ -769,11 +789,34 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
           double zPos = LLPdecayInfo(partonN, l1emu_, generator_)[2];
 	  LLPdecayRadiusJetMatched->Fill(zPos,TMath::Sqrt(xPos*xPos + yPos*yPos) );
 	  LLPdecayXyzJetMatched->Fill(LLPdecayInfo(partonN, l1emu_, generator_)[3]);
+
+	  double TOF = LLPdecayInfo(partonN, l1emu_, generator_)[3];
+	  // consider HCAL TPs within DR 0.5 of the L1 Jet that is matched to a parton for correlation of time delay
+	  for (int HcalTPIt = 0; HcalTPIt < nCaloTPemu; HcalTPIt++){
+	    // eta and phi of the HCAL TP                                                                                                                                                                                                  
+	    double tpEtaemu = l1CaloTPemu_->hcalTPieta[HcalTPIt]; // ieta                                                                                                                                                                  
+	    if (abs(tpEtaemu) > 28 ) continue; // don't consider HCAL TPs outside of HB or HE                                                                                                                                              
+	    double tpPhiemu = l1CaloTPemu_->hcalTPCaliphi[HcalTPIt]; // iphi                                                                                                                                                               
+	    double TP_Eta = etaVal(tpEtaemu); // eta                                                                                                                                                                                       
+	    double TP_Phi = phiVal(tpPhiemu); // phi                                                                                                                                                                                       
+	    if (deltaR(l1emu_->jetEta[jetIt], l1emu_->jetPhi[jetIt], TP_Eta, TP_Phi) < 0.5 ) {
+	      if ( l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >=0 ) TOF_vs_TDC_JetMatched->Fill(TOF,l1CaloTPemu_->hcalTPtiming1[HcalTPIt]);
+	      if ( l1CaloTPemu_->hcalTPtiming2[HcalTPIt] >=0 ) TOF_vs_TDC_JetMatched->Fill(TOF,l1CaloTPemu_->hcalTPtiming2[HcalTPIt]);
+	      if ( l1CaloTPemu_->hcalTPtiming3[HcalTPIt] >=0 ) TOF_vs_TDC_JetMatched->Fill(TOF,l1CaloTPemu_->hcalTPtiming3[HcalTPIt]);
+	      if ( l1CaloTPemu_->hcalTPtiming4[HcalTPIt] >=0 ) TOF_vs_TDC_JetMatched->Fill(TOF,l1CaloTPemu_->hcalTPtiming4[HcalTPIt]);
+	      if ( l1CaloTPemu_->hcalTPtiming5[HcalTPIt] >=0 ) TOF_vs_TDC_JetMatched->Fill(TOF,l1CaloTPemu_->hcalTPtiming5[HcalTPIt]);
+	      if ( l1CaloTPemu_->hcalTPtiming6[HcalTPIt] >=0 ) TOF_vs_TDC_JetMatched->Fill(TOF,l1CaloTPemu_->hcalTPtiming6[HcalTPIt]);
+	      if ( l1CaloTPemu_->hcalTPtiming7[HcalTPIt] >=0 ) TOF_vs_TDC_JetMatched->Fill(TOF,l1CaloTPemu_->hcalTPtiming7[HcalTPIt]);
+	    }
+	  } // end of HCAL TP depth loop for the TDC and TOF correlation plots
 	}
       }
       L1JetMatchingEff->Fill(numL1JetsMatched);
       //      std::cout << closestParton(jetIt, l1emu_, generator_)[0] << " " << closestParton(jetIt, l1emu_, generator_)[1] << std::endl;
       //      std::cout << " " << std::endl;
+
+
+
     
       for (int partonN = 0; partonN < generator_->nPart; partonN ++) {
 	double partonEta = 1000;
@@ -852,7 +895,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	    double min_DeltaR = 100;    
 	    int closestJet = -1;
             for (uint jetIt = 0; jetIt < nJetemu; jetIt++){ // loop over L1 jets, and only do first four (4 highest energy L1 jets from 4 leptons)
-              if (l1emu_->jetEt[jetIt] < 20 ) continue; // require jet is greater than 20 GeV to attempt matching to parton
+	      //              if (l1emu_->jetEt[jetIt] < 20 ) continue; // require jet is greater than 20 GeV to attempt matching to parton
               double Jet_eta = l1emu_->jetEta[jetIt];                 
               double Jet_phi = l1emu_->jetPhi[jetIt];                      
               double DeltaR = deltaR(Jet_eta,Jet_phi,partonEta,partonPhi); // distance between L1 jet and a parton
@@ -884,7 +927,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       totalEvents += 1; // counting total events for efficiency calculations
       htSumDistribution->Fill(htSum);
 
-      if ( ((htSum > 120) && ( Sum4Jet_HBHE >= 10 )) || (htSum > 360) ) passed4JetMult_HBHE_ht120 += 1;
+      if ( ((htSum > 120) && ( Sum4Jet_HBHE >= 2 )) || (htSum > 360) ) passed4JetMult_HBHE_ht120 += 1;
       if (htSum > 360) passedHtSum360 += 1;
 
       for(int bin=0; bin<nHtSumBins; bin++){
@@ -1128,8 +1171,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     ADC50_3ns_4JetMultHB_emu->Write();
     ADC50_3ns_4JetMultHE_emu->Write();
     ADC50_3ns_4JetMultHBHE_emu->Write();
-    // gen matched plots
+    // jet checking plots
     nJet_pt20GeV->Write();
+    for (int Jet = 0; Jet < 4; Jet++) Jet_DR[Jet]->Write();
+    // gen matched plots
     DeltaR_parton_L1jet->Write();
     //    for (int closestJet = 0; closestJet < 15; closestJet++) DeltaR_parton_L1jet_closest[closestJet]->Write();
     LLPdecayRadius->Write();
@@ -1141,6 +1186,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     TOF_LLP_quark->Write();
     TOF_expected->Write();
     TOF_vs_TDC->Write();
+    TOF_vs_TDC_JetMatched->Write();
     for (int Jet = 0; Jet < 4; Jet++) L1Jet_to_Parton[Jet]->Write();
     L1JetMatchingEff->Write();
 

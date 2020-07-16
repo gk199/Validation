@@ -144,7 +144,7 @@ int main() {
   legend1_htSum->Draw();
   c1_LLP_mh125_pl500->SetLogy(); 
   c1_LLP_mh125_pl500->SetGrid();
-  c1_LLP_mh125_pl500->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns/EffRate_mh125_pl500.pdf");
+  c1_LLP_mh125_pl500->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_mh125_pl500.pdf");
 
   TCanvas *c1_LLP_mh125_pl1000 = new TCanvas("c1_LLP_mh125_pl1000","Graph Draw Options",200,10,600,400);
   gr_LLP_mh125_pl1000->GetHistogram()->SetMinimum(-5.);
@@ -166,7 +166,7 @@ int main() {
   legend2_htSum->Draw();
   c1_LLP_mh125_pl1000->SetLogy();
   c1_LLP_mh125_pl1000->SetGrid();
-  c1_LLP_mh125_pl1000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns/EffRate_mh125_pl1000.pdf");
+  c1_LLP_mh125_pl1000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_mh125_pl1000.pdf");
 
   TCanvas *c1_LLP_mh125_pl10000 = new TCanvas("c1_LLP_mh125_pl10000","Graph Draw Options",200,10,600,400);
   gr_LLP_mh125_pl10000->GetHistogram()->SetMinimum(-5.);
@@ -188,7 +188,7 @@ int main() {
   legend3_htSum->Draw();
   c1_LLP_mh125_pl10000->SetLogy();
   c1_LLP_mh125_pl10000->SetGrid();
-  c1_LLP_mh125_pl10000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns/EffRate_mh125_pl10000.pdf");
+  c1_LLP_mh125_pl10000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_mh125_pl10000.pdf");
 
   // mh = 250 GeV
   TCanvas *c1_LLP_mh250_pl1000 = new TCanvas("c1_LLP_mh250_pl1000","Graph Draw Options",200,10,600,400);
@@ -211,7 +211,7 @@ int main() {
   legend4_htSum->Draw();
   c1_LLP_mh250_pl1000->SetLogy();
   c1_LLP_mh250_pl1000->SetGrid();
-  c1_LLP_mh250_pl1000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns/EffRate_mh250_pl1000.pdf");
+  c1_LLP_mh250_pl1000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_mh250_pl1000.pdf");
 
   // mh = 350 GeV
   TCanvas *c1_LLP_mh350_pl1000 = new TCanvas("c1_LLP_mh350_pl1000","Graph Draw Options",200,10,600,400);
@@ -234,7 +234,7 @@ int main() {
   legend5_htSum->Draw();
   c1_LLP_mh350_pl1000->SetLogy();
   c1_LLP_mh350_pl1000->SetGrid();
-  c1_LLP_mh350_pl1000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns/EffRate_mh350_pl1000.pdf");
+  c1_LLP_mh350_pl1000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_mh350_pl1000.pdf");
 
   // mh = 1000 GeV
   TCanvas *c1_LLP_mh1000_pl500 = new TCanvas("c1_LLP_mh1000_pl500","Graph Draw Options",200,10,600,400);
@@ -257,7 +257,7 @@ int main() {
   legend6_htSum->Draw();
   c1_LLP_mh1000_pl500->SetLogy();
   c1_LLP_mh1000_pl500->SetGrid();
-  c1_LLP_mh1000_pl500->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns/EffRate_mh1000_pl500.pdf");
+  c1_LLP_mh1000_pl500->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_mh1000_pl500.pdf");
 
   TCanvas *c1_LLP_mh1000_pl1000 = new TCanvas("c1_LLP_mh1000_pl1000","Graph Draw Options",200,10,600,400);
   gr_LLP_mh1000_pl1000->GetHistogram()->SetMinimum(-5.);
@@ -279,7 +279,7 @@ int main() {
   legend7_htSum->Draw();
   c1_LLP_mh1000_pl1000->SetLogy();
   c1_LLP_mh1000_pl1000->SetGrid();
-  c1_LLP_mh1000_pl1000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns/EffRate_mh1000_pl1000.pdf");
+  c1_LLP_mh1000_pl1000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_mh1000_pl1000.pdf");
 
   TCanvas *c1_LLP_mh1000_pl10000 = new TCanvas("c1_LLP_mh1000_pl10000","Graph Draw Options",200,10,600,400);
   gr_LLP_mh1000_pl10000->GetHistogram()->SetMinimum(-5.);
@@ -301,7 +301,7 @@ int main() {
   legend8_htSum->Draw();
   c1_LLP_mh1000_pl10000->SetLogy();
   c1_LLP_mh1000_pl10000->SetGrid();
-  c1_LLP_mh1000_pl10000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns/EffRate_mh1000_pl10000.pdf");
+  c1_LLP_mh1000_pl10000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_mh1000_pl10000.pdf");
 
   // background
   TCanvas *c1_background = new TCanvas("c1_background","Graph Draw Options",200,10,600,400);
@@ -324,5 +324,5 @@ int main() {
   legend9_htSum->Draw();
   c1_background->SetLogy();
   c1_background->SetGrid();
-  c1_background->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns/EffRate_QCDbackground.pdf");
+  c1_background->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_QCDbackground.pdf");
 }
