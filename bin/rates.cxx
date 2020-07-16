@@ -434,7 +434,11 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 
   // HT sum rate distributions to use in rate vs eff plots. Need HT > 360 rate, and HT > 120 + timing cut rate
   TH1F* htSumRates_original_emu = new TH1F("htSumRates_original_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
-  TH1F* htSumRates_120timingOR360_emu = new TH1F("htSumRates_120timingOR360_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
+  TH1F* htSumRates_120timingOR360_1_emu = new TH1F("htSumRates_120timingOR360_1_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
+  TH1F* htSumRates_120timingOR360_2_emu = new TH1F("htSumRates_120timingOR360_2_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
+  TH1F* htSumRates_120timingOR360_3_emu = new TH1F("htSumRates_120timingOR360_3_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
+  TH1F* htSumRates_120timingOR360_4_emu = new TH1F("htSumRates_120timingOR360_4_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
+  TH1F* htSumRates_120timingOR360_5_emu = new TH1F("htSumRates_120timingOR360_5_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
 
   // GeV / ADC ratios
   std::map<int, TH1F*> GeV_ADC_ratio_HB, GeV_ADC_ratio_HE;
@@ -472,7 +476,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F * htSumDistribution = new TH1F("htSumDistribution","htSum Distribution;HT Sum;Number of Events",100,0,1000);
 
   // saving rate and efficiencies 
-  double passed4JetMult_HBHE_ht120(0); //, passed4JetMult_HB_ht120(0),passed4JetMult_HE_ht120(0);
+  double passed4JetMult_HBHE_ht120_1(0), passed4JetMult_HBHE_ht120_2(0), passed4JetMult_HBHE_ht120_3(0), passed4JetMult_HBHE_ht120_4(0), passed4JetMult_HBHE_ht120_5(0); //, passed4JetMult_HB_ht120(0),passed4JetMult_HE_ht120(0);
   double passedHtSum360(0);
   double totalEvents(0);
 
@@ -927,13 +931,22 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       totalEvents += 1; // counting total events for efficiency calculations
       htSumDistribution->Fill(htSum);
 
-      if ( ((htSum > 120) && ( Sum4Jet_HBHE >= 2 )) || (htSum > 360) ) passed4JetMult_HBHE_ht120 += 1;
+      if ( ((htSum > 120) && ( Sum4Jet_HBHE >= 1 )) || (htSum > 360) ) passed4JetMult_HBHE_ht120_1 += 1;
+      if ( ((htSum > 120) && ( Sum4Jet_HBHE >= 2 )) || (htSum > 360) ) passed4JetMult_HBHE_ht120_2 += 1;
+      if ( ((htSum > 120) && ( Sum4Jet_HBHE >= 3 )) || (htSum > 360) ) passed4JetMult_HBHE_ht120_3 += 1;
+      if ( ((htSum > 120) && ( Sum4Jet_HBHE >= 4 )) || (htSum > 360) ) passed4JetMult_HBHE_ht120_4 += 1;
+      if ( ((htSum > 120) && ( Sum4Jet_HBHE >= 5 )) || (htSum > 360) ) passed4JetMult_HBHE_ht120_5 += 1;
+
       if (htSum > 360) passedHtSum360 += 1;
 
       for(int bin=0; bin<nHtSumBins; bin++){
-        if( (htSum) >= htSumLo+(bin*htSumBinWidth) && (Sum4Jet_HBHE)>=10 ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV, compare to original rates in plot
+        if( (htSum) >= htSumLo+(bin*htSumBinWidth) && (Sum4Jet_HBHE)>=2 ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV, compare to original rates in plot
         if( (htSum) >= htSumLo+(bin*htSumBinWidth) ) htSumRates_original_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV, use for ht > 360 original rates in rate vs. eff plots
-        if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (Sum4Jet_HBHE)>=10 || htSum > 360 ) ) htSumRates_120timingOR360_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV, use for ht > 120 + timing OR ht > 360 rates in rate vs. eff plots
+        if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (Sum4Jet_HBHE)>=1 || htSum > 360 ) ) htSumRates_120timingOR360_1_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV, use for ht > 120 + timing OR ht > 360 rates in rate vs. eff plots
+	if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (Sum4Jet_HBHE)>=2 || htSum > 360 ) ) htSumRates_120timingOR360_2_emu->Fill(htSumLo+(bin*htSumBinWidth));
+	if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (Sum4Jet_HBHE)>=3 || htSum > 360 ) ) htSumRates_120timingOR360_3_emu->Fill(htSumLo+(bin*htSumBinWidth));
+	if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (Sum4Jet_HBHE)>=4 || htSum > 360 ) ) htSumRates_120timingOR360_4_emu->Fill(htSumLo+(bin*htSumBinWidth));
+	if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (Sum4Jet_HBHE)>=5 || htSum > 360 ) ) htSumRates_120timingOR360_5_emu->Fill(htSumLo+(bin*htSumBinWidth));
       }
     }// closes if 'emuOn' is true
 
@@ -1193,7 +1206,11 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     htSumDistribution->Write();
 
     htSumRates_original_emu->Scale(norm);
-    htSumRates_120timingOR360_emu->Scale(norm);
+    htSumRates_120timingOR360_1_emu->Scale(norm);
+    htSumRates_120timingOR360_2_emu->Scale(norm);
+    htSumRates_120timingOR360_3_emu->Scale(norm);
+    htSumRates_120timingOR360_4_emu->Scale(norm);
+    htSumRates_120timingOR360_5_emu->Scale(norm);
 
     // write histograms for energy / ADC
     //    for (int iEta = 1; iEta <= 16; iEta ++) GeV_ADC_ratio_HB[iEta]->Write();
@@ -1248,7 +1265,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     metHFSumRates_hw->Write();
   }
 
-  std::cout << passed4JetMult_HBHE_ht120 << std::endl;
+  std::cout << passed4JetMult_HBHE_ht120_2 << std::endl;
   std::cout << passedHtSum360 << std::endl;
   std::cout << totalEvents << std::endl;
 
@@ -1257,7 +1274,11 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   if (inputFile.substr(27,2) == "mh" ) {
     std::ofstream MultiplicityHits50ADC3ns_ht120_Signal;
     MultiplicityHits50ADC3ns_ht120_Signal.open(Form("MultiplicityHits50ADC3ns_ht120_Signal_%s.txt", inputFile.substr(27,20).c_str()),std::ios_base::trunc);
-    MultiplicityHits50ADC3ns_ht120_Signal << passed4JetMult_HBHE_ht120 / totalEvents << std::endl; // efficiency at HT 120+timing OR HT 360
+    MultiplicityHits50ADC3ns_ht120_Signal << passed4JetMult_HBHE_ht120_1 / totalEvents << std::endl; // efficiency at HT 120+timing OR HT 360
+    MultiplicityHits50ADC3ns_ht120_Signal << passed4JetMult_HBHE_ht120_2 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Signal << passed4JetMult_HBHE_ht120_3 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Signal << passed4JetMult_HBHE_ht120_4 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Signal << passed4JetMult_HBHE_ht120_5 / totalEvents << std::endl;
     MultiplicityHits50ADC3ns_ht120_Signal << passedHtSum360 / totalEvents << std::endl; // efficiency at HT 360
     MultiplicityHits50ADC3ns_ht120_Signal.close();
   }
@@ -1265,17 +1286,30 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   if (inputFile.substr(27,3) == "QCD" ) {
     std::ofstream MultiplicityHits50ADC3ns_ht120_Background;
     MultiplicityHits50ADC3ns_ht120_Background.open("MultiplicityHits50ADC3ns_ht120_Background.txt");
-    MultiplicityHits50ADC3ns_ht120_Background << passed4JetMult_HBHE_ht120 / totalEvents << std::endl; // efficiency at HT 120+timing OR HT 360  
+    MultiplicityHits50ADC3ns_ht120_Background << passed4JetMult_HBHE_ht120_1 / totalEvents << std::endl; // efficiency at HT 120+timing OR HT 360  
+    MultiplicityHits50ADC3ns_ht120_Background << passed4JetMult_HBHE_ht120_2 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Background << passed4JetMult_HBHE_ht120_3 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Background << passed4JetMult_HBHE_ht120_4 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Background << passed4JetMult_HBHE_ht120_5 / totalEvents << std::endl;
     MultiplicityHits50ADC3ns_ht120_Background << passedHtSum360 / totalEvents << std::endl; // efficiency at HT 360  
     MultiplicityHits50ADC3ns_ht120_Background.close();
   }
   // neutrino gun rates
   if (inputFile.substr(27,8) == "Neutrino" ) {
-    int htSum_120timingOR360_120 = htSumRates_120timingOR360_emu->GetBinContent(htSumRates_120timingOR360_emu->GetXaxis()->FindBin(120));
+    int htSum_120timingOR360_1_120 = htSumRates_120timingOR360_1_emu->GetBinContent(htSumRates_120timingOR360_1_emu->GetXaxis()->FindBin(120));
+    int htSum_120timingOR360_2_120 = htSumRates_120timingOR360_2_emu->GetBinContent(htSumRates_120timingOR360_2_emu->GetXaxis()->FindBin(120));
+    int htSum_120timingOR360_3_120 = htSumRates_120timingOR360_3_emu->GetBinContent(htSumRates_120timingOR360_3_emu->GetXaxis()->FindBin(120));
+    int htSum_120timingOR360_4_120 = htSumRates_120timingOR360_4_emu->GetBinContent(htSumRates_120timingOR360_4_emu->GetXaxis()->FindBin(120));
+    int htSum_120timingOR360_5_120 = htSumRates_120timingOR360_5_emu->GetBinContent(htSumRates_120timingOR360_5_emu->GetXaxis()->FindBin(120));
+
     int htSum_original_360 = htSumRates_original_emu->GetBinContent(htSumRates_original_emu->GetXaxis()->FindBin(360));
     std::ofstream NuGunRates;
     NuGunRates.open("NuGunRates.txt");
-    NuGunRates << htSum_120timingOR360_120 << std::endl; // rate at HT 120 
+    NuGunRates << htSum_120timingOR360_1_120 << std::endl; // rate at HT 120 
+    NuGunRates << htSum_120timingOR360_2_120 << std::endl;
+    NuGunRates << htSum_120timingOR360_3_120 << std::endl;
+    NuGunRates << htSum_120timingOR360_4_120 << std::endl;
+    NuGunRates << htSum_120timingOR360_5_120 << std::endl;
     NuGunRates << htSum_original_360 << std::endl; // rate at HT 360 without timing cuts
     NuGunRates.close();
   }
