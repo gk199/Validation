@@ -20,70 +20,70 @@ int main() {
   // second line is efficiency at HT>360 with no timing restrictions
   // Signals
   // mh=125 pl=0.5m
-  double signal_mh125_pl500[2];
+  double signal_mh125_pl500[6];
   ifstream mh125_pl500;
   mh125_pl500.open("MultiplicityHits50ADC3ns_ht120_Signal_mh125__mx50__pl500__.txt");
   int n=0;
   while (mh125_pl500 >> signal_mh125_pl500[n]) n++;
   mh125_pl500.close();
   // mh=125 pl=1m
-  double signal_mh125_pl1000[2];
+  double signal_mh125_pl1000[6];
   ifstream mh125_pl1000;
   mh125_pl1000.open("MultiplicityHits50ADC3ns_ht120_Signal_mh125__mx50__pl1000_.txt");
   n=0;
   while (mh125_pl1000 >> signal_mh125_pl1000[n]) n++;
   mh125_pl1000.close();
   // mh=125 pl=10m
-  double signal_mh125_pl10000[2];
+  double signal_mh125_pl10000[6];
   ifstream mh125_pl10000;
   mh125_pl10000.open("MultiplicityHits50ADC3ns_ht120_Signal_mh125__mx50__pl10000.txt");
   n=0;
   while (mh125_pl10000 >> signal_mh125_pl10000[n]) n++;
   mh125_pl10000.close();
   // mh=1000 pl=0.5m
-  double signal_mh1000_pl500[2];
+  double signal_mh1000_pl500[6];
   ifstream mh1000_pl500;
   mh1000_pl500.open("MultiplicityHits50ADC3ns_ht120_Signal_mh1000_mx450_pl500__.txt");
   n=0;
   while (mh1000_pl500 >> signal_mh1000_pl500[n]) n++;
   mh1000_pl500.close();
   // mh=1000 pl=1m 
-  double signal_mh1000_pl1000[2];
+  double signal_mh1000_pl1000[6];
   ifstream mh1000_pl1000;
   mh1000_pl1000.open("MultiplicityHits50ADC3ns_ht120_Signal_mh1000_mx450_pl1000_.txt");
   n=0;
   while (mh1000_pl1000 >> signal_mh1000_pl1000[n]) n++;
   mh1000_pl1000.close();
   // mh=1000 pl=10m
-  double signal_mh1000_pl10000[2];
+  double signal_mh1000_pl10000[6];
   ifstream mh1000_pl10000;
   mh1000_pl10000.open("MultiplicityHits50ADC3ns_ht120_Signal_mh1000_mx450_pl10000.txt");
   n=0;
   while (mh1000_pl10000 >> signal_mh1000_pl10000[n]) n++;
   mh1000_pl10000.close();
   // mh=250 pl=1m 
-  double signal_mh250_pl1000[2];
+  double signal_mh250_pl1000[6];
   ifstream mh250_pl1000;
   mh250_pl1000.open("MultiplicityHits50ADC3ns_ht120_Signal_mh250__mx120_pl1000_.txt");
   n=0;
   while (mh250_pl1000 >> signal_mh250_pl1000[n]) n++;
   mh250_pl1000.close();
   // mh=350 pl=1m 
-  double signal_mh350_pl1000[2];
+  double signal_mh350_pl1000[6];
   ifstream mh350_pl1000;
   mh350_pl1000.open("MultiplicityHits50ADC3ns_ht120_Signal_mh350__mx160_pl1000_.txt");
   n=0;
   while (mh350_pl1000 >> signal_mh350_pl1000[n]) n++;
   mh350_pl1000.close();
   // Background
-  double background[2];
+  double background[6];
   ifstream QCD;
   QCD.open("MultiplicityHits50ADC3ns_ht120_Background.txt");
   n=0;
   while (QCD >> background[n]) n++;
   QCD.close();
   // Neutrino gun for rates
-  double rates[2];
+  double rates[6];
   ifstream nugun;
   nugun.open("NuGunRates.txt");
   n=0;
@@ -92,35 +92,35 @@ int main() {
 
   // mh = 125 GeV
   TGraph *gr_LLP_mh125_pl500 = new TGraph(2, signal_mh125_pl500, rates);
-  TMarker *m_mh125_pl500_ht360 = new TMarker(signal_mh125_pl500[1], rates[1], 21);
+  TMarker *m_mh125_pl500_ht360 = new TMarker(signal_mh125_pl500[5], rates[5], 21);
   TMarker *m_mh125_pl500_ht120 = new TMarker(signal_mh125_pl500[0], rates[0], 21);
   TGraph *gr_LLP_mh125_pl1000 = new TGraph(2, signal_mh125_pl1000, rates);
-  TMarker *m_mh125_pl1000_ht360 = new TMarker(signal_mh125_pl1000[1], rates[1], 21);
+  TMarker *m_mh125_pl1000_ht360 = new TMarker(signal_mh125_pl1000[5], rates[5], 21);
   TMarker *m_mh125_pl1000_ht120 = new TMarker(signal_mh125_pl1000[0], rates[0], 21);
   TGraph *gr_LLP_mh125_pl10000 = new TGraph(2, signal_mh125_pl10000, rates);
-  TMarker *m_mh125_pl10000_ht360 = new TMarker(signal_mh125_pl10000[1], rates[1], 21);
+  TMarker *m_mh125_pl10000_ht360 = new TMarker(signal_mh125_pl10000[5], rates[5], 21);
   TMarker *m_mh125_pl10000_ht120 = new TMarker(signal_mh125_pl10000[0], rates[0], 21);
   // mh = 1000 GeV
   TGraph *gr_LLP_mh1000_pl500 = new TGraph(2, signal_mh1000_pl500, rates);
-  TMarker *m_mh1000_pl500_ht360 = new TMarker(signal_mh1000_pl500[1], rates[1], 21);
+  TMarker *m_mh1000_pl500_ht360 = new TMarker(signal_mh1000_pl500[5], rates[5], 21);
   TMarker *m_mh1000_pl500_ht120 = new TMarker(signal_mh1000_pl500[0], rates[0], 21);
   TGraph *gr_LLP_mh1000_pl1000 = new TGraph(2, signal_mh1000_pl1000, rates);
-  TMarker *m_mh1000_pl1000_ht360 = new TMarker(signal_mh1000_pl1000[1], rates[1], 21);
+  TMarker *m_mh1000_pl1000_ht360 = new TMarker(signal_mh1000_pl1000[5], rates[5], 21);
   TMarker *m_mh1000_pl1000_ht120 = new TMarker(signal_mh1000_pl1000[0], rates[0], 21);
   TGraph *gr_LLP_mh1000_pl10000 = new TGraph(2, signal_mh1000_pl10000, rates);
-  TMarker *m_mh1000_pl10000_ht360 = new TMarker(signal_mh1000_pl10000[1], rates[1], 21);
+  TMarker *m_mh1000_pl10000_ht360 = new TMarker(signal_mh1000_pl10000[5], rates[5], 21);
   TMarker *m_mh1000_pl10000_ht120 = new TMarker(signal_mh1000_pl10000[0], rates[0], 21);
   // mh = 250 GeV
   TGraph *gr_LLP_mh250_pl1000 = new TGraph(2, signal_mh250_pl1000, rates);
-  TMarker *m_mh250_pl1000_ht360 = new TMarker(signal_mh250_pl1000[1], rates[1], 21);
+  TMarker *m_mh250_pl1000_ht360 = new TMarker(signal_mh250_pl1000[5], rates[5], 21);
   TMarker *m_mh250_pl1000_ht120 = new TMarker(signal_mh250_pl1000[0], rates[0], 21);
   // mh = 350 GeV
   TGraph *gr_LLP_mh350_pl1000 = new TGraph(2, signal_mh350_pl1000, rates);
-  TMarker *m_mh350_pl1000_ht360 = new TMarker(signal_mh350_pl1000[1], rates[1], 21);
+  TMarker *m_mh350_pl1000_ht360 = new TMarker(signal_mh350_pl1000[5], rates[5], 21);
   TMarker *m_mh350_pl1000_ht120 = new TMarker(signal_mh350_pl1000[0], rates[0], 21);
   // QCD
   TGraph *gr_background = new TGraph(2, background, rates);
-  TMarker *m_background_ht360 = new TMarker(background[1], rates[1], 21);
+  TMarker *m_background_ht360 = new TMarker(background[5], rates[5], 21);
   TMarker *m_background_ht120 = new TMarker(background[0], rates[0], 21);
 
   // mh = 125 GeV
