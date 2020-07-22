@@ -118,8 +118,8 @@ double deltaR(double eta1, double phi1, double eta2, double phi2) { // calculate
 
 std::vector<double> intersect(double vx, double vy,double vz, double px, double py, double pz) {
   double lightSpeed = 29979245800; // speed of light in cm/s
-  double radius = 179; //295; //179; // 130 for calorimeters (ECAL + HCAL) in cm
-  double length = 388; //568; //388; // 300 for calorimeters (ECAL + HCAL) in cm
+  double radius = 179; // 130 for calorimeters (ECAL + HCAL) in cm
+  double length = 388; // 300 for calorimeters (ECAL + HCAL) in cm
   double energy = sqrt(px*px + py*py + pz*pz);
   // First work out intersection with cylinder (barrel)        
   double a = (px*px + py*py)*lightSpeed*lightSpeed/(energy*energy);
@@ -174,73 +174,6 @@ std::vector<double> intersect(double vx, double vy,double vz, double px, double 
   etaphi.push_back(zPos);
   return etaphi;
 }
-
-
-std::vector<double> closestParton(int L1Jet, L1Analysis::L1AnalysisL1UpgradeDataFormat *l1emu_, L1Analysis::L1AnalysisGeneratorDataFormat *generator_) { 
-  // find DR between L1 jet (argument) and a b quark from the LLP 
-  double min_dR = 1000;
-  double partonNum = -1;
-  for (int partonN = 0; partonN < generator_->nPart; partonN ++) {
-    double partonEta = 1000;
-    double partonPhi = 1000;
-    if (generator_->partHardProcess[partonN] == 0 ) continue; 
-    if ( (abs(generator_->partId[partonN]) >= 1 && abs(generator_->partId[partonN]) <=5 ) || (abs(generator_->partId[partonN]) == 21) ) { 
-      if ( (generator_->partParent[partonN] == 9000006) || (generator_->partParent[partonN] == 9000007) || (generator_->partParent[partonN] == 6000113) ) {
-	partonEta = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[0];
-	partonPhi = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[1];
-	//	if (l1emu_->jetEt[L1Jet] >= 20 ) {
-	double distance = deltaR(l1emu_->jetEta[L1Jet], l1emu_->jetPhi[L1Jet], partonEta, partonPhi);
-	if (distance < min_dR ) {
-	  min_dR = distance;
-	  partonNum = (double)partonN;
-	}
-	  //	}
-      }
-    }
-    //    if (min_dR <=10 && generator_->partVz[partonNum] > 380 ) std::cout <<generator_->partVz[partonNum] << std::endl; // by this point, no partons with z > 388, plenty of events with z < -388 (when have restriction DR < 0.5)
-  }
-  std::vector<double> DR_partonNum;
-  DR_partonNum.push_back(min_dR);
-  DR_partonNum.push_back(partonNum);
-  return DR_partonNum; // DeltaR from given L1 jet to parton, which number this parton is
-}
-
-// function returning the x,y,z positions and ctau of the LLP associated with the parton closest to this jet
-// then make useful distributions based on this gen matching
-std::vector<double> LLPdecayInfo(int partonN, L1Analysis::L1AnalysisL1UpgradeDataFormat *l1emu_, L1Analysis::L1AnalysisGeneratorDataFormat *generator_) {
-  // given a parton number for an event (this is parton closest to L1 jet from "closestParton" function, what is the displacement of the LLP this resulted from?
-  double LLPxDecay = generator_->partVx[partonN]; // this is creation vertex of parton = decay vertex of LLP
-  double LLPyDecay = generator_->partVy[partonN];
-  double LLPzDecay = generator_->partVz[partonN];
-  double genLLPBeta = -1000;
-  // LLP decay results in two b quarks, calculate beta and gamma of LLP based on the quantities of b quarks
-  if ( (generator_->partVz[partonN] == generator_->partVz[partonN-1] ) && (abs(generator_->partId[partonN]) == abs(generator_->partId[partonN-1])) ) {
-    genLLPBeta = sqrt((generator_->partPx[partonN-1] + generator_->partPx[partonN])*(generator_->partPx[partonN-1] + generator_->partPx[partonN]) + (generator_->partPy[partonN-1] + generator_->partPy[partonN])*(generator_->partPy[partonN-1] + generator_->partPy[partonN]) + (generator_->partPz[partonN-1] + generator_->partPz[partonN])*(generator_->partPz[partonN-1] + generator_->partPz[partonN])) / (generator_->partE[partonN-1] + generator_->partE[partonN]); // beta of LLP considering momentum and energy of two b quarks
-  }
-  if ( (generator_->partVz[partonN] == generator_->partVz[partonN+1] ) && (abs(generator_->partId[partonN]) == abs(generator_->partId[partonN+1])) ) {
-    genLLPBeta = sqrt((generator_->partPx[partonN+1] + generator_->partPx[partonN])*(generator_->partPx[partonN+1] + generator_->partPx[partonN]) + (generator_->partPy[partonN+1] + generator_->partPy[partonN])*(generator_->partPy[partonN+1] + generator_->partPy[partonN]) + (generator_->partPz[partonN+1] + generator_->partPz[partonN])*(generator_->partPz[partonN+1] + generator_->partPz[partonN])) / (generator_->partE[partonN+1] + generator_->partE[partonN]); // beta of LLP considering momentum and energy of two b quarks
-  }
-  double genLLPGamma = 1./TMath::Sqrt(1.-genLLPBeta*genLLPBeta);
-  double vertex = sqrt(generator_->partVx[partonN]*generator_->partVx[partonN] + generator_->partVy[partonN]*generator_->partVy[partonN] + generator_->partVz[partonN]*generator_->partVz[partonN]);
-  // TOF calculation
-  double lightSpeed = 29979245800; // in cm / s
-  double TOF_LLP = 1000000000*vertex / (genLLPBeta * lightSpeed); // in ns
-  double partonHCALx = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[2]; // in cm
-  double partonHCALy = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[3];
-  double partonHCALz = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[4];
-  double TOF_bQuark = 1000000000*(TMath::Sqrt((generator_->partVx[partonN] - partonHCALx)*(generator_->partVx[partonN] - partonHCALx) + (generator_->partVy[partonN] - partonHCALy)*(generator_->partVy[partonN] -partonHCALy) + (generator_->partVz[partonN] - partonHCALz)*(generator_->partVz[partonN] - partonHCALz))) / lightSpeed; // in ns
-  double TOF_expected = 1000000000*(TMath::Sqrt(partonHCALx*partonHCALx + partonHCALy*partonHCALy + partonHCALz*partonHCALz)) / lightSpeed; // this is x,y,z of parton intersection with HCAL
-  double TOFdelay = TOF_LLP + TOF_bQuark - TOF_expected;
-  std::vector<double> LLPinfo;
-  LLPinfo.push_back(LLPxDecay);
-  LLPinfo.push_back(LLPyDecay);
-  LLPinfo.push_back(LLPzDecay);
-  LLPinfo.push_back(vertex / (genLLPGamma * genLLPBeta) );
-  LLPinfo.push_back(TOFdelay);
-  return LLPinfo; // LLP x, y, z decay, LLP ctau in cm in LLP rest frame, TOF delay in ns
-}
-
-// TOF calculation
 
 void rates(bool newConditions, const std::string& inputFileDirectory){
   
@@ -429,16 +362,12 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 
   // histograms based on hit multiplicity from the timing bit
   TH1F * ADC50_3ns_4JetMultHB_emu = new TH1F("ADC50_3ns_4JetMultHB_emu","Number of cells >=50 ADC and >=3ns near 4 L1 Jets (HB, dR(TP,L1Jet)<0.5);Number of cells;Fraction of Entries (normalized)",40,0,40);
-  TH1F * ADC50_3ns_4JetMultHE_emu = new TH1F("ADC50_3ns_4JetMultHE_emu","Number of cells >=50 ADC and >=3ns near 4 L1 Jets (HE, dR(TP,L1Jet)<0.5);Number of cells;Fraction of Entries (normalized)",40,0,40);
+  TH1F * ADC50_3ns_4JetMultHE_emu = new TH1F("ADC50_3ns_4JetMultHE_emu","Number of cells >=50 ADC and >=3ns near 4 L1 Jets (HE, dR(TP,L1Jet)<0.5);Number of cells;Fraction of Entries (normalized)",80,0,80);
   TH1F * ADC50_3ns_4JetMultHBHE_emu = new TH1F("ADC50_3ns_4JetMultHBHE_emu","Number of cells >=50 ADC and >=3ns near 4 L1 Jets (HBHE, dR(TP,L1Jet)<0.5);Number of cells;Fraction of Entries (normalized)",80,0,80);
 
   // HT sum rate distributions to use in rate vs eff plots. Need HT > 360 rate, and HT > 120 + timing cut rate
   TH1F* htSumRates_original_emu = new TH1F("htSumRates_original_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
-  TH1F* htSumRates_120timingOR360_1_emu = new TH1F("htSumRates_120timingOR360_1_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
-  TH1F* htSumRates_120timingOR360_2_emu = new TH1F("htSumRates_120timingOR360_2_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
-  TH1F* htSumRates_120timingOR360_3_emu = new TH1F("htSumRates_120timingOR360_3_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
-  TH1F* htSumRates_120timingOR360_4_emu = new TH1F("htSumRates_120timingOR360_4_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
-  TH1F* htSumRates_120timingOR360_5_emu = new TH1F("htSumRates_120timingOR360_5_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
+  TH1F* htSumRates_120timingOR360_emu = new TH1F("htSumRates_120timingOR360_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
 
   // GeV / ADC ratios
   std::map<int, TH1F*> GeV_ADC_ratio_HB, GeV_ADC_ratio_HE;
@@ -451,36 +380,23 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH2F* GeV_ADC_byTPET_HBHE20 = new TH2F("GeV_ADC_byTPET_HBHE20","GeV/ADC per cell as a function of TP ET, abs(iEta)<=20;TP ET (GeV);GeV/ADC per cell",100,0,100,50,0,0.1);
   TH2F* GeV_ADC_byTPET_HE21 = new TH2F("GeV_ADC_byTPET_HE21","GeV/ADC per cell as a function of TP ET in HE, abs(iEta)>=21;TP ET (GeV);GeV/ADC per cell",100,0,100,50,0,0.1);
 
-  // jet checks
-  TH1F * nJet_pt20GeV = new TH1F("nJet_pt20GeV","Number of Jets with a pT > 20 GeV; Number of Jets; Number of Events",15,0,15);
-  std::map<int,  TH1F*> Jet_DR;
-  for (int Jet = 0; Jet <4; Jet++) Jet_DR[Jet] = new TH1F(Form("Jet_%d_DR",Jet),Form("DeltaR between %d L1 jet and closest L1 jet (considering 4 leading L1 jets); DeltaR; Entries",Jet),50,0,5);
   // gen matching distrbutions
+  TH1F* nJet_pt20GeV = new TH1F("nJet_pt20GeV","Number of Jets with a pT > 20 GeV; Number of Jets; Number of Events",15,0,15);
   TH1F* DeltaR_parton_L1jet = new TH1F("DeltaR_parton_L1jet", "Delta R between parton and closest L1 Jet;DeltaR;Number of Entries",50,0,5);
   std::map<int, TH1F*> DeltaR_parton_L1jet_closest;
   for (int closestJet = 0; closestJet < 15; closestJet++) DeltaR_parton_L1jet_closest[closestJet] = new TH1F(Form("DeltaR_parton_L1jet_closest_Jet%d",closestJet), Form("Delta R between a parton and closest L1 Jet (Jet %d);DeltaR;Number of Entries",closestJet),50,0,5);
-  TH2F * LLPdecayRadius = new TH2F("LLPdecayRadius", "Decay Radius;Decay Position in cm (z); Decay Radius (cm)",150,-600,600,100,0,300);
-  TH1F * LLPdecayXyz = new TH1F("LLPdecayXyz", "LLP ctau;ctau in cm (displacement / beta*gamma);Number of Events",100,0,600);
-  TH2F * LLPdecayRadiusTrigAcceptance = new TH2F("LLPdecayRadiusTrigAcceptance", "Decay Radius for LLPs within trigger acceptance;Decay Position in cm (z); Decay Radius (cm)",150,-600,600,100,0,300);
-  TH1F * LLPdecayXyzTrigAcceptance = new TH1F("LLPdecayXyzTrigAcceptance", "ctau of LLPs within trigger acceptance;ctau in cm (displacement / beta * gamma);Number of Events",100,0,600);
-  TH2F * LLPdecayRadiusJetMatched = new TH2F("LLPdecayRadiusJetMatched", "Decay Radius for LLPs with b-quark within DR 0.5 of L1 jet;Decay Position in cm (z); Decay Radius (cm)",150,-600,600,100,0,300);
-  TH1F * LLPdecayXyzJetMatched = new TH1F("LLPdecayXyzJetMatched", "ctau of LLPs with b-quark within DR 0.5 of L1 jet;ctau in cm (displacement / beta * gamma);Number of Events",100,0,600);
-  TH1F * TOF_LLP_quark = new TH1F("TOF_LLP_quark", "TOF_LLP + TOF_bQuark - TOF_expected; TOF (ns); Number of Events",100,-1,15);
-  TH1F * TOF_expected = new TH1F("TOF_expected", "TOF_expected; TOF (ns); Number of Events",100,-5,20);
-  TH2F * TOF_vs_TDC = new TH2F("TOF_vs_TDC", "TOF_LLP + TOF_bQuark - TOF_expected vs HCAL TDC within DR<0.2; TOF_LLP + TOF_bQuark - TOF_expected (ns); TDC; Number of Events",100,-5,20,100,-5,20);
-  std::map<int, TH1F*> L1Jet_to_Parton;
-  for (int Jet = 0; Jet < 4; Jet++) L1Jet_to_Parton[Jet] = new TH1F(Form("L1Jet_%d_to_Parton",Jet),Form("Delta R Between Leading L1 Jet (#%d) and Closest b-quark;Delta R; Number of Entries",Jet),50,0,5);
-  TH1F * L1JetMatchingEff = new TH1F("L1JetMatchingEff", "Number of 4 Leading L1 Jets with DR<0.5 to a b-quark; Number of Jets; Number of Entries",5,0,5);
-  TH2F * TOF_vs_TDC_JetMatched = new TH2F("TOF_vs_TDC_JetMatched", "TOF_LLP + TOF_bQuark - TOF_expected vs HCAL TDC in DR<0.5 of a L1 Jet that matched to gen parton; TOF_LLP + TOF_bQuark - TOF_expected (ns); TDC; Number of Events",100,-5,20,100,-5,20);
+  TH2F * LLPdecayRadius = new TH2F("LLPdecayRadius", "Decay Radius;Decay Position in cm (z); Decay Radius (cm)",100,0,600,50,0,300);
+  TH1F * LLPdecayXyz = new TH1F("LLPdecayXyz", "LLPs decay position;Decay Radius in cm (x,y,z);Number of Events",100,0,600);
+  TH2F * LLPdecayRadiusTrigAcceptance = new TH2F("LLPdecayRadiusTrigAcceptance", "Decay Radius for LLPs within trigger acceptance;Decay Position in cm (z); Decay Radius (cm)",100,0,600,50,0,300);
+  TH1F * LLPdecayXyzTrigAcceptance = new TH1F("LLPdecayXyzTrigAcceptance", "LLPs decay position within trigger acceptance;Decay Radius in cm (x,y,z);Number of Events",100,0,600);
+  TH1F * TOF_LLP_quark = new TH1F("TOF_LLP_quark", "TOF_LLP + TOF_bQuark - TOF_expected; TOF (ns); Number of Events",100,-5,20);
 
   TH1F * htSumDistribution = new TH1F("htSumDistribution","htSum Distribution;HT Sum;Number of Events",100,0,1000);
 
   // saving rate and efficiencies 
-  double passed4JetMult_HBHE_ht120_1(0), passed4JetMult_HBHE_ht120_2(0), passed4JetMult_HBHE_ht120_3(0), passed4JetMult_HBHE_ht120_4(0), passed4JetMult_HBHE_ht120_5(0); //, passed4JetMult_HB_ht120(0),passed4JetMult_HE_ht120(0);
+  double passed4JetMult_HBHE_ht120(0); //, passed4JetMult_HB_ht120(0),passed4JetMult_HE_ht120(0);
   double passedHtSum360(0);
   double totalEvents(0);
-  double totalEvent_ht120 = 0, totalEvent_ht140 = 0, totalEvent_ht160 = 0, totalEvent_ht180 = 0, totalEvent_ht200 = 0, totalEvent_ht220 = 0, totalEvent_ht240 = 0, totalEvent_ht260 = 0,totalEvent_ht280 = 0, totalEvent_ht300 = 0,totalEvent_ht320 = 0, totalEvent_ht340 = 0, totalEvent_ht360 = 0, totalEvent_ht380 = 0;
-  double HBHE4Jet_inBins_ht120 = 0, HBHE4Jet_inBins_ht140 = 0, HBHE4Jet_inBins_ht160 = 0, HBHE4Jet_inBins_ht180 = 0, HBHE4Jet_inBins_ht200 = 0, HBHE4Jet_inBins_ht220 = 0, HBHE4Jet_inBins_ht240 = 0, HBHE4Jet_inBins_ht260 = 0,HBHE4Jet_inBins_ht280 = 0, HBHE4Jet_inBins_ht300 = 0,HBHE4Jet_inBins_ht320 = 0, HBHE4Jet_inBins_ht340 = 0, HBHE4Jet_inBins_ht360 = 0, HBHE4Jet_inBins_ht380 = 0;
 
   /////////////////////////////////
   // loop through all the entries//
@@ -664,20 +580,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       //////////////////////////////////////
       double nCaloTPemu = l1CaloTPemu_->nHCALTP; // number of TPs varies from 400-1400 per event, approximately Gaussian
       uint nJetemu = l1emu_->nJets; // number of jets per event
-      for (uint jetIt = 0; (jetIt < nJetemu) && (jetIt < 4); jetIt++) { //std::cout << l1emu_->jetEt[jetIt] << std::endl;
-	// given a L1 jet, find the DR to the closest L1 jet
-	double Jet_eta;
-	double Jet_phi;
-	Jet_eta = l1emu_->jetEta[jetIt];
-	Jet_phi = l1emu_->jetPhi[jetIt];
-	double min_DeltaR_L1jets = 100;
-	for (uint jet2 = 0; (jet2 < nJetemu) && (jet2 < 4); jet2++) { // consider any of other 4 leading jets
-	  if (jet2 == jetIt) continue; // skip if same jet
-	  double DeltaR = deltaR(Jet_eta,Jet_phi,l1emu_->jetEta[jet2],l1emu_->jetPhi[jet2]);
-	  if (DeltaR < min_DeltaR_L1jets ) min_DeltaR_L1jets = DeltaR;
-	}
-	Jet_DR[jetIt]->Fill(min_DeltaR_L1jets);
-      }
       int SumTimingBitJet1_HB = 0;
       int SumTimingBitJet2_HB = 0;
       int SumTimingBitJet3_HB = 0;
@@ -698,8 +600,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	double DeltaR = 100;
 	int closestJet = -1;
 	for (uint jetIt = 0; (jetIt < nJetemu) && (jetIt < 4); jetIt++){ // loop over L1 jets, and only do first four (4 highest energy L1 jets from 4 leptons)
-	  //	  std::cout << l1emu_->jetEt[jetIt] << std::endl;
-	  //      	  if (l1emu_->jetEt[jetIt] < 20 ) continue; // require jet is greater than 20 GeV to attempt matching to HCAL TP
+      	  if (l1emu_->jetEt[jetIt] < 20 ) continue; // require jet is greater than 20 GeV to attempt matching to HCAL TP
 	  double Jet_eta;
 	  double Jet_phi;
 	  Jet_eta = l1emu_->jetEta[jetIt];
@@ -711,56 +612,58 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	  }
 	} // closing L1 jet loop
 	// HE and HB GEV / ADC ratios, filled by iEta regions
-	if (abs(tpEtaemu) <= 16 ) GeV_ADC_ratio_HB[abs(tpEtaemu)]->Fill( (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] + l1CaloTPemu_->hcalTPDepth2[HcalTPIt] + l1CaloTPemu_->hcalTPDepth3[HcalTPIt] + l1CaloTPemu_->hcalTPDepth4[HcalTPIt]) / (l1CaloTPemu_->hcalTPADC1[HcalTPIt] + l1CaloTPemu_->hcalTPADC2[HcalTPIt] + l1CaloTPemu_->hcalTPADC3[HcalTPIt] + l1CaloTPemu_->hcalTPADC4[HcalTPIt]));
-	if (abs(tpEtaemu) > 16 && abs(tpEtaemu) <=28 ) GeV_ADC_ratio_HE[abs(tpEtaemu)]->Fill( (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] + l1CaloTPemu_->hcalTPDepth2[HcalTPIt] + l1CaloTPemu_->hcalTPDepth3[HcalTPIt] +l1CaloTPemu_->hcalTPDepth4[HcalTPIt] + l1CaloTPemu_->hcalTPDepth5[HcalTPIt] + l1CaloTPemu_->hcalTPDepth6[HcalTPIt] + l1CaloTPemu_->hcalTPDepth7[HcalTPIt]) / (l1CaloTPemu_->hcalTPADC1[HcalTPIt] + l1CaloTPemu_->hcalTPADC2[HcalTPIt] + l1CaloTPemu_->hcalTPADC3[HcalTPIt] + l1CaloTPemu_->hcalTPADC4[HcalTPIt] + l1CaloTPemu_->hcalTPADC5[HcalTPIt] + l1CaloTPemu_->hcalTPADC6[HcalTPIt] + l1CaloTPemu_->hcalTPADC7[HcalTPIt] ));
+	if (inputFile.substr(0,3) == "QCD" ) { // currently only QCD and nugun have ADC stored in the L1Ntuples
+	  if (abs(tpEtaemu) <= 16 ) GeV_ADC_ratio_HB[abs(tpEtaemu)]->Fill( (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] + l1CaloTPemu_->hcalTPDepth2[HcalTPIt] + l1CaloTPemu_->hcalTPDepth3[HcalTPIt] + l1CaloTPemu_->hcalTPDepth4[HcalTPIt]) / (l1CaloTPemu_->hcalTPADC1[HcalTPIt] + l1CaloTPemu_->hcalTPADC2[HcalTPIt] + l1CaloTPemu_->hcalTPADC3[HcalTPIt] + l1CaloTPemu_->hcalTPADC4[HcalTPIt]));
+	  if (abs(tpEtaemu) > 16 && abs(tpEtaemu) <=28 ) GeV_ADC_ratio_HE[abs(tpEtaemu)]->Fill( (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] + l1CaloTPemu_->hcalTPDepth2[HcalTPIt] + l1CaloTPemu_->hcalTPDepth3[HcalTPIt] +l1CaloTPemu_->hcalTPDepth4[HcalTPIt] + l1CaloTPemu_->hcalTPDepth5[HcalTPIt] + l1CaloTPemu_->hcalTPDepth6[HcalTPIt] + l1CaloTPemu_->hcalTPDepth7[HcalTPIt]) / (l1CaloTPemu_->hcalTPADC1[HcalTPIt] + l1CaloTPemu_->hcalTPADC2[HcalTPIt] + l1CaloTPemu_->hcalTPADC3[HcalTPIt] + l1CaloTPemu_->hcalTPADC4[HcalTPIt] + l1CaloTPemu_->hcalTPADC5[HcalTPIt] + l1CaloTPemu_->hcalTPADC6[HcalTPIt] + l1CaloTPemu_->hcalTPADC7[HcalTPIt] ));
 
-	ADC_vs_GeV_percell->Fill(l1CaloTPemu_->hcalTPADC1[HcalTPIt],l1CaloTPemu_->hcalTPDepth1[HcalTPIt]);
-	ADC_vs_GeV_percell->Fill(l1CaloTPemu_->hcalTPADC2[HcalTPIt],l1CaloTPemu_->hcalTPDepth2[HcalTPIt]);
-	ADC_vs_GeV_percell->Fill(l1CaloTPemu_->hcalTPADC3[HcalTPIt],l1CaloTPemu_->hcalTPDepth3[HcalTPIt]);
-	ADC_vs_GeV_percell->Fill(l1CaloTPemu_->hcalTPADC4[HcalTPIt],l1CaloTPemu_->hcalTPDepth4[HcalTPIt]);
-	ADC_vs_GeV_percell->Fill(l1CaloTPemu_->hcalTPADC5[HcalTPIt],l1CaloTPemu_->hcalTPDepth5[HcalTPIt]);
-	ADC_vs_GeV_percell->Fill(l1CaloTPemu_->hcalTPADC6[HcalTPIt],l1CaloTPemu_->hcalTPDepth6[HcalTPIt]);
-	ADC_vs_GeV_percell->Fill(l1CaloTPemu_->hcalTPADC7[HcalTPIt],l1CaloTPemu_->hcalTPDepth7[HcalTPIt]);
-	
-	GeV_ADC_byTPET->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] / l1CaloTPemu_->hcalTPADC1[HcalTPIt]));
-	GeV_ADC_byTPET->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] / l1CaloTPemu_->hcalTPADC2[HcalTPIt]));
-	GeV_ADC_byTPET->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] / l1CaloTPemu_->hcalTPADC3[HcalTPIt]));
-	GeV_ADC_byTPET->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] / l1CaloTPemu_->hcalTPADC4[HcalTPIt]));
-	GeV_ADC_byTPET->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth5[HcalTPIt] / l1CaloTPemu_->hcalTPADC5[HcalTPIt]));
-	GeV_ADC_byTPET->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth6[HcalTPIt] / l1CaloTPemu_->hcalTPADC6[HcalTPIt]));
-	GeV_ADC_byTPET->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth7[HcalTPIt] / l1CaloTPemu_->hcalTPADC7[HcalTPIt]));
-	
-	if (abs(tpEtaemu) <= 20 ) {
-	  ADC_vs_GeV_percell_HBHE20->Fill(l1CaloTPemu_->hcalTPADC1[HcalTPIt],l1CaloTPemu_->hcalTPDepth1[HcalTPIt]);
-	  ADC_vs_GeV_percell_HBHE20->Fill(l1CaloTPemu_->hcalTPADC2[HcalTPIt],l1CaloTPemu_->hcalTPDepth2[HcalTPIt]);
-	  ADC_vs_GeV_percell_HBHE20->Fill(l1CaloTPemu_->hcalTPADC3[HcalTPIt],l1CaloTPemu_->hcalTPDepth3[HcalTPIt]);
-	  ADC_vs_GeV_percell_HBHE20->Fill(l1CaloTPemu_->hcalTPADC4[HcalTPIt],l1CaloTPemu_->hcalTPDepth4[HcalTPIt]);
-	  ADC_vs_GeV_percell_HBHE20->Fill(l1CaloTPemu_->hcalTPADC5[HcalTPIt],l1CaloTPemu_->hcalTPDepth5[HcalTPIt]);
-	  ADC_vs_GeV_percell_HBHE20->Fill(l1CaloTPemu_->hcalTPADC6[HcalTPIt],l1CaloTPemu_->hcalTPDepth6[HcalTPIt]);
-	  ADC_vs_GeV_percell_HBHE20->Fill(l1CaloTPemu_->hcalTPADC7[HcalTPIt],l1CaloTPemu_->hcalTPDepth7[HcalTPIt]);
-	  GeV_ADC_byTPET_HBHE20->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] / l1CaloTPemu_->hcalTPADC1[HcalTPIt]));
-	  GeV_ADC_byTPET_HBHE20->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] / l1CaloTPemu_->hcalTPADC2[HcalTPIt]));
-	  GeV_ADC_byTPET_HBHE20->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] / l1CaloTPemu_->hcalTPADC3[HcalTPIt]));
-	  GeV_ADC_byTPET_HBHE20->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] / l1CaloTPemu_->hcalTPADC4[HcalTPIt]));
-	  GeV_ADC_byTPET_HBHE20->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth5[HcalTPIt] / l1CaloTPemu_->hcalTPADC5[HcalTPIt]));
-	  GeV_ADC_byTPET_HBHE20->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth6[HcalTPIt] / l1CaloTPemu_->hcalTPADC6[HcalTPIt]));
-	  GeV_ADC_byTPET_HBHE20->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth7[HcalTPIt] / l1CaloTPemu_->hcalTPADC7[HcalTPIt]));
-	}
-	if (abs(tpEtaemu) > 20 && abs(tpEtaemu) <=28 ) {
-	  ADC_vs_GeV_percell_HE21->Fill(l1CaloTPemu_->hcalTPADC1[HcalTPIt],l1CaloTPemu_->hcalTPDepth1[HcalTPIt]);
-	  ADC_vs_GeV_percell_HE21->Fill(l1CaloTPemu_->hcalTPADC2[HcalTPIt],l1CaloTPemu_->hcalTPDepth2[HcalTPIt]);
-	  ADC_vs_GeV_percell_HE21->Fill(l1CaloTPemu_->hcalTPADC3[HcalTPIt],l1CaloTPemu_->hcalTPDepth3[HcalTPIt]);
-	  ADC_vs_GeV_percell_HE21->Fill(l1CaloTPemu_->hcalTPADC4[HcalTPIt],l1CaloTPemu_->hcalTPDepth4[HcalTPIt]);
-	  ADC_vs_GeV_percell_HE21->Fill(l1CaloTPemu_->hcalTPADC5[HcalTPIt],l1CaloTPemu_->hcalTPDepth5[HcalTPIt]);
-	  ADC_vs_GeV_percell_HE21->Fill(l1CaloTPemu_->hcalTPADC6[HcalTPIt],l1CaloTPemu_->hcalTPDepth6[HcalTPIt]);
-	  ADC_vs_GeV_percell_HE21->Fill(l1CaloTPemu_->hcalTPADC7[HcalTPIt],l1CaloTPemu_->hcalTPDepth7[HcalTPIt]);
-	  GeV_ADC_byTPET_HE21->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] / l1CaloTPemu_->hcalTPADC1[HcalTPIt]));
-	  GeV_ADC_byTPET_HE21->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] / l1CaloTPemu_->hcalTPADC2[HcalTPIt]));
-	  GeV_ADC_byTPET_HE21->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] / l1CaloTPemu_->hcalTPADC3[HcalTPIt]));
-	  GeV_ADC_byTPET_HE21->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] / l1CaloTPemu_->hcalTPADC4[HcalTPIt]));
-	  GeV_ADC_byTPET_HE21->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth5[HcalTPIt] / l1CaloTPemu_->hcalTPADC5[HcalTPIt]));
-	  GeV_ADC_byTPET_HE21->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth6[HcalTPIt] / l1CaloTPemu_->hcalTPADC6[HcalTPIt]));
-	  GeV_ADC_byTPET_HE21->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth7[HcalTPIt] / l1CaloTPemu_->hcalTPADC7[HcalTPIt]));
+	  ADC_vs_GeV_percell->Fill(l1CaloTPemu_->hcalTPADC1[HcalTPIt],l1CaloTPemu_->hcalTPDepth1[HcalTPIt]);
+	  ADC_vs_GeV_percell->Fill(l1CaloTPemu_->hcalTPADC2[HcalTPIt],l1CaloTPemu_->hcalTPDepth2[HcalTPIt]);
+	  ADC_vs_GeV_percell->Fill(l1CaloTPemu_->hcalTPADC3[HcalTPIt],l1CaloTPemu_->hcalTPDepth3[HcalTPIt]);
+	  ADC_vs_GeV_percell->Fill(l1CaloTPemu_->hcalTPADC4[HcalTPIt],l1CaloTPemu_->hcalTPDepth4[HcalTPIt]);
+	  ADC_vs_GeV_percell->Fill(l1CaloTPemu_->hcalTPADC5[HcalTPIt],l1CaloTPemu_->hcalTPDepth5[HcalTPIt]);
+	  ADC_vs_GeV_percell->Fill(l1CaloTPemu_->hcalTPADC6[HcalTPIt],l1CaloTPemu_->hcalTPDepth6[HcalTPIt]);
+	  ADC_vs_GeV_percell->Fill(l1CaloTPemu_->hcalTPADC7[HcalTPIt],l1CaloTPemu_->hcalTPDepth7[HcalTPIt]);
+	  
+	  GeV_ADC_byTPET->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] / l1CaloTPemu_->hcalTPADC1[HcalTPIt]));
+	  GeV_ADC_byTPET->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] / l1CaloTPemu_->hcalTPADC2[HcalTPIt]));
+	  GeV_ADC_byTPET->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] / l1CaloTPemu_->hcalTPADC3[HcalTPIt]));
+	  GeV_ADC_byTPET->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] / l1CaloTPemu_->hcalTPADC4[HcalTPIt]));
+	  GeV_ADC_byTPET->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth5[HcalTPIt] / l1CaloTPemu_->hcalTPADC5[HcalTPIt]));
+	  GeV_ADC_byTPET->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth6[HcalTPIt] / l1CaloTPemu_->hcalTPADC6[HcalTPIt]));
+	  GeV_ADC_byTPET->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth7[HcalTPIt] / l1CaloTPemu_->hcalTPADC7[HcalTPIt]));
+
+	  if (abs(tpEtaemu) <= 20 ) {
+	    ADC_vs_GeV_percell_HBHE20->Fill(l1CaloTPemu_->hcalTPADC1[HcalTPIt],l1CaloTPemu_->hcalTPDepth1[HcalTPIt]);
+	    ADC_vs_GeV_percell_HBHE20->Fill(l1CaloTPemu_->hcalTPADC2[HcalTPIt],l1CaloTPemu_->hcalTPDepth2[HcalTPIt]);
+	    ADC_vs_GeV_percell_HBHE20->Fill(l1CaloTPemu_->hcalTPADC3[HcalTPIt],l1CaloTPemu_->hcalTPDepth3[HcalTPIt]);
+	    ADC_vs_GeV_percell_HBHE20->Fill(l1CaloTPemu_->hcalTPADC4[HcalTPIt],l1CaloTPemu_->hcalTPDepth4[HcalTPIt]);
+	    ADC_vs_GeV_percell_HBHE20->Fill(l1CaloTPemu_->hcalTPADC5[HcalTPIt],l1CaloTPemu_->hcalTPDepth5[HcalTPIt]);
+	    ADC_vs_GeV_percell_HBHE20->Fill(l1CaloTPemu_->hcalTPADC6[HcalTPIt],l1CaloTPemu_->hcalTPDepth6[HcalTPIt]);
+	    ADC_vs_GeV_percell_HBHE20->Fill(l1CaloTPemu_->hcalTPADC7[HcalTPIt],l1CaloTPemu_->hcalTPDepth7[HcalTPIt]);
+	    GeV_ADC_byTPET_HBHE20->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] / l1CaloTPemu_->hcalTPADC1[HcalTPIt]));
+	    GeV_ADC_byTPET_HBHE20->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] / l1CaloTPemu_->hcalTPADC2[HcalTPIt]));
+	    GeV_ADC_byTPET_HBHE20->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] / l1CaloTPemu_->hcalTPADC3[HcalTPIt]));
+	    GeV_ADC_byTPET_HBHE20->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] / l1CaloTPemu_->hcalTPADC4[HcalTPIt]));
+	    GeV_ADC_byTPET_HBHE20->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth5[HcalTPIt] / l1CaloTPemu_->hcalTPADC5[HcalTPIt]));
+	    GeV_ADC_byTPET_HBHE20->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth6[HcalTPIt] / l1CaloTPemu_->hcalTPADC6[HcalTPIt]));
+	    GeV_ADC_byTPET_HBHE20->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth7[HcalTPIt] / l1CaloTPemu_->hcalTPADC7[HcalTPIt]));
+	  }
+	  if (abs(tpEtaemu) > 20 && abs(tpEtaemu) <=28 ) {
+	    ADC_vs_GeV_percell_HE21->Fill(l1CaloTPemu_->hcalTPADC1[HcalTPIt],l1CaloTPemu_->hcalTPDepth1[HcalTPIt]);
+	    ADC_vs_GeV_percell_HE21->Fill(l1CaloTPemu_->hcalTPADC2[HcalTPIt],l1CaloTPemu_->hcalTPDepth2[HcalTPIt]);
+	    ADC_vs_GeV_percell_HE21->Fill(l1CaloTPemu_->hcalTPADC3[HcalTPIt],l1CaloTPemu_->hcalTPDepth3[HcalTPIt]);
+	    ADC_vs_GeV_percell_HE21->Fill(l1CaloTPemu_->hcalTPADC4[HcalTPIt],l1CaloTPemu_->hcalTPDepth4[HcalTPIt]);
+	    ADC_vs_GeV_percell_HE21->Fill(l1CaloTPemu_->hcalTPADC5[HcalTPIt],l1CaloTPemu_->hcalTPDepth5[HcalTPIt]);
+	    ADC_vs_GeV_percell_HE21->Fill(l1CaloTPemu_->hcalTPADC6[HcalTPIt],l1CaloTPemu_->hcalTPDepth6[HcalTPIt]);
+	    ADC_vs_GeV_percell_HE21->Fill(l1CaloTPemu_->hcalTPADC7[HcalTPIt],l1CaloTPemu_->hcalTPDepth7[HcalTPIt]);
+	    GeV_ADC_byTPET_HE21->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] / l1CaloTPemu_->hcalTPADC1[HcalTPIt]));
+	    GeV_ADC_byTPET_HE21->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] / l1CaloTPemu_->hcalTPADC2[HcalTPIt]));
+	    GeV_ADC_byTPET_HE21->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] / l1CaloTPemu_->hcalTPADC3[HcalTPIt]));
+	    GeV_ADC_byTPET_HE21->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] / l1CaloTPemu_->hcalTPADC4[HcalTPIt]));
+	    GeV_ADC_byTPET_HE21->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth5[HcalTPIt] / l1CaloTPemu_->hcalTPADC5[HcalTPIt]));
+	    GeV_ADC_byTPET_HE21->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth6[HcalTPIt] / l1CaloTPemu_->hcalTPADC6[HcalTPIt]));
+	    GeV_ADC_byTPET_HE21->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], (l1CaloTPemu_->hcalTPDepth7[HcalTPIt] / l1CaloTPemu_->hcalTPADC7[HcalTPIt]));
+	  }
 	}
 
 	if (min_DeltaR > 0.5 ) continue; // don't consider HCAL TPs that are greater than DR 0.5 from a L1 jet
@@ -782,126 +685,53 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       int Sum4Jet_HBHE = SumTimingBitJet1_HB+SumTimingBitJet2_HB+SumTimingBitJet3_HB+SumTimingBitJet4_HB + SumTimingBitJet1_HE+SumTimingBitJet2_HE+SumTimingBitJet3_HE+SumTimingBitJet4_HE;
       int Sum4Jet_HB = SumTimingBitJet1_HB+SumTimingBitJet2_HB+SumTimingBitJet3_HB+SumTimingBitJet4_HB;
       int Sum4Jet_HE = SumTimingBitJet1_HE+SumTimingBitJet2_HE+SumTimingBitJet3_HE+SumTimingBitJet4_HE;
-    
+
       // ************* GEN PARTICLE MATCHING CODE ******************
-      int numL1JetsMatched = 0;
-      for (uint jetIt = 0; jetIt < nJetemu && jetIt < 4; jetIt++) {
-	L1Jet_to_Parton[jetIt]->Fill(closestParton(jetIt, l1emu_, generator_)[0]);
-	if (closestParton(jetIt, l1emu_, generator_)[0] <= 0.5) {
-	  numL1JetsMatched += 1;
-	  int partonN = closestParton(jetIt, l1emu_, generator_)[1];
-	  double xPos = LLPdecayInfo(partonN, l1emu_, generator_)[0];
-          double yPos = LLPdecayInfo(partonN, l1emu_, generator_)[1];
-          double zPos = LLPdecayInfo(partonN, l1emu_, generator_)[2];
-	  LLPdecayRadiusJetMatched->Fill(zPos,TMath::Sqrt(xPos*xPos + yPos*yPos) );
-	  LLPdecayXyzJetMatched->Fill(LLPdecayInfo(partonN, l1emu_, generator_)[3]);
-
-	  double TOF = LLPdecayInfo(partonN, l1emu_, generator_)[3];
-	  // consider HCAL TPs within DR 0.5 of the L1 Jet that is matched to a parton for correlation of time delay
-	  for (int HcalTPIt = 0; HcalTPIt < nCaloTPemu; HcalTPIt++){
-	    // eta and phi of the HCAL TP                                                                                                                                                                                                  
-	    double tpEtaemu = l1CaloTPemu_->hcalTPieta[HcalTPIt]; // ieta                                                                                                                                                                  
-	    if (abs(tpEtaemu) > 28 ) continue; // don't consider HCAL TPs outside of HB or HE                                                                                                                                              
-	    double tpPhiemu = l1CaloTPemu_->hcalTPCaliphi[HcalTPIt]; // iphi                                                                                                                                                               
-	    double TP_Eta = etaVal(tpEtaemu); // eta                                                                                                                                                                                       
-	    double TP_Phi = phiVal(tpPhiemu); // phi                                                                                                                                                                                       
-	    if (deltaR(l1emu_->jetEta[jetIt], l1emu_->jetPhi[jetIt], TP_Eta, TP_Phi) < 0.5 ) {
-	      if ( l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >=0 ) TOF_vs_TDC_JetMatched->Fill(TOF,l1CaloTPemu_->hcalTPtiming1[HcalTPIt]);
-	      if ( l1CaloTPemu_->hcalTPtiming2[HcalTPIt] >=0 ) TOF_vs_TDC_JetMatched->Fill(TOF,l1CaloTPemu_->hcalTPtiming2[HcalTPIt]);
-	      if ( l1CaloTPemu_->hcalTPtiming3[HcalTPIt] >=0 ) TOF_vs_TDC_JetMatched->Fill(TOF,l1CaloTPemu_->hcalTPtiming3[HcalTPIt]);
-	      if ( l1CaloTPemu_->hcalTPtiming4[HcalTPIt] >=0 ) TOF_vs_TDC_JetMatched->Fill(TOF,l1CaloTPemu_->hcalTPtiming4[HcalTPIt]);
-	      if ( l1CaloTPemu_->hcalTPtiming5[HcalTPIt] >=0 ) TOF_vs_TDC_JetMatched->Fill(TOF,l1CaloTPemu_->hcalTPtiming5[HcalTPIt]);
-	      if ( l1CaloTPemu_->hcalTPtiming6[HcalTPIt] >=0 ) TOF_vs_TDC_JetMatched->Fill(TOF,l1CaloTPemu_->hcalTPtiming6[HcalTPIt]);
-	      if ( l1CaloTPemu_->hcalTPtiming7[HcalTPIt] >=0 ) TOF_vs_TDC_JetMatched->Fill(TOF,l1CaloTPemu_->hcalTPtiming7[HcalTPIt]);
-	    }
-	  } // end of HCAL TP depth loop for the TDC and TOF correlation plots
-	}
-      }
-      L1JetMatchingEff->Fill(numL1JetsMatched);
-      //      std::cout << closestParton(jetIt, l1emu_, generator_)[0] << " " << closestParton(jetIt, l1emu_, generator_)[1] << std::endl;
-      //      std::cout << " " << std::endl;
-
-
-
-    
+      std::cout << "parton loop for gen particle studies" << std::endl;
       for (int partonN = 0; partonN < generator_->nPart; partonN ++) {
 	double partonEta = 1000;
         double partonPhi = 1000;
-
+	double partonHCALx = 1000;
+        double partonHCALy = 1000;
+        double partonHCALz = 1000;
         if (generator_->partHardProcess[partonN] == 0 ) continue;                  
         if ( (abs(generator_->partId[partonN]) >= 1 && abs(generator_->partId[partonN]) <=5 ) || (abs(generator_->partId[partonN]) == 21) ) { 
           if ( (generator_->partParent[partonN] == 9000006) || (generator_->partParent[partonN] == 9000007) || (generator_->partParent[partonN] == 6000113) ) { // 6000113 possibly, or 9000007, or 9000006
             partonEta = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[0];
             partonPhi = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[1];
-	    double partonEta1 = partonEta; // used for TOF and TDC comparisons, partonEta and partonPhi above use in DeltaR from L1 jet
-	    double partonPhi1 = partonPhi;
-	    double partonEta2 = intersect(generator_->partVx[partonN-1],generator_->partVy[partonN-1],generator_->partVz[partonN-1], generator_->partPx[partonN-1],generator_->partPy[partonN-1],generator_->partPz[partonN-1])[0];
-	    double partonPhi2 = intersect(generator_->partVx[partonN-1],generator_->partVy[partonN-1],generator_->partVz[partonN-1], generator_->partPx[partonN-1],generator_->partPy[partonN-1],generator_->partPz[partonN-1])[1];
-	    double parton1HCALx = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[2]; // in cm
-	    double parton1HCALy = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[3];
-	    double parton1HCALz = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[4];
-            double parton2HCALx = intersect(generator_->partVx[partonN-1],generator_->partVy[partonN-1],generator_->partVz[partonN-1], generator_->partPx[partonN-1],generator_->partPy[partonN-1],generator_->partPz[partonN-1])[2];
-            double parton2HCALy = intersect(generator_->partVx[partonN-1],generator_->partVy[partonN-1],generator_->partVz[partonN-1], generator_->partPx[partonN-1],generator_->partPy[partonN-1],generator_->partPz[partonN-1])[3];
-            double parton2HCALz = intersect(generator_->partVx[partonN-1],generator_->partVy[partonN-1],generator_->partVz[partonN-1], generator_->partPx[partonN-1],generator_->partPy[partonN-1],generator_->partPz[partonN-1])[4];
+	    partonHCALx = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[2]; // in cm
+	    partonHCALy = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[3];
+	    partonHCALz = intersect(generator_->partVx[partonN],generator_->partVy[partonN],generator_->partVz[partonN], generator_->partPx[partonN],generator_->partPy[partonN],generator_->partPz[partonN])[4];
 	    double radius = sqrt(generator_->partVx[partonN]*generator_->partVx[partonN] + generator_->partVy[partonN]*generator_->partVy[partonN]);
 	    double vertex = sqrt(generator_->partVx[partonN]*generator_->partVx[partonN] + generator_->partVy[partonN]*generator_->partVy[partonN] + generator_->partVz[partonN]*generator_->partVz[partonN]);
 	    if ( generator_->partVz[partonN] == generator_->partVz[partonN-1]  ) { 
 	      // makes sure found two quarks resulting from LLP decay since they have the same vertex, two b quarks are always separated by 1 in the partonN loop
 	      double genLLPBeta = sqrt((generator_->partPx[partonN-1] + generator_->partPx[partonN])*(generator_->partPx[partonN-1] + generator_->partPx[partonN]) + (generator_->partPy[partonN-1] + generator_->partPy[partonN])*(generator_->partPy[partonN-1] + generator_->partPy[partonN]) + (generator_->partPz[partonN-1] + generator_->partPz[partonN])*(generator_->partPz[partonN-1] + generator_->partPz[partonN])) / (generator_->partE[partonN-1] + generator_->partE[partonN]); // beta of LLP considering momentum and energy of two b quarks
 	      double genLLPGamma = 1./TMath::Sqrt(1.-genLLPBeta*genLLPBeta);
-	      LLPdecayRadius->Fill(generator_->partVz[partonN],radius); // fill the radius and z position for LLP decay
+	      LLPdecayRadius->Fill(radius,abs(generator_->partVz[partonN]),1); // fill the radius and z position for LLP decay
 	      LLPdecayXyz->Fill(vertex / (genLLPBeta * genLLPGamma)); // ctau traveled in lab frame
 
 	      if (Sum4Jet_HBHE >= 10 && htSum > 120) {
-		LLPdecayRadiusTrigAcceptance->Fill(generator_->partVz[partonN],radius); // fill the radius and z position for LLP decay given that event passes trigger selection
+		LLPdecayRadiusTrigAcceptance->Fill(radius,abs(generator_->partVz[partonN]),1); // fill the radius and z position for LLP decay given that event passes trigger selection
 		LLPdecayXyzTrigAcceptance->Fill(vertex / (genLLPBeta * genLLPGamma));
 	      }
-	      
-	      // calculate TOF
-	      double lightSpeed = 29979245800; // in cm / s
-	      double TOF_LLP = 1000000000*vertex / (genLLPBeta * lightSpeed); // in ns
-	      double TOF_bQuark1 = 1000000000*(TMath::Sqrt((generator_->partVx[partonN] - parton1HCALx)*(generator_->partVx[partonN] - parton1HCALx) + (generator_->partVy[partonN] - parton1HCALy)*(generator_->partVy[partonN] -parton1HCALy) + (generator_->partVz[partonN] - parton1HCALz)*(generator_->partVz[partonN] - parton1HCALz))) / lightSpeed; // in ns
-              double TOF_bQuark2 = 1000000000*(TMath::Sqrt((generator_->partVx[partonN-1] - parton2HCALx)*(generator_->partVx[partonN-1] - parton2HCALx) + (generator_->partVy[partonN-1] - parton2HCALy)*(generator_->partVy[partonN-1] -parton2HCALy) + (generator_->partVz[partonN-1] - parton2HCALz)*(generator_->partVz[partonN-1] - parton2HCALz))) / lightSpeed; // in ns
-              double TOF_expected1 = 1000000000*(TMath::Sqrt(parton1HCALx*parton1HCALx + parton1HCALy*parton1HCALy + parton1HCALz*parton1HCALz)) / lightSpeed; // this is x,y,z of parton intersection with HCAL
-	      double TOF_expected2 = 1000000000*(TMath::Sqrt(parton2HCALx*parton2HCALx + parton2HCALy*parton2HCALy + parton2HCALz*parton2HCALz)) / lightSpeed; // this is x,y,z of parton intersection with HCAL
-	      TOF_LLP_quark->Fill((TOF_LLP + TOF_bQuark1 - TOF_expected1)); // TOF in ns, all distances have been in cm
-	      TOF_LLP_quark->Fill((TOF_LLP + TOF_bQuark2 - TOF_expected2));
-	      TOF_expected->Fill(TOF_expected1);
-              TOF_expected->Fill(TOF_expected2);
-
-	      // consider HCAL TPs within DR 0.5 of the parton intersection of the HCAL for correlation of time delay
-	      for (int HcalTPIt = 0; HcalTPIt < nCaloTPemu; HcalTPIt++){
-		// eta and phi of the HCAL TP    
-		double tpEtaemu = l1CaloTPemu_->hcalTPieta[HcalTPIt]; // ieta    
-		if (abs(tpEtaemu) > 28 ) continue; // don't consider HCAL TPs outside of HB or HE 
-		double tpPhiemu = l1CaloTPemu_->hcalTPCaliphi[HcalTPIt]; // iphi
-		double TP_Eta = etaVal(tpEtaemu); // eta
-		double TP_Phi = phiVal(tpPhiemu); // phi
-		if (deltaR(partonEta1, partonPhi1, TP_Eta, TP_Phi) < 0.2 ) {
-		  if ( l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >=0 ) TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark1 - TOF_expected1,l1CaloTPemu_->hcalTPtiming1[HcalTPIt]);
-                  if ( l1CaloTPemu_->hcalTPtiming2[HcalTPIt] >=0 )TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark1 - TOF_expected1,l1CaloTPemu_->hcalTPtiming2[HcalTPIt]);
-                  if ( l1CaloTPemu_->hcalTPtiming3[HcalTPIt] >=0 )TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark1 - TOF_expected1,l1CaloTPemu_->hcalTPtiming3[HcalTPIt]);
-                  if ( l1CaloTPemu_->hcalTPtiming4[HcalTPIt] >=0 )TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark1 - TOF_expected1,l1CaloTPemu_->hcalTPtiming4[HcalTPIt]);
-                  if ( l1CaloTPemu_->hcalTPtiming5[HcalTPIt] >=0 )TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark1 - TOF_expected1,l1CaloTPemu_->hcalTPtiming5[HcalTPIt]);
-                  if ( l1CaloTPemu_->hcalTPtiming6[HcalTPIt] >=0 )TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark1 - TOF_expected1,l1CaloTPemu_->hcalTPtiming6[HcalTPIt]);
-                  if ( l1CaloTPemu_->hcalTPtiming7[HcalTPIt] >=0 )TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark1 - TOF_expected1,l1CaloTPemu_->hcalTPtiming7[HcalTPIt]);
-		}
-                if (deltaR(partonEta2, partonPhi2, TP_Eta, TP_Phi) < 0.2 ) {
-                  if ( l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >=0 )TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark2 - TOF_expected2,l1CaloTPemu_->hcalTPtiming1[HcalTPIt]);
-                  if ( l1CaloTPemu_->hcalTPtiming2[HcalTPIt] >=0 )TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark2 - TOF_expected2,l1CaloTPemu_->hcalTPtiming2[HcalTPIt]);
-                  if ( l1CaloTPemu_->hcalTPtiming3[HcalTPIt] >=0 )TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark2 - TOF_expected2,l1CaloTPemu_->hcalTPtiming3[HcalTPIt]);
-                  if ( l1CaloTPemu_->hcalTPtiming4[HcalTPIt] >=0 )TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark2 - TOF_expected2,l1CaloTPemu_->hcalTPtiming4[HcalTPIt]);
-                  if ( l1CaloTPemu_->hcalTPtiming5[HcalTPIt] >=0 )TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark2 - TOF_expected2,l1CaloTPemu_->hcalTPtiming5[HcalTPIt]);
-                  if ( l1CaloTPemu_->hcalTPtiming6[HcalTPIt] >=0 )TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark2 - TOF_expected2,l1CaloTPemu_->hcalTPtiming6[HcalTPIt]);
-                  if ( l1CaloTPemu_->hcalTPtiming7[HcalTPIt] >=0 )TOF_vs_TDC->Fill(TOF_LLP + TOF_bQuark2 - TOF_expected2,l1CaloTPemu_->hcalTPtiming7[HcalTPIt]);
-		}
-	      }
+	      //              double lightSpeed = 29979245800; // in cm / s
+	      //              double TOF_LLP = 1000000000*radius / (genLLPBeta * lightSpeed); // in ns
 	    }
+	    // calculate TOF
+	    double lightSpeed = 29979245800; // in cm / s
+	    //	      double TOF_bQuark = 1000000000*(TMath::Sqrt((generator_->partVx[partonN] - partonHCALx)*(generator_->partVx[partonN] - partonHCALx) + (generator_->partVy[partonN] - partonHCALy)*(generator_->partVy[partonN] -partonHCALy) + (generator_->partVz[partonN] - partonHCALz)*(generator_->partVz[partonN] - partonHCALz))) / lightSpeed; // in ns
+	    double TOF_expected = 1000000000*(TMath::Sqrt(partonHCALx*partonHCALx + partonHCALy*partonHCALy + partonHCALz*partonHCALz)) / lightSpeed; // this is x,y,z of parton intersection with HCAL
+	    //	      TOF_LLP_quark->Fill((TOF_LLP + TOF_bQuark - TOF_expected)); // TOF in ns, all distances have been in cm
+	    TOF_LLP_quark->Fill((TOF_expected));
+	    std::cout << partonHCALx << ", " << partonHCALy << ", " << partonHCALz << std::endl;
+	    std::cout << TOF_expected << std::endl;
+	    
 
 	    double min_DeltaR = 100;    
 	    int closestJet = -1;
             for (uint jetIt = 0; jetIt < nJetemu; jetIt++){ // loop over L1 jets, and only do first four (4 highest energy L1 jets from 4 leptons)
-	      //              if (l1emu_->jetEt[jetIt] < 20 ) continue; // require jet is greater than 20 GeV to attempt matching to parton
+              if (l1emu_->jetEt[jetIt] < 20 ) continue; // require jet is greater than 20 GeV to attempt matching to parton
               double Jet_eta = l1emu_->jetEta[jetIt];                 
               double Jet_phi = l1emu_->jetPhi[jetIt];                      
               double DeltaR = deltaR(Jet_eta,Jet_phi,partonEta,partonPhi); // distance between L1 jet and a parton
@@ -933,55 +763,13 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       totalEvents += 1; // counting total events for efficiency calculations
       htSumDistribution->Fill(htSum);
 
-      if (htSum > 120 && htSum <=140 ) totalEvent_ht120 += 1;
-      if (htSum > 140 && htSum <=160 ) totalEvent_ht140 += 1;
-      if (htSum > 160 && htSum <=180 ) totalEvent_ht160 += 1;
-      if (htSum > 180 && htSum <=200 ) totalEvent_ht180 += 1;
-      if (htSum > 200 && htSum <=220 ) totalEvent_ht200 += 1;
-      if (htSum > 220 && htSum <=240 ) totalEvent_ht220 += 1;
-      if (htSum > 240 && htSum <=260 ) totalEvent_ht240 += 1;
-      if (htSum > 260 && htSum <=280 ) totalEvent_ht260 += 1;
-      if (htSum > 280 && htSum <=300 ) totalEvent_ht280 += 1;
-      if (htSum > 300 && htSum <=320 ) totalEvent_ht300 += 1;
-      if (htSum > 320 && htSum <=340 ) totalEvent_ht320 += 1;
-      if (htSum > 340 && htSum <=360 ) totalEvent_ht340 += 1;
-      if (htSum > 360 && htSum <=380 ) totalEvent_ht360 += 1;
-      if (htSum > 380 && htSum <=400 ) totalEvent_ht380 += 1;
-
-      if (Sum4Jet_HBHE >= 2) {
-	if (htSum > 120 && htSum <=140 ) HBHE4Jet_inBins_ht120 += 1;
-	if (htSum > 140 && htSum <=160 ) HBHE4Jet_inBins_ht140 += 1;
-	if (htSum > 160 && htSum <=180 ) HBHE4Jet_inBins_ht160 += 1;
-	if (htSum > 180 && htSum <=200 ) HBHE4Jet_inBins_ht180 += 1;
-	if (htSum > 200 && htSum <=220 ) HBHE4Jet_inBins_ht200 += 1;
-	if (htSum > 220 && htSum <=240 ) HBHE4Jet_inBins_ht220 += 1;
-	if (htSum > 240 && htSum <=260 ) HBHE4Jet_inBins_ht240 += 1;
-	if (htSum > 260 && htSum <=280 ) HBHE4Jet_inBins_ht260 += 1;
-	if (htSum > 280 && htSum <=300 ) HBHE4Jet_inBins_ht280 += 1;
-	if (htSum > 300 && htSum <=320 ) HBHE4Jet_inBins_ht300 += 1;
-	if (htSum > 320 && htSum <=340 ) HBHE4Jet_inBins_ht320 += 1;
-	if (htSum > 340 && htSum <=360 ) HBHE4Jet_inBins_ht340 += 1;
-	if (htSum > 360 && htSum <=380 ) HBHE4Jet_inBins_ht360 += 1;
-	if (htSum > 380 && htSum <=400 ) HBHE4Jet_inBins_ht380 += 1;
-      }
-
-
-      if ( ((htSum > 120) && ( Sum4Jet_HBHE >= 1 )) || (htSum > 360) ) passed4JetMult_HBHE_ht120_1 += 1; // +7
-      if ( ((htSum > 120) && ( Sum4Jet_HBHE >= 2 )) || (htSum > 360) ) passed4JetMult_HBHE_ht120_2 += 1;
-      if ( ((htSum > 120) && ( Sum4Jet_HBHE >= 3 )) || (htSum > 360) ) passed4JetMult_HBHE_ht120_3 += 1;
-      if ( ((htSum > 120) && ( Sum4Jet_HBHE >= 4 )) || (htSum > 360) ) passed4JetMult_HBHE_ht120_4 += 1;
-      if ( ((htSum > 120) && ( Sum4Jet_HBHE >= 5 )) || (htSum > 360) ) passed4JetMult_HBHE_ht120_5 += 1;
-
+      if ( ((htSum > 120) && ( Sum4Jet_HBHE >= 10 )) || (htSum > 360) ) passed4JetMult_HBHE_ht120 += 1;
       if (htSum > 360) passedHtSum360 += 1;
 
       for(int bin=0; bin<nHtSumBins; bin++){
-        if( (htSum) >= htSumLo+(bin*htSumBinWidth) && (Sum4Jet_HBHE)>=2 ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV, compare to original rates in plot
+        if( (htSum) >= htSumLo+(bin*htSumBinWidth) && (Sum4Jet_HBHE)>=10 ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV, compare to original rates in plot
         if( (htSum) >= htSumLo+(bin*htSumBinWidth) ) htSumRates_original_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV, use for ht > 360 original rates in rate vs. eff plots
-        if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (Sum4Jet_HBHE)>=1 || htSum > 360 ) ) htSumRates_120timingOR360_1_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV, use for ht > 120 + timing OR ht > 360 rates in rate vs. eff plots
-	if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (Sum4Jet_HBHE)>=2 || htSum > 360 ) ) htSumRates_120timingOR360_2_emu->Fill(htSumLo+(bin*htSumBinWidth));
-	if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (Sum4Jet_HBHE)>=3 || htSum > 360 ) ) htSumRates_120timingOR360_3_emu->Fill(htSumLo+(bin*htSumBinWidth));
-	if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (Sum4Jet_HBHE)>=4 || htSum > 360 ) ) htSumRates_120timingOR360_4_emu->Fill(htSumLo+(bin*htSumBinWidth));
-	if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (Sum4Jet_HBHE)>=5 || htSum > 360 ) ) htSumRates_120timingOR360_5_emu->Fill(htSumLo+(bin*htSumBinWidth));
+        if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (Sum4Jet_HBHE)>=10 || htSum > 360 ) ) htSumRates_120timingOR360_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV, use for ht > 120 + timing OR ht > 360 rates in rate vs. eff plots
       }
     }// closes if 'emuOn' is true
 
@@ -1219,37 +1007,24 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     ADC50_3ns_4JetMultHB_emu->Write();
     ADC50_3ns_4JetMultHE_emu->Write();
     ADC50_3ns_4JetMultHBHE_emu->Write();
-    // jet checking plots
-    nJet_pt20GeV->Write();
-    for (int Jet = 0; Jet < 4; Jet++) Jet_DR[Jet]->Write();
     // gen matched plots
+    nJet_pt20GeV->Write();
     DeltaR_parton_L1jet->Write();
-    //    for (int closestJet = 0; closestJet < 15; closestJet++) DeltaR_parton_L1jet_closest[closestJet]->Write();
+    for (int closestJet = 0; closestJet < 15; closestJet++) DeltaR_parton_L1jet_closest[closestJet]->Write();
     LLPdecayRadius->Write();
     LLPdecayXyz->Write();
     LLPdecayRadiusTrigAcceptance->Write();
     LLPdecayXyzTrigAcceptance->Write();
-    LLPdecayRadiusJetMatched->Write();
-    LLPdecayXyzJetMatched->Write();
     TOF_LLP_quark->Write();
-    TOF_expected->Write();
-    TOF_vs_TDC->Write();
-    TOF_vs_TDC_JetMatched->Write();
-    for (int Jet = 0; Jet < 4; Jet++) L1Jet_to_Parton[Jet]->Write();
-    L1JetMatchingEff->Write();
 
     htSumDistribution->Write();
 
     htSumRates_original_emu->Scale(norm);
-    htSumRates_120timingOR360_1_emu->Scale(norm);
-    htSumRates_120timingOR360_2_emu->Scale(norm);
-    htSumRates_120timingOR360_3_emu->Scale(norm);
-    htSumRates_120timingOR360_4_emu->Scale(norm);
-    htSumRates_120timingOR360_5_emu->Scale(norm);
+    htSumRates_120timingOR360_emu->Scale(norm);
 
     // write histograms for energy / ADC
-    //    for (int iEta = 1; iEta <= 16; iEta ++) GeV_ADC_ratio_HB[iEta]->Write();
-    //    for (int iEta = 17; iEta <= 28; iEta ++) GeV_ADC_ratio_HE[iEta]->Write();
+    for (int iEta = 1; iEta <= 16; iEta ++) GeV_ADC_ratio_HB[iEta]->Write();
+    for (int iEta = 17; iEta <= 28; iEta ++) GeV_ADC_ratio_HE[iEta]->Write();
   }
   ADC_vs_GeV_percell->Write();
   ADC_vs_GeV_percell_HBHE20->Write();
@@ -1300,68 +1075,34 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     metHFSumRates_hw->Write();
   }
 
-  std::cout << passed4JetMult_HBHE_ht120_2 << std::endl;
+  std::cout << passed4JetMult_HBHE_ht120 << std::endl;
   std::cout << passedHtSum360 << std::endl;
   std::cout << totalEvents << std::endl;
 
   // saving efficiencies and rates in txt files to be read by rate vs eff plotting macros
   // signal efficiencies
-  if (inputFile.substr(27,2) == "mh" ) {
+  if (inputFile.substr(0,2) == "mh" ) {
     std::ofstream MultiplicityHits50ADC3ns_ht120_Signal;
-    MultiplicityHits50ADC3ns_ht120_Signal.open(Form("MultiplicityHits50ADC3ns_ht120_Signal_%s.txt", inputFile.substr(27,20).c_str()),std::ios_base::trunc);
-    MultiplicityHits50ADC3ns_ht120_Signal << passed4JetMult_HBHE_ht120_1 / totalEvents << std::endl; // efficiency at HT 120+timing OR HT 360
-    MultiplicityHits50ADC3ns_ht120_Signal << passed4JetMult_HBHE_ht120_2 / totalEvents << std::endl;
-    MultiplicityHits50ADC3ns_ht120_Signal << passed4JetMult_HBHE_ht120_3 / totalEvents << std::endl;
-    MultiplicityHits50ADC3ns_ht120_Signal << passed4JetMult_HBHE_ht120_4 / totalEvents << std::endl;
-    MultiplicityHits50ADC3ns_ht120_Signal << passed4JetMult_HBHE_ht120_5 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Signal.open(Form("MultiplicityHits50ADC3ns_ht120_Signal_%s.txt", inputFile.substr(0,20).c_str()),std::ios_base::trunc);
+    MultiplicityHits50ADC3ns_ht120_Signal << passed4JetMult_HBHE_ht120 / totalEvents << std::endl; // efficiency at HT 120+timing OR HT 360
     MultiplicityHits50ADC3ns_ht120_Signal << passedHtSum360 / totalEvents << std::endl; // efficiency at HT 360
     MultiplicityHits50ADC3ns_ht120_Signal.close();
-    std::ofstream Efficiency_HtBins_Signal;
-    Efficiency_HtBins_Signal.open(Form("Efficiency_HtBins_Signal_%s.txt", inputFile.substr(27,20).c_str()),std::ios_base::trunc);
-    Efficiency_HtBins_Signal << HBHE4Jet_inBins_ht120 / totalEvent_ht120 << std::endl; 
-    Efficiency_HtBins_Signal << HBHE4Jet_inBins_ht140 / totalEvent_ht140 << std::endl;
-    Efficiency_HtBins_Signal << HBHE4Jet_inBins_ht160 / totalEvent_ht160 << std::endl;
-    Efficiency_HtBins_Signal << HBHE4Jet_inBins_ht180 / totalEvent_ht180 << std::endl;
-    Efficiency_HtBins_Signal << HBHE4Jet_inBins_ht200 / totalEvent_ht200 << std::endl;
-    Efficiency_HtBins_Signal << HBHE4Jet_inBins_ht220 / totalEvent_ht220 << std::endl;
-    Efficiency_HtBins_Signal << HBHE4Jet_inBins_ht240 / totalEvent_ht240 << std::endl;
-    Efficiency_HtBins_Signal << HBHE4Jet_inBins_ht260 / totalEvent_ht260 << std::endl;
-    Efficiency_HtBins_Signal << HBHE4Jet_inBins_ht280 / totalEvent_ht280 << std::endl;
-    Efficiency_HtBins_Signal << HBHE4Jet_inBins_ht300 / totalEvent_ht300 << std::endl;
-    Efficiency_HtBins_Signal << HBHE4Jet_inBins_ht320 / totalEvent_ht320 << std::endl;
-    Efficiency_HtBins_Signal << HBHE4Jet_inBins_ht340 / totalEvent_ht340 << std::endl;
-    Efficiency_HtBins_Signal << HBHE4Jet_inBins_ht360 / totalEvent_ht360 << std::endl;
-    Efficiency_HtBins_Signal << HBHE4Jet_inBins_ht380 / totalEvent_ht380 << std::endl;
-    Efficiency_HtBins_Signal.close();
   }
   // background efficiencies 
-  if (inputFile.substr(27,3) == "QCD" ) {
+  if (inputFile.substr(0,3) == "QCD" ) {
     std::ofstream MultiplicityHits50ADC3ns_ht120_Background;
     MultiplicityHits50ADC3ns_ht120_Background.open("MultiplicityHits50ADC3ns_ht120_Background.txt");
-    MultiplicityHits50ADC3ns_ht120_Background << passed4JetMult_HBHE_ht120_1 / totalEvents << std::endl; // efficiency at HT 120+timing OR HT 360  
-    MultiplicityHits50ADC3ns_ht120_Background << passed4JetMult_HBHE_ht120_2 / totalEvents << std::endl;
-    MultiplicityHits50ADC3ns_ht120_Background << passed4JetMult_HBHE_ht120_3 / totalEvents << std::endl;
-    MultiplicityHits50ADC3ns_ht120_Background << passed4JetMult_HBHE_ht120_4 / totalEvents << std::endl;
-    MultiplicityHits50ADC3ns_ht120_Background << passed4JetMult_HBHE_ht120_5 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Background << passed4JetMult_HBHE_ht120 / totalEvents << std::endl; // efficiency at HT 120+timing OR HT 360  
     MultiplicityHits50ADC3ns_ht120_Background << passedHtSum360 / totalEvents << std::endl; // efficiency at HT 360  
     MultiplicityHits50ADC3ns_ht120_Background.close();
   }
   // neutrino gun rates
-  if (inputFile.substr(27,8) == "Neutrino" ) {
-    int htSum_120timingOR360_1_120 = htSumRates_120timingOR360_1_emu->GetBinContent(htSumRates_120timingOR360_1_emu->GetXaxis()->FindBin(120));
-    int htSum_120timingOR360_2_120 = htSumRates_120timingOR360_2_emu->GetBinContent(htSumRates_120timingOR360_2_emu->GetXaxis()->FindBin(120));
-    int htSum_120timingOR360_3_120 = htSumRates_120timingOR360_3_emu->GetBinContent(htSumRates_120timingOR360_3_emu->GetXaxis()->FindBin(120));
-    int htSum_120timingOR360_4_120 = htSumRates_120timingOR360_4_emu->GetBinContent(htSumRates_120timingOR360_4_emu->GetXaxis()->FindBin(120));
-    int htSum_120timingOR360_5_120 = htSumRates_120timingOR360_5_emu->GetBinContent(htSumRates_120timingOR360_5_emu->GetXaxis()->FindBin(120));
-
+  if (inputFile.substr(0,8) == "Neutrino" ) {
+    int htSum_120timingOR360_120 = htSumRates_120timingOR360_emu->GetBinContent(htSumRates_120timingOR360_emu->GetXaxis()->FindBin(120));
     int htSum_original_360 = htSumRates_original_emu->GetBinContent(htSumRates_original_emu->GetXaxis()->FindBin(360));
     std::ofstream NuGunRates;
     NuGunRates.open("NuGunRates.txt");
-    NuGunRates << htSum_120timingOR360_1_120 << std::endl; // rate at HT 120 
-    NuGunRates << htSum_120timingOR360_2_120 << std::endl;
-    NuGunRates << htSum_120timingOR360_3_120 << std::endl;
-    NuGunRates << htSum_120timingOR360_4_120 << std::endl;
-    NuGunRates << htSum_120timingOR360_5_120 << std::endl;
+    NuGunRates << htSum_120timingOR360_120 << std::endl; // rate at HT 120 
     NuGunRates << htSum_original_360 << std::endl; // rate at HT 360 without timing cuts
     NuGunRates.close();
   }

@@ -1,8 +1,15 @@
 <use name="root"/>
 <use name="rootinteractive"/>
 <environment>
+  <bin file="llp_analysis.cxx" name="llp_analysis.exe"/>
   <bin file="draw_rates.cxx" name="draw_rates.exe"/>
+  <bin file="draw_timingbit.cxx" name="draw_timingbit.exe"/>
+  <bin file="draw_1mtimingbit.cxx" name="draw_1mtimingbit.exe"/>
   <bin file="rates.cxx" name="rates.exe"/>
+  <bin file="rates_original.cxx" name="rates_original.exe"/>
+  <bin file="RateEfficiencyPlots.cxx" name="RateEfficiencyPlots.exe"/>
+  <bin file="RateEfficiencyPlots_LLP_ctau.cxx" name="RateEfficiencyPlots_LLP_ctau.exe"/>
+  <bin file="Rate_HTbin.cxx" name="Rate_HTbin.exe"/>
   <bin file="draw_l1analysis.cxx" name="draw_l1analysis.exe"/>
   <bin file="l1jetanalysis.cxx" name="l1jetanalysis.exe"/>
 </environment>
