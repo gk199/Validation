@@ -1306,9 +1306,9 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 
   // saving efficiencies and rates in txt files to be read by rate vs eff plotting macros
   // signal efficiencies
-  if (inputFile.substr(27,2) == "mh" ) {
+  if (inputFile.substr(89,2) == "MH" ) {  // (inputFile.substr(27,2) == "mh" ) {
     std::ofstream MultiplicityHits50ADC3ns_ht120_Signal;
-    MultiplicityHits50ADC3ns_ht120_Signal.open(Form("MultiplicityHits50ADC3ns_ht120_Signal_%s.txt", inputFile.substr(27,20).c_str()),std::ios_base::trunc);
+    MultiplicityHits50ADC3ns_ht120_Signal.open(Form("MultiplicityHits50ADC3ns_ht120_Signal_%s.txt", inputFile.substr(89,29).c_str()),std::ios_base::trunc);  //inputFile.substr(27,20).c_str()),std::ios_base::trunc);
     MultiplicityHits50ADC3ns_ht120_Signal << passed4JetMult_HBHE_ht120_1 / totalEvents << std::endl; // efficiency at HT 120+timing OR HT 360
     MultiplicityHits50ADC3ns_ht120_Signal << passed4JetMult_HBHE_ht120_2 / totalEvents << std::endl;
     MultiplicityHits50ADC3ns_ht120_Signal << passed4JetMult_HBHE_ht120_3 / totalEvents << std::endl;
@@ -1317,7 +1317,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     MultiplicityHits50ADC3ns_ht120_Signal << passedHtSum360 / totalEvents << std::endl; // efficiency at HT 360
     MultiplicityHits50ADC3ns_ht120_Signal.close();
     std::ofstream Efficiency_HtBins_Signal;
-    Efficiency_HtBins_Signal.open(Form("Efficiency_HtBins_Signal_%s.txt", inputFile.substr(27,20).c_str()),std::ios_base::trunc);
+    Efficiency_HtBins_Signal.open(Form("Efficiency_HtBins_Signal_%s.txt", inputFile.substr(89,29).c_str()),std::ios_base::trunc); //inputFile.substr(27,20).c_str()),std::ios_base::trunc);
     Efficiency_HtBins_Signal << HBHE4Jet_inBins_ht120 / totalEvent_ht120 << std::endl; 
     Efficiency_HtBins_Signal << HBHE4Jet_inBins_ht140 / totalEvent_ht140 << std::endl;
     Efficiency_HtBins_Signal << HBHE4Jet_inBins_ht160 / totalEvent_ht160 << std::endl;
@@ -1335,7 +1335,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     Efficiency_HtBins_Signal.close();
   }
   // background efficiencies 
-  if (inputFile.substr(27,3) == "QCD" ) {
+  if (inputFile.substr(70,3) == "QCD" ) {
     std::ofstream MultiplicityHits50ADC3ns_ht120_Background;
     MultiplicityHits50ADC3ns_ht120_Background.open("MultiplicityHits50ADC3ns_ht120_Background.txt");
     MultiplicityHits50ADC3ns_ht120_Background << passed4JetMult_HBHE_ht120_1 / totalEvents << std::endl; // efficiency at HT 120+timing OR HT 360  
@@ -1347,7 +1347,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     MultiplicityHits50ADC3ns_ht120_Background.close();
   }
   // neutrino gun rates
-  if (inputFile.substr(27,8) == "Neutrino" ) {
+  if (inputFile.substr(70,8) == "Neutrino" ) {
     int htSum_120timingOR360_1_120 = htSumRates_120timingOR360_1_emu->GetBinContent(htSumRates_120timingOR360_1_emu->GetXaxis()->FindBin(120));
     int htSum_120timingOR360_2_120 = htSumRates_120timingOR360_2_emu->GetBinContent(htSumRates_120timingOR360_2_emu->GetXaxis()->FindBin(120));
     int htSum_120timingOR360_3_120 = htSumRates_120timingOR360_3_emu->GetBinContent(htSumRates_120timingOR360_3_emu->GetXaxis()->FindBin(120));
