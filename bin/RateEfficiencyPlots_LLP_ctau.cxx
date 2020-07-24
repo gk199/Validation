@@ -22,76 +22,86 @@ int main() {
   // mh=125 pl=3m
   double signal_mh125_pl3000[6];
   ifstream mh125_pl3000;
-  mh125_pl3000.open("MultiplicityHits50ADC3ns_ht120_Signal_mh125__mx50__pl3000_.txt");
+  mh125_pl3000.open("MultiplicityHits50ADC3ns_ht120_Signal_MH-125_MFF-50_CTau-3000mm_Tun.txt");
+  //  mh125_pl3000.open("MultiplicityHits50ADC3ns_ht120_Signal_mh125__mx50__pl3000_.txt");
   int n=0;
   while (mh125_pl3000 >> signal_mh125_pl3000[n]) n++;
   mh125_pl3000.close();
+  /*
   // mh=125 pl=30m      
   double signal_mh125_pl30000[6];
   ifstream mh125_pl30000;
-  mh125_pl30000.open("MultiplicityHits50ADC3ns_ht120_Signal_mh125__mx50__pl30000.txt");
+  mh125_pl30000.open("MultiplicityHits50ADC3ns_ht120_Signal_MH-125_MFF-50_CTau-30000mm_Tu.txt");  //MultiplicityHits50ADC3ns_ht120_Signal_mh125__mx50__pl30000.txt");
   n=0;
   while (mh125_pl30000 >> signal_mh125_pl30000[n]) n++;
   mh125_pl30000.close();
+  */
 
   // mh=1000 pl=10m
   double signal_mh1000_pl10000[6];
   ifstream mh1000_pl10000;
-  mh1000_pl10000.open("MultiplicityHits50ADC3ns_ht120_Signal_mh1000_mx450_pl10000.txt");
+  mh1000_pl10000.open("MultiplicityHits50ADC3ns_ht120_Signal_MH-1000_MFF-450_CTau-10000mm_.txt"); //MultiplicityHits50ADC3ns_ht120_Signal_mh1000_mx450_pl10000.txt");
   n=0;
   while (mh1000_pl10000 >> signal_mh1000_pl10000[n]) n++;
   mh1000_pl10000.close();
   // mh=1000 pl=100m
   double signal_mh1000_pl100000[6];
   ifstream mh1000_pl100000;
-  mh1000_pl100000.open("MultiplicityHits50ADC3ns_ht120_Signal_mh1000_mx450_pl100k_.txt");
+  mh1000_pl100000.open("MultiplicityHits50ADC3ns_ht120_Signal_MH-1000_MFF-450_CTau-100000mm.txt"); //MultiplicityHits50ADC3ns_ht120_Signal_mh1000_mx450_pl100k_.txt");
   n=0;
   while (mh1000_pl100000 >> signal_mh1000_pl100000[n]) n++;
   mh1000_pl100000.close();
 
+  /*
   // mh=350 pl=0.5m 
   double signal_mh350_pl500[6];
   ifstream mh350_pl500;
-  mh350_pl500.open("MultiplicityHits50ADC3ns_ht120_Signal_mh350__mx160_pl500__.txt");
+  mh350_pl500.open("MultiplicityHits50ADC3ns_ht120_Signal_MH-350_MFF-160_CTau-500mm_Tun.txt"); //MultiplicityHits50ADC3ns_ht120_Signal_mh350__mx160_pl500__.txt");
   n=0;
   while (mh350_pl500 >> signal_mh350_pl500[n]) n++;
   mh350_pl500.close();
+  */
+
   // mh=350 pl=1m 
   double signal_mh350_pl1000[6];
   ifstream mh350_pl1000;
-  mh350_pl1000.open("MultiplicityHits50ADC3ns_ht120_Signal_mh350__mx160_pl1000_.txt");
+  mh350_pl1000.open("MultiplicityHits50ADC3ns_ht120_Signal_MH-350_MFF-160_CTau-1000mm_Tu.txt"); //MultiplicityHits50ADC3ns_ht120_Signal_mh350__mx160_pl1000_.txt");
   n=0;
   while (mh350_pl1000 >> signal_mh350_pl1000[n]) n++;
   mh350_pl1000.close();
   // mh=350 pl=10m      
   double signal_mh350_pl10000[6];
   ifstream mh350_pl10000;
-  mh350_pl10000.open("MultiplicityHits50ADC3ns_ht120_Signal_mh350__mx160_pl10000.txt");
+  mh350_pl10000.open("MultiplicityHits50ADC3ns_ht120_Signal_MH-350_MFF-160_CTau-10000mm_T.txt"); //MultiplicityHits50ADC3ns_ht120_Signal_mh350__mx160_pl10000.txt");
   n=0;
   while (mh350_pl10000 >> signal_mh350_pl10000[n]) n++;
   mh350_pl10000.close();
 
+  /*
   // mh=250 pl=0.5m   
   double signal_mh250_pl500[6];
   ifstream mh250_pl500;
-  mh250_pl500.open("MultiplicityHits50ADC3ns_ht120_Signal_mh250__mx160_pl500__.txt");
+  mh250_pl500.open("MultiplicityHits50ADC3ns_ht120_Signal_MH-250_MFF-120_CTau-500mm_Tun.txt"); //MultiplicityHits50ADC3ns_ht120_Signal_mh250__mx160_pl500__.txt");
   n=0;
   while (mh250_pl500 >> signal_mh250_pl500[n]) n++;
   mh250_pl500.close();
+  */
   // mh=250 pl=1m 
   double signal_mh250_pl1000[6];
   ifstream mh250_pl1000;
-  mh250_pl1000.open("MultiplicityHits50ADC3ns_ht120_Signal_mh250__mx120_pl1000_.txt");
+  mh250_pl1000.open("MultiplicityHits50ADC3ns_ht120_Signal_MH-250_MFF-120_CTau-1000mm_Tu.txt"); //MultiplicityHits50ADC3ns_ht120_Signal_mh250__mx120_pl1000_.txt");
   n=0;
   while (mh250_pl1000 >> signal_mh250_pl1000[n]) n++;
   mh250_pl1000.close();
+  /*
   // mh=250 pl=10m
   double signal_mh250_pl10000[6];
   ifstream mh250_pl10000;
-  mh250_pl10000.open("MultiplicityHits50ADC3ns_ht120_Signal_mh250__mx160_pl10000.txt");
+  mh250_pl10000.open("MultiplicityHits50ADC3ns_ht120_Signal_MH-250_MFF-120_CTau-10000mm_Tun.txt"); //MultiplicityHits50ADC3ns_ht120_Signal_mh250__mx160_pl10000.txt");
   n=0;
   while (mh250_pl10000 >> signal_mh250_pl10000[n]) n++;
   mh250_pl10000.close();
+  */
 
   // Background
   double background[6];
@@ -110,49 +120,49 @@ int main() {
   nugun.close();
 
   double nugun_rate[5], cuts_background[5];
-  double cuts_mh125_pl3000[5], cuts_mh125_pl30000[5];
-  double cuts_mh1000_pl10000[5], cuts_mh1000_pl100000[5];
-  double cuts_mh250_pl500[5], cuts_mh250_pl1000[5], cuts_mh250_pl10000[5];
-  double cuts_mh350_pl500[5], cuts_mh350_pl1000[5], cuts_mh350_pl10000[5];
+  double cuts_mh125_pl3000[5];//, cuts_mh125_pl30000[5];
+  double cuts_mh1000_pl10000[5];//, cuts_mh1000_pl100000[5];
+  double cuts_mh250_pl1000[5];//cuts_mh250_pl500[5], cuts_mh250_pl1000[5], cuts_mh250_pl10000[5];
+  double cuts_mh350_pl10000[5];//cuts_mh350_pl500[5], cuts_mh350_pl1000[5], cuts_mh350_pl10000[5];
   for (int i=0; i<5; i++) {
     nugun_rate[i] = rates[i];
     cuts_mh125_pl3000[i] = signal_mh125_pl3000[i];
-    cuts_mh125_pl30000[i] = signal_mh125_pl30000[i];
-    cuts_mh250_pl500[i] = signal_mh250_pl500[i];
+    //    cuts_mh125_pl30000[i] = signal_mh125_pl30000[i];
+    //    cuts_mh250_pl500[i] = signal_mh250_pl500[i];
     cuts_mh250_pl1000[i] = signal_mh250_pl1000[i];
-    cuts_mh250_pl10000[i] = signal_mh250_pl10000[i];
-    cuts_mh350_pl500[i] = signal_mh350_pl500[i];
-    cuts_mh350_pl1000[i] = signal_mh350_pl1000[i];
+    //    cuts_mh250_pl10000[i] = signal_mh250_pl10000[i];
+    //    cuts_mh350_pl500[i] = signal_mh350_pl500[i];
+    //    cuts_mh350_pl1000[i] = signal_mh350_pl1000[i];
     cuts_mh350_pl10000[i] = signal_mh350_pl10000[i];
     cuts_mh1000_pl10000[i] = signal_mh1000_pl10000[i];
-    cuts_mh1000_pl100000[i] = signal_mh1000_pl100000[i];
+    //    cuts_mh1000_pl100000[i] = signal_mh1000_pl100000[i];
     cuts_background[i] = background[i];
   }
 
   // mh = 125 GeV
   TGraph *gr_LLP_mh125_pl3000 = new TGraph(5, cuts_mh125_pl3000, nugun_rate);
   TMarker *m_mh125_pl3000_ht360 = new TMarker(signal_mh125_pl3000[5], rates[5], 21);
-  TGraph *gr_LLP_mh125_pl30000 = new TGraph(5, cuts_mh125_pl30000, nugun_rate);
-  TMarker *m_mh125_pl30000_ht360 = new TMarker(signal_mh125_pl30000[5], rates[5], 21);
+  //  TGraph *gr_LLP_mh125_pl30000 = new TGraph(5, cuts_mh125_pl30000, nugun_rate);
+  //  TMarker *m_mh125_pl30000_ht360 = new TMarker(signal_mh125_pl30000[5], rates[5], 21);
   // mh = 250 GeV
-  TGraph *gr_LLP_mh250_pl500 = new TGraph(5, cuts_mh250_pl500, nugun_rate);
-  TMarker *m_mh250_pl500_ht360 = new TMarker(signal_mh250_pl500[5], rates[5], 21);
+  //  TGraph *gr_LLP_mh250_pl500 = new TGraph(5, cuts_mh250_pl500, nugun_rate);
+  //  TMarker *m_mh250_pl500_ht360 = new TMarker(signal_mh250_pl500[5], rates[5], 21);
   TGraph *gr_LLP_mh250_pl1000 = new TGraph(5, cuts_mh250_pl1000, nugun_rate);
   TMarker *m_mh250_pl1000_ht360 = new TMarker(signal_mh250_pl1000[5], rates[5], 21);
-  TGraph *gr_LLP_mh250_pl10000 = new TGraph(5, cuts_mh250_pl10000, nugun_rate);
-  TMarker *m_mh250_pl10000_ht360 = new TMarker(signal_mh250_pl10000[5], rates[5], 21);
+  //  TGraph *gr_LLP_mh250_pl10000 = new TGraph(5, cuts_mh250_pl10000, nugun_rate);
+  //  TMarker *m_mh250_pl10000_ht360 = new TMarker(signal_mh250_pl10000[5], rates[5], 21);
   // mh = 350 GeV
-  TGraph *gr_LLP_mh350_pl500 = new TGraph(5, cuts_mh350_pl500, nugun_rate);
-  TMarker *m_mh350_pl500_ht360 = new TMarker(signal_mh350_pl500[5], rates[5], 21);
-  TGraph *gr_LLP_mh350_pl1000 = new TGraph(5, cuts_mh350_pl1000, nugun_rate);
-  TMarker *m_mh350_pl1000_ht360 = new TMarker(signal_mh350_pl1000[5], rates[5], 21);
+  //  TGraph *gr_LLP_mh350_pl500 = new TGraph(5, cuts_mh350_pl500, nugun_rate);
+  //  TMarker *m_mh350_pl500_ht360 = new TMarker(signal_mh350_pl500[5], rates[5], 21);
+  //  TGraph *gr_LLP_mh350_pl1000 = new TGraph(5, cuts_mh350_pl1000, nugun_rate);
+  //  TMarker *m_mh350_pl1000_ht360 = new TMarker(signal_mh350_pl1000[5], rates[5], 21);
   TGraph *gr_LLP_mh350_pl10000 = new TGraph(5, cuts_mh350_pl10000, nugun_rate);
   TMarker *m_mh350_pl10000_ht360 = new TMarker(signal_mh350_pl10000[5], rates[5], 21);
   // mh = 1000 GeV 
   TGraph *gr_LLP_mh1000_pl10000 = new TGraph(5, cuts_mh1000_pl10000, nugun_rate);
   TMarker *m_mh1000_pl10000_ht360 = new TMarker(signal_mh1000_pl10000[5], rates[5], 21);
-  TGraph *gr_LLP_mh1000_pl100000 = new TGraph(5, cuts_mh1000_pl100000, nugun_rate);
-  TMarker *m_mh1000_pl100000_ht360 = new TMarker(signal_mh1000_pl100000[5], rates[5], 21);
+  //  TGraph *gr_LLP_mh1000_pl100000 = new TGraph(5, cuts_mh1000_pl100000, nugun_rate);
+  //  TMarker *m_mh1000_pl100000_ht360 = new TMarker(signal_mh1000_pl100000[5], rates[5], 21);
   // QCD
   TGraph *gr_background = new TGraph(5, cuts_background, nugun_rate);
   TMarker *m_background_ht360 = new TMarker(background[5], rates[5], 21);
@@ -171,21 +181,39 @@ int main() {
   m_mh125_pl3000_ht360->Draw();
   gr_LLP_mh125_pl3000->SetLineColor(kRed);
   gr_LLP_mh125_pl3000->Draw("C*");
+
+  m_mh250_pl1000_ht360->SetMarkerStyle(21);
+  m_mh250_pl1000_ht360->SetMarkerColor(kGreen-9);
+  m_mh250_pl1000_ht360->Draw();
+  gr_LLP_mh250_pl1000->SetLineColor(kGreen);
+  gr_LLP_mh250_pl1000->Draw("C*");
+
+  m_mh350_pl10000_ht360->SetMarkerStyle(21);
+  m_mh350_pl10000_ht360->SetMarkerColor(kBlue-9);
+  m_mh350_pl10000_ht360->Draw();
+  gr_LLP_mh350_pl10000->SetLineColor(kBlue);
+  gr_LLP_mh350_pl10000->Draw("C*");
+
   m_mh1000_pl10000_ht360->SetMarkerStyle(21);
-  m_mh1000_pl10000_ht360->SetMarkerColor(kBlue-9);
+  m_mh1000_pl10000_ht360->SetMarkerColor(kMagenta-9);
   m_mh1000_pl10000_ht360->Draw();
-  gr_LLP_mh1000_pl10000->SetLineColor(kBlue);
+  gr_LLP_mh1000_pl10000->SetLineColor(kMagenta);
   gr_LLP_mh1000_pl10000->Draw("C*");
   auto legend1_htSum = new TLegend(0.55,0.15,0.9,0.45);
   legend1_htSum->AddEntry(m_mh125_pl3000_ht360,"m_{H}=125, c#scale[1.2]{#tau}=3m; H_{T}>360 GeV, no timing cuts");
   legend1_htSum->AddEntry(gr_LLP_mh125_pl3000,"m_{H}=125, c#scale[1.2]{#tau}=3m; H_{T}>120 GeV, with timing cuts"); 
+  legend1_htSum->AddEntry(m_mh250_pl1000_ht360,"m_{H}=250, c#scale[1.2]{#tau}=1m; H_{T}>360 GeV, no timing cuts");
+  legend1_htSum->AddEntry(gr_LLP_mh250_pl1000,"m_{H}=250, c#scale[1.2]{#tau}=1m; H_{T}>120 GeV, with timing cuts");
+  legend1_htSum->AddEntry(m_mh350_pl10000_ht360,"m_{H}=350, c#scale[1.2]{#tau}=10m; H_{T}>360 GeV, no timing cuts");
+  legend1_htSum->AddEntry(gr_LLP_mh350_pl10000,"m_{H}=350, c#scale[1.2]{#tau}=10m; H_{T}>120 GeV, with timing cuts");
   legend1_htSum->AddEntry(m_mh1000_pl10000_ht360,"m_{H}=1000, c#scale[1.2]{#tau}=10m; H_{T}>360 GeV, no timing cuts");
   legend1_htSum->AddEntry(gr_LLP_mh1000_pl10000,"m_{H}=1000, c#scale[1.2]{#tau}=10m; H_{T}>120 GeV, with timing cuts");
   legend1_htSum->Draw();
   c1_LLP_pl3000->SetLogy();
   c1_LLP_pl3000->SetGrid();
-  c1_LLP_pl3000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_LLP_overlay_mh125_mh1000_3_10.pdf");
+  c1_LLP_pl3000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/EffRate_LLP_overlay_mh125_250_350_1000_3_1_10.pdf");
 
+  /*
   // mh = 125 GeV, higher lifetime
   TCanvas *c1_LLP_pl30000 = new TCanvas("c1_LLP_pl30000","Graph Draw Options",200,10,600,400);
   gr_LLP_mh125_pl30000->GetHistogram()->SetMinimum(-5.);
@@ -213,7 +241,7 @@ int main() {
   legend2_htSum->Draw();
   c1_LLP_pl30000->SetLogy();
   c1_LLP_pl30000->SetGrid();
-  c1_LLP_pl30000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_LLP_overlay_mh125_mh1000_30_100.pdf");
+  c1_LLP_pl30000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/EffRate_LLP_overlay_mh125_mh1000_30_100.pdf");
 
   // mh = 250, 350
   TCanvas *c1_LLP_pl500 = new TCanvas("c1_LLP_pl500","Graph Draw Options",200,10,600,400);
@@ -242,7 +270,7 @@ int main() {
   legend3_htSum->Draw();
   c1_LLP_pl500->SetLogy();
   c1_LLP_pl500->SetGrid();
-  c1_LLP_pl500->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_LLP_pl500.pdf");
+  c1_LLP_pl500->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/EffRate_LLP_pl500.pdf");
 
   TCanvas *c1_LLP_pl1000 = new TCanvas("c1_LLP_pl1000","Graph Draw Options",200,10,600,400);
   gr_LLP_mh250_pl1000->GetHistogram()->SetMinimum(-5.);
@@ -270,7 +298,7 @@ int main() {
   legend4_htSum->Draw();
   c1_LLP_pl1000->SetLogy();
   c1_LLP_pl1000->SetGrid();
-  c1_LLP_pl1000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_LLP_pl1000.pdf");
+  c1_LLP_pl1000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/EffRate_LLP_pl1000.pdf");
 
   TCanvas *c1_LLP_pl10000 = new TCanvas("c1_LLP_pl10000","Graph Draw Options",200,10,600,400);
   gr_LLP_mh250_pl10000->GetHistogram()->SetMinimum(-5.);
@@ -298,8 +326,8 @@ int main() {
   legend5_htSum->Draw();
   c1_LLP_pl10000->SetLogy();
   c1_LLP_pl10000->SetGrid();
-  c1_LLP_pl10000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_LLP_pl10000.pdf");
-
+  c1_LLP_pl10000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/EffRate_LLP_pl10000.pdf");
+  */
 
   // background
   TCanvas *c1_background = new TCanvas("c1_background","Graph Draw Options",200,10,600,400);
@@ -324,5 +352,5 @@ int main() {
   legend9_htSum->Draw();
   c1_background->SetLogy();
   c1_background->SetGrid();
-  c1_background->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_QCDbackground_grey.pdf");
+  c1_background->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/EffRate_QCDbackground_grey.pdf");
 }

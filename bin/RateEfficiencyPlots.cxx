@@ -26,6 +26,7 @@ int main() {
   int n=0;
   while (mh125_pl3000 >> signal_mh125_pl3000[n]) n++;
   mh125_pl3000.close();
+
   // mh=1000 pl=10m
   double signal_mh1000_pl10000[6];
   ifstream mh1000_pl10000;
@@ -33,6 +34,7 @@ int main() {
   n=0;
   while (mh1000_pl10000 >> signal_mh1000_pl10000[n]) n++;
   mh1000_pl10000.close();
+
   // mh=250 pl=1m 
   double signal_mh250_pl1000[6];
   ifstream mh250_pl1000;
@@ -94,7 +96,7 @@ int main() {
   legend2_htSum->Draw();
   c1_LLP_mh125_pl3000->SetLogy();
   c1_LLP_mh125_pl3000->SetGrid();
-  c1_LLP_mh125_pl3000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_mh125_pl3000.pdf");
+  c1_LLP_mh125_pl3000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/EffRate_mh125_pl3000.pdf");
 
   // mh = 250 GeV
   TCanvas *c1_LLP_mh250_pl1000 = new TCanvas("c1_LLP_mh250_pl1000","Graph Draw Options",200,10,600,400);
@@ -117,7 +119,7 @@ int main() {
   legend4_htSum->Draw();
   c1_LLP_mh250_pl1000->SetLogy();
   c1_LLP_mh250_pl1000->SetGrid();
-  c1_LLP_mh250_pl1000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_mh250_pl1000.pdf");
+  c1_LLP_mh250_pl1000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/EffRate_mh250_pl1000.pdf");
 
   // mh = 1000 GeV
   TCanvas *c1_LLP_mh1000_pl10000 = new TCanvas("c1_LLP_mh1000_pl10000","Graph Draw Options",200,10,600,400);
@@ -140,7 +142,7 @@ int main() {
   legend7_htSum->Draw();
   c1_LLP_mh1000_pl10000->SetLogy();
   c1_LLP_mh1000_pl10000->SetGrid();
-  c1_LLP_mh1000_pl10000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_mh1000_pl10000.pdf");
+  c1_LLP_mh1000_pl10000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/EffRate_mh1000_pl10000.pdf");
 
   // background
   TCanvas *c1_background = new TCanvas("c1_background","Graph Draw Options",200,10,600,400);
@@ -163,5 +165,5 @@ int main() {
   legend9_htSum->Draw();
   c1_background->SetLogy();
   c1_background->SetGrid();
-  c1_background->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_QCDbackground.pdf");
+  c1_background->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/EffRate_QCDbackground.pdf");
 }

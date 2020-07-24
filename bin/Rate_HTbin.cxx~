@@ -20,38 +20,44 @@ int main() {
   // first line is efficiency at HT>120 and mult HEHB >= 10
   // second line is efficiency at HT>360 with no timing restrictions
   // Signals
-  // mh=125 pl=3m
-  double signal_mh125_pl3000[14];
-  ifstream mh125_pl3000;
-  mh125_pl3000.open("Efficiency_HtBins_Signal_MH-125_MFF-50_CTau-3000mm_Tun.txt"); //Efficiency_HtBins_Signal_mh125__mx50__pl3000_.txt");
+  // mh=125 pl=0.5m
+  double signal_mh125_pl500[14];
+  ifstream mh125_pl500;
+  mh125_pl500.open("Efficiency_HtBins_Signal_mh125__mx50__pl500__.txt");
   int n=0;
-  while (mh125_pl3000 >> signal_mh125_pl3000[n]) n++;
-  mh125_pl3000.close();
-  /*
-  // mh=125 pl=30m
-  double signal_mh125_pl30000[14];
-  ifstream mh125_pl30000;
-  mh125_pl30000.open("Efficiency_HtBins_Signal_MH-125_MFF-50_CTau-30000mm_Tu.txt"); //Efficiency_HtBins_Signal_mh125__mx50__pl30000.txt");
+  while (mh125_pl500 >> signal_mh125_pl500[n]) n++;
+  mh125_pl500.close();
+  // mh=125 pl=1m
+  double signal_mh125_pl1000[6];
+  ifstream mh125_pl1000;
+  mh125_pl1000.open("Efficiency_HtBins_Signal_mh125__mx50__pl1000_.txt");
   n=0;
-  while (mh125_pl30000 >> signal_mh125_pl30000[n]) n++;
-  mh125_pl30000.close();
-
+  while (mh125_pl1000 >> signal_mh125_pl1000[n]) n++;
+  mh125_pl1000.close();
+  // mh=125 pl=10m
+  double signal_mh125_pl10000[6];
+  ifstream mh125_pl10000;
+  mh125_pl10000.open("Efficiency_HtBins_Signal_mh125__mx50__pl10000.txt");
+  n=0;
+  while (mh125_pl10000 >> signal_mh125_pl10000[n]) n++;
+  mh125_pl10000.close();
+  /*
   // mh=1000 pl=0.5m
-  double signal_mh1000_pl500[14];
+  double signal_mh1000_pl500[6];
   ifstream mh1000_pl500;
   mh1000_pl500.open("Efficiency_HtBins_Signal_mh1000_mx450_pl500__.txt");
   n=0;
   while (mh1000_pl500 >> signal_mh1000_pl500[n]) n++;
   mh1000_pl500.close();
   // mh=1000 pl=1m 
-  double signal_mh1000_pl1000[14];
+  double signal_mh1000_pl1000[6];
   ifstream mh1000_pl1000;
   mh1000_pl1000.open("Efficiency_HtBins_Signal_mh1000_mx450_pl1000_.txt");
   n=0;
   while (mh1000_pl1000 >> signal_mh1000_pl1000[n]) n++;
   mh1000_pl1000.close();
   // mh=1000 pl=10m
-  double signal_mh1000_pl10000[14];
+  double signal_mh1000_pl10000[6];
   ifstream mh1000_pl10000;
   mh1000_pl10000.open("Efficiency_HtBins_Signal_mh1000_mx450_pl10000.txt");
   n=0;
@@ -59,7 +65,7 @@ int main() {
   mh1000_pl10000.close();
 
   // mh=250 pl=1m 
-  double signal_mh250_pl1000[14];
+  double signal_mh250_pl1000[6];
   ifstream mh250_pl1000;
   mh250_pl1000.open("Efficiency_HtBins_Signal_mh250__mx120_pl1000_.txt");
   n=0;
@@ -67,28 +73,28 @@ int main() {
   mh250_pl1000.close();
 
   // mh=350 pl=0.5m 
-  double signal_mh350_pl500[14];
+  double signal_mh350_pl500[6];
   ifstream mh350_pl500;
   mh350_pl500.open("Efficiency_HtBins_Signal_mh350__mx160_pl500__.txt");
   n=0;
   while (mh350_pl500 >> signal_mh350_pl500[n]) n++;
   mh350_pl500.close();
   // mh=350 pl=1m
-  double signal_mh350_pl1000[14];
+  double signal_mh350_pl1000[6];
   ifstream mh350_pl1000;
   mh350_pl1000.open("Efficiency_HtBins_Signal_mh350__mx160_pl1000_.txt");
   n=0;
   while (mh350_pl1000 >> signal_mh350_pl1000[n]) n++;
   mh350_pl1000.close();
   // mh=350 pl=10m
-  double signal_mh350_pl10000[14];
+  double signal_mh350_pl10000[6];
   ifstream mh350_pl10000;
   mh350_pl10000.open("Efficiency_HtBins_Signal_mh350__mx160_pl10000.txt");
   n=0;
   while (mh350_pl10000 >> signal_mh350_pl10000[n]) n++;
   mh350_pl10000.close();
   // Background
-  double background[14];
+  double background[6];
   ifstream QCD;
   QCD.open("Efficiency_HtBins_Background.txt");
   n=0;
@@ -106,7 +112,7 @@ int main() {
   TGraphErrors *gr_L1HT360 = new TGraphErrors(14, htBin, L1HT360, htBin_er,err_y);
   // 1m
   // mh = 125 GeV
-  TGraphErrors *gr_LLP_mh125_pl3000 = new TGraphErrors(14, htBin, signal_mh125_pl3000,htBin_er,err_y);
+  TGraphErrors *gr_LLP_mh125_pl1000 = new TGraphErrors(14, htBin, signal_mh125_pl1000,htBin_er,err_y);
   // mh = 1000 GeV
   //  TGraphErrors *gr_LLP_mh1000_pl1000 = new TGraphErrors(14, htBin, signal_mh1000_pl1000,htBin_er,err_y);
   // mh = 250 GeV
@@ -116,7 +122,7 @@ int main() {
 
   // 0.5m            
   // mh = 125 GeV  
-  //  TGraphErrors *gr_LLP_mh125_pl500 = new TGraphErrors(14, htBin, signal_mh125_pl500,htBin_er,err_y);
+  TGraphErrors *gr_LLP_mh125_pl500 = new TGraphErrors(14, htBin, signal_mh125_pl500,htBin_er,err_y);
   // mh = 1000 GeV 
   //  TGraphErrors *gr_LLP_mh1000_pl500 = new TGraphErrors(14, htBin, signal_mh1000_pl500,htBin_er,err_y);
   // mh = 350 GeV  
@@ -124,7 +130,7 @@ int main() {
 
   // 10m            
   // mh = 125 GeV
-  //  TGraphErrors *gr_LLP_mh125_pl30000 = new TGraphErrors(14, htBin, signal_mh125_pl30000,htBin_er,err_y);
+  TGraphErrors *gr_LLP_mh125_pl10000 = new TGraphErrors(14, htBin, signal_mh125_pl10000,htBin_er,err_y);
   // mh = 1000 GeV 
   //  TGraphErrors *gr_LLP_mh1000_pl10000 = new TGraphErrors(14, htBin, signal_mh1000_pl10000,htBin_er,err_y);
   // mh = 350 GeV
@@ -133,7 +139,6 @@ int main() {
   // QCD
 
   // mh = 125 GeV
-  /*
   // 0.5 m
   TCanvas *c1_LLP_pl500 = new TCanvas("c1_LLP_pl500","Graph Draw Options",200,10,600,400);
   gr_LLP_mh125_pl500->SetMarkerColor(kBlue);
@@ -150,41 +155,39 @@ int main() {
   legend_htSum->AddEntry(gr_LLP_mh125_pl500,"HT>120 with timing cuts");
   //  legend_htSum->AddEntry(gr_L1HT360,"HT>360 at L1");
   legend_htSum->Draw();
-  c1_LLP_pl500->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/EffHT_LLP_mh125_pl500.pdf");
-  */
+  c1_LLP_pl500->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffHT_LLP_mh125_pl500.pdf");
 
-  TCanvas *c1_LLP_pl3000 = new TCanvas("c1_LLP_pl3000","Graph Draw Options",200,10,600,400);
-  gr_LLP_mh125_pl3000->SetMarkerColor(kBlue);
-  gr_LLP_mh125_pl3000->SetMarkerStyle(21);
-  gr_LLP_mh125_pl3000->Draw("AP");
+  TCanvas *c1_LLP_pl1000 = new TCanvas("c1_LLP_pl1000","Graph Draw Options",200,10,600,400);
+  gr_LLP_mh125_pl1000->SetMarkerColor(kBlue);
+  gr_LLP_mh125_pl1000->SetMarkerStyle(21);
+  gr_LLP_mh125_pl1000->Draw("AP");
   gr_L1HT360->SetMarkerColor(kRed);
   gr_L1HT360->SetMarkerStyle(21);
   //  gr_L1HT360->Draw("P");
-  gr_LLP_mh125_pl3000->SetTitle("HT vs. Signal Efficiency for >=2 Cells >=50ADC,3ns near 4 L1 Jets;HT (GeV);LLP Efficiency, mh=125 GeV, c#scale[1.2]{#tau}=3m   ");
-  gr_LLP_mh125_pl3000->GetHistogram()->SetMinimum(0.);
-  gr_LLP_mh125_pl3000->GetHistogram()->SetMaximum(1.);
-  c1_LLP_pl3000->SetGrid();
+  gr_LLP_mh125_pl1000->SetTitle("HT vs. Signal Efficiency for >=2 Cells >=50ADC,3ns near 4 L1 Jets;HT (GeV);LLP Efficiency, mh=125 GeV, c#scale[1.2]{#tau}=1m   ");
+  gr_LLP_mh125_pl1000->GetHistogram()->SetMinimum(0.);
+  gr_LLP_mh125_pl1000->GetHistogram()->SetMaximum(1.);
+  c1_LLP_pl1000->SetGrid();
   auto legend2_htSum = new TLegend(0.15,0.65,0.45,0.8);
-  legend2_htSum->AddEntry(gr_LLP_mh125_pl3000,"HT>120 with timing cuts");
+  legend2_htSum->AddEntry(gr_LLP_mh125_pl1000,"HT>120 with timing cuts");
   //  legend2_htSum->AddEntry(gr_L1HT360,"HT>360 at L1");
   legend2_htSum->Draw();
-  c1_LLP_pl3000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/EffHT_LLP_mh125_pl3000.pdf");
-  /*
-  TCanvas *c1_LLP_pl30000 = new TCanvas("c1_LLP_pl30000","Graph Draw Options",200,10,600,400);
-  gr_LLP_mh125_pl30000->SetMarkerColor(kBlue);
-  gr_LLP_mh125_pl30000->SetMarkerStyle(21);
-  gr_LLP_mh125_pl30000->Draw("AP");
+  c1_LLP_pl1000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffHT_LLP_mh125_pl1000.pdf");
+
+  TCanvas *c1_LLP_pl10000 = new TCanvas("c1_LLP_pl10000","Graph Draw Options",200,10,600,400);
+  gr_LLP_mh125_pl10000->SetMarkerColor(kBlue);
+  gr_LLP_mh125_pl10000->SetMarkerStyle(21);
+  gr_LLP_mh125_pl10000->Draw("AP");
   gr_L1HT360->SetMarkerColor(kRed);
   gr_L1HT360->SetMarkerStyle(21);
   //  gr_L1HT360->Draw("P");
-  gr_LLP_mh125_pl30000->SetTitle("HT vs. Signal Efficiency for >=2 Cells >=50ADC,3ns near 4 L1 Jets;HT (GeV);LLP Efficiency, mh=125 GeV, c#scale[1.2]{#tau}=30m   ");
-  gr_LLP_mh125_pl30000->GetHistogram()->SetMinimum(0.);
-  gr_LLP_mh125_pl30000->GetHistogram()->SetMaximum(1.);
-  c1_LLP_pl30000->SetGrid();
+  gr_LLP_mh125_pl10000->SetTitle("HT vs. Signal Efficiency for >=2 Cells >=50ADC,3ns near 4 L1 Jets;HT (GeV);LLP Efficiency, mh=125 GeV, c#scale[1.2]{#tau}=10m   ");
+  gr_LLP_mh125_pl10000->GetHistogram()->SetMinimum(0.);
+  gr_LLP_mh125_pl10000->GetHistogram()->SetMaximum(1.);
+  c1_LLP_pl10000->SetGrid();
   auto legend3_htSum = new TLegend(0.15,0.65,0.45,0.8);
-  legend3_htSum->AddEntry(gr_LLP_mh125_pl30000,"HT>120 with timing cuts");
+  legend3_htSum->AddEntry(gr_LLP_mh125_pl10000,"HT>120 with timing cuts");
   //  legend3_htSum->AddEntry(gr_L1HT360,"HT>360 at L1");
   legend3_htSum->Draw();
-  c1_LLP_pl30000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/EffHT_LLP_mh125_pl30000.pdf");
-  */
+  c1_LLP_pl10000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffHT_LLP_mh125_pl10000.pdf");
 }

@@ -5,6 +5,8 @@
   <bin file="draw_rates.cxx" name="draw_rates.exe"/>
   <bin file="draw_timingbit.cxx" name="draw_timingbit.exe"/>
   <bin file="draw_timingbit_mh1000.cxx" name="draw_timingbit_mh1000.exe"/>
+  <bin file="draw_timingbit_mh350.cxx" name="draw_timingbit_mh350.exe"/>
+  <bin file="draw_timingbit_mh250.cxx" name="draw_timingbit_mh250.exe"/>
   <bin file="draw_timingbit_mh125.cxx" name="draw_timingbit_mh125.exe"/>
   <bin file="draw_1mtimingbit.cxx" name="draw_1mtimingbit.exe"/>
   <bin file="rates.cxx" name="rates.exe"/>

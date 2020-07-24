@@ -22,7 +22,7 @@ int main()
   gROOT->ForceStyle();
 
   // default, then new conditions
-  std::vector<std::string> filenames = {"rates_new_cond_QCD.root", "rates_new_cond_LLP_pl10000.root", "rates_new_cond_LLP_pl100000.root"};
+  std::vector<std::string> filenames = {"rates_new_cond_QCD.root", "rates_new_cond_LLP_pl10000.root", "rates_new_cond_LLP_pl100k_.root"};
   std::vector<std::string> multTypes = {"ADC50_3ns_4JetMultHB", "ADC50_3ns_4JetMultHE", "ADC50_3ns_4JetMultHBHE"};
 
   std::map<std::string, TH1F*> multHists_QCD;
@@ -39,8 +39,8 @@ int main()
     histName += "_emu";
 
     multHists_QCD[multType] = dynamic_cast<TH1F*>(files.at(0)->Get(histName.c_str()));
-    multHists_LLPpl10000[multType] = dynamic_cast<TH1F*>(files.at(1)->Get(histName.c_str()));
-    multHists_LLPpl100000[multType] = dynamic_cast<TH1F*>(files.at(2)->Get(histName.c_str()));
+    multHists_LLPpl10000[multType] = dynamic_cast<TH1F*>(files.at(2)->Get(histName.c_str()));
+    multHists_LLPpl100000[multType] = dynamic_cast<TH1F*>(files.at(3)->Get(histName.c_str()));
   }
 
   for(auto pair : multHists_QCD) pair.second->SetLineWidth(2);
