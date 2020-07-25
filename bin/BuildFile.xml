@@ -9,6 +9,7 @@
   <bin file="rates_original.cxx" name="rates_original.exe"/>
   <bin file="RateEfficiencyPlots.cxx" name="RateEfficiencyPlots.exe"/>
   <bin file="RateEfficiencyPlots_LLP_ctau.cxx" name="RateEfficiencyPlots_LLP_ctau.exe"/>
+  <bin file="Rate_HTbin.cxx" name="Rate_HTbin.exe"/>
   <bin file="draw_l1analysis.cxx" name="draw_l1analysis.exe"/>
   <bin file="l1jetanalysis.cxx" name="l1jetanalysis.exe"/>
 </environment>

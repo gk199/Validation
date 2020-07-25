@@ -26,6 +26,7 @@ echo " "
 echo " "
 echo "Rates plots from draw_rates.exe"
 draw_rates.exe
+mv rates_new_cond.root rates_new_cond_nugun.root
 mv plots/*Rates_emu.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns/
 echo " "
 echo "Making overlay plots from draw_timingbit.exe"
