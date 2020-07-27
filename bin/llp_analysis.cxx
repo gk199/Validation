@@ -316,6 +316,7 @@ void llp_analysis(bool newConditions, const std::string& inputFileDirectory){
 
   }
 
+  /*
   if (hwOn){
 
     singleJetRates_hw->Scale(norm);
@@ -332,6 +333,7 @@ void llp_analysis(bool newConditions, const std::string& inputFileDirectory){
     quadJetRates_hw->Write();
 
   }
+  */
   myfile << "using the following ntuple: " << inputFile << std::endl;
   myfile << "number of colliding bunches = " << numBunch << std::endl;
   myfile << "run luminosity = " << runLum << std::endl;

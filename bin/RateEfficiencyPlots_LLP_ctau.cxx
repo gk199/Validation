@@ -216,7 +216,7 @@ int main() {
   legend2_htSum->AddEntry(l,"Neutrino gun rate at HT=120GeV with no timing cuts");
   legend2_htSum->Draw();
   c1_LLP_pl1000->SetGrid();
-  c1_LLP_pl1000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_LLP_pl1000_linear.pdf");
+  //  c1_LLP_pl1000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_LLP_pl1000_linear.pdf");
   gr_LLP_mh125_pl1000->GetHistogram()->SetMinimum(10000.);
   gr_LLP_mh125_pl1000->GetHistogram()->SetMaximum(100000000.);
   c1_LLP_pl1000->SetLogy();
@@ -259,7 +259,7 @@ int main() {
   legend3_htSum->AddEntry(l,"Neutrino gun rate at HT=120GeV with no timing cuts");
   legend3_htSum->Draw();
   c1_LLP_pl500->SetGrid();
-  c1_LLP_pl500->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_LLP_pl500_linear.pdf");
+  //  c1_LLP_pl500->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_LLP_pl500_linear.pdf");
   c1_LLP_pl500->SetLogy();
   c1_LLP_pl500->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_LLP_pl500.pdf");
 
@@ -300,7 +300,7 @@ int main() {
   legend4_htSum->AddEntry(l,"Neutrino gun rate at HT=120GeV with no timing cuts");
   legend4_htSum->Draw();
   c1_LLP_pl10000->SetGrid();
-  c1_LLP_pl10000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_LLP_pl10000_linear.pdf");
+  //  c1_LLP_pl10000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_LLP_pl10000_linear.pdf");
   c1_LLP_pl10000->SetLogy();
   c1_LLP_pl10000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_LLP_pl10000.pdf");
 
@@ -330,7 +330,7 @@ int main() {
   //  legend9_htSum->AddEntry(m_background_ht120,"H_{T}>120 GeV, with timing cuts");
   legend9_htSum->Draw();
   c1_background->SetGrid();
-  c1_background->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_QCDbackground_grey_linear.pdf");
+  //  c1_background->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_QCDbackground_grey_linear.pdf");
   c1_background->SetLogy();
   c1_background->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_QCDbackground_grey.pdf");
 }

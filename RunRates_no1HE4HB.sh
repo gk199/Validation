@@ -84,8 +84,11 @@ mv plots/ADC50_3ns_4JetMultHEOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBi
 mv plots/ADC50_3ns_4JetMultHBHEOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/ADC50_3ns_no1HE4HB_4JetMultHBHEOverlay_1m.pdf
 echo " "
 echo "Efficiency vs. rate plots"
-RateEfficiencyPlots.exe 
 RateEfficiencyPlots_LLP_ctau.exe
+Rate_HTbin.exe
+Eff_ctau.exe
 mv /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate* /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/
+mv /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/Eff_ctau.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/
+mv /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffHT_LLP* /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/
 cp MultiplicityHits50ADC3ns_ht120_*.txt /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/
 cp NuGunRates.txt /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/
