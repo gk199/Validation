@@ -3,6 +3,7 @@
 #include<vector>
 #include "TGraph.h"
 #include "TMarker.h"
+#include "TLine.h"
 #include "TCanvas.h"
 #include "TLegend.h"
 #include "TROOT.h"
@@ -112,7 +113,7 @@ int main() {
   QCD.close();
 
   // Neutrino gun for rates
-  double rates[6];
+  double rates[7];
   ifstream nugun;
   nugun.open("NuGunRates.txt");
   n=0;
@@ -166,6 +167,8 @@ int main() {
   // QCD
   TGraph *gr_background = new TGraph(5, cuts_background, nugun_rate);
   TMarker *m_background_ht360 = new TMarker(background[5], rates[5], 21);
+  // comparison to the rate at 120 with no timing cuts  
+  TLine *l=new TLine(0.,rates[6],1.,rates[6]);
 
   // mh = 125 GeV
   TCanvas *c1_LLP_pl3000 = new TCanvas("c1_LLP_pl3000","Graph Draw Options",200,10,600,400);
@@ -199,6 +202,9 @@ int main() {
   m_mh1000_pl10000_ht360->Draw();
   gr_LLP_mh1000_pl10000->SetLineColor(kMagenta);
   gr_LLP_mh1000_pl10000->Draw("C*");
+  l->SetLineColor(kBlack);
+  l->SetLineStyle(7);
+  l->Draw();
   auto legend1_htSum = new TLegend(0.55,0.15,0.9,0.45);
   legend1_htSum->AddEntry(m_mh125_pl3000_ht360,"m_{H}=125, c#scale[1.2]{#tau}=3m; H_{T}>360 GeV, no timing cuts");
   legend1_htSum->AddEntry(gr_LLP_mh125_pl3000,"m_{H}=125, c#scale[1.2]{#tau}=3m; H_{T}>120 GeV, with timing cuts"); 
@@ -208,6 +214,7 @@ int main() {
   legend1_htSum->AddEntry(gr_LLP_mh350_pl10000,"m_{H}=350, c#scale[1.2]{#tau}=10m; H_{T}>120 GeV, with timing cuts");
   legend1_htSum->AddEntry(m_mh1000_pl10000_ht360,"m_{H}=1000, c#scale[1.2]{#tau}=10m; H_{T}>360 GeV, no timing cuts");
   legend1_htSum->AddEntry(gr_LLP_mh1000_pl10000,"m_{H}=1000, c#scale[1.2]{#tau}=10m; H_{T}>120 GeV, with timing cuts");
+  legend1_htSum->AddEntry(l,"Neutrino gun rate at HT=120GeV with no timing cuts");
   legend1_htSum->Draw();
   c1_LLP_pl3000->SetLogy();
   c1_LLP_pl3000->SetGrid();
@@ -345,9 +352,13 @@ int main() {
   //  m_background_ht120->SetMarkerStyle(21);
   //  m_background_ht120->SetMarkerColor(kBlack);
   //  m_background_ht120->Draw();
+  l->SetLineColor(kBlack);
+  l->SetLineStyle(7);
+  l->Draw();
   auto legend9_htSum = new TLegend(0.55,0.15,0.9,0.35);
   legend9_htSum->AddEntry(m_background_ht360,"H_{T}>360 GeV, no timing cuts");
-  legend9_htSum->AddEntry(gr_background,"H_{T}>120 GeV, with timing cuts");                                                                                                                                                        
+  legend9_htSum->AddEntry(gr_background,"H_{T}>120 GeV, with timing cuts");        
+  legend9_htSum->AddEntry(l,"Neutrino gun rate at HT=120GeV with no timing cuts");
   //  legend9_htSum->AddEntry(m_background_ht120,"H_{T}>120 GeV, with timing cuts");
   legend9_htSum->Draw();
   c1_background->SetLogy();

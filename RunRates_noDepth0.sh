@@ -7,6 +7,13 @@ echo "QCD"
 rates.exe new /eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/TimingTrigger/QCD_Pt-15to3000_TuneCP5_Flat_14TeV_pythia8_HCAL/CRAB3_QCD_TDC_MC/200722_192212/0000/QCD
 mv rates_new_cond.root rates_new_cond_QCD.root
 echo " "
+echo "Neutrino gun new and old conditions"
+rates.exe new /eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/TimingTrigger/Neutrino_Pt-2to20_gun_HCAL/CRAB3_NuGun_TDC_MC/200722_142743/0000/
+rates_original.exe def /eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/TimingTrigger/Neutrino_Pt-2to20_gun_HCAL/CRAB3_NuGun_TDC_MC/200722_142743/0000/
+echo " "
+echo "Rates plots from draw_rates.exe"
+draw_rates.exe
+mv plots/*Rates_emu.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/ADC50_3ns_no1HE4HB/
 echo " "
 echo "LLP mh=125 GeV, ctau=3 m"
 rates.exe new /eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/TimingTrigger/HTo2LongLivedTo4b_MH-125_MFF-50_CTau-3000mm_TuneCP5_14TeV_pythia8_HCAL/CRAB3_mh125_ctau3000_TDC_MC/200722_185526/0000

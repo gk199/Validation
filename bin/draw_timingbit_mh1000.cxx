@@ -75,8 +75,8 @@ int main()
     multHists_LLPpl100000[hist]->Scale(1./multHists_LLPpl100000[hist]->Integral());
     multHists_LLPpl100000[hist]->Draw("hist same");
     leg->AddEntry(multHists_QCD[hist],"QCD", "F");
-    leg->AddEntry(multHists_LLPpl10000[hist], "LLP, mh=125, c#scale[1.2]{#tau}=10m", "L");
-    leg->AddEntry(multHists_LLPpl100000[hist], "LLP, mh=125, c#scale[1.2]{#tau}=100m", "L");
+    leg->AddEntry(multHists_LLPpl10000[hist], "LLP, mh=1000, c#scale[1.2]{#tau}=10m", "L");
+    leg->AddEntry(multHists_LLPpl100000[hist], "LLP, mh=1000, c#scale[1.2]{#tau}=100m", "L");
     multHists_QCD[hist]->GetYaxis()->CenterTitle(true);
     multHists_QCD[hist]->SetTitle("Number of cells >=" + name(0,5) + " and " + name(6,3)+", from TPs within DR<0.5 of " + name (10,1) + " L1 Jets"); // general name "mult at 3 GeV and 1 ns, TP matched w/jet"
     multHists_QCD[hist]->GetXaxis()->SetLabelSize(0.03);
