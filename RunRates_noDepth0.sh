@@ -75,4 +75,8 @@ echo " "
 echo " "
 echo "Efficiency vs. rate plots"
 RateEfficiencyPlots_LLP_ctau.exe
+Rate_HTbin.exe
+Eff_ctau.exe
 mv /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/EffRate* /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/ADC50_3ns_no1HE4HB/
+mv /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/EffHT_LLP* /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/ADC50_3ns_no1HE4HB/
+mv /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/Eff_ctau.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/ADC50_3ns_no1HE4HB/
