@@ -105,15 +105,16 @@ int main() {
   // Neutrino gun for rates
   double rates[7];
   ifstream nugun;
+  //  nugun.open("NuGunRates_360_OR_120timing.txt");
   nugun.open("NuGunRates.txt");
   n=0;
   while (nugun >> rates[n]) n++;
   nugun.close();
 
-  double nugun_rate[5], cuts_mh125_pl1000[5], cuts_mh1000_pl1000[5], cuts_mh250_pl1000[5], cuts_mh350_pl1000[5], cuts_background[5];
-  double cuts_mh125_pl500[5], cuts_mh1000_pl500[5], cuts_mh350_pl500[5];
-  double cuts_mh125_pl10000[5], cuts_mh1000_pl10000[5], cuts_mh350_pl10000[5];
-  for (int i=0; i<5; i++) {
+  double nugun_rate[4], cuts_mh125_pl1000[4], cuts_mh1000_pl1000[4], cuts_mh250_pl1000[4], cuts_mh350_pl1000[4], cuts_background[4];
+  double cuts_mh125_pl500[4], cuts_mh1000_pl500[4], cuts_mh350_pl500[4];
+  double cuts_mh125_pl10000[4], cuts_mh1000_pl10000[4], cuts_mh350_pl10000[4];
+  for (int i=0; i<4; i++) {
     nugun_rate[i] = rates[i];
     cuts_mh125_pl1000[i] = signal_mh125_pl1000[i];
     cuts_mh1000_pl1000[i] = signal_mh1000_pl1000[i];
@@ -130,56 +131,55 @@ int main() {
 
   // 1m
   // mh = 125 GeV
-  TGraph *gr_LLP_mh125_pl1000 = new TGraph(5, cuts_mh125_pl1000, nugun_rate);
+  TGraph *gr_LLP_mh125_pl1000 = new TGraph(4, cuts_mh125_pl1000, nugun_rate);
   TMarker *m_mh125_pl1000_ht360 = new TMarker(signal_mh125_pl1000[5], rates[5], 21);
   //  TMarker *m_mh125_pl1000_ht120 = new TMarker(signal_mh125_pl1000[0], rates[0], 21);
   // mh = 1000 GeV
-  TGraph *gr_LLP_mh1000_pl1000 = new TGraph(5, cuts_mh1000_pl1000, nugun_rate);
+  TGraph *gr_LLP_mh1000_pl1000 = new TGraph(4, cuts_mh1000_pl1000, nugun_rate);
   TMarker *m_mh1000_pl1000_ht360 = new TMarker(signal_mh1000_pl1000[5], rates[5], 21);
   // mh = 250 GeV
-  TGraph *gr_LLP_mh250_pl1000 = new TGraph(5, cuts_mh250_pl1000, nugun_rate);
+  TGraph *gr_LLP_mh250_pl1000 = new TGraph(4, cuts_mh250_pl1000, nugun_rate);
   TMarker *m_mh250_pl1000_ht360 = new TMarker(signal_mh250_pl1000[5], rates[5], 21);
   // mh = 350 GeV
-  TGraph *gr_LLP_mh350_pl1000 = new TGraph(5, cuts_mh350_pl1000, nugun_rate);
+  TGraph *gr_LLP_mh350_pl1000 = new TGraph(4, cuts_mh350_pl1000, nugun_rate);
   TMarker *m_mh350_pl1000_ht360 = new TMarker(signal_mh350_pl1000[5], rates[5], 21);
 
   // 0.5m            
   // mh = 125 GeV  
-  TGraph *gr_LLP_mh125_pl500 = new TGraph(5, cuts_mh125_pl500, nugun_rate);
+  TGraph *gr_LLP_mh125_pl500 = new TGraph(4, cuts_mh125_pl500, nugun_rate);
   TMarker *m_mh125_pl500_ht360 = new TMarker(signal_mh125_pl500[5], rates[5], 21);
   // mh = 1000 GeV 
-  TGraph *gr_LLP_mh1000_pl500 = new TGraph(5, cuts_mh1000_pl500, nugun_rate);
+  TGraph *gr_LLP_mh1000_pl500 = new TGraph(4, cuts_mh1000_pl500, nugun_rate);
   TMarker *m_mh1000_pl500_ht360 = new TMarker(signal_mh1000_pl500[5], rates[5], 21);
   // mh = 350 GeV  
-  TGraph *gr_LLP_mh350_pl500 = new TGraph(5, cuts_mh350_pl500, nugun_rate);
+  TGraph *gr_LLP_mh350_pl500 = new TGraph(4, cuts_mh350_pl500, nugun_rate);
   TMarker *m_mh350_pl500_ht360 = new TMarker(signal_mh350_pl500[5], rates[5], 21);
 
   // 10m            
   // mh = 125 GeV  
-  TGraph *gr_LLP_mh125_pl10000 = new TGraph(5, cuts_mh125_pl10000, rates);
+  TGraph *gr_LLP_mh125_pl10000 = new TGraph(4, cuts_mh125_pl10000, rates);
   TMarker *m_mh125_pl10000_ht360 = new TMarker(signal_mh125_pl10000[5], rates[5], 21);
   // mh = 1000 GeV 
-  TGraph *gr_LLP_mh1000_pl10000 = new TGraph(5, cuts_mh1000_pl10000, nugun_rate);
+  TGraph *gr_LLP_mh1000_pl10000 = new TGraph(4, cuts_mh1000_pl10000, nugun_rate);
   TMarker *m_mh1000_pl10000_ht360 = new TMarker(signal_mh1000_pl10000[5], rates[5], 21);
   // mh = 350 GeV
-  TGraph *gr_LLP_mh350_pl10000 = new TGraph(5, cuts_mh350_pl10000, nugun_rate);
+  TGraph *gr_LLP_mh350_pl10000 = new TGraph(4, cuts_mh350_pl10000, nugun_rate);
   TMarker *m_mh350_pl10000_ht360 = new TMarker(signal_mh350_pl10000[5], rates[5], 21);
 
   // QCD
-  TGraph *gr_background = new TGraph(5, cuts_background, nugun_rate);
+  TGraph *gr_background = new TGraph(4, cuts_background, nugun_rate);
   TMarker *m_background_ht360 = new TMarker(background[5], rates[5], 21);
   // comparison to the rate at 120 with no timing cuts
   TLine *l=new TLine(0.,rates[6],1.,rates[6]);
 
 
-  // mh = 125 GeV
+  // 1m
   TCanvas *c1_LLP_pl1000 = new TCanvas("c1_LLP_pl1000","Graph Draw Options",200,10,600,400);
-  gr_LLP_mh125_pl1000->GetHistogram()->SetMinimum(-5.);
   gr_LLP_mh125_pl1000->Draw("AC*");
-  gr_LLP_mh125_pl1000->SetTitle("Rate vs. Signal Efficiency for >=1,2,3,4,5 Cells >=50ADC,3ns near 4 L1 Jets;LLP Efficiency, c#scale[1.2]{#tau}=1m;Neutrino Gun Rate (Hz, unnormalized)   ");
+  gr_LLP_mh125_pl1000->SetTitle("Rate vs. Signal Efficiency for >=1,2,3,4 Cells >=50ADC,3ns near 4 L1 Jets;LLP Efficiency, c#scale[1.2]{#tau}=1m;Neutrino Gun Rate (Hz, unnormalized)   ");
   gr_LLP_mh125_pl1000->GetXaxis()->SetLimits(0.,1.);
-  gr_LLP_mh125_pl1000->GetHistogram()->SetMinimum(0.);
-  gr_LLP_mh125_pl1000->GetHistogram()->SetMaximum(30000000.);
+  gr_LLP_mh125_pl1000->GetHistogram()->SetMinimum(1.);
+  gr_LLP_mh125_pl1000->GetHistogram()->SetMaximum(100000000.);
 
   m_mh125_pl1000_ht360->SetMarkerStyle(21);
   m_mh125_pl1000_ht360->SetMarkerColor(kRed-9);
@@ -217,18 +217,15 @@ int main() {
   legend2_htSum->Draw();
   c1_LLP_pl1000->SetGrid();
   //  c1_LLP_pl1000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_LLP_pl1000_linear.pdf");
-  gr_LLP_mh125_pl1000->GetHistogram()->SetMinimum(10000.);
-  gr_LLP_mh125_pl1000->GetHistogram()->SetMaximum(100000000.);
   c1_LLP_pl1000->SetLogy();
   c1_LLP_pl1000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_LLP_pl1000.pdf");
 
   // 0.5 m
   TCanvas *c1_LLP_pl500 = new TCanvas("c1_LLP_pl500","Graph Draw Options",200,10,600,400);
-  gr_LLP_mh125_pl500->GetHistogram()->SetMinimum(-5.);
   gr_LLP_mh125_pl500->Draw("AC*");
-  gr_LLP_mh125_pl500->SetTitle("Rate vs. Signal Efficiency for >=1,2,3,4,5 Cells >=50ADC,3ns near 4 L1 Jets;LLP Efficiency, c#scale[1.2]{#tau}=0.5m;Neutrino Gun Rate (Hz, unnormalized)   ");
+  gr_LLP_mh125_pl500->SetTitle("Rate vs. Signal Efficiency for >=1,2,3,4 Cells >=50ADC,3ns near 4 L1 Jets;LLP Efficiency, c#scale[1.2]{#tau}=0.5m;Neutrino Gun Rate (Hz, unnormalized)   ");
   gr_LLP_mh125_pl500->GetXaxis()->SetLimits(0.,1.);
-  gr_LLP_mh125_pl500->GetHistogram()->SetMinimum(10000.);
+  gr_LLP_mh125_pl500->GetHistogram()->SetMinimum(1.);
   gr_LLP_mh125_pl500->GetHistogram()->SetMaximum(100000000.);
 
   m_mh125_pl500_ht360->SetMarkerStyle(21);
@@ -265,11 +262,10 @@ int main() {
 
   // 10m
   TCanvas *c1_LLP_pl10000 = new TCanvas("c1_LLP_pl10000","Graph Draw Options",200,10,600,400);
-  gr_LLP_mh125_pl10000->GetHistogram()->SetMinimum(-5.);
   gr_LLP_mh125_pl10000->Draw("A*");
-  gr_LLP_mh125_pl10000->SetTitle("Rate vs. Signal Efficiency for >=1,2,3,4,5 Cells >=50ADC,3ns near 4 L1 Jets;LLP Efficiency, c#scale[1.2]{#tau}=10m;Neutrino Gun Rate (Hz, unnormalized)   ");
+  gr_LLP_mh125_pl10000->SetTitle("Rate vs. Signal Efficiency for >=1,2,3,4 Cells >=50ADC,3ns near 4 L1 Jets;LLP Efficiency, c#scale[1.2]{#tau}=10m;Neutrino Gun Rate (Hz, unnormalized)   ");
   gr_LLP_mh125_pl10000->GetXaxis()->SetLimits(0.,1.);
-  gr_LLP_mh125_pl10000->GetHistogram()->SetMinimum(10000.);
+  gr_LLP_mh125_pl10000->GetHistogram()->SetMinimum(1.);
   gr_LLP_mh125_pl10000->GetHistogram()->SetMaximum(100000000.);
 
   m_mh125_pl10000_ht360->SetMarkerStyle(21);
@@ -306,12 +302,11 @@ int main() {
 
   // background
   TCanvas *c1_background = new TCanvas("c1_background","Graph Draw Options",200,10,600,400);
-  gr_background->GetHistogram()->SetMinimum(-5.);
   gr_background->Draw("AC*");
   gr_background->SetLineColor(kBlack);
-  gr_background->SetTitle("htSum Rate vs. Background Efficiency for >=1,2,3,4,5 Cells >=50ADC,3ns near 4 L1 Jets;QCD Efficiency;Neutrino Gun Rate (Hz, unnormalized)   ");
+  gr_background->SetTitle("htSum Rate vs. Background Efficiency for >=1,2,3,4 Cells >=50ADC,3ns near 4 L1 Jets;QCD Efficiency;Neutrino Gun Rate (Hz, unnormalized)   ");
   gr_background->GetXaxis()->SetLimits(0.,1.);
-  gr_background->GetHistogram()->SetMinimum(10000.);
+  gr_background->GetHistogram()->SetMinimum(1.);
   gr_background->GetHistogram()->SetMaximum(100000000.);
 
   m_background_ht360->SetMarkerStyle(21);
