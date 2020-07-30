@@ -103,18 +103,18 @@ int main() {
   QCD.close();
 
   // Neutrino gun for rates
-  double rates[7];
+  double added_rates[7];
   ifstream nugun;
-  nugun.open("NuGunRates.txt");
+  nugun.open("NuGunRates_360_OR_120timing.txt");
   n=0;
-  while (nugun >> rates[n]) n++;
+  while (nugun >> added_rates[n]) n++;
   nugun.close();
 
-  double nugun_rate[4], cuts_mh125_pl1000[4], cuts_mh1000_pl1000[4], cuts_mh250_pl1000[4], cuts_mh350_pl1000[4], cuts_background[4];
+  double nugun_added_rate[4], cuts_mh125_pl1000[4], cuts_mh1000_pl1000[4], cuts_mh250_pl1000[4], cuts_mh350_pl1000[4], cuts_background[4];
   double cuts_mh125_pl500[4], cuts_mh1000_pl500[4], cuts_mh350_pl500[4];
   double cuts_mh125_pl10000[4], cuts_mh1000_pl10000[4], cuts_mh350_pl10000[4];
   for (int i=0; i<4; i++) {
-    nugun_rate[i] = rates[i];
+    nugun_added_rate[i] = added_rates[i];
     cuts_mh125_pl1000[i] = signal_mh125_pl1000[i];
     cuts_mh1000_pl1000[i] = signal_mh1000_pl1000[i];
     cuts_mh250_pl1000[i] = signal_mh250_pl1000[i];
@@ -130,46 +130,46 @@ int main() {
 
   // 1m
   // mh = 125 GeV
-  TGraph *gr_LLP_mh125_pl1000 = new TGraph(4, cuts_mh125_pl1000, nugun_rate);
-  TMarker *m_mh125_pl1000_ht360 = new TMarker(signal_mh125_pl1000[5], rates[5], 21);
-  //  TMarker *m_mh125_pl1000_ht120 = new TMarker(signal_mh125_pl1000[0], rates[0], 21);
+  TGraph *gr_LLP_mh125_pl1000 = new TGraph(4, cuts_mh125_pl1000, nugun_added_rate);
+  TMarker *m_mh125_pl1000_ht360 = new TMarker(signal_mh125_pl1000[5], added_rates[5], 21);
+  //  TMarker *m_mh125_pl1000_ht120 = new TMarker(signal_mh125_pl1000[0], added_rates[0], 21);
   // mh = 1000 GeV
-  TGraph *gr_LLP_mh1000_pl1000 = new TGraph(4, cuts_mh1000_pl1000, nugun_rate);
-  TMarker *m_mh1000_pl1000_ht360 = new TMarker(signal_mh1000_pl1000[5], rates[5], 21);
+  TGraph *gr_LLP_mh1000_pl1000 = new TGraph(4, cuts_mh1000_pl1000, nugun_added_rate);
+  TMarker *m_mh1000_pl1000_ht360 = new TMarker(signal_mh1000_pl1000[5], added_rates[5], 21);
   // mh = 250 GeV
-  TGraph *gr_LLP_mh250_pl1000 = new TGraph(4, cuts_mh250_pl1000, nugun_rate);
-  TMarker *m_mh250_pl1000_ht360 = new TMarker(signal_mh250_pl1000[5], rates[5], 21);
+  TGraph *gr_LLP_mh250_pl1000 = new TGraph(4, cuts_mh250_pl1000, nugun_added_rate);
+  TMarker *m_mh250_pl1000_ht360 = new TMarker(signal_mh250_pl1000[5], added_rates[5], 21);
   // mh = 350 GeV
-  TGraph *gr_LLP_mh350_pl1000 = new TGraph(4, cuts_mh350_pl1000, nugun_rate);
-  TMarker *m_mh350_pl1000_ht360 = new TMarker(signal_mh350_pl1000[5], rates[5], 21);
+  TGraph *gr_LLP_mh350_pl1000 = new TGraph(4, cuts_mh350_pl1000, nugun_added_rate);
+  TMarker *m_mh350_pl1000_ht360 = new TMarker(signal_mh350_pl1000[5], added_rates[5], 21);
 
   // 0.5m            
   // mh = 125 GeV  
-  TGraph *gr_LLP_mh125_pl500 = new TGraph(4, cuts_mh125_pl500, nugun_rate);
-  TMarker *m_mh125_pl500_ht360 = new TMarker(signal_mh125_pl500[5], rates[5], 21);
+  TGraph *gr_LLP_mh125_pl500 = new TGraph(4, cuts_mh125_pl500, nugun_added_rate);
+  TMarker *m_mh125_pl500_ht360 = new TMarker(signal_mh125_pl500[5], added_rates[5], 21);
   // mh = 1000 GeV 
-  TGraph *gr_LLP_mh1000_pl500 = new TGraph(4, cuts_mh1000_pl500, nugun_rate);
-  TMarker *m_mh1000_pl500_ht360 = new TMarker(signal_mh1000_pl500[5], rates[5], 21);
+  TGraph *gr_LLP_mh1000_pl500 = new TGraph(4, cuts_mh1000_pl500, nugun_added_rate);
+  TMarker *m_mh1000_pl500_ht360 = new TMarker(signal_mh1000_pl500[5], added_rates[5], 21);
   // mh = 350 GeV  
-  TGraph *gr_LLP_mh350_pl500 = new TGraph(4, cuts_mh350_pl500, nugun_rate);
-  TMarker *m_mh350_pl500_ht360 = new TMarker(signal_mh350_pl500[5], rates[5], 21);
+  TGraph *gr_LLP_mh350_pl500 = new TGraph(4, cuts_mh350_pl500, nugun_added_rate);
+  TMarker *m_mh350_pl500_ht360 = new TMarker(signal_mh350_pl500[5], added_rates[5], 21);
 
   // 10m            
   // mh = 125 GeV  
-  TGraph *gr_LLP_mh125_pl10000 = new TGraph(4, cuts_mh125_pl10000, rates);
-  TMarker *m_mh125_pl10000_ht360 = new TMarker(signal_mh125_pl10000[5], rates[5], 21);
+  TGraph *gr_LLP_mh125_pl10000 = new TGraph(4, cuts_mh125_pl10000, added_rates);
+  TMarker *m_mh125_pl10000_ht360 = new TMarker(signal_mh125_pl10000[5], added_rates[5], 21);
   // mh = 1000 GeV 
-  TGraph *gr_LLP_mh1000_pl10000 = new TGraph(4, cuts_mh1000_pl10000, nugun_rate);
-  TMarker *m_mh1000_pl10000_ht360 = new TMarker(signal_mh1000_pl10000[5], rates[5], 21);
+  TGraph *gr_LLP_mh1000_pl10000 = new TGraph(4, cuts_mh1000_pl10000, nugun_added_rate);
+  TMarker *m_mh1000_pl10000_ht360 = new TMarker(signal_mh1000_pl10000[5], added_rates[5], 21);
   // mh = 350 GeV
-  TGraph *gr_LLP_mh350_pl10000 = new TGraph(4, cuts_mh350_pl10000, nugun_rate);
-  TMarker *m_mh350_pl10000_ht360 = new TMarker(signal_mh350_pl10000[5], rates[5], 21);
+  TGraph *gr_LLP_mh350_pl10000 = new TGraph(4, cuts_mh350_pl10000, nugun_added_rate);
+  TMarker *m_mh350_pl10000_ht360 = new TMarker(signal_mh350_pl10000[5], added_rates[5], 21);
 
   // QCD
-  TGraph *gr_background = new TGraph(4, cuts_background, nugun_rate);
-  TMarker *m_background_ht360 = new TMarker(background[5], rates[5], 21);
+  TGraph *gr_background = new TGraph(4, cuts_background, nugun_added_rate);
+  TMarker *m_background_ht360 = new TMarker(background[5], added_rates[5], 21);
   // comparison to the rate at 120 with no timing cuts
-  TLine *l=new TLine(0.,rates[6],1.,rates[6]);
+  TLine *l=new TLine(0.,added_rates[6],1.,added_rates[6]);
 
 
   // 1m
@@ -177,7 +177,7 @@ int main() {
   gr_LLP_mh125_pl1000->Draw("AC*");
   gr_LLP_mh125_pl1000->SetTitle("Rate vs. Signal Efficiency for >=1,2,3,4 Cells >=50ADC,3ns near 4 L1 Jets;Added LLP Efficiency, c#scale[1.2]{#tau}=1m;Neutrino Gun Rate (Hz, unnormalized)   ");
   gr_LLP_mh125_pl1000->GetXaxis()->SetLimits(0.,1.);
-  gr_LLP_mh125_pl1000->GetHistogram()->SetMinimum(1.);
+  gr_LLP_mh125_pl1000->GetHistogram()->SetMinimum(10000.);
   gr_LLP_mh125_pl1000->GetHistogram()->SetMaximum(100000000.);
 
   m_mh125_pl1000_ht360->SetMarkerStyle(21);
@@ -203,28 +203,28 @@ int main() {
   l->SetLineColor(kBlack);
   l->SetLineStyle(7);
   l->Draw();
-  auto legend2_htSum = new TLegend(0.35,0.15,0.9,0.45);
+  auto legend2_htSum = new TLegend(0.3,0.15,0.9,0.45);
   legend2_htSum->AddEntry(m_mh125_pl1000_ht360,"m_{H}=125; H_{T}>360 GeV, no timing cuts");
-  legend2_htSum->AddEntry(gr_LLP_mh125_pl1000,"m_{H}=125; H_{T}>120 GeV, with timing cuts"); 
+  legend2_htSum->AddEntry(gr_LLP_mh125_pl1000,"m_{H}=125; H_{T}>120 GeV with timing cuts OR H_{T}>360 GeV"); 
   legend2_htSum->AddEntry(m_mh250_pl1000_ht360,"m_{H}=250; H_{T}>360 GeV, no timing cuts");
-  legend2_htSum->AddEntry(gr_LLP_mh250_pl1000,"m_{H}=250; H_{T}>120 GeV, with timing cuts"); 
+  legend2_htSum->AddEntry(gr_LLP_mh250_pl1000,"m_{H}=250; H_{T}>120 GeV with timing cuts OR H_{T}>360 GeV"); 
   legend2_htSum->AddEntry(m_mh350_pl1000_ht360,"m_{H}=350; H_{T}>360 GeV, no timing cuts");
-  legend2_htSum->AddEntry(gr_LLP_mh350_pl1000,"m_{H}=350; H_{T}>120 GeV, with timing cuts");  
+  legend2_htSum->AddEntry(gr_LLP_mh350_pl1000,"m_{H}=350; H_{T}>120 GeV with timing cuts OR H_{T}>360 GeV");  
   legend2_htSum->AddEntry(m_mh1000_pl1000_ht360,"m_{H}=1000; H_{T}>360 GeV, no timing cuts");
-  legend2_htSum->AddEntry(gr_LLP_mh1000_pl1000,"m_{H}=1000; H_{T}>120 GeV, with timing cuts");
+  legend2_htSum->AddEntry(gr_LLP_mh1000_pl1000,"m_{H}=1000; H_{T}>120 GeV with timing cuts OR H_{T}>360 GeV");
   legend2_htSum->AddEntry(l,"Neutrino gun rate at HT=120GeV with no timing cuts");
   legend2_htSum->Draw();
   c1_LLP_pl1000->SetGrid();
-  //  c1_LLP_pl1000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_LLP_pl1000_linear.pdf");
+  //  c1_LLP_pl1000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_LLP_pl1000_linear_ORtriggers.pdf");
   c1_LLP_pl1000->SetLogy();
-  c1_LLP_pl1000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_LLP_pl1000.pdf");
+  c1_LLP_pl1000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_LLP_pl1000_ORtriggers.pdf");
 
   // 0.5 m
   TCanvas *c1_LLP_pl500 = new TCanvas("c1_LLP_pl500","Graph Draw Options",200,10,600,400);
   gr_LLP_mh125_pl500->Draw("AC*");
   gr_LLP_mh125_pl500->SetTitle("Rate vs. Signal Efficiency for >=1,2,3,4 Cells >=50ADC,3ns near 4 L1 Jets;Added LLP Efficiency, c#scale[1.2]{#tau}=0.5m;Neutrino Gun Rate (Hz, unnormalized)   ");
   gr_LLP_mh125_pl500->GetXaxis()->SetLimits(0.,1.);
-  gr_LLP_mh125_pl500->GetHistogram()->SetMinimum(1.);
+  gr_LLP_mh125_pl500->GetHistogram()->SetMinimum(10000.);
   gr_LLP_mh125_pl500->GetHistogram()->SetMaximum(100000000.);
 
   m_mh125_pl500_ht360->SetMarkerStyle(21);
@@ -245,26 +245,26 @@ int main() {
   l->SetLineColor(kBlack);
   l->SetLineStyle(7);
   l->Draw();
-  auto legend3_htSum = new TLegend(0.3,0.15,0.9,0.4);
+  auto legend3_htSum = new TLegend(0.25,0.15,0.9,0.4);
   legend3_htSum->AddEntry(m_mh125_pl500_ht360,"m_{H}=125; H_{T}>360 GeV, no timing cuts");
-  legend3_htSum->AddEntry(gr_LLP_mh125_pl500,"m_{H}=125; H_{T}>120 GeV, with timing cuts");
+  legend3_htSum->AddEntry(gr_LLP_mh125_pl500,"m_{H}=125; H_{T}>120 GeV with timing cuts OR H_{T}>360 GeV");
   legend3_htSum->AddEntry(m_mh350_pl500_ht360,"m_{H}=350; H_{T}>360 GeV, no timing cuts");
-  legend3_htSum->AddEntry(gr_LLP_mh350_pl500,"m_{H}=350; H_{T}>120 GeV, with timing cuts");
+  legend3_htSum->AddEntry(gr_LLP_mh350_pl500,"m_{H}=350; H_{T}>120 GeV with timing cuts OR H_{T}>360 GeV");
   legend3_htSum->AddEntry(m_mh1000_pl500_ht360,"m_{H}=1000; H_{T}>360 GeV, no timing cuts");
-  legend3_htSum->AddEntry(gr_LLP_mh1000_pl500,"m_{H}=1000; H_{T}>120 GeV, with timing cuts");
+  legend3_htSum->AddEntry(gr_LLP_mh1000_pl500,"m_{H}=1000; H_{T}>120 GeV with timing cuts OR H_{T}>360 GeV");
   legend3_htSum->AddEntry(l,"Neutrino gun rate at HT=120GeV with no timing cuts");
   legend3_htSum->Draw();
   c1_LLP_pl500->SetGrid();
-  //  c1_LLP_pl500->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_LLP_pl500_linear.pdf");
+  //  c1_LLP_pl500->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_LLP_pl500_linear_ORtriggers.pdf");
   c1_LLP_pl500->SetLogy();
-  c1_LLP_pl500->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_LLP_pl500.pdf");
+  c1_LLP_pl500->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_LLP_pl500_ORtriggers.pdf");
 
   // 10m
   TCanvas *c1_LLP_pl10000 = new TCanvas("c1_LLP_pl10000","Graph Draw Options",200,10,600,400);
   gr_LLP_mh125_pl10000->Draw("A*");
   gr_LLP_mh125_pl10000->SetTitle("Rate vs. Signal Efficiency for >=1,2,3,4 Cells >=50ADC,3ns near 4 L1 Jets;Added LLP Efficiency, c#scale[1.2]{#tau}=10m;Neutrino Gun Rate (Hz, unnormalized)   ");
   gr_LLP_mh125_pl10000->GetXaxis()->SetLimits(0.,1.);
-  gr_LLP_mh125_pl10000->GetHistogram()->SetMinimum(1.);
+  gr_LLP_mh125_pl10000->GetHistogram()->SetMinimum(10000.);
   gr_LLP_mh125_pl10000->GetHistogram()->SetMaximum(100000000.);
 
   m_mh125_pl10000_ht360->SetMarkerStyle(21);
@@ -285,19 +285,19 @@ int main() {
   l->SetLineColor(kBlack);
   l->SetLineStyle(7);
   l->Draw();
-  auto legend4_htSum = new TLegend(0.3,0.15,0.9,0.4);
+  auto legend4_htSum = new TLegend(0.25,0.15,0.9,0.4);
   legend4_htSum->AddEntry(m_mh125_pl10000_ht360,"m_{H}=125; H_{T}>360 GeV, no timing cuts");
-  legend4_htSum->AddEntry(gr_LLP_mh125_pl10000,"m_{H}=125; H_{T}>120 GeV, with timing cuts");
+  legend4_htSum->AddEntry(gr_LLP_mh125_pl10000,"m_{H}=125; H_{T}>120 GeV with timing cuts OR H_{T}>360 GeV");
   legend4_htSum->AddEntry(m_mh350_pl10000_ht360,"m_{H}=350; H_{T}>360 GeV, no timing cuts");
-  legend4_htSum->AddEntry(gr_LLP_mh350_pl10000,"m_{H}=350; H_{T}>120 GeV, with timing cuts");
+  legend4_htSum->AddEntry(gr_LLP_mh350_pl10000,"m_{H}=350; H_{T}>120 GeV with timing cuts OR H_{T}>360 GeV");
   legend4_htSum->AddEntry(m_mh1000_pl10000_ht360,"m_{H}=1000; H_{T}>360 GeV, no timing cuts");
-  legend4_htSum->AddEntry(gr_LLP_mh1000_pl10000,"m_{H}=1000; H_{T}>120 GeV, with timing cuts");
+  legend4_htSum->AddEntry(gr_LLP_mh1000_pl10000,"m_{H}=1000; H_{T}>120 GeV with timing cuts OR H_{T}>360 GeV");
   legend4_htSum->AddEntry(l,"Neutrino gun rate at HT=120GeV with no timing cuts");
   legend4_htSum->Draw();
   c1_LLP_pl10000->SetGrid();
-  //  c1_LLP_pl10000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_LLP_pl10000_linear.pdf");
+  //  c1_LLP_pl10000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_LLP_pl10000_linear_ORtriggers.pdf");
   c1_LLP_pl10000->SetLogy();
-  c1_LLP_pl10000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_LLP_pl10000.pdf");
+  c1_LLP_pl10000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_LLP_pl10000_ORtriggers.pdf");
 
   // background
   TCanvas *c1_background = new TCanvas("c1_background","Graph Draw Options",200,10,600,400);
@@ -305,7 +305,7 @@ int main() {
   gr_background->SetLineColor(kBlack);
   gr_background->SetTitle("Rate vs. Background Efficiency for >=1,2,3,4 Cells >=50ADC,3ns near 4 L1 Jets;Added QCD Efficiency;Neutrino Gun Rate (Hz, unnormalized)   ");
   gr_background->GetXaxis()->SetLimits(0.,1.);
-  gr_background->GetHistogram()->SetMinimum(1.);
+  gr_background->GetHistogram()->SetMinimum(10000.);
   gr_background->GetHistogram()->SetMaximum(100000000.);
 
   m_background_ht360->SetMarkerStyle(21);
@@ -317,14 +317,14 @@ int main() {
   l->SetLineColor(kBlack);
   l->SetLineStyle(7);
   l->Draw();
-  auto legend9_htSum = new TLegend(0.35,0.15,0.9,0.35);
+  auto legend9_htSum = new TLegend(0.25,0.15,0.9,0.35);
   legend9_htSum->AddEntry(m_background_ht360,"H_{T}>360 GeV, no timing cuts");
-  legend9_htSum->AddEntry(gr_background,"H_{T}>120 GeV, with timing cuts");                                                                                                                                                        
+  legend9_htSum->AddEntry(gr_background,"H_{T}>120 GeV with timing cuts OR H_{T}>360 GeV");                                                                                                                                                        
   legend9_htSum->AddEntry(l,"Neutrino gun rate at HT=120GeV with no timing cuts");
-  //  legend9_htSum->AddEntry(m_background_ht120,"H_{T}>120 GeV, with timing cuts");
+  //  legend9_htSum->AddEntry(m_background_ht120,"H_{T}>120 GeV with timing cuts OR H_{T}>360 GeV");
   legend9_htSum->Draw();
   c1_background->SetGrid();
-  //  c1_background->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_QCDbackground_grey_linear.pdf");
+  //  c1_background->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_QCDbackground_grey_linear_ORtriggers.pdf");
   c1_background->SetLogy();
-  c1_background->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_QCDbackground_grey.pdf");
+  c1_background->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/EffRate_QCDbackground_grey_ORtriggers.pdf");
 }
