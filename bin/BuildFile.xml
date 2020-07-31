@@ -13,6 +13,7 @@
   <bin file="rates_original.cxx" name="rates_original.exe"/>
   <bin file="RateEfficiencyPlots.cxx" name="RateEfficiencyPlots.exe"/>
   <bin file="RateEfficiencyPlots_LLP_ctau.cxx" name="RateEfficiencyPlots_LLP_ctau.exe"/>
+<bin file="RateEfficiencyPlots_LLP_ctau_AddedEff.cxx" name="RateEfficiencyPlots_LLP_ctau_AddedEff.exe"/>  
   <bin file="Rate_HTbin.cxx" name="Rate_HTbin.exe"/>
   <bin file="Eff_ctau.cxx" name="Eff_ctau.exe"/>
   <bin file="draw_l1analysis.cxx" name="draw_l1analysis.exe"/>

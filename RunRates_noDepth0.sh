@@ -19,6 +19,10 @@ echo "LLP mh=125 GeV, ctau=3 m"
 rates.exe new /eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/TimingTrigger/HTo2LongLivedTo4b_MH-125_MFF-50_CTau-3000mm_TuneCP5_14TeV_pythia8_HCAL/CRAB3_mh125_ctau3000_TDC_MC/200722_185526/0000
 mv rates_new_cond.root rates_new_cond_LLP_pl3000.root
 echo " "
+echo "LLP mh=125 GeV, ctau=30 m"
+rates.exe new /eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/TimingTrigger/HTo2LongLivedTo4b_MH-125_MFF-50_CTau-30000mm_TuneCP5_14TeV_pythia8_HCAL/CRAB3_mh125_ctau30000_TDC_MC/200728_205042/0000
+mv rates_new_cond.root rates_new_cond_LLP_pl30000.root
+echo " "
 echo "Making overlay plots from draw_timingbit.exe"
 draw_timingbit_mh125.exe
 mv plots/ADC50_3ns_4JetMultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/ADC50_3ns_no1HE4HB/ADC50_3ns_no1HE4HB_4JetMultHBOverlay_mh125.pdf
@@ -43,6 +47,10 @@ mv plots/ADC50_3ns_4JetMultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBi
 mv plots/ADC50_3ns_4JetMultHEOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/ADC50_3ns_no1HE4HB/ADC50_3ns_no1HE4HB_4JetMultHEOverlay_mh250.pdf
 mv plots/ADC50_3ns_4JetMultHBHEOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/ADC50_3ns_no1HE4HB/ADC50_3ns_no1HE4HB_4JetMultHBHEOverlay_mh250.pdf
 echo " "
+echo " "
+echo "LLP mh=350 GeV, ctau=0.5 m"
+rates.exe new /eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/TimingTrigger/HTo2LongLivedTo4b_MH-350_MFF-160_CTau-500mm_TuneCP5_14TeV_pythia8_HCAL/CRAB3_mh350_ctau500_TDC_MC/200728_204829/0000
+mv rates_new_cond.root rates_new_cond_LLP_pl500.root
 echo " "
 echo "LLP mh=350 GeV, ctau=1 m"
 rates.exe new /eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/TimingTrigger/HTo2LongLivedTo4b_MH-350_MFF-160_CTau-1000mm_TuneCP5_14TeV_pythia8_HCAL/CRAB3_mh350_ctau1000_TDC_MC/200722_182856/0000
@@ -75,6 +83,7 @@ echo " "
 echo " "
 echo "Efficiency vs. rate plots"
 RateEfficiencyPlots_LLP_ctau.exe
+RateEfficiencyPlots_LLP_ctau_AddedEff.exe
 Rate_HTbin.exe
 Eff_ctau.exe
 mv /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/EffRate* /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/ADC50_3ns_no1HE4HB/

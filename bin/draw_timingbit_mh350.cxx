@@ -66,14 +66,14 @@ int main()
     TString name(multHists_QCD[hist]->GetName());
     int yMax = 0;
     yMax = multHists_QCD[hist]->GetMaximum();
-    multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1.2*yMax);
+    multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,2*yMax);
     multHists_QCD[hist]->SetFillStyle(3005);
     multHists_QCD[hist]->Scale(1./multHists_QCD[hist]->Integral());
     multHists_QCD[hist]->Draw("hist pfc");
     TLegend *leg = new TLegend(0.6, 0.65, 0.95, 0.9);
     multHists_LLPpl500[hist]->SetLineColor(kBlue);
     multHists_LLPpl500[hist]->Scale(1./multHists_LLPpl500[hist]->Integral());
-    //    multHists_LLPpl500[hist]->Draw("hist same");
+    multHists_LLPpl500[hist]->Draw("hist same");
     multHists_LLPpl1000[hist]->SetLineColor(kGreen+1);
     multHists_LLPpl1000[hist]->Scale(1./multHists_LLPpl1000[hist]->Integral());
     multHists_LLPpl1000[hist]->Draw("hist same");
@@ -81,7 +81,7 @@ int main()
     multHists_LLPpl10000[hist]->Scale(1./multHists_LLPpl10000[hist]->Integral());
     multHists_LLPpl10000[hist]->Draw("hist same");
     leg->AddEntry(multHists_QCD[hist],"QCD", "F");
-    //    leg->AddEntry(multHists_LLPpl500[hist], "LLP, mh=350 GeV, c#scale[1.2]{#tau}=0.5m", "L");
+    leg->AddEntry(multHists_LLPpl500[hist], "LLP, mh=350 GeV, c#scale[1.2]{#tau}=0.5m", "L");
     leg->AddEntry(multHists_LLPpl1000[hist], "LLP, mh=350 GeV, c#scale[1.2]{#tau}=1m", "L");
     leg->AddEntry(multHists_LLPpl10000[hist], "LLP, mh=350 GeV, c#scale[1.2]{#tau}=10m", "L");
     multHists_QCD[hist]->GetYaxis()->CenterTitle(true);

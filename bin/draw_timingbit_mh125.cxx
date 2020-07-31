@@ -22,12 +22,12 @@ int main()
   gROOT->ForceStyle();
 
   // default, then new conditions
-  std::vector<std::string> filenames = {"rates_new_cond_QCD.root", "rates_new_cond_LLP_pl3000.root"}; //, "rates_new_cond_LLP_pl30000.root"};
+  std::vector<std::string> filenames = {"rates_new_cond_QCD.root", "rates_new_cond_LLP_pl3000.root", "rates_new_cond_LLP_pl30000.root"};
   std::vector<std::string> multTypes = {"ADC50_3ns_4JetMultHB", "ADC50_3ns_4JetMultHE", "ADC50_3ns_4JetMultHBHE"};
 
   std::map<std::string, TH1F*> multHists_QCD;
   std::map<std::string, TH1F*> multHists_LLPpl3000;
-  //  std::map<std::string, TH1F*> multHists_LLPpl30000;
+  std::map<std::string, TH1F*> multHists_LLPpl30000;
 
   std::vector<TFile*> files;
   for(auto file : filenames) {
@@ -40,12 +40,12 @@ int main()
 
     multHists_QCD[multType] = dynamic_cast<TH1F*>(files.at(0)->Get(histName.c_str()));
     multHists_LLPpl3000[multType] = dynamic_cast<TH1F*>(files.at(1)->Get(histName.c_str()));
-    //    multHists_LLPpl30000[multType] = dynamic_cast<TH1F*>(files.at(2)->Get(histName.c_str()));
+    multHists_LLPpl30000[multType] = dynamic_cast<TH1F*>(files.at(2)->Get(histName.c_str()));
   }
 
   for(auto pair : multHists_QCD) pair.second->SetLineWidth(2);
   for(auto pair : multHists_LLPpl3000) pair.second->SetLineWidth(2);
-  //  for(auto pair : multHists_LLPpl30000) pair.second->SetLineWidth(2);
+  for(auto pair : multHists_LLPpl30000) pair.second->SetLineWidth(2);
 
   std::vector<TCanvas*> canvases;
   std::vector<TPad*> pad1;
@@ -61,22 +61,28 @@ int main()
 
     multHists_QCD[hist]->SetLineColor(kBlack); 
     TString name(multHists_QCD[hist]->GetName());
-    int yMax = 0;
-    yMax = multHists_QCD[hist]->GetMaximum();
-    multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1.2*yMax);
     multHists_QCD[hist]->SetFillStyle(3005);
     multHists_QCD[hist]->Scale(1./multHists_QCD[hist]->Integral());
+
+    /*    int yMax = 0;
+    yMax = multHists_QCD[hist]->GetMaximum();
+    std::cout << yMax << std::endl;
+    multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,2*yMax);
+    canvases.back()->Update();
+    */
+
     multHists_QCD[hist]->Draw("hist pfc");
+    multHists_QCD[hist]->Draw("hist same");
     TLegend *leg = new TLegend(0.6, 0.65, 0.95, 0.9);
     multHists_LLPpl3000[hist]->SetLineColor(kGreen+1);
     multHists_LLPpl3000[hist]->Scale(1./multHists_LLPpl3000[hist]->Integral());
     multHists_LLPpl3000[hist]->Draw("hist same");
-    //    multHists_LLPpl30000[hist]->SetLineColor(kRed);
-    //    multHists_LLPpl30000[hist]->Scale(1./multHists_LLPpl30000[hist]->Integral());
-    //    multHists_LLPpl30000[hist]->Draw("hist same");
+    multHists_LLPpl30000[hist]->SetLineColor(kRed);
+    multHists_LLPpl30000[hist]->Scale(1./multHists_LLPpl30000[hist]->Integral());
+    multHists_LLPpl30000[hist]->Draw("hist same");
     leg->AddEntry(multHists_QCD[hist],"QCD", "F");
     leg->AddEntry(multHists_LLPpl3000[hist], "LLP, mh=125, c#scale[1.2]{#tau}=3m", "L");
-    //    leg->AddEntry(multHists_LLPpl30000[hist], "LLP, mh=125, c#scale[1.2]{#tau}=30m", "L");
+    leg->AddEntry(multHists_LLPpl30000[hist], "LLP, mh=125, c#scale[1.2]{#tau}=30m", "L");
     multHists_QCD[hist]->GetYaxis()->CenterTitle(true);
     multHists_QCD[hist]->SetTitle("Number of cells >=" + name(0,5) + " and " + name(6,3)+", from TPs within DR<0.5 of " + name (10,1) + " L1 Jets"); // general name "mult at 3 GeV and 1 ns, TP matched w/jet"
     multHists_QCD[hist]->GetXaxis()->SetLabelSize(0.03);

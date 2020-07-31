@@ -63,7 +63,7 @@ int main()
     TString name(multHists_QCD[hist]->GetName());
     int yMax = 0;
     yMax = multHists_QCD[hist]->GetMaximum();
-    multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1.2*yMax);
+    multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,2*yMax);
     multHists_QCD[hist]->SetFillStyle(3005);
     multHists_QCD[hist]->Scale(1./multHists_QCD[hist]->Integral());
     multHists_QCD[hist]->Draw("hist pfc");
