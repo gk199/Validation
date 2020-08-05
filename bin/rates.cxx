@@ -480,7 +480,11 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F * L1JetMatchingEff = new TH1F("L1JetMatchingEff", "Number of 4 Leading L1 Jets with DR<0.5 to a b-quark; Number of Jets; Number of Entries",5,0,5);
   TH2F * TOF_vs_TDC_JetMatched = new TH2F("TOF_vs_TDC_JetMatched", "TOF_LLP + TOF_bQuark - TOF_expected vs HCAL TDC in DR<0.5 of a L1 Jet that matched to gen parton; TOF_LLP + TOF_bQuark - TOF_expected (ns); TDC; Number of Events",100,-5,20,100,-5,20);
 
-  TH1F * htSumDistribution = new TH1F("htSumDistribution","htSum Distribution;HT Sum;Number of Events",100,0,1000);
+  TH1F * htSumDistribution = new TH1F("htSumDistribution","htSum Distribution;L1_HT (GeV);Number of Events",200,0,2000); // x bins, x low, x up
+  TH1F * L1_Jet1_ET = new TH1F("L1_Jet1_ET","L1 Jet 1 Transverse Energy;ET (GeV);Number of Events",200,0,400);
+  TH1F * L1_Jet2_ET = new TH1F("L1_Jet2_ET","L1 Jet 2 Transverse Energy;ET (GeV);Number of Events",200,0,400);
+  TH1F * L1_Jet3_ET = new TH1F("L1_Jet3_ET","L1 Jet 3 Transverse Energy;ET (GeV);Number of Events",200,0,400);
+  TH1F * L1_Jet4_ET = new TH1F("L1_Jet4_ET","L1 Jet 4 Transverse Energy;ET (GeV);Number of Events",200,0,400);
 
   // saving rate and efficiencies 
   double passed4JetMult_HBHE_ht120_1(0), passed4JetMult_HBHE_ht120_2(0), passed4JetMult_HBHE_ht120_3(0), passed4JetMult_HBHE_ht120_4(0), passed4JetMult_HBHE_ht120_5(0); //, passed4JetMult_HB_ht120(0),passed4JetMult_HE_ht120(0);
@@ -672,7 +676,27 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       //////////////////////////////////////
       double nCaloTPemu = l1CaloTPemu_->nHCALTP; // number of TPs varies from 400-1400 per event, approximately Gaussian
       uint nJetemu = l1emu_->nJets; // number of jets per event
-      for (uint jetIt = 0; (jetIt < nJetemu) && (jetIt < 4); jetIt++) { //std::cout << l1emu_->jetEt[jetIt] << std::endl;
+      /*      if (jentry == 0) {
+	std::cout << l1emu_->jetEta[0] << ", " << l1emu_->jetPhi[0] << std::endl;
+	std::cout << l1emu_->jetEta[1] << ", " << l1emu_->jetPhi[1] <<  std::endl;
+	std::cout << l1emu_->jetEta[2] << ", " << l1emu_->jetPhi[2] <<  std::endl;
+	std::cout << l1emu_->jetEta[3] << ", " << l1emu_->jetPhi[3] <<  std::endl;
+	std::cout << l1emu_->jetEta[4] << ", " << l1emu_->jetPhi[4] <<  std::endl;
+	std::cout << l1emu_->jetEta[5] << ", " << l1emu_->jetPhi[5] <<  std::endl;
+	std::cout << l1emu_->jetEta[6] << ", " << l1emu_->jetPhi[6] <<  std::endl;
+	std::cout << l1emu_->jetEta[7] << ", " << l1emu_->jetPhi[7] <<  std::endl;
+	std::cout << l1emu_->jetEta[8] << ", " << l1emu_->jetPhi[8] <<  std::endl;
+	std::cout << l1emu_->jetEta[9] << ", " << l1emu_->jetPhi[9] <<  std::endl;
+	std::cout << l1emu_->jetEta[10] << ", " << l1emu_->jetPhi[10] <<  std::endl;
+	std::cout << l1emu_->jetEta[11] << ", " << l1emu_->jetPhi[11] <<  std::endl;
+	}*/
+      L1_Jet1_ET->Fill(l1emu_->jetEt[0]);
+      L1_Jet2_ET->Fill(l1emu_->jetEt[1]);
+      L1_Jet3_ET->Fill(l1emu_->jetEt[2]);
+      L1_Jet4_ET->Fill(l1emu_->jetEt[3]);
+
+      for (uint jetIt = 0; (jetIt < nJetemu) && (jetIt < 4); jetIt++) { 
+	//std::cout << l1emu_->jetEt[jetIt] << std::endl;
 	// given a L1 jet, find the DR to the closest L1 jet
 	double Jet_eta;
 	double Jet_phi;
@@ -1256,6 +1280,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     L1JetMatchingEff->Write();
 
     htSumDistribution->Write();
+    L1_Jet1_ET->Write();
+    L1_Jet2_ET->Write();
+    L1_Jet3_ET->Write();
+    L1_Jet4_ET->Write();
 
     htSumRates_original_emu->Scale(norm);
     // HT120+timing OR HT360

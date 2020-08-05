@@ -27,6 +27,7 @@ echo " "
 echo "Rates plots from draw_rates.exe"
 draw_rates.exe
 mv plots/*Rates_emu.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/
+mv rates_new_cond.root rates_new_cond_106X_nugun.root
 echo " "
 echo "Making overlay plots from draw_timingbit.exe"
 draw_timingbit.exe
@@ -50,6 +51,7 @@ echo " "
 echo "Making overlay plots from draw_timingbit.exe"
 draw_timingbit.exe
 mv rates_new_cond_LLP_pl1000.root rates_new_cond_LLP_mh1000_pl1000.root
+mv rates_new_cond_LLP_pl10000.root rates_new_cond_LLP_mh1000_pl10000.root
 mv plots/ADC50_3ns_4JetMultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/ADC50_3ns_no1HE4HB_4JetMultHBOverlay_mh1000.pdf
 mv plots/ADC50_3ns_4JetMultHEOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/ADC50_3ns_no1HE4HB_4JetMultHEOverlay_mh1000.pdf
 mv plots/ADC50_3ns_4JetMultHBHEOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/ADC50_3ns_no1HE4HB_4JetMultHBHEOverlay_mh1000.pdf
