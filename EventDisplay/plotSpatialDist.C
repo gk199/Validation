@@ -19,8 +19,7 @@
 #include "TPaveText.h"
 #include "TLine.h"
 #include "TEllipse.h"
-#include "L1Trigger/L1TNtuples/interface/L1AnalysisEventDataFormat.h"
-#include "L1Trigger/L1TNtuples/interface/L1AnalysisL1UpgradeDataFormat.h"
+#include "L1Trigger/L1TNtuples/interface/L1AnalysisL1UpgradeDataFormat_eventdisplay.h"
 #include "L1Trigger/L1TNtuples/interface/L1AnalysisCaloTPDataFormat.h"
 #include <sstream>
 //#include "Math/VectorUtil_Cint.h"
@@ -32,6 +31,32 @@
 #ifdef __MAKECINT__
 #pragma link C++ class vector<TLorentzVector>+;
 #endif
+
+// functions to calculate eta from ieta, phi from iphi, delta eta, delta phi, and deltaR. Code from https://github.com/gk199/cms-hcal-debug/blob/PulseShape/plugins/HcalCompareUpgradeChains.cc#L894-L954
+double etaVal(int ieta) { // calculate eta given ieta
+  double etavl;
+  if (ieta <= -24){
+    etavl = .1695*ieta + 1.9931;
+  }
+  else if (ieta <= -1){
+    etavl = .0875*ieta + .0489;
+  }
+  else if (ieta < 24){
+    etavl = .0875*ieta - .0489;
+  }
+  else {
+    etavl = .1695*ieta - 1.9931;
+  }
+  return etavl;
+}
+
+double phiVal(int iphi) { // calculate phi given iphi
+  double phiBins=72.;
+  double phivl;
+  phivl=double(iphi)*(2.*TMath::Pi()/phiBins);
+  if (iphi > 36) phivl -= 2.*TMath::Pi();
+  return phivl;
+}
 
 void DrawRegionLines(){
   std::vector<TLine*> regionLines;
@@ -99,9 +124,9 @@ void plotSpatialDist(int iEvent){
   TTree *t2 = (TTree*) f->Get("l1UpgradeEmuTree/L1UpgradeTree"); // has info about L1 jets, in L1Upgrade branch   
   TTree *t3 = (TTree*) f->Get("l1CaloTowerEmuTree/L1CaloTowerTree"); // info on HCAL TDC and energy, in CaloTP branch
 
-  std::vector<TLorentzVector> *vL1Jets        = 0;
-  std::vector<TLorentzVector> *vHcalTPdepth   = 0;
-  int event =0;
+  L1Analysis::L1AnalysisL1UpgradeDataFormat *vL1Jets = new L1Analysis::L1AnalysisL1UpgradeDataFormat();
+  L1Analysis::L1AnalysisCaloTPDataFormat *vHcalTPdepth = new L1Analysis::L1AnalysisCaloTPDataFormat();
+  ULong64_t event =0; // declare as a unsigned long 64 bit integer
   
   // Create a new canvas.
   TCanvas *c1 = new TCanvas("c1","eta vs phi",200,10,700,700);
@@ -115,10 +140,7 @@ void plotSpatialDist(int iEvent){
   TBranch *bL1Jets = 0;
   TBranch *bHcalTPdepth = 0;
 
-  //  t->SetBranchAddress("event",&event,&bEvent);
-  L1Analysis::L1AnalysisEventDataFormat    *event_ = new L1Analysis::L1AnalysisEventDataFormat();
-  t->SetBranchAddress("event", &event_,&bEvent);
-
+  t->SetBranchAddress("event",&event,&bEvent);
   t2->SetBranchAddress("L1Upgrade",&vL1Jets,&bL1Jets);
   t3->SetBranchAddress("CaloTP",&vHcalTPdepth,&bHcalTPdepth);
 
@@ -139,23 +161,23 @@ void plotSpatialDist(int iEvent){
 
   //get the event number
   char name[30];
-  sprintf(name,"Event %u",event);
+  sprintf(name,"Event %llu",event);
   std::cout<<event<<std::endl;
   std::cout<<name<<std::endl;
   TH2F *h2 = new TH2F("h2",name,68,-3,3,72,-3.142,3.142);
 
   int k = 0;
 
-  for (UInt_t j = 0; j < vHcalTPdepth->size(); ++j) {
-    double eta = vHcalTPdepth->at(j).Eta();//hcalTPieta();
-    double phi = vHcalTPdepth->at(j).Phi();//hcalTPiphi();
-    double pt  = vHcalTPdepth->at(j).Pt();//hcalTPet();
+  for (int j = 0; j < vHcalTPdepth->nHCALTP; ++j) {
+    double eta = etaVal(vHcalTPdepth->hcalTPieta[j]);
+    double phi = phiVal(vHcalTPdepth->hcalTPiphi[j]);
+    double pt  = vHcalTPdepth->hcalTPet[j];
     h2HcalTPdepth->Fill(eta, phi, pt);
 
     if(pt>10){
-      std::cout<<"vHcalTPdepth->at(j).Pt() "<<vHcalTPdepth->at(j).Pt()
-	       <<" eta "<<vHcalTPdepth->at(j).Eta()
-	       <<" phi "<<vHcalTPdepth->at(j).Phi()<<std::endl;
+      std::cout<<"vHcalTPdepth->at(j).Pt() "<<vHcalTPdepth->hcalTPet[j]
+	       <<" eta "<<etaVal(vHcalTPdepth->hcalTPieta[j])
+	       <<" phi "<<phiVal(vHcalTPdepth->hcalTPiphi[j])<<std::endl;
       std::ostringstream strs;
       strs << pt;
       std::string text = strs.str();
@@ -171,10 +193,10 @@ void plotSpatialDist(int iEvent){
     }
   }  
   
-  for (UInt_t j = 0; j < vL1Jets->size(); ++j) {
-    double eta = vL1Jets->at(j).Eta();//jetEta();
-    double phi = vL1Jets->at(j).Phi();//jetPhi();
-    double pt  = vL1Jets->at(j).Pt();//jetEt();
+  for (UInt_t j = 0; j < vL1Jets->nJets; ++j) {
+    double eta = vL1Jets->jetEta[j];
+    double phi = vL1Jets->jetPhi[j];
+    double pt  = vL1Jets->jetEt[j];
     h2L1Jets->Fill(eta, phi, pt);
   }  
   
@@ -193,9 +215,9 @@ void plotSpatialDist(int iEvent){
   h2L1Jets->Draw("SAME BOX");
   
   double x1=-99., x2=-99., x3=-99., x4=-99., y1=-99., y2=-99., y3=-99., y4=-99.;
-  for (UInt_t j = 0; j < vL1Jets->size(); ++j) {
-    double eta = vL1Jets->at(j).Eta();//jetEta();
-    double phi = vL1Jets->at(j).Phi();//jetPhi();
+  for (UInt_t j = 0; j < vL1Jets->nJets; ++j) {
+    double eta = vL1Jets->jetEta[j];
+    double phi = vL1Jets->jetPhi[j];
     if(j == 0) { x1 = eta-0.8; x2 = eta+0.8; y1 = phi-0.8; y2 = phi+0.8; }
     if(j == 1) { x3 = eta-0.8; x4 = eta+0.8; y3 = phi-0.8; y4 = phi+0.8; }
     TEllipse *circ = new TEllipse(eta,phi,.8,.8);
@@ -219,7 +241,7 @@ void plotSpatialDist(int iEvent){
   }
   
   char saveFile[100];
-  sprintf(saveFile,"/afs/cern.ch/work/g/gkopp/HCAL_Trigger/L1Ntuples/HCAL_TP_TimingBitEmulator/CMSSW_10_6_0/src/HcalTrigger/Validation/EventDisplay/Event-%u-test_trigger.png",event);
+  sprintf(saveFile,"/afs/cern.ch/work/g/gkopp/HCAL_Trigger/L1Ntuples/HCAL_TP_TimingBitEmulator/CMSSW_10_6_0/src/HcalTrigger/Validation/EventDisplay/Event-%llu-test_trigger.png",event);
   c1->SaveAs(saveFile);
   
   if(x1 > -99.){
@@ -240,7 +262,7 @@ void plotSpatialDist(int iEvent){
     h2L1Jets->Draw("SAME BOX");
     l->Draw();
     char saveFile1[100];
-    sprintf(saveFile1,"/afs/cern.ch/work/g/gkopp/HCAL_Trigger/L1Ntuples/HCAL_TP_TimingBitEmulator/CMSSW_10_6_0/src/HcalTrigger/Validation/EventDisplay/Event-%u-test-jet1_trigger.png",event);
+    sprintf(saveFile1,"/afs/cern.ch/work/g/gkopp/HCAL_Trigger/L1Ntuples/HCAL_TP_TimingBitEmulator/CMSSW_10_6_0/src/HcalTrigger/Validation/EventDisplay/Event-%llu-test-jet1_trigger.png",event);
     c2->SaveAs(saveFile1);
   }
   
@@ -262,7 +284,7 @@ void plotSpatialDist(int iEvent){
     h2L1Jets->Draw("SAME BOX");
     l->Draw();
     char saveFile1[100];
-    sprintf(saveFile1,"/afs/cern.ch/work/g/gkopp/HCAL_Trigger/L1Ntuples/HCAL_TP_TimingBitEmulator/CMSSW_10_6_0/src/HcalTrigger/Validation/EventDisplay/Event-%u-test-jet2_trigger.png",event); 
+    sprintf(saveFile1,"/afs/cern.ch/work/g/gkopp/HCAL_Trigger/L1Ntuples/HCAL_TP_TimingBitEmulator/CMSSW_10_6_0/src/HcalTrigger/Validation/EventDisplay/Event-%llu-test-jet2_trigger.png",event); 
     c3->SaveAs(saveFile1);
   }
   
