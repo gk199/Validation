@@ -5,7 +5,7 @@
 #include "TFile.h"
 #include "TLegend.h"
 #include "TROOT.h"
-
+#include "TPaveStats.h"
 #include <map>
 #include <string>
 #include <vector>
@@ -47,8 +47,8 @@ int main()
   for(auto hist : multTypes) {
     canvases.push_back(new TCanvas);
     canvases.back()->SetWindowSize(1.3*canvases.back()->GetWw(), 0.9*canvases.back()->GetWh());
-    pad1.push_back(new TPad("pad1", "pad1", 0, .15, 1, 0.9));
-    pad1.back()->SetGrid();
+    pad1.push_back(new TPad("pad1", "pad1", 0, 0, 1, 0.9));
+    //    pad1.back()->SetGrid();
     pad1.back()->Draw();
     pad1.back()->cd();
 
@@ -57,11 +57,28 @@ int main()
     TString name(multHists_110X[hist]->GetName());
     //    multHists_110X[hist]->GetXaxis()->SetRangeUser(0,900);
     //    if ( strcmp(hist.substr(0,2).c_str(), "L1") == 0 ) multHists_110X[hist]->GetXaxis()->SetRangeUser(0,120);
+
     multHists_110X[hist]->Draw("hist");
-    TLegend *leg = new TLegend(0.6, 0.75, 0.9, 0.9);
+    gStyle->SetOptStat(1);
+    gPad->Update();
+    TPaveStats *st1 = (TPaveStats*)multHists_110X[hist]->FindObject("stats");
+    st1->SetName("110X");
+    st1->SetY1NDC(0.5);
+    st1->SetY2NDC(0.7);
+    st1->SetTextColor(kBlue); 
+
     multHists_106X[hist]->SetLineColor(kRed);
     multHists_106X[hist]->Scale(1./multHists_106X[hist]->Integral());
-    multHists_106X[hist]->Draw("hist same");
+    multHists_106X[hist]->Draw("hist sames");
+    gStyle->SetOptStat(1);
+    gPad->Update();
+    TPaveStats *st = (TPaveStats*)multHists_106X[hist]->FindObject("stats");
+    st->SetName("106X");
+    st->SetY1NDC(0.2);
+    st->SetY2NDC(0.4);
+    st->SetTextColor(kRed); 
+
+    TLegend *leg = new TLegend(0.6, 0.75, 0.9, 0.9);
     leg->AddEntry(multHists_106X[hist],"106X, mh=1TeV, pl=10m","L"); //neutrino gun", "L");
     leg->AddEntry(multHists_110X[hist], "110X, mh=1TeV, pl=10m","L"); //neutrino gun", "L");
     multHists_110X[hist]->SetTitle(Form("Comparison between 110X and 106X MC distributions -- %s", hist.substr(0).c_str())); 
