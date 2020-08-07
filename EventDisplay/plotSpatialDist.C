@@ -174,8 +174,8 @@ void plotSpatialDist(int iEvent){
     // eta, phi, pt of HCAL TP
     double eta = etaVal(vHcalTPdepth->hcalTPieta[j]);
     double phi = phiVal(vHcalTPdepth->hcalTPiphi[j]);
-    double pt  = vHcalTPdepth->hcalTPet[j];
-    h2HcalTPs->Fill(eta, phi, pt);
+    double pt  = vHcalTPdepth->hcalTPet[j]; // ET of the whole HCAL TP
+    //    h2HcalTPs->Fill(eta, phi, pt);
     // check through HCAL TP depth layers (4 HB, 7 HE) 
     double TDC[7] = {0};
     double cellEt[7] = {0};
@@ -187,18 +187,18 @@ void plotSpatialDist(int iEvent){
     if (vHcalTPdepth->hcalTPtiming6[j] >= 0) {TDC[5] = vHcalTPdepth->hcalTPtiming6[j]; cellEt[5] = vHcalTPdepth->hcalTPDepth6[j];}
     if (vHcalTPdepth->hcalTPtiming7[j] >= 0) {TDC[6] = vHcalTPdepth->hcalTPtiming7[j]; cellEt[6] = vHcalTPdepth->hcalTPDepth7[j];}
     for (int depth = 0; depth < vHcalTPdepth->hcalTPnDepths[j]; ++ depth) { // loop through HCAL TP depths
-      if (TDC[depth] >= 3) h2HcalTPsDelayed->Fill(eta, phi, TDC[depth]);
-
+      if (TDC[depth] >= 3 && cellEt[depth] >= 3) h2HcalTPsDelayed->Fill(eta, phi, TDC[depth]);
+      if (TDC[depth] >= 2 && cellEt[depth] >= 3) h2HcalTPs->Fill(eta, phi, TDC[depth]);
       if (TDC[depth] >= 3 && cellEt[depth] >= 3) {
 	std::cout<<"TDC "<<TDC[depth] << " et " << cellEt[depth] << " at depth " << depth
 		 <<" eta "<<eta
 		 <<" phi "<<phi<<std::endl;
 	std::ostringstream strs;
-	strs << vHcalTPdepth->hcalTPtiming2[j]; // print TDC on the eta phi plot for delayed
+	strs << TDC[depth]; // print TDC on the eta phi plot for delayed
 	std::string text = strs.str();
-	eta += 0.01;
-	phi += 0.01;
-	TPaveText *tempText = new TPaveText( eta, phi, eta+0.1, phi+0.1 );
+	eta += 0.02;
+	phi += 0.02;
+	TPaveText *tempText = new TPaveText( eta, phi, eta+0.15, phi+0.15 );
 	tempText->AddText(text.c_str());
 	tempText->SetFillColor(0);
 	tempText->SetLineColor(0);
@@ -206,24 +206,26 @@ void plotSpatialDist(int iEvent){
 	tempText->SetTextColor(kGreen);
 	hcalTPsDelayedText.push_back(tempText);
       }
-    }
 
-    if(pt>4){
-      std::cout<<"vHcalTPdepth->at(j).Pt() "<<pt
-	       <<" eta "<<eta
-	       <<" phi "<<phi<<std::endl;
-      std::ostringstream strs;
-      strs << pt; // print pt on the eta phi plot for high energy TPs
-      std::string text = strs.str();
-      eta += 0.01;
-      phi += 0.01;
-      TPaveText *tempText = new TPaveText( eta, phi, eta+0.1, phi+0.1 );
-      tempText->AddText(text.c_str());
-      tempText->SetFillColor(0);
-      tempText->SetLineColor(0);
-      tempText->SetShadowColor(0);
-      tempText->SetTextColor(kBlue);
-      hcalTPsText.push_back(tempText);
+      /*
+      if(TDC[depth]>=10){
+	std::cout<<"TDC "<<TDC[depth]
+		 <<" eta "<<eta
+		 <<" phi "<<phi<<std::endl;
+	std::ostringstream strs;
+	strs << TDC[depth]; // print pt on the eta phi plot for high energy TPs
+	std::string text = strs.str();
+	eta += 0.02;
+	phi += 0.02;
+	TPaveText *tempText = new TPaveText( eta, phi, eta+0.15, phi+0.15 );
+	tempText->AddText(text.c_str());
+	tempText->SetFillColor(0);
+	tempText->SetLineColor(0);
+	tempText->SetShadowColor(0);
+	tempText->SetTextColor(kMagenta);
+	hcalTPsText.push_back(tempText);
+      }
+      */
     }
   }  
   
@@ -238,9 +240,9 @@ void plotSpatialDist(int iEvent){
     std::ostringstream strs;
     strs << j; // print which leading jet this is (0 = most energetic)
     std::string text = strs.str();
-    eta += 0.01;
-    phi += 0.01;
-    TPaveText *tempText = new TPaveText( eta, phi, eta+0.1, phi+0.1 );
+    eta += 0.02;
+    phi += 0.02;
+    TPaveText *tempText = new TPaveText( eta, phi, eta+0.2, phi+0.2 );
     tempText->AddText(text.c_str());
     tempText->SetFillColor(0);
     tempText->SetLineColor(0);
@@ -276,8 +278,8 @@ void plotSpatialDist(int iEvent){
   
   float xR=0.8;
   TLegend *l = new TLegend(xR,0.8,xR+0.2,1.0);
-  l->AddEntry(h2HcalTPs,"HCAL TPs","F");
-  l->AddEntry(h2HcalTPsDelayed,"Delayed Cells","F");
+  l->AddEntry(h2HcalTPs,"Cell>=2ns, 3GeV","F");
+  l->AddEntry(h2HcalTPsDelayed,"Cell>=3ns, 3GeV","F");
   l->AddEntry(h2L1Jets,"L1 jets","F");
   l->Draw();
   h2HcalTPs->GetXaxis()->SetTitle("eta");
@@ -292,6 +294,9 @@ void plotSpatialDist(int iEvent){
   for (UInt_t j = 0; j < leadingJetText.size(); ++j) {
     leadingJetText.at(j)->Draw("SAME");
   }
+  h2L1Jets->Draw("SAME BOX");
+  h2HcalTPs->Draw("SAME BOX");   
+  h2HcalTPsDelayed->Draw("SAME BOX");
   
   char saveFile[100];
   sprintf(saveFile,"/afs/cern.ch/work/g/gkopp/HCAL_Trigger/L1Ntuples/HCAL_TP_TimingBitEmulator/CMSSW_10_6_0/src/HcalTrigger/Validation/EventDisplay/Event-%llu-test_trigger.png",event);
