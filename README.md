@@ -63,3 +63,12 @@ TMVA::TMVAGui("output.root")
 root -l -b -q TMVAClassificationApplication.C
 ```
 Which opens the GUI to see the classifier cut efficiencies. Data from ROOT files is read in to the analysis template with 'background_filename' and 'signal_filename'. TMVAClassificationApplication.C outputs a single root file, TMVApp.root with a discriminator distribution for the input file, using the trained classifier and weights files in dataset/weights.
+
+## Event Display
+Event display code adapted from Isobel and Pallabi's code is [here](https://github.com/gk199/Validation/blob/TimingBit106x/EventDisplay/plotSpatialDist.C) and is used to plot L1 jets and delayed cells in an event. This is run in a ROOT session with
+```
+root
+.L plotSpatialDist.C++
+.x plotSpatialDist.C(0)
+```
+where `(0)` indicates which event is considered. 

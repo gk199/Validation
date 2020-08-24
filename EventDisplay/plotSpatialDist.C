@@ -118,6 +118,7 @@ void DrawTowerLines(){
 void plotSpatialDist(int iEvent){
   gStyle->SetOptStat(0);
   TFile *f = TFile::Open("L1Ntuple_mh125_mx50_pl1000.root","READ");
+  //  TFile *f = TFile::Open("L1Ntuple_QCD.root","READ");
   if (!f) { return; }
   
   TTree *t = (TTree*) f->Get("l1EventTree/L1EventTree"); // saves event info, in event branch
@@ -173,7 +174,7 @@ void plotSpatialDist(int iEvent){
   for (int j = 0; j < vHcalTPdepth->nHCALTP; ++j) { // loop through all HCAL TPs
     // eta, phi, pt of HCAL TP
     double eta = etaVal(vHcalTPdepth->hcalTPieta[j]);
-    double phi = phiVal(vHcalTPdepth->hcalTPiphi[j]);
+    double phi = phiVal(vHcalTPdepth->hcalTPCaliphi[j]); // was hcalTPiphi, but this is the corrected one
     double pt  = vHcalTPdepth->hcalTPet[j]; // ET of the whole HCAL TP
     //    h2HcalTPs->Fill(eta, phi, pt);
     // check through HCAL TP depth layers (4 HB, 7 HE) 
@@ -302,6 +303,7 @@ void plotSpatialDist(int iEvent){
   sprintf(saveFile,"/afs/cern.ch/work/g/gkopp/HCAL_Trigger/L1Ntuples/HCAL_TP_TimingBitEmulator/CMSSW_10_6_0/src/HcalTrigger/Validation/EventDisplay/Event-%llu-test_trigger.png",event);
   c1->SaveAs(saveFile);
   
+  /*
   if(x1 > -99.){
     TCanvas *c2 = new TCanvas("c2","leading jet",200,10,700,700);
     c2->SetFillColor(0);
@@ -345,5 +347,5 @@ void plotSpatialDist(int iEvent){
     sprintf(saveFile1,"/afs/cern.ch/work/g/gkopp/HCAL_Trigger/L1Ntuples/HCAL_TP_TimingBitEmulator/CMSSW_10_6_0/src/HcalTrigger/Validation/EventDisplay/Event-%llu-test-jet2_trigger.png",event); 
     c3->SaveAs(saveFile1);
   }
-  
+  */  
 }

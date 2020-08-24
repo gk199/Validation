@@ -648,15 +648,13 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
       for (int HcalTPIt = 0; HcalTPIt < nCaloTPemu; HcalTPIt++){
 	// eta and phi of the HCAL TP
 	double tpEtaemu = l1CaloTPemu_->hcalTPieta[HcalTPIt]; // ieta
-	if (abs(tpEtaemu) > 16 ) continue; // don't consider HCAL TPs outside of HB or HE
+	if (abs(tpEtaemu) > 16 ) continue; // don't consider HCAL TPs outside of HB or HE. End of HB is eta=1.479m, end of HE is eta=3 from here http://www.hephy.at/user/friedl/diss/html/node8.html
         int TP_eta_2x2 = 1000;
         if (tpEtaemu>0) TP_eta_2x2 = tpEtaemu+15; // 16 to 31
         else if (tpEtaemu<0) TP_eta_2x2 = tpEtaemu+1+15; // 0 to 15 
-	//	std::cout << TP_eta_2x2 << " = 2x2 eta val, and TP eta val = " << tpEtaemu << std::endl;
 
 	double tpPhiemu = l1CaloTPemu_->hcalTPCaliphi[HcalTPIt]; // iphi
 	int TP_phi_2x2 = tpPhiemu-1;
-	//	std::cout << TP_phi_2x2 << " = TP iphi" << std::endl;
 
 	// each TP has the Timing Bit set with the multiplicity for that tower
         int TP_TimingBit = l1CaloTPemu_->hcalTPTimingBit[HcalTPIt];
@@ -668,8 +666,8 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 	if (abs(tpEtaemu) > 16 && abs(tpEtaemu) <= 28 ) {
           SumTimingBitJet1_HE += TP_TimingBit;
 	}
-      	// each TP has the Timing Bit set with the multiplicity for that tower
       } // closing HCAL TP loop
+      /*
       int Sum4Jet_HBHE = SumTimingBitJet1_HB + SumTimingBitJet1_HE;
       int Sum4Jet_HB = SumTimingBitJet1_HB;
       int Sum4Jet_HE = SumTimingBitJet1_HE;
@@ -678,7 +676,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
       ADC50_3ns_4JetMultHB_emu->Fill(Sum4Jet_HB);
       ADC50_3ns_4JetMultHE_emu->Fill(Sum4Jet_HE);
       ADC50_3ns_4JetMultHBHE_emu->Fill(Sum4Jet_HBHE);
-
+      */
       int delayed_calo_objects = 0;
       // check 2x2 regions and nearest neighbors as well
       for (int ieta = 0; ieta<32; ieta+=2) {
@@ -701,8 +699,11 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 	    }
 	  }
 	  delayed_6x6 -= delayed_2x2;
-	  if (delayed_2x2 >= 2) std::cout << delayed_2x2 << " = 2x2, and 6x6 = " << delayed_6x6 << std::endl;
+	  if (delayed_2x2 >= 2) std::cout << delayed_2x2 << " = 2x2, and 6x6 = " << delayed_6x6 << " at ieta, iphi = " << ieta-15 << ", " << iphi << " and eta, phi = " << etaVal(ieta-15) << ", " << phiVal(iphi+1) << std::endl;
 	  if (delayed_2x2 >= 2 && delayed_6x6 >= 1) delayed_calo_objects += 1;
+	  ADC50_3ns_4JetMultHB_emu->Fill(delayed_2x2);
+	  ADC50_3ns_4JetMultHE_emu->Fill(delayed_6x6);
+	  ADC50_3ns_4JetMultHBHE_emu->Fill(delayed_2x2 + delayed_6x6);
 	}
       }
 
