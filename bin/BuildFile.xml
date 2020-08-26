@@ -4,6 +4,7 @@
   <bin file="llp_analysis.cxx" name="llp_analysis.exe"/>
   <bin file="draw_rates.cxx" name="draw_rates.exe"/>
   <bin file="draw_timingbit.cxx" name="draw_timingbit.exe"/>
+  <bin file="draw_timingbit_delayed_cluster.cxx" name="draw_timingbit_delayed_cluster.exe"/>
   <bin file="draw_1mtimingbit.cxx" name="draw_1mtimingbit.exe"/>
   <bin file="draw_110X_106X_comp.cxx" name="draw_110X_106X_comp.exe"/>
   <bin file="rates.cxx" name="rates.exe"/>

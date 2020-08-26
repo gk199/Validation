@@ -1369,11 +1369,11 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     MultiplicityHits50ADC3ns_ht120_Signal << passedHtSum360 / totalEvents << std::endl; // efficiency at HT 360
     MultiplicityHits50ADC3ns_ht120_Signal << " " << std::endl;
     MultiplicityHits50ADC3ns_ht120_Signal << "Added efficiency at nhit = 1,2,3,4,5 " << std::endl;
-    MultiplicityHits50ADC3ns_ht120_Signal << (passed4JetMult_HBHE_ht120_1 - passedHtSum360)*10 / totalEvents << std::endl;
-    MultiplicityHits50ADC3ns_ht120_Signal << (passed4JetMult_HBHE_ht120_2 - passedHtSum360)*10 / totalEvents << std::endl;
-    MultiplicityHits50ADC3ns_ht120_Signal << (passed4JetMult_HBHE_ht120_3 - passedHtSum360)*10 / totalEvents << std::endl;
-    MultiplicityHits50ADC3ns_ht120_Signal << (passed4JetMult_HBHE_ht120_4 - passedHtSum360)*10 / totalEvents << std::endl;
-    MultiplicityHits50ADC3ns_ht120_Signal << (passed4JetMult_HBHE_ht120_5 - passedHtSum360)*10 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Signal << (passed4JetMult_HBHE_ht120_1 - passedHtSum360)*100 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Signal << (passed4JetMult_HBHE_ht120_2 - passedHtSum360)*100 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Signal << (passed4JetMult_HBHE_ht120_3 - passedHtSum360)*100 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Signal << (passed4JetMult_HBHE_ht120_4 - passedHtSum360)*100 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Signal << (passed4JetMult_HBHE_ht120_5 - passedHtSum360)*100 / totalEvents << std::endl;
     MultiplicityHits50ADC3ns_ht120_Signal.close();
     std::ofstream Efficiency_HtBins_Signal;
     Efficiency_HtBins_Signal.open(Form("Efficiency_HtBins_Signal_%s.txt", inputFile.substr(27,20).c_str()),std::ios_base::trunc);
@@ -1421,11 +1421,11 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     MultiplicityHits50ADC3ns_ht120_Background << passedHtSum360 / totalEvents << std::endl; // efficiency at HT 360  
     MultiplicityHits50ADC3ns_ht120_Background << " " << std::endl;
     MultiplicityHits50ADC3ns_ht120_Background << "Added efficiency at nhit = 1,2,3,4,5 " << std::endl;
-    MultiplicityHits50ADC3ns_ht120_Background << (passed4JetMult_HBHE_ht120_1 - passedHtSum360)*10 / totalEvents << std::endl;
-    MultiplicityHits50ADC3ns_ht120_Background << (passed4JetMult_HBHE_ht120_2 - passedHtSum360)*10 / totalEvents << std::endl;
-    MultiplicityHits50ADC3ns_ht120_Background << (passed4JetMult_HBHE_ht120_3 - passedHtSum360)*10 / totalEvents << std::endl;
-    MultiplicityHits50ADC3ns_ht120_Background << (passed4JetMult_HBHE_ht120_4 - passedHtSum360)*10 / totalEvents << std::endl;
-    MultiplicityHits50ADC3ns_ht120_Background << (passed4JetMult_HBHE_ht120_5 - passedHtSum360)*10 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Background << (passed4JetMult_HBHE_ht120_1 - passedHtSum360)*100 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Background << (passed4JetMult_HBHE_ht120_2 - passedHtSum360)*100 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Background << (passed4JetMult_HBHE_ht120_3 - passedHtSum360)*100 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Background << (passed4JetMult_HBHE_ht120_4 - passedHtSum360)*100 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Background << (passed4JetMult_HBHE_ht120_5 - passedHtSum360)*100 / totalEvents << std::endl;
     MultiplicityHits50ADC3ns_ht120_Background.close();
   }
   // neutrino gun rates

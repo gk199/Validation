@@ -428,9 +428,11 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
   TH1F* ecalTP_hw = new TH1F("ecalTP_hw", ";TP E_{T}; # Entries", nTpBins, tpLo, tpHi);
 
   // histograms based on hit multiplicity from the timing bit
-  TH1F * ADC50_3ns_4JetMultHB_emu = new TH1F("ADC50_3ns_4JetMultHB_emu","Number of cells >=50 ADC and >=3ns near 4 L1 Jets (HB, dR(TP,L1Jet)<0.5);Number of cells;Fraction of Entries (normalized)",40,0,40);
-  TH1F * ADC50_3ns_4JetMultHE_emu = new TH1F("ADC50_3ns_4JetMultHE_emu","Number of cells >=50 ADC and >=3ns near 4 L1 Jets (HE, dR(TP,L1Jet)<0.5);Number of cells;Fraction of Entries (normalized)",40,0,40);
-  TH1F * ADC50_3ns_4JetMultHBHE_emu = new TH1F("ADC50_3ns_4JetMultHBHE_emu","Number of cells >=50 ADC and >=3ns near 4 L1 Jets (HBHE, dR(TP,L1Jet)<0.5);Number of cells;Fraction of Entries (normalized)",40,0,40);
+  TH1F * Delayed_2x2_MultHB_emu = new TH1F("Delayed_2x2_MultHB_emu","Number of cells in 2x2 region >=50 ADC and >=3ns;Number of cells;Fraction of Entries (normalized)",5,0,5);
+  TH1F * Delayed_6x6_MultHB_emu = new TH1F("Delayed_6x6_MultHB_emu","Number of cells in 6x6 (donut) region >=50 ADC and >=3ns;Number of cells;Fraction of Entries (normalized)",5,0,5);
+  TH1F * Delayed_full_6x6_MultHB_emu = new TH1F("Delayed_full_6x6_MultHB_emu","Number of cells in full 6x6 region >=50 ADC and >=3ns;Number of cells;Fraction of Entries (normalized)",5,0,5);
+  TH1F * HTdistribution_trig_emu = new TH1F("HTdistribution_trig_emu","HT Distribution of Events Passing Calo Cluster Trigger;HT (GeV);Number of Events",50,0,2000);
+  TH1F * HTdistribution_emu = new TH1F("HTdistribution_emu","HT Distribution of Events;HT (GeV);Number of Events",50,0,2000);
 
   // HT sum rate distributions to use in rate vs eff plots. Need HT > 360 rate, and HT > 120 + timing cut rate
   TH1F* htSumRates_original_emu = new TH1F("htSumRates_original_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
@@ -462,7 +464,6 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
   /////////////////////////////////
   for (Long64_t jentry=0; jentry<nentries; jentry++){
     if((jentry%10000)==0) std::cout << "Done " << jentry  << " events of " << nentries << std::endl;
-
 
     //lumi break clause
     eventTree->GetEntry(jentry);
@@ -639,10 +640,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
       //////////////////////////////////////
       double nCaloTPemu = l1CaloTPemu_->nHCALTP; // number of TPs varies from 400-1400 per event, approximately Gaussian
 
-      int SumTimingBitJet1_HB = 0;
-      int SumTimingBitJet1_HE = 0;
-
-      std::cout << "HCAL TP LOOP" << std::endl;
+      //      std::cout << "HCAL TP LOOP, event = " << jentry << " with HT = " << htSum << std::endl;
       double timingbit_eta_phi[32][72] = {{0}};
 
       for (int HcalTPIt = 0; HcalTPIt < nCaloTPemu; HcalTPIt++){
@@ -659,25 +657,11 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 	// each TP has the Timing Bit set with the multiplicity for that tower
         int TP_TimingBit = l1CaloTPemu_->hcalTPTimingBit[HcalTPIt];
         timingbit_eta_phi[TP_eta_2x2][TP_phi_2x2] = TP_TimingBit;
-
-	if (abs(tpEtaemu) <= 16 ) {
-	  SumTimingBitJet1_HB += TP_TimingBit;
-	}
-	if (abs(tpEtaemu) > 16 && abs(tpEtaemu) <= 28 ) {
-          SumTimingBitJet1_HE += TP_TimingBit;
-	}
       } // closing HCAL TP loop
-      /*
-      int Sum4Jet_HBHE = SumTimingBitJet1_HB + SumTimingBitJet1_HE;
-      int Sum4Jet_HB = SumTimingBitJet1_HB;
-      int Sum4Jet_HE = SumTimingBitJet1_HE;
-    
-      // filling histograms for number of cells above energy and timing threshold set by the timing bit (50 ADC, 3 ns)
-      ADC50_3ns_4JetMultHB_emu->Fill(Sum4Jet_HB);
-      ADC50_3ns_4JetMultHE_emu->Fill(Sum4Jet_HE);
-      ADC50_3ns_4JetMultHBHE_emu->Fill(Sum4Jet_HBHE);
-      */
+
       int delayed_calo_objects = 0;
+      int past_ieta = -100;
+      int past_iphi = -100;
       // check 2x2 regions and nearest neighbors as well
       for (int ieta = 0; ieta<32; ieta+=2) {
 	for (int iphi = 0; iphi<72; iphi+=2) {
@@ -699,15 +683,19 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 	    }
 	  }
 	  delayed_6x6 -= delayed_2x2;
-	  if (delayed_2x2 >= 2) std::cout << delayed_2x2 << " = 2x2, and 6x6 = " << delayed_6x6 << " at ieta, iphi = " << ieta-15 << ", " << iphi << " and eta, phi = " << etaVal(ieta-15) << ", " << phiVal(iphi+1) << std::endl;
-	  if (delayed_2x2 >= 2 && delayed_6x6 >= 1) delayed_calo_objects += 1;
-	  ADC50_3ns_4JetMultHB_emu->Fill(delayed_2x2);
-	  ADC50_3ns_4JetMultHE_emu->Fill(delayed_6x6);
-	  ADC50_3ns_4JetMultHBHE_emu->Fill(delayed_2x2 + delayed_6x6);
+	  //	  if (delayed_2x2 >= 2 && iphi-past_iphi > 2 && ieta-past_ieta > 2) std::cout << delayed_2x2 << " = 2x2, and 6x6 = " << delayed_6x6 << " at ieta, iphi = " << ieta-15 << ", " << iphi << " and eta, phi = " << etaVal(ieta-15) << ", " << phiVal(iphi+1) << std::endl;
+	  if (delayed_2x2 >= 2 && delayed_6x6 >= 1 && iphi-past_iphi > 2 && ieta-past_ieta > 2) { // dont double count same region, with ieta iphi +-2 of already passed region
+	    delayed_calo_objects += 1;
+	    past_ieta = ieta;
+	    past_iphi = iphi;
+	  }
+	  Delayed_2x2_MultHB_emu->Fill(delayed_2x2);
+	  Delayed_6x6_MultHB_emu->Fill(delayed_6x6);
+	  Delayed_full_6x6_MultHB_emu->Fill(delayed_2x2 + delayed_6x6);
 	}
       }
-
-      
+      if (delayed_calo_objects >= 1) HTdistribution_trig_emu->Fill(htSum);
+      HTdistribution_emu->Fill(htSum);
 
       // saving number of events passed cell multiplicity cuts. These are efficiency values used in rate vs eff plots
       totalEvents += 1; // counting total events for efficiency calculations
@@ -1006,10 +994,12 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
     metHFSumRates_emu->Write();
 
     // write histograms based on timing bit
-    ADC50_3ns_4JetMultHB_emu->Write();
-    ADC50_3ns_4JetMultHE_emu->Write();
-    ADC50_3ns_4JetMultHBHE_emu->Write();
- 
+    Delayed_2x2_MultHB_emu->Write();
+    Delayed_6x6_MultHB_emu->Write();
+    Delayed_full_6x6_MultHB_emu->Write();
+    HTdistribution_trig_emu->Write();
+    HTdistribution_emu->Write();
+
     htSumDistribution->Write();
 
     htSumRates_original_emu->Scale(norm);
@@ -1069,7 +1059,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
     metHFSumRates_hw->Write();
   }
 
-  std::cout << passed4JetMult_HBHE_ht120_2 << std::endl;
+  std::cout << passed4JetMult_HBHE_ht120_1 << std::endl;
   std::cout << passedHtSum360 << std::endl;
   std::cout << totalEvents << std::endl;
 
@@ -1086,11 +1076,11 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
     MultiplicityHits50ADC3ns_ht120_Signal << passedHtSum360 / totalEvents << std::endl; // efficiency at HT 360
     MultiplicityHits50ADC3ns_ht120_Signal << " " << std::endl;
     MultiplicityHits50ADC3ns_ht120_Signal << "Added efficiency at nhit = 1,2,3,4,5 " << std::endl;
-    MultiplicityHits50ADC3ns_ht120_Signal << (passed4JetMult_HBHE_ht120_1 - passedHtSum360)*10 / totalEvents << std::endl;
-    MultiplicityHits50ADC3ns_ht120_Signal << (passed4JetMult_HBHE_ht120_2 - passedHtSum360)*10 / totalEvents << std::endl;
-    MultiplicityHits50ADC3ns_ht120_Signal << (passed4JetMult_HBHE_ht120_3 - passedHtSum360)*10 / totalEvents << std::endl;
-    MultiplicityHits50ADC3ns_ht120_Signal << (passed4JetMult_HBHE_ht120_4 - passedHtSum360)*10 / totalEvents << std::endl;
-    MultiplicityHits50ADC3ns_ht120_Signal << (passed4JetMult_HBHE_ht120_5 - passedHtSum360)*10 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Signal << (passed4JetMult_HBHE_ht120_1 - passedHtSum360)*100 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Signal << (passed4JetMult_HBHE_ht120_2 - passedHtSum360)*100 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Signal << (passed4JetMult_HBHE_ht120_3 - passedHtSum360)*100 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Signal << (passed4JetMult_HBHE_ht120_4 - passedHtSum360)*100 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Signal << (passed4JetMult_HBHE_ht120_5 - passedHtSum360)*100 / totalEvents << std::endl;
     MultiplicityHits50ADC3ns_ht120_Signal.close();
     std::ofstream Efficiency_HtBins_Signal;
     Efficiency_HtBins_Signal.open(Form("Efficiency_HtBins_Signal_%s.txt", inputFile.substr(27,20).c_str()),std::ios_base::trunc);
@@ -1138,11 +1128,11 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
     MultiplicityHits50ADC3ns_ht120_Background << passedHtSum360 / totalEvents << std::endl; // efficiency at HT 360  
     MultiplicityHits50ADC3ns_ht120_Background << " " << std::endl;
     MultiplicityHits50ADC3ns_ht120_Background << "Added efficiency at nhit = 1,2,3,4,5 " << std::endl;
-    MultiplicityHits50ADC3ns_ht120_Background << (passed4JetMult_HBHE_ht120_1 - passedHtSum360)*10 / totalEvents << std::endl;
-    MultiplicityHits50ADC3ns_ht120_Background << (passed4JetMult_HBHE_ht120_2 - passedHtSum360)*10 / totalEvents << std::endl;
-    MultiplicityHits50ADC3ns_ht120_Background << (passed4JetMult_HBHE_ht120_3 - passedHtSum360)*10 / totalEvents << std::endl;
-    MultiplicityHits50ADC3ns_ht120_Background << (passed4JetMult_HBHE_ht120_4 - passedHtSum360)*10 / totalEvents << std::endl;
-    MultiplicityHits50ADC3ns_ht120_Background << (passed4JetMult_HBHE_ht120_5 - passedHtSum360)*10 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Background << (passed4JetMult_HBHE_ht120_1 - passedHtSum360)*100 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Background << (passed4JetMult_HBHE_ht120_2 - passedHtSum360)*100 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Background << (passed4JetMult_HBHE_ht120_3 - passedHtSum360)*100 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Background << (passed4JetMult_HBHE_ht120_4 - passedHtSum360)*100 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Background << (passed4JetMult_HBHE_ht120_5 - passedHtSum360)*100 / totalEvents << std::endl;
     MultiplicityHits50ADC3ns_ht120_Background.close();
   }
   // neutrino gun rates
