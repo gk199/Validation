@@ -24,7 +24,7 @@ int main()
   // default, then new conditions
   std::vector<std::string> filenames = {"rates_new_cond_QCD.root", "rates_new_cond_LLP_pl500.root", "rates_new_cond_LLP_pl1000.root", "rates_new_cond_LLP_pl10000.root"};
   //  std::vector<std::string> multTypes = {"ADC50_3ns_4JetMultHB", "ADC50_3ns_4JetMultHE", "ADC50_3ns_4JetMultHBHE"};
-  std::vector<std::string> multTypes = {"Delayed_2x2_MultHB","Delayed_6x6_MultHB","Delayed_full_6x6_MultHB","HTdistribution","HTdistribution_trig"};
+  std::vector<std::string> multTypes = {"Delayed_2x2_MultHB","Delayed_6x6_MultHB","Delayed_full_6x6_MultHB","Delayed_2x2_0GeV_MultHB","Delayed_2x2_1GeV_MultHB","Delayed_2x2_2GeV_MultHB","Delayed_2x2_3GeV_MultHB","HTdistribution","HTdistribution_trig"};
 
   std::map<std::string, TH1F*> multHists_QCD;
   std::map<std::string, TH1F*> multHists_LLPpl500;
@@ -65,12 +65,15 @@ int main()
 
     multHists_QCD[hist]->SetLineColor(kBlack); 
     TString name(multHists_QCD[hist]->GetName());
-    int yMax = 0;
-    yMax = multHists_QCD[hist]->GetMaximum();
-    multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1.2*yMax);
+    //    int yMax = 2;
+    //    yMax = multHists_QCD[hist]->GetMaximum();
+    //    multHists_QCD[hist]->GetYaxis()->SetRangeUser(0,1.2*yMax);
+    //    multHists_QCD[hist]->SetAxisRange(0., 1.,"Y");
     multHists_QCD[hist]->SetFillStyle(3005);
     multHists_QCD[hist]->Scale(1./multHists_QCD[hist]->Integral());
     multHists_QCD[hist]->Draw("hist pfc");
+    multHists_QCD[hist]->SetAxisRange(0.000001, 3.,"Y");
+    gPad->SetLogy();
     TLegend *leg = new TLegend(0.6, 0.65, 0.95, 0.9);
     multHists_LLPpl500[hist]->SetLineColor(kBlue);
     multHists_LLPpl500[hist]->Scale(1./multHists_LLPpl500[hist]->Integral());

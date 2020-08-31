@@ -35,6 +35,10 @@ mv rates_new_cond_LLP_pl1000.root rates_new_cond_LLP_mh125_pl1000.root
 mv plots/Delayed_2x2_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Delayed_2x2_MultHBOverlay_mh125.pdf
 mv plots/Delayed_6x6_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Delayed_6x6_MultHBOverlay_mh125.pdf
 mv plots/Delayed_full_6x6_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Delayed_full_6x6_MultHBOverlay_mh125.pdf
+mv plots/Delayed_2x2_0GeV_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Delayed_2x2_0GeV_MultHBOverlay_mh125.pdf
+mv plots/Delayed_2x2_1GeV_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Delayed_2x2_1GeV_MultHBOverlay_mh125.pdf
+mv plots/Delayed_2x2_2GeV_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Delayed_2x2_2GeV_MultHBOverlay_mh125.pdf
+mv plots/Delayed_2x2_3GeV_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Delayed_2x2_3GeV_MultHBOverlay_mh125.pdf
 mv plots/HTdistributionOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/HTdistributionOverlay_mh125.pdf
 mv plots/HTdistribution_trigOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/HTdistribution_trig_Overlay_mh125.pdf
 echo " "
@@ -57,6 +61,10 @@ mv rates_new_cond_LLP_pl10000.root rates_new_cond_LLP_mh1000_pl10000.root
 mv plots/Delayed_2x2_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Delayed_2x2_MultHBOverlay_mh1000.pdf
 mv plots/Delayed_6x6_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Delayed_6x6_MultHBOverlay_mh1000.pdf
 mv plots/Delayed_full_6x6_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Delayed_full_6x6_MultHBOverlay_mh1000.pdf
+mv plots/Delayed_2x2_0GeV_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Delayed_2x2_0GeV_MultHBOverlay_mh1000.pdf
+mv plots/Delayed_2x2_1GeV_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Delayed_2x2_1GeV_MultHBOverlay_mh1000.pdf
+mv plots/Delayed_2x2_2GeV_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Delayed_2x2_2GeV_MultHBOverlay_mh1000.pdf
+mv plots/Delayed_2x2_3GeV_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Delayed_2x2_3GeV_MultHBOverlay_mh1000.pdf
 mv plots/HTdistributionOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/HTdistributionOverlay_mh1000.pdf
 mv plots/HTdistribution_trigOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/HTdistribution_trig_Overlay_mh1000.pdf
 echo " "
@@ -78,6 +86,10 @@ mv rates_new_cond_LLP_pl1000.root rates_new_cond_LLP_mh350_pl1000.root
 mv plots/Delayed_2x2_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Delayed_2x2_MultHBOverlay_mh350.pdf
 mv plots/Delayed_6x6_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Delayed_6x6_MultHBOverlay_mh350.pdf
 mv plots/Delayed_full_6x6_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Delayed_full_6x6_MultHBOverlay_mh350.pdf
+mv plots/Delayed_2x2_0GeV_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Delayed_2x2_0GeV_MultHBOverlay_mh350.pdf
+mv plots/Delayed_2x2_1GeV_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Delayed_2x2_1GeV_MultHBOverlay_mh350.pdf
+mv plots/Delayed_2x2_2GeV_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Delayed_2x2_2GeV_MultHBOverlay_mh350.pdf
+mv plots/Delayed_2x2_3GeV_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Delayed_2x2_3GeV_MultHBOverlay_mh350.pdf
 mv plots/HTdistributionOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/HTdistributionOverlay_mh350.pdf
 mv plots/HTdistribution_trigOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/HTdistribution_trig_Overlay_mh350.pdf
 echo " "

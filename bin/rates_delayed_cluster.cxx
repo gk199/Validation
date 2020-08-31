@@ -116,6 +116,28 @@ double deltaR(double eta1, double phi1, double eta2, double phi2) { // calculate
   return sqrt(deta*deta + dphi*dphi);
 }
 
+std::vector<double> eta_phi_2x2(double ieta, double iphi) {
+  double TP_eta_2x2 = 1000;
+  if (ieta>0) TP_eta_2x2 = ieta+15; // 16 to 31                                                                                                                    
+  else if (ieta<0) TP_eta_2x2 = ieta+1+15; // 0 to 15                                                                                                              
+  double TP_phi_2x2 = iphi-1; // 0 to 71
+  std::vector<double> eta_phi_2x2;
+  eta_phi_2x2.push_back(TP_eta_2x2);
+  eta_phi_2x2.push_back(TP_phi_2x2);
+  return eta_phi_2x2; 
+}
+
+std::vector<double> two_two_eta_phi(double eta_2x2, double phi_2x2) {
+  double ieta = 1000;
+  ieta = eta_2x2 - 15;
+  if (ieta <= 0) ieta -= 1;
+  double iphi = phi_2x2 + 1;
+  std::vector<double> two_two_eta_phi;
+  two_two_eta_phi.push_back(ieta);
+  two_two_eta_phi.push_back(iphi);
+  return two_two_eta_phi;
+}
+
 std::vector<double> intersect(double vx, double vy,double vz, double px, double py, double pz) {
   double lightSpeed = 29979245800; // speed of light in cm/s
   double radius = 179; //295; //179; // 130 for calorimeters (ECAL + HCAL) in cm
@@ -194,7 +216,6 @@ std::vector<double> closestParton(int L1Jet, L1Analysis::L1AnalysisL1UpgradeData
 	  min_dR = distance;
 	  partonNum = (double)partonN;
 	}
-	  //	}
       }
     }
     //    if (min_dR <=10 && generator_->partVz[partonNum] > 380 ) std::cout <<generator_->partVz[partonNum] << std::endl; // by this point, no partons with z > 388, plenty of events with z < -388 (when have restriction DR < 0.5)
@@ -428,9 +449,14 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
   TH1F* ecalTP_hw = new TH1F("ecalTP_hw", ";TP E_{T}; # Entries", nTpBins, tpLo, tpHi);
 
   // histograms based on hit multiplicity from the timing bit
-  TH1F * Delayed_2x2_MultHB_emu = new TH1F("Delayed_2x2_MultHB_emu","Number of cells in 2x2 region >=50 ADC and >=3ns;Number of cells;Fraction of Entries (normalized)",5,0,5);
-  TH1F * Delayed_6x6_MultHB_emu = new TH1F("Delayed_6x6_MultHB_emu","Number of cells in 6x6 (donut) region >=50 ADC and >=3ns;Number of cells;Fraction of Entries (normalized)",5,0,5);
-  TH1F * Delayed_full_6x6_MultHB_emu = new TH1F("Delayed_full_6x6_MultHB_emu","Number of cells in full 6x6 region >=50 ADC and >=3ns;Number of cells;Fraction of Entries (normalized)",5,0,5);
+  TH1F * Delayed_2x2_MultHB_emu = new TH1F("Delayed_2x2_MultHB_emu","Number of cells in 2x2 region >=50 ADC and >=3ns;Number of cells;Fraction of Entries (normalized)",10,0,10);
+  TH1F * Delayed_6x6_MultHB_emu = new TH1F("Delayed_6x6_MultHB_emu","Number of cells in 6x6 (donut) region >=50 ADC and >=3ns;Number of cells;Fraction of Entries (normalized)",20,0,20);
+  TH1F * Delayed_full_6x6_MultHB_emu = new TH1F("Delayed_full_6x6_MultHB_emu","Number of cells in full 6x6 region >=50 ADC and >=3ns;Number of cells;Fraction of Entries (normalized)",20,0,20);
+  TH1F * Delayed_2x2_3GeV_MultHB_emu = new TH1F("Delayed_2x2_3GeV_MultHB_emu","Number of cells in 2x2 region >=3 GeV and >=3ns;Number of cells;Fraction of Entries (normalized)",10,0,10);
+  TH1F * Delayed_2x2_2GeV_MultHB_emu = new TH1F("Delayed_2x2_2GeV_MultHB_emu","Number of cells in 2x2 region >=2 GeV and >=3ns;Number of cells;Fraction of Entries (normalized)",10,0,10);
+  TH1F * Delayed_2x2_1GeV_MultHB_emu = new TH1F("Delayed_2x2_1GeV_MultHB_emu","Number of cells in 2x2 region >=1 GeV and >=3ns;Number of cells;Fraction of Entries (normalized)",10,0,10);
+  TH1F * Delayed_2x2_0GeV_MultHB_emu = new TH1F("Delayed_2x2_0GeV_MultHB_emu","Number of cells in 2x2 region >=0 GeV and >=3ns;Number of cells;Fraction of Entries (normalized)",10,0,10);
+
   TH1F * HTdistribution_trig_emu = new TH1F("HTdistribution_trig_emu","HT Distribution of Events Passing Calo Cluster Trigger;HT (GeV);Number of Events",50,0,2000);
   TH1F * HTdistribution_emu = new TH1F("HTdistribution_emu","HT Distribution of Events;HT (GeV);Number of Events",50,0,2000);
 
@@ -453,8 +479,14 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 
   // saving rate and efficiencies 
   double passed4JetMult_HBHE_ht120_1(0), passed4JetMult_HBHE_ht120_2(0), passed4JetMult_HBHE_ht120_3(0), passed4JetMult_HBHE_ht120_4(0), passed4JetMult_HBHE_ht120_5(0); //, passed4JetMult_HB_ht120(0),passed4JetMult_HE_ht120(0);
+  double passed_calo_cluster_trig(0);
   double passedHtSum360(0);
   double totalEvents(0);
+  double totalEvents_HBdr05(0);
+  double totalEvents_HBdr05_1ns(0);
+  double totalEvents_HBdr05_2ns(0);
+  double totalEvents_HBdr05_3ns(0);
+  double totalSeed(0), totalSeedL1Jet(0);
   double totalEvent_ht120 = 0, totalEvent_ht140 = 0, totalEvent_ht160 = 0, totalEvent_ht180 = 0, totalEvent_ht200 = 0, totalEvent_ht220 = 0, totalEvent_ht240 = 0, totalEvent_ht260 = 0,totalEvent_ht280 = 0, totalEvent_ht300 = 0,totalEvent_ht320 = 0, totalEvent_ht340 = 0, totalEvent_ht360 = 0, totalEvent_ht380 = 0;
   double HBHE4Jet_inBins_ht120 = 0, HBHE4Jet_inBins_ht140 = 0, HBHE4Jet_inBins_ht160 = 0, HBHE4Jet_inBins_ht180 = 0, HBHE4Jet_inBins_ht200 = 0, HBHE4Jet_inBins_ht220 = 0, HBHE4Jet_inBins_ht240 = 0, HBHE4Jet_inBins_ht260 = 0,HBHE4Jet_inBins_ht280 = 0, HBHE4Jet_inBins_ht300 = 0,HBHE4Jet_inBins_ht320 = 0, HBHE4Jet_inBins_ht340 = 0, HBHE4Jet_inBins_ht360 = 0, HBHE4Jet_inBins_ht380 = 0;
   double HEHB4Jet_ht120_wTiming = 0;
@@ -634,67 +666,133 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
       for(int bin=0; bin<nMetHFSumBins; bin++){
         if( (metHFSum) >= metHFSumLo+(bin*metHFSumBinWidth) ) metHFSumRates_emu->Fill(metHFSumLo+(bin*metHFSumBinWidth)); //GeV           
       }
-    
+
+      //////////////////////////////////////
+      /////////// LLP incident on HB? //////
+      //////////////////////////////////////
+      uint nJetemu = l1emu_->nJets; // number of jets per event
+      int numLLPdecayHB = 0; // count how many LLP decay products are expected to intersect the HB
+      int numLLPdecayHB_1ns = 0;
+      int numLLPdecayHB_2ns = 0;
+      int numLLPdecayHB_3ns = 0; // count how many LLP decay products are expected to intersect the HB, and have TOF excess of 3ns
+
+      for (uint jetIt = 0; jetIt < nJetemu; jetIt++) {
+	if (abs(l1emu_->jetEta[jetIt]) > 1.4) continue;
+	if (closestParton(jetIt, l1emu_, generator_)[0] <= 0.5) { // if a parton is near a HB L1 jet
+	  numLLPdecayHB += 1;
+	  if (LLPdecayInfo(closestParton(jetIt, l1emu_, generator_)[1], l1emu_, generator_)[4] > 1)  numLLPdecayHB_1ns += 1; // if TOF delay is over 3ns
+          if (LLPdecayInfo(closestParton(jetIt, l1emu_, generator_)[1], l1emu_, generator_)[4] > 2)  numLLPdecayHB_2ns += 1; // if TOF delay is over 3ns
+          if (LLPdecayInfo(closestParton(jetIt, l1emu_, generator_)[1], l1emu_, generator_)[4] > 3)  numLLPdecayHB_3ns += 1; // if TOF delay is over 3ns
+	}
+      }
+      //      std::cout << numLLPdecayHB << " = number of LLP decay products incident on HB" <<std::endl;
+      if (inputFile.substr(27,2) == "mh" && numLLPdecayHB > 0) totalEvents_HBdr05 += 1;
+      if (inputFile.substr(27,2) == "mh" && numLLPdecayHB_1ns > 0) totalEvents_HBdr05_1ns += 1;
+      if (inputFile.substr(27,2) == "mh" && numLLPdecayHB_2ns > 0) totalEvents_HBdr05_2ns += 1;
+      if (inputFile.substr(27,2) == "mh" && numLLPdecayHB_3ns > 0) totalEvents_HBdr05_3ns += 1;
+      if (inputFile.substr(27,2) == "mh" && numLLPdecayHB_3ns == 0 ) continue;
+
       //////////////////////////////////////
       ////////// HCAL TP Loop //////////
       //////////////////////////////////////
       double nCaloTPemu = l1CaloTPemu_->nHCALTP; // number of TPs varies from 400-1400 per event, approximately Gaussian
 
       //      std::cout << "HCAL TP LOOP, event = " << jentry << " with HT = " << htSum << std::endl;
-      double timingbit_eta_phi[32][72] = {{0}};
+      double timingbit_eta_phi[32][72] = {{0}}; // 32 72 if just HB
+      double cells3ns0GeV_eta_phi[32][72] = {{0}};
+      double cells3ns1GeV_eta_phi[32][72] = {{0}};
+      double cells3ns2GeV_eta_phi[32][72] = {{0}};
+      double cells3ns3GeV_eta_phi[32][72] = {{0}};
 
       for (int HcalTPIt = 0; HcalTPIt < nCaloTPemu; HcalTPIt++){
 	// eta and phi of the HCAL TP
 	double tpEtaemu = l1CaloTPemu_->hcalTPieta[HcalTPIt]; // ieta
-	if (abs(tpEtaemu) > 16 ) continue; // don't consider HCAL TPs outside of HB or HE. End of HB is eta=1.479m, end of HE is eta=3 from here http://www.hephy.at/user/friedl/diss/html/node8.html
-        int TP_eta_2x2 = 1000;
-        if (tpEtaemu>0) TP_eta_2x2 = tpEtaemu+15; // 16 to 31
-        else if (tpEtaemu<0) TP_eta_2x2 = tpEtaemu+1+15; // 0 to 15 
-
 	double tpPhiemu = l1CaloTPemu_->hcalTPCaliphi[HcalTPIt]; // iphi
-	int TP_phi_2x2 = tpPhiemu-1;
+	if (abs(tpEtaemu) > 16 ) continue; // don't consider HCAL TPs outside of HB or HE. End of HB is eta=1.479m, end of HE is eta=3 from here http://www.hephy.at/user/friedl/diss/html/node8.html. HB restriction: abs(tpEtaemu) > 16. HEHB restriction: abs(tpEtaemu) > 28
+	int TP_eta_2x2 = eta_phi_2x2(tpEtaemu,tpPhiemu)[0];
+        int TP_phi_2x2 = eta_phi_2x2(tpEtaemu,tpPhiemu)[1];
 
 	// each TP has the Timing Bit set with the multiplicity for that tower
         int TP_TimingBit = l1CaloTPemu_->hcalTPTimingBit[HcalTPIt];
         timingbit_eta_phi[TP_eta_2x2][TP_phi_2x2] = TP_TimingBit;
+        if (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] >= 0 && l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >= 3) cells3ns0GeV_eta_phi[TP_eta_2x2][TP_phi_2x2] += 1;
+        if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= 0 && l1CaloTPemu_->hcalTPtiming2[HcalTPIt] >= 3) cells3ns0GeV_eta_phi[TP_eta_2x2][TP_phi_2x2] += 1;
+        if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= 0 && l1CaloTPemu_->hcalTPtiming3[HcalTPIt] >= 3) cells3ns0GeV_eta_phi[TP_eta_2x2][TP_phi_2x2] += 1;
+        if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= 0 && l1CaloTPemu_->hcalTPtiming4[HcalTPIt] >= 3) cells3ns0GeV_eta_phi[TP_eta_2x2][TP_phi_2x2] += 1;
+	if (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] >= 1 && l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >= 3) cells3ns1GeV_eta_phi[TP_eta_2x2][TP_phi_2x2] += 1;
+        if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= 1 && l1CaloTPemu_->hcalTPtiming2[HcalTPIt] >= 3) cells3ns1GeV_eta_phi[TP_eta_2x2][TP_phi_2x2] += 1;
+        if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= 1 && l1CaloTPemu_->hcalTPtiming3[HcalTPIt] >= 3) cells3ns1GeV_eta_phi[TP_eta_2x2][TP_phi_2x2] += 1;
+        if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= 1 && l1CaloTPemu_->hcalTPtiming4[HcalTPIt] >= 3) cells3ns1GeV_eta_phi[TP_eta_2x2][TP_phi_2x2] += 1;
+        if (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] >= 2 && l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >= 3) cells3ns2GeV_eta_phi[TP_eta_2x2][TP_phi_2x2] += 1;
+        if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= 2 && l1CaloTPemu_->hcalTPtiming2[HcalTPIt] >= 3) cells3ns2GeV_eta_phi[TP_eta_2x2][TP_phi_2x2] += 1;
+        if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= 2 && l1CaloTPemu_->hcalTPtiming3[HcalTPIt] >= 3) cells3ns2GeV_eta_phi[TP_eta_2x2][TP_phi_2x2] += 1;
+        if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= 2 && l1CaloTPemu_->hcalTPtiming4[HcalTPIt] >= 3) cells3ns2GeV_eta_phi[TP_eta_2x2][TP_phi_2x2] += 1;
+        if (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] >= 3 && l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >= 3) cells3ns3GeV_eta_phi[TP_eta_2x2][TP_phi_2x2] += 1;
+        if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= 3 && l1CaloTPemu_->hcalTPtiming2[HcalTPIt] >= 3) cells3ns3GeV_eta_phi[TP_eta_2x2][TP_phi_2x2] += 1;
+        if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= 3 && l1CaloTPemu_->hcalTPtiming3[HcalTPIt] >= 3) cells3ns3GeV_eta_phi[TP_eta_2x2][TP_phi_2x2] += 1;
+        if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= 3 && l1CaloTPemu_->hcalTPtiming4[HcalTPIt] >= 3) cells3ns3GeV_eta_phi[TP_eta_2x2][TP_phi_2x2] += 1;
       } // closing HCAL TP loop
 
       int delayed_calo_objects = 0;
+      int delayed_calo_objects_L1jet = 0;
       int past_ieta = -100;
       int past_iphi = -100;
       // check 2x2 regions and nearest neighbors as well
-      for (int ieta = 0; ieta<32; ieta+=2) {
-	for (int iphi = 0; iphi<72; iphi+=2) {
+      for (int ieta_2x2 = 0; ieta_2x2<32; ieta_2x2+=2) { //ieta_2x2<32; ieta_2x2+=2) {
+	for (int iphi_2x2 = 0; iphi_2x2<72; iphi_2x2+=2) {
 	  int delayed_2x2 = 0;
 	  int delayed_6x6 = 0;
+	  int delayed_2x2_0GeV = 0, delayed_2x2_1GeV = 0, delayed_2x2_2GeV = 0, delayed_2x2_3GeV = 0;
 	  // grid of 32x72, now break into 2x2 tower sums for a new grid of 16x36
 	  // even, even = top left corner of 2x2 regions
-	  delayed_2x2 += timingbit_eta_phi[ieta][iphi] + timingbit_eta_phi[ieta][iphi+1] + timingbit_eta_phi[ieta+1][iphi] + timingbit_eta_phi[ieta+1][iphi+1];
+	  delayed_2x2 += timingbit_eta_phi[ieta_2x2][iphi_2x2] + timingbit_eta_phi[ieta_2x2][iphi_2x2+1] + timingbit_eta_phi[ieta_2x2+1][iphi_2x2] + timingbit_eta_phi[ieta_2x2+1][iphi_2x2+1];
+          delayed_2x2_0GeV += cells3ns0GeV_eta_phi[ieta_2x2][iphi_2x2] + cells3ns0GeV_eta_phi[ieta_2x2][iphi_2x2+1] + cells3ns0GeV_eta_phi[ieta_2x2+1][iphi_2x2] + cells3ns0GeV_eta_phi[ieta_2x2+1][iphi_2x2+1];
+	  delayed_2x2_1GeV += cells3ns1GeV_eta_phi[ieta_2x2][iphi_2x2] + cells3ns1GeV_eta_phi[ieta_2x2][iphi_2x2+1] + cells3ns1GeV_eta_phi[ieta_2x2+1][iphi_2x2] + cells3ns1GeV_eta_phi[ieta_2x2+1][iphi_2x2+1];
+          delayed_2x2_2GeV += cells3ns2GeV_eta_phi[ieta_2x2][iphi_2x2] + cells3ns2GeV_eta_phi[ieta_2x2][iphi_2x2+1] + cells3ns2GeV_eta_phi[ieta_2x2+1][iphi_2x2] + cells3ns2GeV_eta_phi[ieta_2x2+1][iphi_2x2+1];
+          delayed_2x2_3GeV += cells3ns3GeV_eta_phi[ieta_2x2][iphi_2x2] + cells3ns3GeV_eta_phi[ieta_2x2][iphi_2x2+1] + cells3ns3GeV_eta_phi[ieta_2x2+1][iphi_2x2] + cells3ns3GeV_eta_phi[ieta_2x2+1][iphi_2x2+1];
+
 	  if (delayed_2x2 >= 2) { // then check the nearest neighbors of 2x2 regions as well
-	    for (int eta_range = ieta-2; eta_range < ieta+4; eta_range++) {
-	      for (int phi_range = iphi-2; phi_range < iphi+4; phi_range++) {
+	    for (int eta_range = ieta_2x2-2; eta_range < ieta_2x2+4; eta_range++) {
+	      for (int phi_range = iphi_2x2-2; phi_range < iphi_2x2+4; phi_range++) {
 		int wrapped_phi_range = phi_range; // takes care of phi wrap around
 		if (wrapped_phi_range < 0 ) wrapped_phi_range += 72;
 		if (wrapped_phi_range > 71 ) wrapped_phi_range -= 72;
-		if ((ieta == 0) && (eta_range < 0)) continue;
-		if ((ieta == 30) && (eta_range > 31)) continue;
+		if ((ieta_2x2 == 0) && (eta_range < 0)) continue;
+		if ((ieta_2x2 == 30) && (eta_range > 31)) continue;
 		delayed_6x6 += timingbit_eta_phi[eta_range][wrapped_phi_range];
 	      }
 	    }
 	  }
 	  delayed_6x6 -= delayed_2x2;
-	  //	  if (delayed_2x2 >= 2 && iphi-past_iphi > 2 && ieta-past_ieta > 2) std::cout << delayed_2x2 << " = 2x2, and 6x6 = " << delayed_6x6 << " at ieta, iphi = " << ieta-15 << ", " << iphi << " and eta, phi = " << etaVal(ieta-15) << ", " << phiVal(iphi+1) << std::endl;
-	  if (delayed_2x2 >= 2 && delayed_6x6 >= 1 && iphi-past_iphi > 2 && ieta-past_ieta > 2) { // dont double count same region, with ieta iphi +-2 of already passed region
+	  if (delayed_2x2 >= 2 && delayed_6x6 >= 1 && iphi_2x2-past_iphi > 2 && ieta_2x2-past_ieta > 2) { // dont double count same region, with ieta iphi +-2 of already passed region
 	    delayed_calo_objects += 1;
-	    past_ieta = ieta;
-	    past_iphi = iphi;
+	    past_ieta = ieta_2x2;
+	    past_iphi = iphi_2x2;
+	    // is seed within a L1 jet region? 
+	    double min_DR = 100;
+	    for (uint jetIt = 0; jetIt < nJetemu; jetIt++) {
+	      double seed_eta = etaVal(two_two_eta_phi(ieta_2x2, iphi_2x2)[0]);
+	      double seed_phi = phiVal(two_two_eta_phi(ieta_2x2, iphi_2x2)[1]);
+
+	      if (deltaR(l1emu_->jetEta[jetIt], l1emu_->jetPhi[jetIt], seed_eta, seed_phi)<=min_DR) min_DR = deltaR(l1emu_->jetEta[jetIt], l1emu_->jetPhi[jetIt], seed_eta, seed_phi);
+	    }
+	    if (min_DR<=0.5) delayed_calo_objects_L1jet += 1;
 	  }
+	 
 	  Delayed_2x2_MultHB_emu->Fill(delayed_2x2);
-	  Delayed_6x6_MultHB_emu->Fill(delayed_6x6);
-	  Delayed_full_6x6_MultHB_emu->Fill(delayed_2x2 + delayed_6x6);
+	  if (delayed_2x2 > 1) Delayed_6x6_MultHB_emu->Fill(delayed_6x6); 
+	  if (delayed_2x2 > 1) Delayed_full_6x6_MultHB_emu->Fill(delayed_2x2 + delayed_6x6);
+          Delayed_2x2_0GeV_MultHB_emu->Fill(delayed_2x2_0GeV);
+	  Delayed_2x2_1GeV_MultHB_emu->Fill(delayed_2x2_1GeV);
+          Delayed_2x2_2GeV_MultHB_emu->Fill(delayed_2x2_2GeV);
+          Delayed_2x2_3GeV_MultHB_emu->Fill(delayed_2x2_3GeV);
 	}
       }
-      if (delayed_calo_objects >= 1) HTdistribution_trig_emu->Fill(htSum);
+      if (delayed_calo_objects >= 1) {
+	totalSeedL1Jet += delayed_calo_objects_L1jet; // count total seeds within a L1 region
+        totalSeed += delayed_calo_objects; // count total seeds found
+	HTdistribution_trig_emu->Fill(htSum); // plot HT dist of events passing calo trigger
+      }
       HTdistribution_emu->Fill(htSum);
 
       // saving number of events passed cell multiplicity cuts. These are efficiency values used in rate vs eff plots
@@ -735,7 +833,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 	if (htSum > 380 && htSum <=400 ) HBHE4Jet_inBins_ht380 += 1;
       }
 
-
+      if ( delayed_calo_objects >= 1 ) passed_calo_cluster_trig += 1;
       if ( ((htSum > 120) && ( delayed_calo_objects >= 1 )) || (htSum >= 360) ) passed4JetMult_HBHE_ht120_1 += 1; // +7
       if ( ((htSum > 120) && ( delayed_calo_objects >= 2 )) || (htSum >= 360) ) passed4JetMult_HBHE_ht120_2 += 1;
       if ( ((htSum > 120) && ( delayed_calo_objects >= 3 )) || (htSum >= 360) ) passed4JetMult_HBHE_ht120_3 += 1;
@@ -997,6 +1095,10 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
     Delayed_2x2_MultHB_emu->Write();
     Delayed_6x6_MultHB_emu->Write();
     Delayed_full_6x6_MultHB_emu->Write();
+    Delayed_2x2_0GeV_MultHB_emu->Write();
+    Delayed_2x2_1GeV_MultHB_emu->Write();
+    Delayed_2x2_2GeV_MultHB_emu->Write();
+    Delayed_2x2_3GeV_MultHB_emu->Write();
     HTdistribution_trig_emu->Write();
     HTdistribution_emu->Write();
 
@@ -1059,9 +1161,15 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
     metHFSumRates_hw->Write();
   }
 
-  std::cout << passed4JetMult_HBHE_ht120_1 << std::endl;
-  std::cout << passedHtSum360 << std::endl;
-  std::cout << totalEvents << std::endl;
+  std::cout << passed_calo_cluster_trig << " passed calo trig, no HT cut" << std::endl;
+  std::cout << passed4JetMult_HBHE_ht120_1 << " passed calo trig + HT120 OR HT360" << std::endl;
+  std::cout << passedHtSum360 << " passed HT360" << std::endl;
+  std::cout << totalEvents << " all events" << std::endl;
+  std::cout << totalEvents_HBdr05 << " events with LLP decay product within DR<0.5 of L1 jet in HB" << std::endl;
+  std::cout << totalEvents_HBdr05_1ns << " events with LLP decay product within DR<0.5 of L1 jet in HB, and TOF delay > 1ns" << std::endl;
+  std::cout << totalEvents_HBdr05_2ns << " events with LLP decay product within DR<0.5 of L1 jet in HB, and TOF delay > 2ns" << std::endl;
+  std::cout << totalEvents_HBdr05_3ns << " events with LLP decay product within DR<0.5 of L1 jet in HB, and TOF delay > 3ns" << std::endl;
+  std::cout << totalSeedL1Jet / totalSeed << " = " << totalSeedL1Jet << " / " << totalSeed << " = fraction of seeds within a L1 jet" << std::endl;
 
   // saving efficiencies and rates in txt files to be read by rate vs eff plotting macros
   // signal efficiencies
