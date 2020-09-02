@@ -31,7 +31,9 @@ mv rates_new_cond.root rates_new_cond_106X_nugun.root
 echo " "
 echo "Making overlay plots from draw_timingbit.exe"
 draw_timingbit_delayed_cluster.exe
+mv rates_new_cond_LLP_pl500.root rates_new_cond_LLP_mh125_pl500.root
 mv rates_new_cond_LLP_pl1000.root rates_new_cond_LLP_mh125_pl1000.root
+mv rates_new_cond_LLP_pl10000.root rates_new_cond_LLP_mh125_pl10000.root
 mv plots/Delayed_2x2_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Delayed_2x2_MultHBOverlay_mh125.pdf
 mv plots/Delayed_6x6_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Delayed_6x6_MultHBOverlay_mh125.pdf
 mv plots/Delayed_full_6x6_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Delayed_full_6x6_MultHBOverlay_mh125.pdf
@@ -56,6 +58,7 @@ mv rates_new_cond.root rates_new_cond_LLP_pl500.root
 echo " "
 echo "Making overlay plots from draw_timingbit.exe"
 draw_timingbit_delayed_cluster.exe
+mv rates_new_cond_LLP_pl500.root rates_new_cond_LLP_mh1000_pl500.root
 mv rates_new_cond_LLP_pl1000.root rates_new_cond_LLP_mh1000_pl1000.root
 mv rates_new_cond_LLP_pl10000.root rates_new_cond_LLP_mh1000_pl10000.root
 mv plots/Delayed_2x2_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Delayed_2x2_MultHBOverlay_mh1000.pdf
@@ -82,7 +85,9 @@ mv rates_new_cond.root rates_new_cond_LLP_pl500.root
 echo " "
 echo "Making overlay plots from draw_timingbit.exe"
 draw_timingbit_delayed_cluster.exe
+mv rates_new_cond_LLP_pl500.root rates_new_cond_LLP_mh350_pl500.root
 mv rates_new_cond_LLP_pl1000.root rates_new_cond_LLP_mh350_pl1000.root
+mv rates_new_cond_LLP_pl10000.root rates_new_cond_LLP_mh350_pl10000.root
 mv plots/Delayed_2x2_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Delayed_2x2_MultHBOverlay_mh350.pdf
 mv plots/Delayed_6x6_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Delayed_6x6_MultHBOverlay_mh350.pdf
 mv plots/Delayed_full_6x6_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Delayed_full_6x6_MultHBOverlay_mh350.pdf

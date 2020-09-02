@@ -218,7 +218,6 @@ std::vector<double> closestParton(int L1Jet, L1Analysis::L1AnalysisL1UpgradeData
 	}
       }
     }
-    //    if (min_dR <=10 && generator_->partVz[partonNum] > 380 ) std::cout <<generator_->partVz[partonNum] << std::endl; // by this point, no partons with z > 388, plenty of events with z < -388 (when have restriction DR < 0.5)
   }
   std::vector<double> DR_partonNum;
   DR_partonNum.push_back(min_dR);
@@ -477,6 +476,9 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 
   TH1F * htSumDistribution = new TH1F("htSumDistribution","htSum Distribution;L1_HT (GeV);Number of Events",200,0,2000); // x bins, x low, x up
 
+  TH2F* prompt_delayed_seed = new TH2F("prompt_delayed_seed","Prompt and Delayed 2x2 Seeds in a L1 jet;Prompt Seeds;Delayed Seeds",15,0,15,15,0,15);
+
+
   // saving rate and efficiencies 
   double passed4JetMult_HBHE_ht120_1(0), passed4JetMult_HBHE_ht120_2(0), passed4JetMult_HBHE_ht120_3(0), passed4JetMult_HBHE_ht120_4(0), passed4JetMult_HBHE_ht120_5(0); //, passed4JetMult_HB_ht120(0),passed4JetMult_HE_ht120(0);
   double passed_calo_cluster_trig(0);
@@ -675,13 +677,19 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
       int numLLPdecayHB_1ns = 0;
       int numLLPdecayHB_2ns = 0;
       int numLLPdecayHB_3ns = 0; // count how many LLP decay products are expected to intersect the HB, and have TOF excess of 3ns
+      double nCaloTPemu = l1CaloTPemu_->nHCALTP; // number of TPs varies from 400-1400 per event, approximately Gaussian                                                  
 
-      for (uint jetIt = 0; jetIt < nJetemu; jetIt++) {
-	if (abs(l1emu_->jetEta[jetIt]) > 1.4) continue;
-	if (closestParton(jetIt, l1emu_, generator_)[0] <= 0.5) { // if a parton is near a HB L1 jet
-	  numLLPdecayHB += 1;
-	  if (LLPdecayInfo(closestParton(jetIt, l1emu_, generator_)[1], l1emu_, generator_)[4] > 1)  numLLPdecayHB_1ns += 1; // if TOF delay is over 3ns
-          if (LLPdecayInfo(closestParton(jetIt, l1emu_, generator_)[1], l1emu_, generator_)[4] > 2)  numLLPdecayHB_2ns += 1; // if TOF delay is over 3ns
+      for (uint jetIt = 0; jetIt < nJetemu; jetIt++) { // loop over jets
+	if (abs(l1emu_->jetEta[jetIt]) > 1.4) continue; // consider HB jets
+	if (closestParton(jetIt, l1emu_, generator_)[0] <= 0.5) { // if closest parton is near a HB L1 jet
+	  /*	  for (int HcalTPIt = 0; HcalTPIt < nCaloTPemu; HcalTPIt++){ // loop over HCAL TPs
+	    double tpEtaemu = l1CaloTPemu_->hcalTPieta[HcalTPIt]; // ieta 
+	    double tpPhiemu = l1CaloTPemu_->hcalTPCaliphi[HcalTPIt]; // iphi   
+	    if (deltaR(l1emu_->jetEta[jetIt], l1emu_->jetPhi[jetIt], etaVal(tpEtaemu), phiVal(tpPhiemu)) <= 0.2) std::cout << jetIt << " = jet number, with: " << l1CaloTPemu_->hcalTPDepth1[HcalTPIt] << ", " << l1CaloTPemu_->hcalTPDepth2[HcalTPIt] << ", " << l1CaloTPemu_->hcalTPDepth3[HcalTPIt] << ", " << l1CaloTPemu_->hcalTPDepth4[HcalTPIt] << " = energies, and times = " <<  l1CaloTPemu_->hcalTPtiming1[HcalTPIt] << ", " <<  l1CaloTPemu_->hcalTPtiming2[HcalTPIt] << ", " <<  l1CaloTPemu_->hcalTPtiming3[HcalTPIt] << ", " <<  l1CaloTPemu_->hcalTPtiming4[HcalTPIt] << std::endl;
+	    }*/
+	  numLLPdecayHB += 1; // how many of the partons expected to intersect HB
+	  if (LLPdecayInfo(closestParton(jetIt, l1emu_, generator_)[1], l1emu_, generator_)[4] > 1)  numLLPdecayHB_1ns += 1; // if TOF delay is over 1ns
+          if (LLPdecayInfo(closestParton(jetIt, l1emu_, generator_)[1], l1emu_, generator_)[4] > 2)  numLLPdecayHB_2ns += 1; // if TOF delay is over 2ns
           if (LLPdecayInfo(closestParton(jetIt, l1emu_, generator_)[1], l1emu_, generator_)[4] > 3)  numLLPdecayHB_3ns += 1; // if TOF delay is over 3ns
 	}
       }
@@ -690,31 +698,38 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
       if (inputFile.substr(27,2) == "mh" && numLLPdecayHB_1ns > 0) totalEvents_HBdr05_1ns += 1;
       if (inputFile.substr(27,2) == "mh" && numLLPdecayHB_2ns > 0) totalEvents_HBdr05_2ns += 1;
       if (inputFile.substr(27,2) == "mh" && numLLPdecayHB_3ns > 0) totalEvents_HBdr05_3ns += 1;
-      if (inputFile.substr(27,2) == "mh" && numLLPdecayHB_3ns == 0 ) continue;
+      if (inputFile.substr(27,2) == "mh" && numLLPdecayHB == 0 ) continue; // if no LLPs in HB, skip event
 
       //////////////////////////////////////
       ////////// HCAL TP Loop //////////
       //////////////////////////////////////
-      double nCaloTPemu = l1CaloTPemu_->nHCALTP; // number of TPs varies from 400-1400 per event, approximately Gaussian
-
-      //      std::cout << "HCAL TP LOOP, event = " << jentry << " with HT = " << htSum << std::endl;
+      //      double nCaloTPemu = l1CaloTPemu_->nHCALTP; // number of TPs varies from 400-1400 per event, approximately Gaussian
       double timingbit_eta_phi[32][72] = {{0}}; // 32 72 if just HB
+      double promptveto_0_3ns_3GeV_eta_phi[32][72] = {{0}};
       double cells3ns0GeV_eta_phi[32][72] = {{0}};
       double cells3ns1GeV_eta_phi[32][72] = {{0}};
       double cells3ns2GeV_eta_phi[32][72] = {{0}};
       double cells3ns3GeV_eta_phi[32][72] = {{0}};
 
-      for (int HcalTPIt = 0; HcalTPIt < nCaloTPemu; HcalTPIt++){
-	// eta and phi of the HCAL TP
+      for (int HcalTPIt = 0; HcalTPIt < nCaloTPemu; HcalTPIt++){ // loop over HCAL TPs
 	double tpEtaemu = l1CaloTPemu_->hcalTPieta[HcalTPIt]; // ieta
 	double tpPhiemu = l1CaloTPemu_->hcalTPCaliphi[HcalTPIt]; // iphi
-	if (abs(tpEtaemu) > 16 ) continue; // don't consider HCAL TPs outside of HB or HE. End of HB is eta=1.479m, end of HE is eta=3 from here http://www.hephy.at/user/friedl/diss/html/node8.html. HB restriction: abs(tpEtaemu) > 16. HEHB restriction: abs(tpEtaemu) > 28
-	int TP_eta_2x2 = eta_phi_2x2(tpEtaemu,tpPhiemu)[0];
-        int TP_phi_2x2 = eta_phi_2x2(tpEtaemu,tpPhiemu)[1];
+	if (abs(tpEtaemu) > 16 ) continue; // don't consider HCAL TPs outside of HB or HE. 
+	// End of HB is eta=1.479m, end of HE is eta=3 from here http://www.hephy.at/user/friedl/diss/html/node8.html.
+	// HB restriction: abs(tpEtaemu) > 16. HEHB restriction: abs(tpEtaemu) > 28
+	int TP_eta_2x2 = eta_phi_2x2(tpEtaemu,tpPhiemu)[0]; // convert from ieta to 2x2 eta mapping
+        int TP_phi_2x2 = eta_phi_2x2(tpEtaemu,tpPhiemu)[1]; // 2x2 phi mapping
 
 	// each TP has the Timing Bit set with the multiplicity for that tower
         int TP_TimingBit = l1CaloTPemu_->hcalTPTimingBit[HcalTPIt];
         timingbit_eta_phi[TP_eta_2x2][TP_phi_2x2] = TP_TimingBit;
+
+	// prompt veto, counts high energy prompt hits
+        if (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] >= 3 && l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >= 0 && l1CaloTPemu_->hcalTPtiming4[HcalTPIt] < 3) promptveto_0_3ns_3GeV_eta_phi[TP_eta_2x2][TP_phi_2x2] += 1;
+        if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= 3 && l1CaloTPemu_->hcalTPtiming2[HcalTPIt] >= 0 && l1CaloTPemu_->hcalTPtiming4[HcalTPIt] < 3) promptveto_0_3ns_3GeV_eta_phi[TP_eta_2x2][TP_phi_2x2] += 1;
+        if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= 3 && l1CaloTPemu_->hcalTPtiming3[HcalTPIt] >= 0 && l1CaloTPemu_->hcalTPtiming4[HcalTPIt] < 3) promptveto_0_3ns_3GeV_eta_phi[TP_eta_2x2][TP_phi_2x2] += 1;
+        if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= 3 && l1CaloTPemu_->hcalTPtiming4[HcalTPIt] >= 0 && l1CaloTPemu_->hcalTPtiming4[HcalTPIt] < 3) promptveto_0_3ns_3GeV_eta_phi[TP_eta_2x2][TP_phi_2x2] += 1;
+
         if (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] >= 0 && l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >= 3) cells3ns0GeV_eta_phi[TP_eta_2x2][TP_phi_2x2] += 1;
         if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= 0 && l1CaloTPemu_->hcalTPtiming2[HcalTPIt] >= 3) cells3ns0GeV_eta_phi[TP_eta_2x2][TP_phi_2x2] += 1;
         if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= 0 && l1CaloTPemu_->hcalTPtiming3[HcalTPIt] >= 3) cells3ns0GeV_eta_phi[TP_eta_2x2][TP_phi_2x2] += 1;
@@ -733,24 +748,40 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
         if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= 3 && l1CaloTPemu_->hcalTPtiming4[HcalTPIt] >= 3) cells3ns3GeV_eta_phi[TP_eta_2x2][TP_phi_2x2] += 1;
       } // closing HCAL TP loop
 
-      int delayed_calo_objects = 0;
-      int delayed_calo_objects_L1jet = 0;
-      int past_ieta = -100;
-      int past_iphi = -100;
-      // check 2x2 regions and nearest neighbors as well
+      int delayed_calo_objects[nJetemu] = {0}; // delayed calo objects in each L1 jet
+      int prompt_calo_objects[nJetemu] = {0}; // prompt calo objects in each L1 jet
+    
+      // check 2x2 regions for seeds
       for (int ieta_2x2 = 0; ieta_2x2<32; ieta_2x2+=2) { //ieta_2x2<32; ieta_2x2+=2) {
 	for (int iphi_2x2 = 0; iphi_2x2<72; iphi_2x2+=2) {
 	  int delayed_2x2 = 0;
+	  int prompt_veto = 0;
 	  int delayed_6x6 = 0;
 	  int delayed_2x2_0GeV = 0, delayed_2x2_1GeV = 0, delayed_2x2_2GeV = 0, delayed_2x2_3GeV = 0;
 	  // grid of 32x72, now break into 2x2 tower sums for a new grid of 16x36
 	  // even, even = top left corner of 2x2 regions
 	  delayed_2x2 += timingbit_eta_phi[ieta_2x2][iphi_2x2] + timingbit_eta_phi[ieta_2x2][iphi_2x2+1] + timingbit_eta_phi[ieta_2x2+1][iphi_2x2] + timingbit_eta_phi[ieta_2x2+1][iphi_2x2+1];
+	  prompt_veto += promptveto_0_3ns_3GeV_eta_phi[ieta_2x2][iphi_2x2] + promptveto_0_3ns_3GeV_eta_phi[ieta_2x2][iphi_2x2+1] + promptveto_0_3ns_3GeV_eta_phi[ieta_2x2+1][iphi_2x2] + promptveto_0_3ns_3GeV_eta_phi[ieta_2x2+1][iphi_2x2+1];
           delayed_2x2_0GeV += cells3ns0GeV_eta_phi[ieta_2x2][iphi_2x2] + cells3ns0GeV_eta_phi[ieta_2x2][iphi_2x2+1] + cells3ns0GeV_eta_phi[ieta_2x2+1][iphi_2x2] + cells3ns0GeV_eta_phi[ieta_2x2+1][iphi_2x2+1];
 	  delayed_2x2_1GeV += cells3ns1GeV_eta_phi[ieta_2x2][iphi_2x2] + cells3ns1GeV_eta_phi[ieta_2x2][iphi_2x2+1] + cells3ns1GeV_eta_phi[ieta_2x2+1][iphi_2x2] + cells3ns1GeV_eta_phi[ieta_2x2+1][iphi_2x2+1];
           delayed_2x2_2GeV += cells3ns2GeV_eta_phi[ieta_2x2][iphi_2x2] + cells3ns2GeV_eta_phi[ieta_2x2][iphi_2x2+1] + cells3ns2GeV_eta_phi[ieta_2x2+1][iphi_2x2] + cells3ns2GeV_eta_phi[ieta_2x2+1][iphi_2x2+1];
           delayed_2x2_3GeV += cells3ns3GeV_eta_phi[ieta_2x2][iphi_2x2] + cells3ns3GeV_eta_phi[ieta_2x2][iphi_2x2+1] + cells3ns3GeV_eta_phi[ieta_2x2+1][iphi_2x2] + cells3ns3GeV_eta_phi[ieta_2x2+1][iphi_2x2+1];
-
+	  // assign to closest L1 jet
+	  int closestJet = -1;
+	  double min_DR = 100;                                                                                                                                                      
+	  for (uint jetIt = 0; jetIt < nJetemu; jetIt++) {
+	    double seed_eta = etaVal(two_two_eta_phi(ieta_2x2, iphi_2x2)[0]);
+	    double seed_phi = phiVal(two_two_eta_phi(ieta_2x2, iphi_2x2)[1]);
+	    if (deltaR(l1emu_->jetEta[jetIt], l1emu_->jetPhi[jetIt], seed_eta, seed_phi)<=min_DR) {
+	      min_DR = deltaR(l1emu_->jetEta[jetIt], l1emu_->jetPhi[jetIt], seed_eta, seed_phi);
+	      closestJet = jetIt;
+	    }
+	  }
+	  if (min_DR<=0.5) { 
+	    if (delayed_2x2 >= 2) delayed_calo_objects[closestJet] += 1;
+            if (prompt_veto >= 2) prompt_calo_objects[closestJet] += 1;
+	  }
+	  /*
 	  if (delayed_2x2 >= 2) { // then check the nearest neighbors of 2x2 regions as well
 	    for (int eta_range = ieta_2x2-2; eta_range < ieta_2x2+4; eta_range++) {
 	      for (int phi_range = iphi_2x2-2; phi_range < iphi_2x2+4; phi_range++) {
@@ -768,17 +799,15 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 	    delayed_calo_objects += 1;
 	    past_ieta = ieta_2x2;
 	    past_iphi = iphi_2x2;
-	    // is seed within a L1 jet region? 
 	    double min_DR = 100;
-	    for (uint jetIt = 0; jetIt < nJetemu; jetIt++) {
+	    for (uint jetIt = 0; jetIt < nJetemu; jetIt++) { // is seed within a L1 jet region? 
 	      double seed_eta = etaVal(two_two_eta_phi(ieta_2x2, iphi_2x2)[0]);
 	      double seed_phi = phiVal(two_two_eta_phi(ieta_2x2, iphi_2x2)[1]);
-
 	      if (deltaR(l1emu_->jetEta[jetIt], l1emu_->jetPhi[jetIt], seed_eta, seed_phi)<=min_DR) min_DR = deltaR(l1emu_->jetEta[jetIt], l1emu_->jetPhi[jetIt], seed_eta, seed_phi);
 	    }
 	    if (min_DR<=0.5) delayed_calo_objects_L1jet += 1;
 	  }
-	 
+	  */
 	  Delayed_2x2_MultHB_emu->Fill(delayed_2x2);
 	  if (delayed_2x2 > 1) Delayed_6x6_MultHB_emu->Fill(delayed_6x6); 
 	  if (delayed_2x2 > 1) Delayed_full_6x6_MultHB_emu->Fill(delayed_2x2 + delayed_6x6);
@@ -788,11 +817,22 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
           Delayed_2x2_3GeV_MultHB_emu->Fill(delayed_2x2_3GeV);
 	}
       }
-      if (delayed_calo_objects >= 1) {
-	totalSeedL1Jet += delayed_calo_objects_L1jet; // count total seeds within a L1 region
-        totalSeed += delayed_calo_objects; // count total seeds found
-	HTdistribution_trig_emu->Fill(htSum); // plot HT dist of events passing calo trigger
+
+
+
+      //      std::cout << jentry<< " = entry" << std::endl;
+
+      // how many jets pass the delayed trigger
+      int num_delayed_jet = 0;
+      for (uint jetIt = 0; jetIt < nJetemu; jetIt++) {
+	//	std::cout << delayed_calo_objects[jetIt] << " = number of delayed calo objects near jet " << jetIt << " and number of prompt calo objects = " << prompt_calo_objects[jetIt] << std::endl;
+	if (delayed_calo_objects[jetIt] > 0) prompt_delayed_seed->Fill(prompt_calo_objects[jetIt], delayed_calo_objects[jetIt]);
+	//	if (delayed_calo_objects[jetIt] >= 1 && prompt_calo_objects[jetIt] == 0) num_delayed_jet += 1;
+	if (delayed_calo_objects[jetIt] >= 1 && prompt_calo_objects[jetIt] <= 2) num_delayed_jet += 1;
+	//	if (delayed_calo_objects[jetIt] >= 1) num_delayed_jet += 1;
       }
+      //      std::cout << num_delayed_jet << " number of delayed jets found in HB" << std::endl;
+      if (num_delayed_jet > 0) HTdistribution_trig_emu->Fill(htSum); // plot HT dist of events passing calo trigger 
       HTdistribution_emu->Fill(htSum);
 
       // saving number of events passed cell multiplicity cuts. These are efficiency values used in rate vs eff plots
@@ -815,7 +855,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
       if (htSum > 380 && htSum <=400 ) totalEvent_ht380 += 1;
 
       //      if (Sum4Jet_HBHE >= 2) {
-      if (delayed_calo_objects >= 1) {
+      if (num_delayed_jet >= 1) {
 	if (htSum > 120 ) HEHB4Jet_ht120_wTiming += 1; // events passing 2 hits over 3ns, 50 ADC
 	if (htSum > 120 && htSum <=140 ) HBHE4Jet_inBins_ht120 += 1;
 	if (htSum > 140 && htSum <=160 ) HBHE4Jet_inBins_ht140 += 1;
@@ -833,31 +873,31 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 	if (htSum > 380 && htSum <=400 ) HBHE4Jet_inBins_ht380 += 1;
       }
 
-      if ( delayed_calo_objects >= 1 ) passed_calo_cluster_trig += 1;
-      if ( ((htSum > 120) && ( delayed_calo_objects >= 1 )) || (htSum >= 360) ) passed4JetMult_HBHE_ht120_1 += 1; // +7
-      if ( ((htSum > 120) && ( delayed_calo_objects >= 2 )) || (htSum >= 360) ) passed4JetMult_HBHE_ht120_2 += 1;
-      if ( ((htSum > 120) && ( delayed_calo_objects >= 3 )) || (htSum >= 360) ) passed4JetMult_HBHE_ht120_3 += 1;
-      if ( ((htSum > 120) && ( delayed_calo_objects >= 4 )) || (htSum >= 360) ) passed4JetMult_HBHE_ht120_4 += 1;
-      if ( ((htSum > 120) && ( delayed_calo_objects >= 5 )) || (htSum >= 360) ) passed4JetMult_HBHE_ht120_5 += 1;
+      if ( num_delayed_jet >= 1 ) passed_calo_cluster_trig += 1;
+      if ( ((htSum > 120) && ( num_delayed_jet >= 1 )) || (htSum >= 360) ) passed4JetMult_HBHE_ht120_1 += 1; // +7
+      if ( ((htSum > 120) && ( num_delayed_jet >= 2 )) || (htSum >= 360) ) passed4JetMult_HBHE_ht120_2 += 1;
+      if ( ((htSum > 120) && ( num_delayed_jet >= 3 )) || (htSum >= 360) ) passed4JetMult_HBHE_ht120_3 += 1;
+      if ( ((htSum > 120) && ( num_delayed_jet >= 4 )) || (htSum >= 360) ) passed4JetMult_HBHE_ht120_4 += 1;
+      if ( ((htSum > 120) && ( num_delayed_jet >= 5 )) || (htSum >= 360) ) passed4JetMult_HBHE_ht120_5 += 1;
 
       if (htSum > 360) passedHtSum360 += 1;
 
       for(int bin=0; bin<nHtSumBins; bin++){
-        if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( delayed_calo_objects)>=2 ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV, compare to original rates in plot
+        if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( num_delayed_jet)>=2 ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV, compare to original rates in plot
         if( (htSum) >= htSumLo+(bin*htSumBinWidth) ) htSumRates_original_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV, use for ht > 360 original rates in rate vs. eff plots
 
 	//GeV, use for ht > 120 + timing OR ht > 360 rates in rate vs. eff plots
-        if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (delayed_calo_objects)>=1 || htSum >= 360 ) ) htSumRates_120timingOR360_1_emu->Fill(htSumLo+(bin*htSumBinWidth));
-	if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (delayed_calo_objects)>=2 || htSum >= 360 ) ) htSumRates_120timingOR360_2_emu->Fill(htSumLo+(bin*htSumBinWidth));
-	if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (delayed_calo_objects)>=3 || htSum >= 360 ) ) htSumRates_120timingOR360_3_emu->Fill(htSumLo+(bin*htSumBinWidth));
-	if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (delayed_calo_objects)>=4 || htSum >= 360 ) ) htSumRates_120timingOR360_4_emu->Fill(htSumLo+(bin*htSumBinWidth));
-	if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (delayed_calo_objects)>=5 || htSum >= 360 ) ) htSumRates_120timingOR360_5_emu->Fill(htSumLo+(bin*htSumBinWidth));
+        if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (num_delayed_jet)>=1 || htSum >= 360 ) ) htSumRates_120timingOR360_1_emu->Fill(htSumLo+(bin*htSumBinWidth));
+	if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (num_delayed_jet)>=2 || htSum >= 360 ) ) htSumRates_120timingOR360_2_emu->Fill(htSumLo+(bin*htSumBinWidth));
+	if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (num_delayed_jet)>=3 || htSum >= 360 ) ) htSumRates_120timingOR360_3_emu->Fill(htSumLo+(bin*htSumBinWidth));
+	if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (num_delayed_jet)>=4 || htSum >= 360 ) ) htSumRates_120timingOR360_4_emu->Fill(htSumLo+(bin*htSumBinWidth));
+	if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (num_delayed_jet)>=5 || htSum >= 360 ) ) htSumRates_120timingOR360_5_emu->Fill(htSumLo+(bin*htSumBinWidth));
 	// use for ht120+timing rates in rate vs. eff plots
-        if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (delayed_calo_objects)>=1 ) ) htSumRates_120timing_1_emu->Fill(htSumLo+(bin*htSumBinWidth));
-        if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (delayed_calo_objects)>=2 ) ) htSumRates_120timing_2_emu->Fill(htSumLo+(bin*htSumBinWidth));
-        if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (delayed_calo_objects)>=3 ) ) htSumRates_120timing_3_emu->Fill(htSumLo+(bin*htSumBinWidth));
-        if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (delayed_calo_objects)>=4 ) ) htSumRates_120timing_4_emu->Fill(htSumLo+(bin*htSumBinWidth));
-        if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (delayed_calo_objects)>=5 ) ) htSumRates_120timing_5_emu->Fill(htSumLo+(bin*htSumBinWidth));
+        if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (num_delayed_jet)>=1 ) ) htSumRates_120timing_1_emu->Fill(htSumLo+(bin*htSumBinWidth));
+        if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (num_delayed_jet)>=2 ) ) htSumRates_120timing_2_emu->Fill(htSumLo+(bin*htSumBinWidth));
+        if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (num_delayed_jet)>=3 ) ) htSumRates_120timing_3_emu->Fill(htSumLo+(bin*htSumBinWidth));
+        if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (num_delayed_jet)>=4 ) ) htSumRates_120timing_4_emu->Fill(htSumLo+(bin*htSumBinWidth));
+        if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( (num_delayed_jet)>=5 ) ) htSumRates_120timing_5_emu->Fill(htSumLo+(bin*htSumBinWidth));
       }
     }// closes if 'emuOn' is true
 
@@ -1103,6 +1143,8 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
     HTdistribution_emu->Write();
 
     htSumDistribution->Write();
+
+    prompt_delayed_seed->Write();
 
     htSumRates_original_emu->Scale(norm);
     // HT120+timing OR HT360

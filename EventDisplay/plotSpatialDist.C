@@ -117,8 +117,8 @@ void DrawTowerLines(){
 //void plotSpatialDist(int iEvent, const char* file){
 void plotSpatialDist(int iEvent){
   gStyle->SetOptStat(0);
-  TFile *f = TFile::Open("L1Ntuple_mh125_mx50_pl1000.root","READ");
-  //  TFile *f = TFile::Open("L1Ntuple_QCD.root","READ");
+  //  TFile *f = TFile::Open("L1Ntuple_mh125_mx50_pl1000.root","READ");
+  TFile *f = TFile::Open("L1Ntuple_QCD.root","READ");
   if (!f) { return; }
   
   TTree *t = (TTree*) f->Get("l1EventTree/L1EventTree"); // saves event info, in event branch
@@ -189,7 +189,8 @@ void plotSpatialDist(int iEvent){
     if (vHcalTPdepth->hcalTPtiming7[j] >= 0) {TDC[6] = vHcalTPdepth->hcalTPtiming7[j]; cellEt[6] = vHcalTPdepth->hcalTPDepth7[j];}
     for (int depth = 0; depth < vHcalTPdepth->hcalTPnDepths[j]; ++ depth) { // loop through HCAL TP depths
       if (TDC[depth] >= 3 && cellEt[depth] >= 3) h2HcalTPsDelayed->Fill(eta, phi, TDC[depth]);
-      if (TDC[depth] >= 2 && cellEt[depth] >= 3) h2HcalTPs->Fill(eta, phi, TDC[depth]);
+      if (TDC[depth] >= 0 && TDC[depth] < 3 && cellEt[depth] >= 3) h2HcalTPs->Fill(eta, phi, TDC[depth]);
+      //if (TDC[depth] >= 2 && cellEt[depth] >= 3) h2HcalTPs->Fill(eta, phi, TDC[depth]);
       if (TDC[depth] >= 3 && cellEt[depth] >= 3) {
 	std::cout<<"TDC "<<TDC[depth] << " et " << cellEt[depth] << " at depth " << depth
 		 <<" eta "<<eta
@@ -279,7 +280,8 @@ void plotSpatialDist(int iEvent){
   
   float xR=0.8;
   TLegend *l = new TLegend(xR,0.8,xR+0.2,1.0);
-  l->AddEntry(h2HcalTPs,"Cell>=2ns, 3GeV","F");
+  l->AddEntry(h2HcalTPs,"Cell>=0ns,<3ns, 3GeV","F");
+  //  l->AddEntry(h2HcalTPs,"Cell>=2ns, 3GeV","F");
   l->AddEntry(h2HcalTPsDelayed,"Cell>=3ns, 3GeV","F");
   l->AddEntry(h2L1Jets,"L1 jets","F");
   l->Draw();
