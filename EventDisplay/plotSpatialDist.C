@@ -117,8 +117,8 @@ void DrawTowerLines(){
 //void plotSpatialDist(int iEvent, const char* file){
 void plotSpatialDist(int iEvent){
   gStyle->SetOptStat(0);
-  //  TFile *f = TFile::Open("L1Ntuple_mh125_mx50_pl1000.root","READ");
-  TFile *f = TFile::Open("L1Ntuple_QCD.root","READ");
+  TFile *f = TFile::Open("L1Ntuple_mh125_mx50_pl1000.root","READ");
+  //  TFile *f = TFile::Open("L1Ntuple_QCD.root","READ");
   if (!f) { return; }
   
   TTree *t = (TTree*) f->Get("l1EventTree/L1EventTree"); // saves event info, in event branch
