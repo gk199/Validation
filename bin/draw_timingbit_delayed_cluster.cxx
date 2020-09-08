@@ -24,7 +24,7 @@ int main()
   // default, then new conditions
   std::vector<std::string> filenames = {"rates_new_cond_QCD.root", "rates_new_cond_LLP_pl500.root", "rates_new_cond_LLP_pl1000.root", "rates_new_cond_LLP_pl10000.root"};
   //  std::vector<std::string> multTypes = {"ADC50_3ns_4JetMultHB", "ADC50_3ns_4JetMultHE", "ADC50_3ns_4JetMultHBHE"};
-  std::vector<std::string> multTypes = {"Delayed_2x2_MultHB","Delayed_2x2_0GeV_MultHB","Delayed_2x2_1GeV_MultHB","Delayed_2x2_2GeV_MultHB","Delayed_2x2_3GeV_MultHB","HTdistribution","HTdistribution_trig","DeltaR_L1_delayed_seed","DeltaR_L1_prompt_seed","DeltaR_L1_delayed_hit","DeltaR_L1_prompt_hit","Mult_delayed_hit","Mult_prompt_hit"}; // list the names of the TH1Fs that will be overlayed
+  std::vector<std::string> multTypes = {"Delayed_2x2_MultHB","Prompt_2x2_MultHB","HTdistribution","HTdistribution_trig","DeltaR_L1_delayed_seed","DeltaR_L1_prompt_seed","DeltaR_L1_delayed_hit","DeltaR_L1_prompt_hit","Mult_delayed_hit","Mult_prompt_hit"}; // list the names of the TH1Fs that will be overlayed
 
   std::map<std::string, TH1F*> multHists_QCD;
   std::map<std::string, TH1F*> multHists_LLPpl500;
@@ -72,8 +72,11 @@ int main()
     multHists_QCD[hist]->SetFillStyle(3005);
     multHists_QCD[hist]->Scale(1./multHists_QCD[hist]->Integral());
     multHists_QCD[hist]->Draw("hist pfc");
-    multHists_QCD[hist]->SetAxisRange(0.000001, 3.,"Y");
-    gPad->SetLogy();
+    multHists_QCD[hist]->SetAxisRange(0,1,"Y");
+    if (hist == "HTdistribution" || hist == "HTdistribution_trig")  multHists_QCD[hist]->SetAxisRange(0,0.3,"Y");
+    if (hist == "Mult_delayed_hit" || hist == "Mult_prompt_hit")  multHists_QCD[hist]->SetAxisRange(0,0.5,"Y");
+    //    multHists_QCD[hist]->SetAxisRange(0.000001, 3.,"Y");
+    //    gPad->SetLogy();
     TLegend *leg = new TLegend(0.6, 0.65, 0.95, 0.9);
     multHists_LLPpl500[hist]->SetLineColor(kBlue);
     multHists_LLPpl500[hist]->Scale(1./multHists_LLPpl500[hist]->Integral());

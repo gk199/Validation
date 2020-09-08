@@ -1352,6 +1352,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     metHFSumRates_hw->Write();
   }
 
+  std::cout << (passed4JetMult_HBHE_ht120_3 - passedHtSum360)*100 / totalEvents << " added efficiency" << std::endl;
+  std::cout << (passed4JetMult_HBHE_ht120_3)*100 / totalEvents << " percent passed" << std::endl;
   std::cout << passed4JetMult_HBHE_ht120_2 << std::endl;
   std::cout << passedHtSum360 << std::endl;
   std::cout << totalEvents << std::endl;
