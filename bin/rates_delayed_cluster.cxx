@@ -450,11 +450,12 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
   // histograms based on hit multiplicity from the timing bit
   TH1F * Delayed_2x2_MultHB_emu = new TH1F("Delayed_2x2_MultHB_emu","Number of cells in 2x2 region >=50 ADC and >=3ns;Number of cells;Fraction of Entries (normalized)",10,0,10);
   TH1F * Prompt_2x2_MultHB_emu = new TH1F("Prompt_2x2_MultHB_emu","Number of TPs in 2x2 region that are prompt and high energy;Number of TPs;Fraction of Entries (normalized)",10,0,10);
+  TH1F * Prompt_Energy_2x2_MultHB_emu = new TH1F("Prompt_Energy_2x2_MultHB_emu","Energy of TPs in 2x2 region that are prompt;Energy of TPs;Fraction of Entries (normalized)",20,0,10);
 
-  TH1F * DeltaR_L1_delayed_seed_emu = new TH1F("DeltaR_L1_delayed_seed_emu","DeltaR between a Delayed Seed and the Closest L1 jet;Delta R;Fraction of Entries (normalized)",10,0,1);
-  TH1F * DeltaR_L1_prompt_seed_emu = new TH1F("DeltaR_L1_prompt_seed_emu","DeltaR between a Prompt Seed and the Closest L1 jet;Delta R;Fraction of Entries (normalized)",10,0,1);
-  TH1F * DeltaR_L1_delayed_hit_emu = new TH1F("DeltaR_L1_delayed_hit_emu","DeltaR between a Delayed Hit and the Closest L1 Jet in a Seeded Jet;Delta R;Fraction of Entries (normalized)",30,0,3);
-  TH1F * DeltaR_L1_prompt_hit_emu = new TH1F("DeltaR_L1_prompt_hit_emu","DeltaR between a Prompt Hit and the Closest L1 Jet in a Seeded Jet;Delta R;Fraction of Entries (normalized)",30,0,3);
+  TH1F * DeltaR_L1_delayed_seed_emu = new TH1F("DeltaR_L1_delayed_seed_emu","DeltaR between a Delayed Seed and the Closest L1 jet;Delta R;Fraction of Entries (normalized)",20,0,1);
+  TH1F * DeltaR_L1_prompt_seed_emu = new TH1F("DeltaR_L1_prompt_seed_emu","DeltaR between a Prompt Seed and the Closest L1 jet;Delta R;Fraction of Entries (normalized)",20,0,1);
+  TH1F * DeltaR_L1_delayed_hit_emu = new TH1F("DeltaR_L1_delayed_hit_emu","DeltaR between a Delayed Hit and the Closest L1 Jet in a Seeded Jet;Delta R;Fraction of Entries (normalized)",30,0,1.5);
+  TH1F * DeltaR_L1_prompt_hit_emu = new TH1F("DeltaR_L1_prompt_hit_emu","DeltaR between a Prompt Hit and the Closest L1 Jet in a Seeded Jet;Delta R;Fraction of Entries (normalized)",30,0,1.5);
   TH1F * Mult_delayed_hit_emu = new TH1F("Mult_delayed_hit_emu","Number of delayed hits near a seeded jet;Number of cells;Fraction of Entries (normalized)",20,0,20);
   TH1F * Mult_prompt_hit_emu =new TH1F("Mult_prompt_hit_emu","Number of prompt hits near a seeded jet;Number of cells;Fraction of Entries (normalized)",20,0,20);
 
@@ -709,6 +710,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
       // per TP, count delayed hits (timing bit) and tower energy for prompt hit consideration
       double timingbit_eta_phi[32][72] = {{0}}; // 32 72 if just HB
       double prompt_TP_10GeV_eta_phi[32][72] = {{0}};
+      double prompt_TP_energy_eta_phi[32][72] = {{0}};
 
       for (int HcalTPIt = 0; HcalTPIt < nCaloTPemu; HcalTPIt++){ // loop over HCAL TPs
 	double tpEtaemu = l1CaloTPemu_->hcalTPieta[HcalTPIt]; // ieta
@@ -724,13 +726,15 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
         timingbit_eta_phi[TP_eta_2x2][TP_phi_2x2] = TP_TimingBit;
 
 	// prompt veto, counts high energy prompt TPs in region with no delayed hits
-	if (l1CaloTPemu_->hcalTPet[HcalTPIt] > 3) prompt_TP_10GeV_eta_phi[TP_eta_2x2][TP_phi_2x2] = 1; // sum of depths, transverse energy. Track if TP is above energy threshold (1 if above, 0 if not)
+	if (l1CaloTPemu_->hcalTPet[HcalTPIt] >= 0) prompt_TP_energy_eta_phi[TP_eta_2x2][TP_phi_2x2] = l1CaloTPemu_->hcalTPet[HcalTPIt];
+	if (l1CaloTPemu_->hcalTPet[HcalTPIt] >= 3) prompt_TP_10GeV_eta_phi[TP_eta_2x2][TP_phi_2x2] = 1; // sum of depths, transverse energy. Track if TP is above energy threshold (1 if above, 0 if not)
       } // closing HCAL TP loop
 
       int delayed_calo_objects[nJetemu] = {0}; // delayed calo objects in each L1 jet
       int prompt_calo_objects[nJetemu] = {0}; // prompt calo objects in each L1 jet
       int delayed[nJetemu] = {0}; // delayed hits in each L1 jet
       int prompt[nJetemu] = {0}; // prompt towers in each L1 jet
+      int prompt_energy[nJetemu] = {0}; // number of 2x2 non-delayed regions that have high energy
       //      int delayed_2x2_count[32][72] = {{0}}; // per 2x2, number of delayed hits. Odd eta, phi entries will be not be filled -- not corner of a 2x2!
       //      int prompt_2x2_count[32][72] = {{0}}; // per 2x2, number of prompt high energy TPs (when 2x2 has no delayed hits)
 
@@ -740,6 +744,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 	  int delayed_2x2 = 0;
 	  int delayed_4x4 = 0;
 	  int prompt_2x2 = 0;
+	  double prompt_energy_2x2 = 0;
 	  // grid of 32x72, now break into 2x2 tower sums for a new grid of 16x36
 	  // even, even = top left corner of 2x2 regions
 	  delayed_2x2 += timingbit_eta_phi[ieta_2x2][iphi_2x2] + timingbit_eta_phi[ieta_2x2][iphi_2x2+1] + timingbit_eta_phi[ieta_2x2+1][iphi_2x2] + timingbit_eta_phi[ieta_2x2+1][iphi_2x2+1];
@@ -750,6 +755,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 	  //	  delayed_2x2_count[ieta_2x2][ieta_2x2] = delayed_2x2; 
 	  if (delayed_2x2 == 0) { // no delayed hits in this 2x2 region
 	    prompt_2x2 += prompt_TP_10GeV_eta_phi[ieta_2x2][iphi_2x2] + prompt_TP_10GeV_eta_phi[ieta_2x2][iphi_2x2+1] + prompt_TP_10GeV_eta_phi[ieta_2x2+1][iphi_2x2] + prompt_TP_10GeV_eta_phi[ieta_2x2+1][iphi_2x2+1];
+	    prompt_energy_2x2 += prompt_TP_energy_eta_phi[ieta_2x2][iphi_2x2] + prompt_TP_energy_eta_phi[ieta_2x2][iphi_2x2+1] + prompt_TP_energy_eta_phi[ieta_2x2+1][iphi_2x2] + prompt_TP_energy_eta_phi[ieta_2x2+1][iphi_2x2+1];
 	    //	    prompt_2x2_count[ieta_2x2][ieta_2x2] = prompt_2x2;
 	  }
 
@@ -767,16 +773,18 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 
           if (delayed_2x2 > 0) DeltaR_L1_delayed_hit_emu->Fill(min_DR); // DR from L1 jet center to a delayed hit
           if (prompt_2x2 > 0) DeltaR_L1_prompt_hit_emu->Fill(min_DR); // DR from L1 jet center to a prompt TP
-	  if (delayed_2x2 >= 2) DeltaR_L1_delayed_seed_emu->Fill(min_DR); // DR from L1 jet center to delayed seed
+	  if (delayed_4x4 >= 2) DeltaR_L1_delayed_seed_emu->Fill(min_DR); // DR from L1 jet center to delayed seed
 	  if (prompt_2x2 >= 2) DeltaR_L1_prompt_seed_emu->Fill(min_DR); // DR from L1 jet center to prompt seed
 	  if (min_DR<=0.5) { // check if the jet has a delayed or prompt seed
 	    delayed[closestJet] += delayed_2x2; // assign delayed 2x2 hits to the nearest jet
 	    prompt[closestJet] += prompt_2x2;
-	    if (delayed_4x4 >= 2) delayed_calo_objects[closestJet] += 1;
+	    if (prompt_energy_2x2 >= 4) prompt_energy[closestJet] += 1; // how many 2x2 are non delayed but energetic
+	    if (delayed_4x4 >= 2) delayed_calo_objects[closestJet] += 1; // how many 4x4 are delayed
 	    //	    if (delayed_2x2 >= 2) delayed_calo_objects[closestJet] += 1;
 	    if (prompt_2x2 >= 2) prompt_calo_objects[closestJet] += 1;
-	    Delayed_2x2_MultHB_emu->Fill(delayed_2x2); // number of cells in 2x2 that are delayed
-	    if (delayed_2x2 == 0) Prompt_2x2_MultHB_emu->Fill(prompt_2x2);
+	    Delayed_2x2_MultHB_emu->Fill(delayed_4x4); // number of cells in 2x2 that are delayed
+	    if (delayed_2x2 == 0 && prompt_2x2 > 0) Prompt_2x2_MultHB_emu->Fill(prompt_2x2);
+            if (delayed_2x2 == 0 && prompt_energy_2x2 > 0) Prompt_Energy_2x2_MultHB_emu->Fill(prompt_energy_2x2);
 	  }
 	}
       }
@@ -792,8 +800,8 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 	}
 
 	if (delayed_calo_objects[jetIt] > 0) prompt_delayed_seed->Fill(prompt_calo_objects[jetIt], delayed_calo_objects[jetIt]);
-	//	if (delayed_calo_objects[jetIt] >= 1 && prompt_calo_objects[jetIt] <= 1 && prompt[jetIt] <= 4) num_delayed_jet += 1;
-	if (delayed_calo_objects[jetIt] >= 1 && prompt[jetIt] < 1) num_delayed_jet += 1;
+	if (delayed_calo_objects[jetIt] >= 1 && prompt_energy[jetIt] < 1 ) num_delayed_jet += 1;
+	//	if (delayed_calo_objects[jetIt] >= 1 && prompt[jetIt] < 2 && prompt_energy[jetIt] == 0) num_delayed_jet += 1;
 	//	if (delayed_calo_objects[jetIt] >= 1 && prompt_calo_objects[jetIt] <= 1)
       }
       if (num_delayed_jet > 0) HTdistribution_trig_emu->Fill(htSum); // plot HT dist of events passing calo trigger 
@@ -1099,6 +1107,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
     // write histograms based on timing bit
     Delayed_2x2_MultHB_emu->Write();
     Prompt_2x2_MultHB_emu->Write();
+    Prompt_Energy_2x2_MultHB_emu->Write();
     HTdistribution_trig_emu->Write();
     HTdistribution_emu->Write();
 
