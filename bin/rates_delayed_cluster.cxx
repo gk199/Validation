@@ -118,8 +118,8 @@ double deltaR(double eta1, double phi1, double eta2, double phi2) { // calculate
 
 std::vector<double> eta_phi_2x2(double ieta, double iphi) {
   double TP_eta_2x2 = 1000;
-  if (ieta>0) TP_eta_2x2 = ieta+15; // 16 to 31                                                                                                                    
-  else if (ieta<0) TP_eta_2x2 = ieta+1+15; // 0 to 15                                                                                                              
+  if (ieta>0) TP_eta_2x2 = ieta+27; //+15; // 16 to 31                                                                                                                    
+  else if (ieta<0) TP_eta_2x2 = ieta+28; //+1+15; // 0 to 15                                                                                                              
   double TP_phi_2x2 = iphi-1; // 0 to 71
   std::vector<double> eta_phi_2x2;
   eta_phi_2x2.push_back(TP_eta_2x2);
@@ -129,7 +129,7 @@ std::vector<double> eta_phi_2x2(double ieta, double iphi) {
 
 std::vector<double> two_two_eta_phi(double eta_2x2, double phi_2x2) {
   double ieta = 1000;
-  ieta = eta_2x2 - 15;
+  ieta = eta_2x2 -27;// - 15;
   if (ieta <= 0) ieta -= 1;
   double iphi = phi_2x2 + 1;
   std::vector<double> two_two_eta_phi;
@@ -457,7 +457,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
   TH1F * DeltaR_L1_delayed_hit_emu = new TH1F("DeltaR_L1_delayed_hit_emu","DeltaR between a Delayed Hit and the Closest L1 Jet in a Seeded Jet;Delta R;Fraction of Entries (normalized)",30,0,1.5);
   TH1F * DeltaR_L1_prompt_hit_emu = new TH1F("DeltaR_L1_prompt_hit_emu","DeltaR between a Prompt Hit and the Closest L1 Jet in a Seeded Jet;Delta R;Fraction of Entries (normalized)",30,0,1.5);
   TH1F * Mult_delayed_hit_emu = new TH1F("Mult_delayed_hit_emu","Number of delayed hits near a seeded jet;Number of cells;Fraction of Entries (normalized)",20,0,20);
-  TH1F * Mult_prompt_hit_emu =new TH1F("Mult_prompt_hit_emu","Number of prompt hits near a seeded jet;Number of cells;Fraction of Entries (normalized)",20,0,20);
+  TH1F * Mult_prompt_hit_emu =new TH1F("Mult_prompt_hit_emu","Number of prompt TPs near a seeded jet;Number of TPs;Fraction of Entries (normalized)",20,0,20);
 
   TH1F * HTdistribution_trig_emu = new TH1F("HTdistribution_trig_emu","HT Distribution of Events Passing Calo Cluster Trigger;HT (GeV);Number of Events",25,0,2000);
   TH1F * HTdistribution_emu = new TH1F("HTdistribution_emu","HT Distribution of Events;HT (GeV);Number of Events",25,0,2000);
@@ -673,6 +673,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
         if( (metHFSum) >= metHFSumLo+(bin*metHFSumBinWidth) ) metHFSumRates_emu->Fill(metHFSumLo+(bin*metHFSumBinWidth)); //GeV           
       }
       
+      // change lines 688 and 719 to only include HB, or HE+HB!! Jet eta < 1,3; and HCAL TP ieta < 16, 28
       //////////////////////////////////////
       /////////// LLP incident on HB? //////
       //////////////////////////////////////
@@ -684,7 +685,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
       double nCaloTPemu = l1CaloTPemu_->nHCALTP; // number of TPs varies from 400-1400 per event, approximately Gaussian                                                  
       
       for (uint jetIt = 0; jetIt < nJetemu; jetIt++) { // loop over jets
-	if (abs(l1emu_->jetEta[jetIt]) > 1) continue; // consider HB jets, HB extends to 1.4
+	if (abs(l1emu_->jetEta[jetIt]) > 1) continue; // consider HB jets, HB extends to 1.4. HE extends to 3. 
 	if (closestParton(jetIt, l1emu_, generator_)[0] <= 0.5) { // if closest parton is near a HB L1 jet
 	  /*if (jentry == 6 || jentry == 9 || jentry == 22 || jentry == 24) for (int HcalTPIt = 0; HcalTPIt < nCaloTPemu; HcalTPIt++){ // loop over HCAL TPs
 	    double tpEtaemu = l1CaloTPemu_->hcalTPieta[HcalTPIt]; // ieta 
@@ -708,14 +709,14 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
       ////////// HCAL TP Loop //////////
       //////////////////////////////////////
       // per TP, count delayed hits (timing bit) and tower energy for prompt hit consideration
-      double timingbit_eta_phi[32][72] = {{0}}; // 32 72 if just HB
-      double prompt_TP_10GeV_eta_phi[32][72] = {{0}};
-      double prompt_TP_energy_eta_phi[32][72] = {{0}};
+      double timingbit_eta_phi[56][72] = {{0}}; // 32 72 if just HB
+      double prompt_TP_10GeV_eta_phi[56][72] = {{0}};
+      double prompt_TP_energy_eta_phi[56][72] = {{0}};
 
       for (int HcalTPIt = 0; HcalTPIt < nCaloTPemu; HcalTPIt++){ // loop over HCAL TPs
 	double tpEtaemu = l1CaloTPemu_->hcalTPieta[HcalTPIt]; // ieta
 	double tpPhiemu = l1CaloTPemu_->hcalTPCaliphi[HcalTPIt]; // iphi
-	if (abs(tpEtaemu) > 16 ) continue; // don't consider HCAL TPs outside of HB or HE. 
+	if (abs(tpEtaemu) > 16 ) continue; // don't consider HCAL TPs outside of HB or HE -- note, 29 should be summed with 28 still presumably 
 	// End of HB is eta=1.479m, end of HE is eta=3 from here http://www.hephy.at/user/friedl/diss/html/node8.html.
 	// HB restriction: abs(tpEtaemu) > 16. HEHB restriction: abs(tpEtaemu) > 28
 	int TP_eta_2x2 = eta_phi_2x2(tpEtaemu,tpPhiemu)[0]; // convert from ieta to 2x2 eta mapping
@@ -739,13 +740,13 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
       //      int prompt_2x2_count[32][72] = {{0}}; // per 2x2, number of prompt high energy TPs (when 2x2 has no delayed hits)
 
       // check 2x2 regions for seeds
-      for (int ieta_2x2 = 0; ieta_2x2<32; ieta_2x2+=2) {
+      for (int ieta_2x2 = 0; ieta_2x2<56; ieta_2x2+=2) { // 32 for HB only
 	for (int iphi_2x2 = 0; iphi_2x2<72; iphi_2x2+=2) {
 	  int delayed_2x2 = 0;
 	  int delayed_4x4 = 0;
 	  int prompt_2x2 = 0;
 	  double prompt_energy_2x2 = 0;
-	  // grid of 32x72, now break into 2x2 tower sums for a new grid of 16x36
+	  // grid of 56x72, now break into 2x2 tower sums for a grid fo 28x36 // grid of 32x72, now break into 2x2 tower sums for a new grid of 16x36
 	  // even, even = top left corner of 2x2 regions
 	  delayed_2x2 += timingbit_eta_phi[ieta_2x2][iphi_2x2] + timingbit_eta_phi[ieta_2x2][iphi_2x2+1] + timingbit_eta_phi[ieta_2x2+1][iphi_2x2] + timingbit_eta_phi[ieta_2x2+1][iphi_2x2+1];
 	  if (ieta_2x2 > 0 && iphi_2x2 > 0) delayed_4x4 += delayed_2x2 
@@ -800,9 +801,9 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 	}
 
 	if (delayed_calo_objects[jetIt] > 0) prompt_delayed_seed->Fill(prompt_calo_objects[jetIt], delayed_calo_objects[jetIt]);
-	if (delayed_calo_objects[jetIt] >= 1 && prompt_energy[jetIt] < 1 ) num_delayed_jet += 1;
-	//	if (delayed_calo_objects[jetIt] >= 1 && prompt[jetIt] < 2 && prompt_energy[jetIt] == 0) num_delayed_jet += 1;
-	//	if (delayed_calo_objects[jetIt] >= 1 && prompt_calo_objects[jetIt] <= 1)
+	//	if (delayed_calo_objects[jetIt] >= 1 && prompt_energy[jetIt] < 1 ) num_delayed_jet += 1;
+       	if (delayed_calo_objects[jetIt] >= 1 && prompt[jetIt] < 2 && prompt_energy[jetIt] == 0) num_delayed_jet += 1;
+	//	if (delayed_calo_objects[jetIt] >= 1 && prompt[jetIt] < 2 ) num_delayed_jet += 1;
       }
       if (num_delayed_jet > 0) HTdistribution_trig_emu->Fill(htSum); // plot HT dist of events passing calo trigger 
       HTdistribution_emu->Fill(htSum);

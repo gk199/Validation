@@ -74,7 +74,8 @@ int main()
     multHists_QCD[hist]->Draw("hist pfc");
     multHists_QCD[hist]->SetAxisRange(0,1,"Y");
     if (hist == "HTdistribution" || hist == "HTdistribution_trig")  multHists_QCD[hist]->SetAxisRange(0,0.3,"Y");
-    if (hist == "Mult_delayed_hit" || hist == "Mult_prompt_hit")  multHists_QCD[hist]->SetAxisRange(0,0.5,"Y");
+    if (hist == "Mult_delayed_hit" || hist == "Mult_prompt_hit")  multHists_QCD[hist]->SetAxisRange(0,0.75,"Y");
+    if (hist == "Mult_prompt_hit")  multHists_QCD[hist]->SetAxisRange(0,10,"X");
     //    multHists_QCD[hist]->SetAxisRange(0.000001, 3.,"Y");
     //    gPad->SetLogy();
     TLegend *leg = new TLegend(0.6, 0.65, 0.95, 0.9);
