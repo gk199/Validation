@@ -25,8 +25,8 @@ FRONTIER = 'frontier://FrontierProd/CMS_CONDITIONS'
 def check_setup():
     if not ("CMSSW_BASE" in os.environ):
         sys.exit("Please issue 'cmsenv' before running")
-    if not ("crabclient" in os.environ['PATH']):
-        sys.exit("Please set up crab environment before running")
+#    if not ("crabclient" in os.environ['PATH']):
+#        sys.exit("Please set up crab environment before running")
 
 def generate_ntuple_config(configtype, newtag, caloparams):
     """Generates ntuple python file for a given 
