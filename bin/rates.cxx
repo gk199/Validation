@@ -676,7 +676,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       //////////////////////////////////////
       double nCaloTPemu = l1CaloTPemu_->nHCALTP; // number of TPs varies from 400-1400 per event, approximately Gaussian
       uint nJetemu = l1emu_->nJets; // number of jets per event
-      if (jentry == 0) {
+      /*      if (jentry == 0) {
 	std::cout << l1emu_->jetEta[0] << ", " << l1emu_->jetPhi[0] << std::endl;
 	std::cout << l1emu_->jetEta[1] << ", " << l1emu_->jetPhi[1] <<  std::endl;
 	std::cout << l1emu_->jetEta[2] << ", " << l1emu_->jetPhi[2] <<  std::endl;
@@ -690,6 +690,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	std::cout << l1emu_->jetEta[10] << ", " << l1emu_->jetPhi[10] <<  std::endl;
 	std::cout << l1emu_->jetEta[11] << ", " << l1emu_->jetPhi[11] <<  std::endl;
       }
+      */
       L1_Jet1_ET->Fill(l1emu_->jetEt[0]);
       L1_Jet2_ET->Fill(l1emu_->jetEt[1]);
       L1_Jet3_ET->Fill(l1emu_->jetEt[2]);

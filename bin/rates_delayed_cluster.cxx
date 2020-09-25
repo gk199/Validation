@@ -283,6 +283,24 @@ std::vector<double> LLPdecayInfo(int partonN, L1Analysis::L1AnalysisL1UpgradeDat
   return LLPinfo; // LLP x, y, z decay, LLP ctau in cm in LLP rest frame, TOF delay in ns
 }
 
+std::vector<double> ctau(int partonN, L1Analysis::L1AnalysisGeneratorDataFormat *generator_) {
+  double beta = -1000;
+  beta = sqrt( (generator_->partPx[partonN] * generator_->partPx[partonN]) + (generator_->partPy[partonN] * generator_->partPy[partonN]) + (generator_->partPz[partonN] * generator_->partPz[partonN]) ) / (generator_->partE[partonN]);
+  double gamma = 1./TMath::Sqrt(1.-beta*beta);
+  double xDist = generator_->partVx[partonN];// - generator_->dauVx[partonN];
+  double yDist = generator_->partVy[partonN];// - generator_->dauVy[partonN];
+  double zDist = generator_->partVz[partonN];// - generator_->dauVz[partonN];
+  double path_length = sqrt(xDist*xDist + yDist*yDist + zDist*zDist);
+  double ctau_rest_frame = path_length / ( gamma * beta);
+  double lightSpeed = 29979245800; // in cm / s
+  double TOF_LLP = 1000000000*path_length / (beta * lightSpeed); // in ns
+  std::vector<double> ctau;
+  ctau.push_back(path_length); // cm
+  ctau.push_back(ctau_rest_frame); // cm
+  ctau.push_back(TOF_LLP); //ns
+  return ctau;
+}
+
 // TOF calculation
 
 void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirectory){
@@ -502,8 +520,13 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 
   TH1F * htSumDistribution = new TH1F("htSumDistribution","htSum Distribution;L1_HT (GeV);Number of Events",200,0,2000); // x bins, x low, x up
 
+  TH1F* ctau_LLP = new TH1F("ctau_LLP","ctau of LLP in particle rest frame;ctau (m);Number of Events",100,0,50);
+  TH1F* ctau_LLP_trigger = new TH1F("ctau_LLP_trigger","ctau of LLP (passed trigger) in particle rest frame;ctau (m);Number of Events",100,0,50);
+  TH1F* path_length = new TH1F("path_length","Path length of particle in lab frame;path length (m);Number of Events",100,0,3); 
+  TH2F* path_length_energy = new TH2F("path_length_energy","Path length (lab frame) vs energy of parton;path length (m);Energy (GeV)",100,0,3,100,0,1000);
+
   TH2F* prompt_delayed_seed = new TH2F("prompt_delayed_seed","Prompt and Delayed 2x2 Seeds in a L1 jet;Prompt Seeds;Delayed Seeds",15,0,15,15,0,15);
-  TH2F* PDGid_radius = new TH2F("PDGid_radius","PDG ID and creation vertex of particle in QCD sample near delayed seed;PDG ID;Creation Vertex (cm)",25,0,25,90,0,45);
+  TH2F* PDGid_radius = new TH2F("PDGid_radius","PDG ID and creation vertex of particle in QCD sample near delayed seed;PDG ID;Creation Vertex (cm)",250,0,250,90,0,45);
   TH2F* pion_radius_z = new TH2F("pion_radius_z","Pion radius and z position (creation vertex) in QCD sample;Z position;Creation Radius (cm)",50,0,50,150,0,150);
   TH2F* delayed4x4seed_TDC_GeV_HB = new TH2F("delayed4x4seed_TDC_GeV_HB","TDC and Energy in cells forming delayed 4x4 seed in HB;TDC;GeV",25,0,25,20,0,20);
   TH2F* delayed4x4seed_depth_TDC_HB = new TH2F("delayed4x4seed_depth_TDC_HB","TDC and Depth in cells forming delayed 4x4 seed in HB;Depth;TDC",5,0,5,20,0,20);
@@ -529,7 +552,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
   /////////////////////////////////
   for (Long64_t jentry=0; jentry<nentries; jentry++){
     if((jentry%10000)==0) std::cout << "Done " << jentry  << " events of " << nentries << std::endl;
-
+    //    std::cout << jentry << std::endl;
     //lumi break clause
     eventTree->GetEntry(jentry);
     //skip the corresponding event
@@ -699,7 +722,10 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
       for(int bin=0; bin<nMetHFSumBins; bin++){
         if( (metHFSum) >= metHFSumLo+(bin*metHFSumBinWidth) ) metHFSumRates_emu->Fill(metHFSumLo+(bin*metHFSumBinWidth)); //GeV           
       }
-      
+
+      for (int partonN = 0; partonN < generator_->nPart; partonN ++) {
+        if (generator_->partParent[partonN] == 6000113) ctau_LLP->Fill(LLPdecayInfo(partonN,l1emu_,generator_)[3]/100);
+      }      
       // change lines 688 and 719 to only include HB, or HE+HB!! Jet eta < 1,3; and HCAL TP ieta < 16, 28
       //////////////////////////////////////
       /////////// LLP incident on HB? //////
@@ -753,7 +779,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 	//        int TP_TimingBit = l1CaloTPemu_->hcalTPTimingBit[HcalTPIt];
 	//	if (abs(tpEtaemu) <= 16) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] = TP_TimingBit;
 	if (abs(tpEtaemu) <= 16) { 
-	  if (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] >= 2 && l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >= 4) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;                                          
+	  if (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] >= 2 && l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >= 4) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
           if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= 2 && l1CaloTPemu_->hcalTPtiming2[HcalTPIt] >= 4) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
           if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= 2 && l1CaloTPemu_->hcalTPtiming3[HcalTPIt] >= 4) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
           if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= 2 && l1CaloTPemu_->hcalTPtiming4[HcalTPIt] >= 4) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
@@ -900,18 +926,29 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
       }
 
       // investigate delayed QCD hits -- what physics is causing these?? 
-      if (inputFile.substr(27,3) == "QCD" ) {
-	for (int partonN = 0; partonN < generator_->nPart; partonN ++) if (generator_->partId[partonN] == 111|| generator_->partId[partonN] == 211 ) {
-	    pion_radius_z->Fill(sqrt(generator_->partVx[partonN]*generator_->partVx[partonN] + generator_->partVy[partonN]*generator_->partVy[partonN]), abs(generator_->partVz[partonN]));
-	  }
-	for (uint jetIt = 0; jetIt < nJetemu; jetIt++) {
-	  if (delayed_calo_objects[jetIt] >= 1 && closestQCDParton(jetIt, l1emu_, generator_)[0] <= 0.5 ) { // if a jet had a delayed seed, find parton projected to be nearby
-            double partonN = closestQCDParton(jetIt, l1emu_, generator_)[1];
-	    int PDG_ID = generator_->partId[partonN];
-	    double vertex = sqrt(generator_->partVx[partonN]*generator_->partVx[partonN] + generator_->partVy[partonN]*generator_->partVy[partonN] + generator_->partVz[partonN]*generator_->partVz[partonN]);
-	    //	    std::cout << PDG_ID << " = PDG ID of particle from QCD process that is near a seeded (by delayed 4x4 region) L1 jet, and this originated at " << vertex << " with delta R = " << closestQCDParton(jetIt, l1emu_, generator_)[0] << std::endl;
-	    PDGid_radius->Fill(abs(PDG_ID),vertex);
-	  }
+      //      if (inputFile.substr(27,3) == "QCD" ) {
+      for (int partonN = 0; partonN < generator_->nPart; partonN ++) {
+	if (generator_->partParent[partonN] == 6000113) ctau_LLP_trigger->Fill(LLPdecayInfo(partonN,l1emu_,generator_)[3]/100);
+        else {
+	  path_length->Fill(ctau(partonN,generator_)[0]/100); // if not from LLP, plot the creation vertex of parton
+	  path_length_energy->Fill(ctau(partonN,generator_)[0]/100, generator_->partE[partonN]); // creation vertex vs energy
+	}
+
+	// following print outs indicate the daughter particles are not paired correctly :(
+	//	if ( (generator_->partId[partonN] == 9000006) || (generator_->partId[partonN] == 9000007) || (generator_->partId[partonN] == 6000113) ) std::cout << generator_->partId[partonN] << " = parton PDG ID, and daughter PDG ID = " << generator_->dauId[partonN] << std::endl;
+	//	if ( abs(generator_->partId[partonN] == 5) && generator_->partParent[partonN] == 6000113 ) std::cout << generator_->partParent[partonN] << " = parton parent PDG ID, and daughter PDG ID = " << generator_->partId[partonN]<< std::endl;
+	if (generator_->partId[partonN] == 111|| generator_->partId[partonN] == 211 ) {
+	  pion_radius_z->Fill(sqrt(generator_->partVx[partonN]*generator_->partVx[partonN] + generator_->partVy[partonN]*generator_->partVy[partonN]), abs(generator_->partVz[partonN]));
+	}
+      }
+    
+      for (uint jetIt = 0; jetIt < nJetemu; jetIt++) {
+	if (delayed_calo_objects[jetIt] >= 1 && closestQCDParton(jetIt, l1emu_, generator_)[0] <= 0.5 ) { // if a jet had a delayed seed, find parton projected to be nearby
+	  double partonN = closestQCDParton(jetIt, l1emu_, generator_)[1];
+	  int PDG_ID = generator_->partId[partonN];
+	  double vertex = sqrt(generator_->partVx[partonN]*generator_->partVx[partonN] + generator_->partVy[partonN]*generator_->partVy[partonN] + generator_->partVz[partonN]*generator_->partVz[partonN]);
+	  //	    std::cout << PDG_ID << " = PDG ID of particle from QCD process that is near a seeded (by delayed 4x4 region) L1 jet, and this originated at " << vertex << " with delta R = " << closestQCDParton(jetIt, l1emu_, generator_)[0] << std::endl;
+	  PDGid_radius->Fill(abs(PDG_ID),vertex);
 	}
       }
 
@@ -1246,6 +1283,11 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
     DeltaR_L1_prompt_hit_emu->Write();
     Mult_delayed_hit_emu->Write();
     Mult_prompt_hit_emu->Write();
+
+    ctau_LLP->Write();
+    ctau_LLP_trigger->Write();
+    path_length->Write();
+    path_length_energy->Write();
     PDGid_radius->Write();
     pion_radius_z->Write();
     delayed4x4seed_TDC_GeV_HB->Write();
