@@ -711,6 +711,16 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	}
 	Jet_DR[jetIt]->Fill(min_DeltaR_L1jets);
       }
+
+      // triggerability restrictions
+      int numLLPdecayHB = 0; // count how many LLP decay products are expected to intersect the HB
+      for (uint jetIt = 0; jetIt < nJetemu; jetIt++) { // loop over jets                                                                                 
+        if (abs(l1emu_->jetEta[jetIt]) > 2.5) continue; // consider HB jets, HB extends to 1.4. HE extends to 3.                                         
+        if (closestParton(jetIt, l1emu_, generator_)[0] <= 0.5) { // if closest parton is near a HB L1 jet  
+          numLLPdecayHB += 1; // how many of the partons expected to intersect HB                              
+        }
+      }
+      if (inputFile.substr(27,2) == "mh" && numLLPdecayHB == 0 ) continue; // if no LLPs in HB, skip event                                                
       int SumTimingBitJet1_HB = 0;
       int SumTimingBitJet2_HB = 0;
       int SumTimingBitJet3_HB = 0;
