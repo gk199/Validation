@@ -28,7 +28,9 @@ https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideL1TStage2Instructions#Envi
 
 In 11_0_X:
 ```
-git cms-merge-topic --unsafe georgia14:upgradeHcalTPs-l1t-110X
+#git cms-merge-topic --unsafe georgia14:upgradeHcalTPs-l1t-110X
+#git cms-merge-topic --unsafe lwang046:upgradeHcalTPs-timeingbit-106X 
+git cms-merge-topic --unsafe lwang046:upgradeHcalTPs-timeingbit-110X
 git clone git@github.com:cms-hcal-trigger/validation.git HcalTrigger/Validation 
 ```
 
