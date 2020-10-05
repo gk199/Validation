@@ -313,7 +313,8 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
   double prompt_TP_energy_variable = 3; // energy for a prompt TP
   double prompt_2x2_TP_variable = 2; // how many high energy TPs to reject jet based on (if >= this variable)
   double delayed_4x4_variable = 2; // how many cells to count as a delayed seed 4x4 region (require >= this variable)
-  double TDC_variable = 4; // TDC value to be considered delayed
+  double TDC_HB_variable = 4; // TDC value to be considered delayed
+  double TDC_HE_variable = 4;
   double GeV_HB_variable = 2; // GeV value to be considered delayed
   double GeV_HE_variable = 1;
 
@@ -545,7 +546,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
   // saving rate and efficiencies 
   double passed4JetMult_HBHE_ht120_1(0), passed4JetMult_HBHE_ht120_2(0), passed4JetMult_HBHE_ht120_3(0), passed4JetMult_HBHE_ht120_4(0), passed4JetMult_HBHE_ht120_5(0); //, passed4JetMult_HB_ht120(0),passed4JetMult_HE_ht120(0);
   double passed_calo_cluster_trig(0);
-  double passed_calo_cluster_trig_120(0);
+  double passed_calo_cluster_trig_120(0), passed_calo_cluster_trig_120_2(0), passed_calo_cluster_trig_120_3(0), passed_calo_cluster_trig_120_4(0), passed_calo_cluster_trig_120_5(0);
   double passedHtSum360(0);
   double totalEvents(0);
   double totalEvents_HBdr05(0);
@@ -783,21 +784,21 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 	//        int TP_TimingBit = l1CaloTPemu_->hcalTPTimingBit[HcalTPIt];
 	//	if (abs(tpEtaemu) <= 16) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] = TP_TimingBit;
 	if (abs(tpEtaemu) <= 16) { 
-	  if (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >= TDC_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
-          if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming2[HcalTPIt] >= TDC_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
-          if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming3[HcalTPIt] >= TDC_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
-          if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming4[HcalTPIt] >= TDC_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
+	  if (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >= TDC_HB_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
+          if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming2[HcalTPIt] >= TDC_HB_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
+          if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming3[HcalTPIt] >= TDC_HB_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
+          if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming4[HcalTPIt] >= TDC_HB_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
 	}
 
 	if (abs(tpEtaemu) > 16) { // lower energy thresholds in HE, since using transverse energy goes as 1/cosh(eta)
 	  // investigate which depth layers to include, timing bit excludes depth layer 1
 	  //	  if (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] >= 3 && l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >= 3) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
-          if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming2[HcalTPIt] >= TDC_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
-          if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming3[HcalTPIt] >= TDC_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
-          if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming4[HcalTPIt] >= TDC_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
-          if (l1CaloTPemu_->hcalTPDepth5[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming5[HcalTPIt] >= TDC_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
-          if (l1CaloTPemu_->hcalTPDepth6[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming6[HcalTPIt] >= TDC_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
-          if (l1CaloTPemu_->hcalTPDepth7[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming7[HcalTPIt] >= TDC_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
+          if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming2[HcalTPIt] >= TDC_HE_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
+          if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming3[HcalTPIt] >= TDC_HE_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
+          if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming4[HcalTPIt] >= TDC_HE_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
+          if (l1CaloTPemu_->hcalTPDepth5[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming5[HcalTPIt] >= TDC_HE_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
+          if (l1CaloTPemu_->hcalTPDepth6[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming6[HcalTPIt] >= TDC_HE_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
+          if (l1CaloTPemu_->hcalTPDepth7[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming7[HcalTPIt] >= TDC_HE_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
 	}
 
 	// prompt veto, counts high energy prompt TPs in region with no delayed hits
@@ -870,45 +871,45 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 		if ( (seed_ieta_1 == tpEtaemu) || (seed_ieta_2 == tpEtaemu) || (seed_ieta_3 == tpEtaemu) || (seed_ieta_4 == tpEtaemu) ) { // ieta
 		  if ( (seed_iphi_1 == tpPhiemu) || (seed_iphi_2 == tpPhiemu) || (seed_iphi_3 == tpPhiemu) || (seed_iphi_4 == tpPhiemu) ) { // iphi
 		    if (abs(tpEtaemu) > 16) { // lower energy thresholds in HE, since using transverse energy goes as 1/cosh(eta)
-		      if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming2[HcalTPIt] >= TDC_variable) {
+		      if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming2[HcalTPIt] >= TDC_HE_variable) {
 			delayed4x4seed_TDC_GeV_HE->Fill(l1CaloTPemu_->hcalTPtiming2[HcalTPIt], l1CaloTPemu_->hcalTPDepth2[HcalTPIt]);
                         delayed4x4seed_depth_TDC_HE->Fill(2, l1CaloTPemu_->hcalTPtiming2[HcalTPIt]);
 		      }
-		      if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming3[HcalTPIt] >= TDC_variable) {
+		      if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming3[HcalTPIt] >= TDC_HE_variable) {
 			delayed4x4seed_TDC_GeV_HE->Fill(l1CaloTPemu_->hcalTPtiming3[HcalTPIt], l1CaloTPemu_->hcalTPDepth3[HcalTPIt]);
                         delayed4x4seed_depth_TDC_HE->Fill(3, l1CaloTPemu_->hcalTPtiming3[HcalTPIt]);
 		      }
-		      if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming4[HcalTPIt] >= TDC_variable) {
+		      if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming4[HcalTPIt] >= TDC_HE_variable) {
 			delayed4x4seed_TDC_GeV_HE->Fill(l1CaloTPemu_->hcalTPtiming4[HcalTPIt], l1CaloTPemu_->hcalTPDepth4[HcalTPIt]);
                         delayed4x4seed_depth_TDC_HE->Fill(4, l1CaloTPemu_->hcalTPtiming4[HcalTPIt]);
 		      }
-		      if (l1CaloTPemu_->hcalTPDepth5[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming5[HcalTPIt] >= TDC_variable) {
+		      if (l1CaloTPemu_->hcalTPDepth5[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming5[HcalTPIt] >= TDC_HE_variable) {
 			delayed4x4seed_TDC_GeV_HE->Fill(l1CaloTPemu_->hcalTPtiming5[HcalTPIt], l1CaloTPemu_->hcalTPDepth5[HcalTPIt]);
                         delayed4x4seed_depth_TDC_HE->Fill(5, l1CaloTPemu_->hcalTPtiming5[HcalTPIt]);
 		      }
-		      if (l1CaloTPemu_->hcalTPDepth6[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming6[HcalTPIt] >= TDC_variable) {
+		      if (l1CaloTPemu_->hcalTPDepth6[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming6[HcalTPIt] >= TDC_HE_variable) {
 			delayed4x4seed_TDC_GeV_HE->Fill(l1CaloTPemu_->hcalTPtiming6[HcalTPIt], l1CaloTPemu_->hcalTPDepth6[HcalTPIt]);
                         delayed4x4seed_depth_TDC_HE->Fill(6, l1CaloTPemu_->hcalTPtiming6[HcalTPIt]);
 		      }
-		      if (l1CaloTPemu_->hcalTPDepth7[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming7[HcalTPIt] >= TDC_variable) {
+		      if (l1CaloTPemu_->hcalTPDepth7[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming7[HcalTPIt] >= TDC_HE_variable) {
 			delayed4x4seed_TDC_GeV_HE->Fill(l1CaloTPemu_->hcalTPtiming7[HcalTPIt], l1CaloTPemu_->hcalTPDepth7[HcalTPIt]);
                         delayed4x4seed_depth_TDC_HE->Fill(7, l1CaloTPemu_->hcalTPtiming7[HcalTPIt]);
 		      }
 		    } // HE
 		    if (abs(tpEtaemu) <= 16) {
-                      if (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >= TDC_variable) {
+                      if (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >= TDC_HB_variable) {
 			delayed4x4seed_TDC_GeV_HB->Fill(l1CaloTPemu_->hcalTPtiming1[HcalTPIt], l1CaloTPemu_->hcalTPDepth1[HcalTPIt]);
 			delayed4x4seed_depth_TDC_HB->Fill(1, l1CaloTPemu_->hcalTPtiming1[HcalTPIt]);
 		      }
-		      if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming2[HcalTPIt] >= TDC_variable) {
+		      if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming2[HcalTPIt] >= TDC_HB_variable) {
 			delayed4x4seed_TDC_GeV_HB->Fill(l1CaloTPemu_->hcalTPtiming2[HcalTPIt], l1CaloTPemu_->hcalTPDepth2[HcalTPIt]);
                         delayed4x4seed_depth_TDC_HB->Fill(2, l1CaloTPemu_->hcalTPtiming2[HcalTPIt]);
 		      }
-                      if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming3[HcalTPIt] >= TDC_variable) {
+                      if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming3[HcalTPIt] >= TDC_HB_variable) {
 			delayed4x4seed_TDC_GeV_HB->Fill(l1CaloTPemu_->hcalTPtiming3[HcalTPIt], l1CaloTPemu_->hcalTPDepth3[HcalTPIt]);
                         delayed4x4seed_depth_TDC_HB->Fill(3, l1CaloTPemu_->hcalTPtiming3[HcalTPIt]);
 		      }
-                      if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming4[HcalTPIt] >= TDC_variable) {
+                      if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming4[HcalTPIt] >= TDC_HB_variable) {
 			delayed4x4seed_TDC_GeV_HB->Fill(l1CaloTPemu_->hcalTPtiming4[HcalTPIt], l1CaloTPemu_->hcalTPDepth4[HcalTPIt]);
                         delayed4x4seed_depth_TDC_HB->Fill(4, l1CaloTPemu_->hcalTPtiming4[HcalTPIt]);
 		      }
@@ -1005,6 +1006,10 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 
       if ( num_delayed_jet >= 1 ) passed_calo_cluster_trig += 1;
       if ( num_delayed_jet >= 1 && htSum > 120 ) passed_calo_cluster_trig_120 += 1;
+      if ( num_delayed_jet >= 2 && htSum > 120 ) passed_calo_cluster_trig_120_2 += 1;
+      if ( num_delayed_jet >= 3 && htSum > 120 ) passed_calo_cluster_trig_120_3 += 1;
+      if ( num_delayed_jet >= 4 && htSum > 120 ) passed_calo_cluster_trig_120_4 += 1;
+      if ( num_delayed_jet >= 5 && htSum > 120 ) passed_calo_cluster_trig_120_5 += 1;
       if ( ((htSum > 120) && ( num_delayed_jet >= 1 )) || (htSum >= 360) ) passed4JetMult_HBHE_ht120_1 += 1; // +7
       if ( ((htSum > 120) && ( num_delayed_jet >= 2 )) || (htSum >= 360) ) passed4JetMult_HBHE_ht120_2 += 1;
       if ( ((htSum > 120) && ( num_delayed_jet >= 3 )) || (htSum >= 360) ) passed4JetMult_HBHE_ht120_3 += 1;
@@ -1371,13 +1376,22 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
     MultiplicityHits50ADC3ns_ht120_Signal << passed4JetMult_HBHE_ht120_4 / totalEvents << std::endl;
     MultiplicityHits50ADC3ns_ht120_Signal << passed4JetMult_HBHE_ht120_5 / totalEvents << std::endl;
     MultiplicityHits50ADC3ns_ht120_Signal << passedHtSum360 / totalEvents << std::endl; // efficiency at HT 360
-    MultiplicityHits50ADC3ns_ht120_Signal << " " << std::endl;
-    MultiplicityHits50ADC3ns_ht120_Signal << "Added efficiency at nhit = 1,2,3,4,5 " << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Signal << "" << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Signal << "" << std::endl;
+    //    MultiplicityHits50ADC3ns_ht120_Signal << "Added efficiency at nhit = 1,2,3,4,5 " << std::endl;
     MultiplicityHits50ADC3ns_ht120_Signal << (passed4JetMult_HBHE_ht120_1 - passedHtSum360)*100 / totalEvents << std::endl;
     MultiplicityHits50ADC3ns_ht120_Signal << (passed4JetMult_HBHE_ht120_2 - passedHtSum360)*100 / totalEvents << std::endl;
     MultiplicityHits50ADC3ns_ht120_Signal << (passed4JetMult_HBHE_ht120_3 - passedHtSum360)*100 / totalEvents << std::endl;
     MultiplicityHits50ADC3ns_ht120_Signal << (passed4JetMult_HBHE_ht120_4 - passedHtSum360)*100 / totalEvents << std::endl;
     MultiplicityHits50ADC3ns_ht120_Signal << (passed4JetMult_HBHE_ht120_5 - passedHtSum360)*100 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Signal << "" << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Signal << "" << std::endl;
+    //    MultiplicityHits50ADC3ns_ht120_Signal << "Efficiency at HT120 + timing, increasing number of delayed jets " << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Signal << passed_calo_cluster_trig_120 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Signal << passed_calo_cluster_trig_120_2 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Signal << passed_calo_cluster_trig_120_3 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Signal << passed_calo_cluster_trig_120_4 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Signal << passed_calo_cluster_trig_120_5 / totalEvents << std::endl;
     MultiplicityHits50ADC3ns_ht120_Signal.close();
     std::ofstream Efficiency_HtBins_Signal;
     Efficiency_HtBins_Signal.open(Form("Efficiency_HtBins_Signal_%s.txt", inputFile.substr(27,20).c_str()),std::ios_base::trunc);
@@ -1423,13 +1437,22 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
     MultiplicityHits50ADC3ns_ht120_Background << passed4JetMult_HBHE_ht120_4 / totalEvents << std::endl;
     MultiplicityHits50ADC3ns_ht120_Background << passed4JetMult_HBHE_ht120_5 / totalEvents << std::endl;
     MultiplicityHits50ADC3ns_ht120_Background << passedHtSum360 / totalEvents << std::endl; // efficiency at HT 360  
-    MultiplicityHits50ADC3ns_ht120_Background << " " << std::endl;
-    MultiplicityHits50ADC3ns_ht120_Background << "Added efficiency at nhit = 1,2,3,4,5 " << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Background << "" << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Background << "" << std::endl;
+    //    MultiplicityHits50ADC3ns_ht120_Background << "Added efficiency at nhit = 1,2,3,4,5 " << std::endl;
     MultiplicityHits50ADC3ns_ht120_Background << (passed4JetMult_HBHE_ht120_1 - passedHtSum360)*100 / totalEvents << std::endl;
     MultiplicityHits50ADC3ns_ht120_Background << (passed4JetMult_HBHE_ht120_2 - passedHtSum360)*100 / totalEvents << std::endl;
     MultiplicityHits50ADC3ns_ht120_Background << (passed4JetMult_HBHE_ht120_3 - passedHtSum360)*100 / totalEvents << std::endl;
     MultiplicityHits50ADC3ns_ht120_Background << (passed4JetMult_HBHE_ht120_4 - passedHtSum360)*100 / totalEvents << std::endl;
     MultiplicityHits50ADC3ns_ht120_Background << (passed4JetMult_HBHE_ht120_5 - passedHtSum360)*100 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Background << "" << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Background << "" << std::endl;
+    //    MultiplicityHits50ADC3ns_ht120_Background << "Efficiency at HT120 + timing, increasing number of delayed jets " << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Background << passed_calo_cluster_trig_120 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Background << passed_calo_cluster_trig_120_2 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Background << passed_calo_cluster_trig_120_3 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Background << passed_calo_cluster_trig_120_4 / totalEvents << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Background << passed_calo_cluster_trig_120_5 / totalEvents << std::endl;
     MultiplicityHits50ADC3ns_ht120_Background.close();
   }
   // neutrino gun rates
