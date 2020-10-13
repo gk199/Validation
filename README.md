@@ -72,3 +72,6 @@ root
 .x plotSpatialDist.C(0)
 ```
 where `(0)` indicates which event is considered. 
+
+## Location on lxplus
+`/afs/cern.ch/work/g/gkopp/HCAL_Trigger/L1Ntuples/HCAL_TP_TimingBitEmulator/CMSSW_10_6_0/src/HcalTrigger/Validation/` for the timing bit implementation in CMSSW 106X. This has code for both the inclusive 4 jet delayed trigger, and the delayed jet trigger (based on prompt and delayed seeds).

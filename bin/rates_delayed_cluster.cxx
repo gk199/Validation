@@ -15,7 +15,7 @@
 #include "L1Trigger/L1TNtuples/interface/L1AnalysisRecoVertexDataFormat.h"
 #include "L1Trigger/L1TNtuples/interface/L1AnalysisCaloTPDataFormat.h"
 #include "L1Trigger/L1TNtuples/interface/L1AnalysisGeneratorDataFormat.h"
-
+//#include "FastSimDataFormats/NuclearInteractions/interface/FSimDisplacedVertex.h"
 
 /* TODO: put errors in rates...
 creates the the rates and distributions for l1 trigger objects
@@ -955,13 +955,20 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
       // how many jets pass the delayed trigger
       int num_delayed_jet = 0;
       for (uint jetIt = 0; jetIt < nJetemu; jetIt++) {
+	int num_delayed_obj = 0; // used for ROC curves
 	if (delayed_calo_objects[jetIt] >= 1) { // make sure a jet is seeded!	
 	  Mult_delayed_hit_emu->Fill(delayed[jetIt]);
 	  Mult_prompt_hit_emu->Fill(prompt_TP[jetIt]);
 	}
 
 	if (delayed_calo_objects[jetIt] > 0) prompt_delayed_seed->Fill(prompt_TP[jetIt], delayed_calo_objects[jetIt]);
-	if (delayed_calo_objects[jetIt] >= 1 && prompt_TP[jetIt] < prompt_2x2_TP_variable && prompt_energy[jetIt] == 0) num_delayed_jet += 1;
+	// num_delayed_jet is 1 if has delayed seed, 2 if delayed seed and passed prompt TP veto, 3 if delayed seed and passed prompt TP veto and prompt 2x2 veto. Used for ROC curves instead of scanning n_delayed_jets. Progressively add on requirements, in this order
+	if (delayed_calo_objects[jetIt] >= 1) num_delayed_obj += 1;
+	if (delayed_calo_objects[jetIt] >= 1 && prompt_TP[jetIt] < prompt_2x2_TP_variable) num_delayed_obj += 1;
+	if (delayed_calo_objects[jetIt] >= 1 && prompt_TP[jetIt] < prompt_2x2_TP_variable && prompt_energy[jetIt] == 0) num_delayed_obj += 1;
+	// now find max of num_delayed_obj
+	if (num_delayed_obj > num_delayed_jet) num_delayed_jet = num_delayed_obj;
+	//	if (delayed_calo_objects[jetIt] >= 1 && prompt_TP[jetIt] < prompt_2x2_TP_variable && prompt_energy[jetIt] == 0) num_delayed_jet += 1;
       }
       if (num_delayed_jet > 0) HTdistribution_trig_emu->Fill(htSum); // plot HT dist of events passing calo trigger 
       HTdistribution_emu->Fill(htSum);

@@ -101,8 +101,8 @@ int main() {
   double Background_120timing[5],Background_120timingOR360[5];
 
   for (int i=0; i<5; i++) {
-    Signal_120timingOR360_mh1000_pl10000[i] = arr_signal_mh1000_pl10000[i];
-    Signal_120timing_mh1000_pl10000[i] = arr_signal_mh1000_pl10000[i+11];
+    Signal_120timingOR360_mh1000_pl10000[i] = arr_signal_mh1000_pl10000[i]; // eff at 120+timing OR 360
+    Signal_120timing_mh1000_pl10000[i] = arr_signal_mh1000_pl10000[i+11]; // eff at 120+timing, this is last grouping of what is written to txt file
     Signal_120timingOR360_mh1000_pl1000[i] = arr_signal_mh1000_pl1000[i];
     Signal_120timing_mh1000_pl1000[i] = arr_signal_mh1000_pl1000[i+11];
     Signal_120timingOR360_mh1000_pl500[i] = arr_signal_mh1000_pl500[i];
@@ -135,26 +135,26 @@ int main() {
 
 
   // make TGraphs with various TDC scans overlayed to compare signal acceptance and background rejection performance
-  TGraph *gr_120timing_mh1000_pl10000_timescan = new TGraph (2, Signal_120timing_mh1000_pl10000,Background_120timing);
-  TGraph *gr_120timingOR360_mh1000_pl10000_timescan = new TGraph (2, Signal_120timingOR360_mh1000_pl10000,Background_120timingOR360);
-  TGraph *gr_120timing_mh1000_pl1000_timescan = new TGraph (2, Signal_120timing_mh1000_pl1000,Background_120timing);
-  TGraph *gr_120timingOR360_mh1000_pl1000_timescan = new TGraph (2, Signal_120timingOR360_mh1000_pl1000,Background_120timingOR360);
-  TGraph *gr_120timing_mh1000_pl500_timescan = new TGraph (2, Signal_120timing_mh1000_pl500,Background_120timing);
-  TGraph *gr_120timingOR360_mh1000_pl500_timescan = new TGraph (2, Signal_120timingOR360_mh1000_pl500,Background_120timingOR360);
-  TGraph *gr_120timing_mh350_pl10000_timescan = new TGraph (2, Signal_120timing_mh350_pl10000,Background_120timing);
-  TGraph *gr_120timingOR360_mh350_pl10000_timescan = new TGraph (2, Signal_120timingOR360_mh350_pl10000,Background_120timingOR360);
-  TGraph *gr_120timing_mh350_pl1000_timescan = new TGraph (2, Signal_120timing_mh350_pl1000,Background_120timing);
-  TGraph *gr_120timingOR360_mh350_pl1000_timescan = new TGraph (2, Signal_120timingOR360_mh350_pl1000,Background_120timingOR360);
-  TGraph *gr_120timing_mh350_pl500_timescan = new TGraph (2, Signal_120timing_mh350_pl500,Background_120timing);
-  TGraph *gr_120timingOR360_mh350_pl500_timescan = new TGraph (2, Signal_120timingOR360_mh350_pl500,Background_120timingOR360);
-  TGraph *gr_120timing_mh250_pl1000_timescan = new TGraph (2, Signal_120timing_mh250_pl1000,Background_120timing);
-  TGraph *gr_120timingOR360_mh250_pl1000_timescan = new TGraph (2, Signal_120timingOR360_mh250_pl1000,Background_120timingOR360);
-  TGraph *gr_120timing_mh125_pl10000_timescan = new TGraph (2, Signal_120timing_mh125_pl10000,Background_120timing);
-  TGraph *gr_120timingOR360_mh125_pl10000_timescan = new TGraph (2, Signal_120timingOR360_mh125_pl10000,Background_120timingOR360);
-  TGraph *gr_120timing_mh125_pl1000_timescan = new TGraph (2, Signal_120timing_mh125_pl1000,Background_120timing);
-  TGraph *gr_120timingOR360_mh125_pl1000_timescan = new TGraph (2, Signal_120timingOR360_mh125_pl1000,Background_120timingOR360);
-  TGraph *gr_120timing_mh125_pl500_timescan = new TGraph (2, Signal_120timing_mh125_pl500,Background_120timing);
-  TGraph *gr_120timingOR360_mh125_pl500_timescan = new TGraph (2, Signal_120timingOR360_mh125_pl500,Background_120timingOR360);
+  TGraph *gr_120timing_mh1000_pl10000_timescan = new TGraph (3, Signal_120timing_mh1000_pl10000,Background_120timing);
+  TGraph *gr_120timingOR360_mh1000_pl10000_timescan = new TGraph (3, Signal_120timingOR360_mh1000_pl10000,Background_120timingOR360);
+  TGraph *gr_120timing_mh1000_pl1000_timescan = new TGraph (3, Signal_120timing_mh1000_pl1000,Background_120timing);
+  TGraph *gr_120timingOR360_mh1000_pl1000_timescan = new TGraph (3, Signal_120timingOR360_mh1000_pl1000,Background_120timingOR360);
+  TGraph *gr_120timing_mh1000_pl500_timescan = new TGraph (3, Signal_120timing_mh1000_pl500,Background_120timing);
+  TGraph *gr_120timingOR360_mh1000_pl500_timescan = new TGraph (3, Signal_120timingOR360_mh1000_pl500,Background_120timingOR360);
+  TGraph *gr_120timing_mh350_pl10000_timescan = new TGraph (3, Signal_120timing_mh350_pl10000,Background_120timing);
+  TGraph *gr_120timingOR360_mh350_pl10000_timescan = new TGraph (3, Signal_120timingOR360_mh350_pl10000,Background_120timingOR360);
+  TGraph *gr_120timing_mh350_pl1000_timescan = new TGraph (3, Signal_120timing_mh350_pl1000,Background_120timing);
+  TGraph *gr_120timingOR360_mh350_pl1000_timescan = new TGraph (3, Signal_120timingOR360_mh350_pl1000,Background_120timingOR360);
+  TGraph *gr_120timing_mh350_pl500_timescan = new TGraph (3, Signal_120timing_mh350_pl500,Background_120timing);
+  TGraph *gr_120timingOR360_mh350_pl500_timescan = new TGraph (3, Signal_120timingOR360_mh350_pl500,Background_120timingOR360);
+  TGraph *gr_120timing_mh250_pl1000_timescan = new TGraph (3, Signal_120timing_mh250_pl1000,Background_120timing);
+  TGraph *gr_120timingOR360_mh250_pl1000_timescan = new TGraph (3, Signal_120timingOR360_mh250_pl1000,Background_120timingOR360);
+  TGraph *gr_120timing_mh125_pl10000_timescan = new TGraph (3, Signal_120timing_mh125_pl10000,Background_120timing);
+  TGraph *gr_120timingOR360_mh125_pl10000_timescan = new TGraph (3, Signal_120timingOR360_mh125_pl10000,Background_120timingOR360);
+  TGraph *gr_120timing_mh125_pl1000_timescan = new TGraph (3, Signal_120timing_mh125_pl1000,Background_120timing);
+  TGraph *gr_120timingOR360_mh125_pl1000_timescan = new TGraph (3, Signal_120timingOR360_mh125_pl1000,Background_120timingOR360);
+  TGraph *gr_120timing_mh125_pl500_timescan = new TGraph (3, Signal_120timing_mh125_pl500,Background_120timing);
+  TGraph *gr_120timingOR360_mh125_pl500_timescan = new TGraph (3, Signal_120timingOR360_mh125_pl500,Background_120timingOR360);
 
   TCanvas *ROC_120timingOR360_pl10000 = new TCanvas("ROC_120timingOR360_pl10000","Graph Draw Options",200,10,600,600);
   ROC_120timingOR360_pl10000->SetGrid();
@@ -169,9 +169,9 @@ int main() {
   gr_120timingOR360_mh125_pl10000_timescan->SetLineColor(3);
   gr_120timingOR360_mh125_pl10000_timescan->Draw("C*");
   auto legend_pl10000 = new TLegend(0.45,0.65,0.9,0.8);
-  legend_pl10000->AddEntry(gr_120timingOR360_mh125_pl10000_timescan,"mh = 125, 120+timing OR 360, njets scanned");
-  legend_pl10000->AddEntry(gr_120timingOR360_mh350_pl10000_timescan,"mh = 350, 120+timing OR 360, njets scanned");
-  legend_pl10000->AddEntry(gr_120timingOR360_mh1000_pl10000_timescan,"mh = 1000, 120+timing OR 360, njets scanned");
+  legend_pl10000->AddEntry(gr_120timingOR360_mh125_pl10000_timescan,"mh = 125, 120+timing OR 360, delayed objects scanned");
+  legend_pl10000->AddEntry(gr_120timingOR360_mh350_pl10000_timescan,"mh = 350, 120+timing OR 360, delayed objects scanned");
+  legend_pl10000->AddEntry(gr_120timingOR360_mh1000_pl10000_timescan,"mh = 1000, 120+timing OR 360, delayed objects scanned");
   legend_pl10000->Draw();
   ROC_120timingOR360_pl10000->SaveAs("plots/ROC_120timingOR360_pl10000.pdf");
 
@@ -190,10 +190,10 @@ int main() {
   gr_120timingOR360_mh250_pl1000_timescan->SetLineColor(1);
   gr_120timingOR360_mh250_pl1000_timescan->Draw("C*");
   auto legend_pl1000 = new TLegend(0.45,0.65,0.9,0.8);
-  legend_pl1000->AddEntry(gr_120timingOR360_mh125_pl1000_timescan,"mh = 125, 120+timing OR 360, njets scanned");
-  legend_pl1000->AddEntry(gr_120timingOR360_mh250_pl1000_timescan,"mh = 250, 120+timing OR 360, njets scanned");
-  legend_pl1000->AddEntry(gr_120timingOR360_mh350_pl1000_timescan,"mh = 350, 120+timing OR 360, njets scanned");
-  legend_pl1000->AddEntry(gr_120timingOR360_mh1000_pl1000_timescan,"mh = 1000, 120+timing OR 360, njets scanned");
+  legend_pl1000->AddEntry(gr_120timingOR360_mh125_pl1000_timescan,"mh = 125, 120+timing OR 360, delayed objects scanned");
+  legend_pl1000->AddEntry(gr_120timingOR360_mh250_pl1000_timescan,"mh = 250, 120+timing OR 360, delayed objects scanned");
+  legend_pl1000->AddEntry(gr_120timingOR360_mh350_pl1000_timescan,"mh = 350, 120+timing OR 360, delayed objects scanned");
+  legend_pl1000->AddEntry(gr_120timingOR360_mh1000_pl1000_timescan,"mh = 1000, 120+timing OR 360, delayed objects scanned");
   legend_pl1000->Draw();
   ROC_120timingOR360_pl1000->SaveAs("plots/ROC_120timingOR360_pl1000.pdf");
 
@@ -210,9 +210,9 @@ int main() {
   gr_120timingOR360_mh125_pl500_timescan->SetLineColor(3);
   gr_120timingOR360_mh125_pl500_timescan->Draw("C*");
   auto legend_pl500 = new TLegend(0.45,0.65,0.9,0.8);
-  legend_pl500->AddEntry(gr_120timingOR360_mh125_pl500_timescan,"mh = 125, 120+timing OR 360, njets scanned");
-  legend_pl500->AddEntry(gr_120timingOR360_mh350_pl500_timescan,"mh = 350, 120+timing OR 360, njets scanned");
-  legend_pl500->AddEntry(gr_120timingOR360_mh1000_pl500_timescan,"mh = 1000, 120+timing OR 360, njets scanned");
+  legend_pl500->AddEntry(gr_120timingOR360_mh125_pl500_timescan,"mh = 125, 120+timing OR 360, delayed objects scanned");
+  legend_pl500->AddEntry(gr_120timingOR360_mh350_pl500_timescan,"mh = 350, 120+timing OR 360, delayed objects scanned");
+  legend_pl500->AddEntry(gr_120timingOR360_mh1000_pl500_timescan,"mh = 1000, 120+timing OR 360, delayed objects scanned");
   legend_pl500->Draw();
   ROC_120timingOR360_pl500->SaveAs("plots/ROC_120timingOR360_pl500.pdf");
 
@@ -230,9 +230,9 @@ int main() {
   gr_120timing_mh125_pl10000_timescan->SetLineColor(3);
   gr_120timing_mh125_pl10000_timescan->Draw("C*");
   auto legend_120timing_pl10000 = new TLegend(0.15,0.15,0.55,0.4);
-  legend_120timing_pl10000->AddEntry(gr_120timing_mh125_pl10000_timescan,"mh = 125, 120+timing, njets scanned");
-  legend_120timing_pl10000->AddEntry(gr_120timing_mh350_pl10000_timescan,"mh = 350, 120+timing, njets scanned");
-  legend_120timing_pl10000->AddEntry(gr_120timing_mh1000_pl10000_timescan,"mh = 1000, 120+timing, njets scanned");
+  legend_120timing_pl10000->AddEntry(gr_120timing_mh125_pl10000_timescan,"mh = 125, 120+timing, delayed objects scanned");
+  legend_120timing_pl10000->AddEntry(gr_120timing_mh350_pl10000_timescan,"mh = 350, 120+timing, delayed objects scanned");
+  legend_120timing_pl10000->AddEntry(gr_120timing_mh1000_pl10000_timescan,"mh = 1000, 120+timing, delayed objects scanned");
   legend_120timing_pl10000->Draw();
   ROC_120timing_pl10000->SaveAs("plots/ROC_120timing_pl10000.pdf");
 
@@ -251,10 +251,10 @@ int main() {
   gr_120timing_mh250_pl1000_timescan->SetLineColor(1);
   gr_120timing_mh250_pl1000_timescan->Draw("C*");
   auto legend_120timing_pl1000 = new TLegend(0.15,0.15,0.55,0.4);
-  legend_120timing_pl1000->AddEntry(gr_120timing_mh125_pl1000_timescan,"mh = 125, 120+timing, njets scanned");
-  legend_120timing_pl1000->AddEntry(gr_120timing_mh250_pl1000_timescan,"mh = 250, 120+timing, njets scanned");
-  legend_120timing_pl1000->AddEntry(gr_120timing_mh350_pl1000_timescan,"mh = 350, 120+timing, njets scanned");
-  legend_120timing_pl1000->AddEntry(gr_120timing_mh1000_pl1000_timescan,"mh = 1000, 120+timing, njets scanned");
+  legend_120timing_pl1000->AddEntry(gr_120timing_mh125_pl1000_timescan,"mh = 125, 120+timing, delayed objects scanned");
+  legend_120timing_pl1000->AddEntry(gr_120timing_mh250_pl1000_timescan,"mh = 250, 120+timing, delayed objects scanned");
+  legend_120timing_pl1000->AddEntry(gr_120timing_mh350_pl1000_timescan,"mh = 350, 120+timing, delayed objects scanned");
+  legend_120timing_pl1000->AddEntry(gr_120timing_mh1000_pl1000_timescan,"mh = 1000, 120+timing, delayed objects scanned");
   legend_120timing_pl1000->Draw();
   ROC_120timing_pl1000->SaveAs("plots/ROC_120timing_pl1000.pdf");
 
@@ -271,9 +271,9 @@ int main() {
   gr_120timing_mh125_pl500_timescan->SetLineColor(3);
   gr_120timing_mh125_pl500_timescan->Draw("C*");
   auto legend_120timing_pl500 = new TLegend(0.15,0.15,0.55,0.4);
-  legend_120timing_pl500->AddEntry(gr_120timing_mh125_pl500_timescan,"mh = 125, 120+timing, njets scanned");
-  legend_120timing_pl500->AddEntry(gr_120timing_mh350_pl500_timescan,"mh = 350, 120+timing, njets scanned");
-  legend_120timing_pl500->AddEntry(gr_120timing_mh1000_pl500_timescan,"mh = 1000, 120+timing, njets scanned");
+  legend_120timing_pl500->AddEntry(gr_120timing_mh125_pl500_timescan,"mh = 125, 120+timing, delayed objects scanned");
+  legend_120timing_pl500->AddEntry(gr_120timing_mh350_pl500_timescan,"mh = 350, 120+timing, delayed objects scanned");
+  legend_120timing_pl500->AddEntry(gr_120timing_mh1000_pl500_timescan,"mh = 1000, 120+timing, delayed objects scanned");
   legend_120timing_pl500->Draw();
   ROC_120timing_pl500->SaveAs("plots/ROC_120timing_pl500.pdf");
 
