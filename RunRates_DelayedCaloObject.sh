@@ -1,26 +1,22 @@
-echo "Compiling rates.cxx, draw_timingbit.cxx files"
-echo " "
-scram b -j 8
-echo " "
-echo " "
+echo " " 
 echo "LLP mh=125 GeV, ctau=10 m"
-rates_delayed_cluster.exe new GeV3_ADC50_ADC105_no1HE4HB/mh125__mx50__pl10000
+rates_delayed_cluster.exe new GeV3_ADC50_ADC105_no1HE4HB/mh125__mx50__pl10000 $1 $2 $3 $4 $5 $6
 mv rates_new_cond.root rates_new_cond_LLP_pl10000.root
 echo " "
 echo "LLP mh=125 GeV, ctau=1 m"
-rates_delayed_cluster.exe new GeV3_ADC50_ADC105_no1HE4HB/mh125__mx50__pl1000_
+rates_delayed_cluster.exe new GeV3_ADC50_ADC105_no1HE4HB/mh125__mx50__pl1000_ $1 $2 $3 $4 $5 $6
 mv rates_new_cond.root rates_new_cond_LLP_pl1000.root
 echo " "
 echo "LLP mh=125 GeV, ctau=0.5 m"
-rates_delayed_cluster.exe new GeV3_ADC50_ADC105_no1HE4HB/mh125__mx50__pl500__
+rates_delayed_cluster.exe new GeV3_ADC50_ADC105_no1HE4HB/mh125__mx50__pl500__ $1 $2 $3 $4 $5 $6
 mv rates_new_cond.root rates_new_cond_LLP_pl500.root
 echo " "
 echo "QCD"
-rates_delayed_cluster.exe new GeV3_ADC50_ADC105_no1HE4HB/QCD
+rates_delayed_cluster.exe new GeV3_ADC50_ADC105_no1HE4HB/QCD $1 $2 $3 $4 $5 $6
 mv rates_new_cond.root rates_new_cond_QCD.root
 echo " "
 echo "Neutrino gun new and old conditions"
-rates_delayed_cluster.exe new GeV3_ADC50_ADC105_no1HE4HB/NeutrinoGun
+rates_delayed_cluster.exe new GeV3_ADC50_ADC105_no1HE4HB/NeutrinoGun $1 $2 $3 $4 $5 $6
 rates_original.exe def GeV3_ADC50_ADC105_no1HE4HB/NeutrinoGun
 echo " "
 echo " "
@@ -47,15 +43,15 @@ mv plots/HTdistributionOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC5
 mv plots/HTdistribution_trigOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/HTdistribution_trig_Overlay_mh125.pdf
 echo " "
 echo "LLP mh=1000 GeV, ctau=10 m"
-rates_delayed_cluster.exe new GeV3_ADC50_ADC105_no1HE4HB/mh1000_mx450_pl10000
+rates_delayed_cluster.exe new GeV3_ADC50_ADC105_no1HE4HB/mh1000_mx450_pl10000 $1 $2 $3 $4 $5 $6
 mv rates_new_cond.root rates_new_cond_LLP_pl10000.root
 echo " "
 echo "LLP mh=1000 GeV, ctau=1 m"
-rates_delayed_cluster.exe new GeV3_ADC50_ADC105_no1HE4HB/mh1000_mx450_pl1000_
+rates_delayed_cluster.exe new GeV3_ADC50_ADC105_no1HE4HB/mh1000_mx450_pl1000_ $1 $2 $3 $4 $5 $6
 mv rates_new_cond.root rates_new_cond_LLP_pl1000.root
 echo " "
 echo "LLP mh=1000 GeV, ctau=0.5 m"
-rates_delayed_cluster.exe new GeV3_ADC50_ADC105_no1HE4HB/mh1000_mx450_pl500__
+rates_delayed_cluster.exe new GeV3_ADC50_ADC105_no1HE4HB/mh1000_mx450_pl500__ $1 $2 $3 $4 $5 $6
 mv rates_new_cond.root rates_new_cond_LLP_pl500.root
 echo " "
 echo "Making overlay plots from draw_timingbit.exe"
@@ -76,15 +72,15 @@ mv plots/HTdistributionOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC5
 mv plots/HTdistribution_trigOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/HTdistribution_trig_Overlay_mh1000.pdf
 echo " "
 echo "LLP mh=350 GeV, ctau=10 m"
-rates_delayed_cluster.exe new GeV3_ADC50_ADC105_no1HE4HB/mh350__mx160_pl10000
+rates_delayed_cluster.exe new GeV3_ADC50_ADC105_no1HE4HB/mh350__mx160_pl10000 $1 $2 $3 $4 $5 $6
 mv rates_new_cond.root rates_new_cond_LLP_pl10000.root
 echo " "
 echo "LLP mh=350 GeV, ctau=1 m"
-rates_delayed_cluster.exe new GeV3_ADC50_ADC105_no1HE4HB/mh350__mx160_pl1000_
+rates_delayed_cluster.exe new GeV3_ADC50_ADC105_no1HE4HB/mh350__mx160_pl1000_ $1 $2 $3 $4 $5 $6
 mv rates_new_cond.root rates_new_cond_LLP_pl1000.root
 echo " "
 echo "LLP mh=350 GeV, ctau=0.5 m"
-rates_delayed_cluster.exe new GeV3_ADC50_ADC105_no1HE4HB/mh350__mx160_pl500__
+rates_delayed_cluster.exe new GeV3_ADC50_ADC105_no1HE4HB/mh350__mx160_pl500__ $1 $2 $3 $4 $5 $6
 mv rates_new_cond.root rates_new_cond_LLP_pl500.root
 echo " "
 echo "Making overlay plots from draw_timingbit.exe"
@@ -105,7 +101,7 @@ mv plots/HTdistributionOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC5
 mv plots/HTdistribution_trigOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/HTdistribution_trig_Overlay_mh350.pdf
 echo " "
 echo "LLP mh=250 GeV, ctau=1 m"
-rates_delayed_cluster.exe new GeV3_ADC50_ADC105_no1HE4HB/mh250__mx120_pl1000_
+rates_delayed_cluster.exe new GeV3_ADC50_ADC105_no1HE4HB/mh250__mx120_pl1000_ $1 $2 $3 $4 $5 $6
 echo " "
 echo "Efficiency vs. rate plots"
 RateEfficiencyPlots_LLP_ctau.exe

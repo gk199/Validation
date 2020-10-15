@@ -35,16 +35,23 @@ double numBunch = 2556; //1537; //the number of bunches colliding for the run of
 double runLum = 0.02; // 0.44: 275783  0.58:  276363 //luminosity of the run of interest (*10^34)
 double expectedLum = 1.15; //expected luminosity of 2016 runs (*10^34)
 
-void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirectory);
+void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirectory, double TDC_HB_variable, double TDC_HE_variable, double GeV_HB_variable, double GeV_HE_variable, double prompt_TP_energy_variable, double prompt_2x2_energy_variable);
 
 int main(int argc, char *argv[])
 {
   bool newConditions = true;
   std::string ntuplePath("");
+  double TDC_HB;
+  double TDC_HE;
+  double GeV_HB;
+  double GeV_HE;
+  double prompt_TP_energy;
+  double prompt_2x2_energy;
 
-  if (argc != 3) {
+  if (argc != 9) {
     std::cout << "Usage: rates.exe [new/def] [path to ntuples]\n"
-	      << "[new/def] indicates new or default (existing) conditions" << std::endl;
+	      << "[new/def] indicates new or default (existing) conditions"
+	      << "then values for TDC, GeV, prompt reject energies" << std::endl;
     exit(1);
   }
   else {
@@ -57,9 +64,15 @@ int main(int argc, char *argv[])
       exit(1);
     }
     ntuplePath = argv[2];
+    TDC_HB = atof(argv[3]);
+    TDC_HE = atof(argv[4]);
+    GeV_HB = atof(argv[5]);
+    GeV_HE = atof(argv[6]);
+    prompt_TP_energy = atof(argv[7]);
+    prompt_2x2_energy = atof(argv[8]);
   }
 
-  rates_delayed_cluster(newConditions, ntuplePath);
+  rates_delayed_cluster(newConditions, ntuplePath, TDC_HB, TDC_HE, GeV_HB, GeV_HE, prompt_TP_energy, prompt_2x2_energy);
 
   return 0;
 }
@@ -303,20 +316,20 @@ std::vector<double> ctau(int partonN, L1Analysis::L1AnalysisGeneratorDataFormat 
 
 // TOF calculation
 
-void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirectory){
+void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirectory, double TDC_HB_variable, double TDC_HE_variable, double GeV_HB_variable, double GeV_HE_variable, double prompt_TP_energy_variable, double prompt_2x2_energy_variable){
   
   bool hwOn = true;   //are we using data from hardware? (upgrade trigger had to be running!!!)
   bool emuOn = true;  //are we using data from emulator?
 
   // variables used to scan parameters -- energy, time, delayed and prompt seeds
-  double prompt_2x2_energy_variable = 4; // energy to define energetic 2x2 region (non-delayed)
-  double prompt_TP_energy_variable = 3; // energy for a prompt TP
+  //  double prompt_2x2_energy_variable = 4; // energy to define energetic 2x2 region (non-delayed)
+  //  double prompt_TP_energy_variable = 3; // energy for a prompt TP
   double prompt_2x2_TP_variable = 2; // how many high energy TPs to reject jet based on (if >= this variable)
   double delayed_4x4_variable = 2; // how many cells to count as a delayed seed 4x4 region (require >= this variable)
-  double TDC_HB_variable = 4; // TDC value to be considered delayed
-  double TDC_HE_variable = 4;
-  double GeV_HB_variable = 2; // GeV value to be considered delayed
-  double GeV_HE_variable = 1;
+  //  double TDC_HB_variable = 4; // TDC value to be considered delayed
+  //  double TDC_HE_variable = 4;
+  //  double GeV_HB_variable = 2; // GeV value to be considered delayed
+  //  double GeV_HE_variable = 1;
 
   if (hwOn==false && emuOn==false){
     std::cout << "exiting as neither hardware or emulator selected" << std::endl;
