@@ -135,26 +135,26 @@ int main() {
 
 
   // make TGraphs with various TDC scans overlayed to compare signal acceptance and background rejection performance
-  TGraph *gr_120timing_mh1000_pl10000_timescan = new TGraph (3, Signal_120timing_mh1000_pl10000,Background_120timing);
-  TGraph *gr_120timingOR360_mh1000_pl10000_timescan = new TGraph (3, Signal_120timingOR360_mh1000_pl10000,Background_120timingOR360);
-  TGraph *gr_120timing_mh1000_pl1000_timescan = new TGraph (3, Signal_120timing_mh1000_pl1000,Background_120timing);
-  TGraph *gr_120timingOR360_mh1000_pl1000_timescan = new TGraph (3, Signal_120timingOR360_mh1000_pl1000,Background_120timingOR360);
-  TGraph *gr_120timing_mh1000_pl500_timescan = new TGraph (3, Signal_120timing_mh1000_pl500,Background_120timing);
-  TGraph *gr_120timingOR360_mh1000_pl500_timescan = new TGraph (3, Signal_120timingOR360_mh1000_pl500,Background_120timingOR360);
-  TGraph *gr_120timing_mh350_pl10000_timescan = new TGraph (3, Signal_120timing_mh350_pl10000,Background_120timing);
-  TGraph *gr_120timingOR360_mh350_pl10000_timescan = new TGraph (3, Signal_120timingOR360_mh350_pl10000,Background_120timingOR360);
-  TGraph *gr_120timing_mh350_pl1000_timescan = new TGraph (3, Signal_120timing_mh350_pl1000,Background_120timing);
-  TGraph *gr_120timingOR360_mh350_pl1000_timescan = new TGraph (3, Signal_120timingOR360_mh350_pl1000,Background_120timingOR360);
-  TGraph *gr_120timing_mh350_pl500_timescan = new TGraph (3, Signal_120timing_mh350_pl500,Background_120timing);
-  TGraph *gr_120timingOR360_mh350_pl500_timescan = new TGraph (3, Signal_120timingOR360_mh350_pl500,Background_120timingOR360);
-  TGraph *gr_120timing_mh250_pl1000_timescan = new TGraph (3, Signal_120timing_mh250_pl1000,Background_120timing);
-  TGraph *gr_120timingOR360_mh250_pl1000_timescan = new TGraph (3, Signal_120timingOR360_mh250_pl1000,Background_120timingOR360);
-  TGraph *gr_120timing_mh125_pl10000_timescan = new TGraph (3, Signal_120timing_mh125_pl10000,Background_120timing);
-  TGraph *gr_120timingOR360_mh125_pl10000_timescan = new TGraph (3, Signal_120timingOR360_mh125_pl10000,Background_120timingOR360);
-  TGraph *gr_120timing_mh125_pl1000_timescan = new TGraph (3, Signal_120timing_mh125_pl1000,Background_120timing);
-  TGraph *gr_120timingOR360_mh125_pl1000_timescan = new TGraph (3, Signal_120timingOR360_mh125_pl1000,Background_120timingOR360);
-  TGraph *gr_120timing_mh125_pl500_timescan = new TGraph (3, Signal_120timing_mh125_pl500,Background_120timing);
-  TGraph *gr_120timingOR360_mh125_pl500_timescan = new TGraph (3, Signal_120timingOR360_mh125_pl500,Background_120timingOR360);
+  TGraph *gr_120timing_mh1000_pl10000_timescan = new TGraph (5, Signal_120timing_mh1000_pl10000,Background_120timing);
+  TGraph *gr_120timingOR360_mh1000_pl10000_timescan = new TGraph (5, Signal_120timingOR360_mh1000_pl10000,Background_120timingOR360);
+  TGraph *gr_120timing_mh1000_pl1000_timescan = new TGraph (5, Signal_120timing_mh1000_pl1000,Background_120timing);
+  TGraph *gr_120timingOR360_mh1000_pl1000_timescan = new TGraph (5, Signal_120timingOR360_mh1000_pl1000,Background_120timingOR360);
+  TGraph *gr_120timing_mh1000_pl500_timescan = new TGraph (5, Signal_120timing_mh1000_pl500,Background_120timing);
+  TGraph *gr_120timingOR360_mh1000_pl500_timescan = new TGraph (5, Signal_120timingOR360_mh1000_pl500,Background_120timingOR360);
+  TGraph *gr_120timing_mh350_pl10000_timescan = new TGraph (5, Signal_120timing_mh350_pl10000,Background_120timing);
+  TGraph *gr_120timingOR360_mh350_pl10000_timescan = new TGraph (5, Signal_120timingOR360_mh350_pl10000,Background_120timingOR360);
+  TGraph *gr_120timing_mh350_pl1000_timescan = new TGraph (5, Signal_120timing_mh350_pl1000,Background_120timing);
+  TGraph *gr_120timingOR360_mh350_pl1000_timescan = new TGraph (5, Signal_120timingOR360_mh350_pl1000,Background_120timingOR360);
+  TGraph *gr_120timing_mh350_pl500_timescan = new TGraph (5, Signal_120timing_mh350_pl500,Background_120timing);
+  TGraph *gr_120timingOR360_mh350_pl500_timescan = new TGraph (5, Signal_120timingOR360_mh350_pl500,Background_120timingOR360);
+  TGraph *gr_120timing_mh250_pl1000_timescan = new TGraph (5, Signal_120timing_mh250_pl1000,Background_120timing);
+  TGraph *gr_120timingOR360_mh250_pl1000_timescan = new TGraph (5, Signal_120timingOR360_mh250_pl1000,Background_120timingOR360);
+  TGraph *gr_120timing_mh125_pl10000_timescan = new TGraph (5, Signal_120timing_mh125_pl10000,Background_120timing);
+  TGraph *gr_120timingOR360_mh125_pl10000_timescan = new TGraph (5, Signal_120timingOR360_mh125_pl10000,Background_120timingOR360);
+  TGraph *gr_120timing_mh125_pl1000_timescan = new TGraph (5, Signal_120timing_mh125_pl1000,Background_120timing);
+  TGraph *gr_120timingOR360_mh125_pl1000_timescan = new TGraph (5, Signal_120timingOR360_mh125_pl1000,Background_120timingOR360);
+  TGraph *gr_120timing_mh125_pl500_timescan = new TGraph (5, Signal_120timing_mh125_pl500,Background_120timing);
+  TGraph *gr_120timingOR360_mh125_pl500_timescan = new TGraph (5, Signal_120timingOR360_mh125_pl500,Background_120timingOR360);
 
   TCanvas *ROC_120timingOR360_pl10000 = new TCanvas("ROC_120timingOR360_pl10000","Graph Draw Options",200,10,600,600);
   ROC_120timingOR360_pl10000->SetGrid();

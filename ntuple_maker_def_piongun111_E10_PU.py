@@ -26,7 +26,7 @@ process.maxEvents = cms.untracked.PSet(
 
 # Input source
 process.source = cms.Source("PoolSource",
-fileNames = cms.untracked.vstring('file:/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_10_6_0/src/SinglePion_noPU_step1.root'),
+fileNames = cms.untracked.vstring('file:/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/PionGun/SinglePion111_E10_PU_step1.root'),
     secondaryFileNames = cms.untracked.vstring()
 )
 

@@ -33,10 +33,10 @@ mv rates_new_cond_LLP_pl10000.root rates_new_cond_LLP_mh125_pl10000.root
 mv plots/Delayed_2x2_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Delayed_2x2_MultHBOverlay_mh125.pdf
 mv plots/Prompt_2x2_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Prompt_2x2_MultHBOverlay_mh125.pdf
 mv plots/Prompt_Energy_2x2_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Prompt_Energy_2x2_MultHBOverlay_mh125.pdf
-mv plots/DeltaR_L1_delayed_seedOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/DeltaR_L1_delayed_seedOverlay_mh125.pdf
-mv plots/DeltaR_L1_prompt_seedOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/DeltaR_L1_prompt_seedOverlay_mh125.pdf
-mv plots/DeltaR_L1_delayed_hitOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/DeltaR_L1_delayed_hitOverlay_mh125.pdf
-mv plots/DeltaR_L1_prompt_hitOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/DeltaR_L1_prompt_hitOverlay_mh125.pdf
+# mv plots/DeltaR_L1_delayed_seedOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/DeltaR_L1_delayed_seedOverlay_mh125.pdf
+# mv plots/DeltaR_L1_prompt_seedOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/DeltaR_L1_prompt_seedOverlay_mh125.pdf
+# mv plots/DeltaR_L1_delayed_hitOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/DeltaR_L1_delayed_hitOverlay_mh125.pdf
+# mv plots/DeltaR_L1_prompt_hitOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/DeltaR_L1_prompt_hitOverlay_mh125.pdf
 mv plots/Mult_delayed_hitOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Mult_delayed_hitOverlay_mh125.pdf
 mv plots/Mult_prompt_hitOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Mult_prompt_hitOverlay_mh125.pdf
 mv plots/HTdistributionOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/HTdistributionOverlay_mh125.pdf
@@ -62,10 +62,10 @@ mv rates_new_cond_LLP_pl10000.root rates_new_cond_LLP_mh1000_pl10000.root
 mv plots/Delayed_2x2_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Delayed_2x2_MultHBOverlay_mh1000.pdf
 mv plots/Prompt_2x2_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Prompt_2x2_MultHBOverlay_mh1000.pdf
 mv plots/Prompt_Energy_2x2_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Prompt_Energy_2x2_MultHBOverlay_mh1000.pdf
-mv plots/DeltaR_L1_delayed_seedOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/DeltaR_L1_delayed_seedOverlay_mh1000.pdf
-mv plots/DeltaR_L1_prompt_seedOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/DeltaR_L1_prompt_seedOverlay_mh1000.pdf
-mv plots/DeltaR_L1_delayed_hitOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/DeltaR_L1_delayed_hitOverlay_mh1000.pdf
-mv plots/DeltaR_L1_prompt_hitOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/DeltaR_L1_prompt_hitOverlay_mh1000.pdf
+# mv plots/DeltaR_L1_delayed_seedOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/DeltaR_L1_delayed_seedOverlay_mh1000.pdf
+# mv plots/DeltaR_L1_prompt_seedOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/DeltaR_L1_prompt_seedOverlay_mh1000.pdf
+# mv plots/DeltaR_L1_delayed_hitOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/DeltaR_L1_delayed_hitOverlay_mh1000.pdf
+# mv plots/DeltaR_L1_prompt_hitOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/DeltaR_L1_prompt_hitOverlay_mh1000.pdf
 mv plots/Mult_delayed_hitOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Mult_delayed_hitOverlay_mh1000.pdf
 mv plots/Mult_prompt_hitOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Mult_prompt_hitOverlay_mh1000.pdf
 mv plots/HTdistributionOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/HTdistributionOverlay_mh1000.pdf
@@ -91,10 +91,10 @@ mv rates_new_cond_LLP_pl10000.root rates_new_cond_LLP_mh350_pl10000.root
 mv plots/Delayed_2x2_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Delayed_2x2_MultHBOverlay_mh350.pdf
 mv plots/Prompt_2x2_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Prompt_2x2_MultHBOverlay_mh350.pdf
 mv plots/Prompt_Energy_2x2_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Prompt_Energy_2x2_MultHBOverlay_mh350.pdf
-mv plots/DeltaR_L1_delayed_seedOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/DeltaR_L1_delayed_seedOverlay_mh350.pdf
-mv plots/DeltaR_L1_prompt_seedOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/DeltaR_L1_prompt_seedOverlay_mh350.pdf
-mv plots/DeltaR_L1_delayed_hitOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/DeltaR_L1_delayed_hitOverlay_mh350.pdf
-mv plots/DeltaR_L1_prompt_hitOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/DeltaR_L1_prompt_hitOverlay_mh350.pdf
+# mv plots/DeltaR_L1_delayed_seedOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/DeltaR_L1_delayed_seedOverlay_mh350.pdf
+# mv plots/DeltaR_L1_prompt_seedOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/DeltaR_L1_prompt_seedOverlay_mh350.pdf
+# mv plots/DeltaR_L1_delayed_hitOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/DeltaR_L1_delayed_hitOverlay_mh350.pdf
+# mv plots/DeltaR_L1_prompt_hitOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/DeltaR_L1_prompt_hitOverlay_mh350.pdf
 mv plots/Mult_delayed_hitOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Mult_delayed_hitOverlay_mh350.pdf
 mv plots/Mult_prompt_hitOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/Mult_prompt_hitOverlay_mh350.pdf
 mv plots/HTdistributionOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/ADC50_3ns_no1HE4HB/DelayedCaloObject/HTdistributionOverlay_mh350.pdf
