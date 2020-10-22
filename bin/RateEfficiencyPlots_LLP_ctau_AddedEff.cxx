@@ -175,7 +175,7 @@ int main() {
   // 1m
   TCanvas *c1_LLP_pl1000 = new TCanvas("c1_LLP_pl1000","Graph Draw Options",200,10,600,400);
   gr_LLP_mh125_pl1000->Draw("AL*");
-  //  gr_LLP_mh125_pl1000->SetTitle("Rate vs. Signal Efficiency for >=1,2,3,4 Cells >=50ADC,3ns near 4 L1 Jets;Added LLP Efficiency, c#scale[1.2]{#tau}=1m;Neutrino Gun Rate (Hz, unnormalized)   ");
+  //  gr_LLP_mh125_pl1000->SetTitle("Rate vs. Signal Efficiency for >=1,2,3,4,5 Cells >=50ADC,3ns near 4 L1 Jets;Added LLP Efficiency, c#scale[1.2]{#tau}=1m;Neutrino Gun Rate (Hz, unnormalized)   ");
   gr_LLP_mh125_pl1000->SetTitle("Rate vs. Signal Efficiency for >=1,2 Delayed Objects;Added LLP Efficiency, c#scale[1.2]{#tau}=1m;Neutrino Gun Rate (Hz, unnormalized)   ");
   gr_LLP_mh125_pl1000->GetXaxis()->SetLimits(0.,1.);
   gr_LLP_mh125_pl1000->GetHistogram()->SetMinimum(10000.);
@@ -223,7 +223,7 @@ int main() {
   // 0.5 m
   TCanvas *c1_LLP_pl500 = new TCanvas("c1_LLP_pl500","Graph Draw Options",200,10,600,400);
   gr_LLP_mh125_pl500->Draw("AL*");
-  //  gr_LLP_mh125_pl500->SetTitle("Rate vs. Signal Efficiency for >=1,2,3,4 Cells >=50ADC,3ns near 4 L1 Jets;Added LLP Efficiency, c#scale[1.2]{#tau}=0.5m;Neutrino Gun Rate (Hz, unnormalized)   ");
+  //  gr_LLP_mh125_pl500->SetTitle("Rate vs. Signal Efficiency for >=1,2,3,4,5 Cells >=50ADC,3ns near 4 L1 Jets;Added LLP Efficiency, c#scale[1.2]{#tau}=0.5m;Neutrino Gun Rate (Hz, unnormalized)   ");
   gr_LLP_mh125_pl500->SetTitle("Rate vs. Signal Efficiency for >=1,2 Delayed Objects;Added LLP Efficiency, c#scale[1.2]{#tau}=0.5m;Neutrino Gun Rate (Hz, unnormalized)   ");
   gr_LLP_mh125_pl500->GetXaxis()->SetLimits(0.,1.);
   gr_LLP_mh125_pl500->GetHistogram()->SetMinimum(10000.);
@@ -264,7 +264,7 @@ int main() {
   // 10m
   TCanvas *c1_LLP_pl10000 = new TCanvas("c1_LLP_pl10000","Graph Draw Options",200,10,600,400);
   gr_LLP_mh125_pl10000->Draw("AL*");
-  //  gr_LLP_mh125_pl10000->SetTitle("Rate vs. Signal Efficiency for >=1,2,3,4 Cells >=50ADC,3ns near 4 L1 Jets;Added LLP Efficiency, c#scale[1.2]{#tau}=10m;Neutrino Gun Rate (Hz, unnormalized)   ");
+  //  gr_LLP_mh125_pl10000->SetTitle("Rate vs. Signal Efficiency for >=1,2,3,4,5 Cells >=50ADC,3ns near 4 L1 Jets;Added LLP Efficiency, c#scale[1.2]{#tau}=10m;Neutrino Gun Rate (Hz, unnormalized)   ");
   gr_LLP_mh125_pl10000->SetTitle("Rate vs. Signal Efficiency for >=1,2 Delayed Objects;Added LLP Efficiency, c#scale[1.2]{#tau}=10m;Neutrino Gun Rate (Hz, unnormalized)   ");
   gr_LLP_mh125_pl10000->GetXaxis()->SetLimits(0.,1.);
   gr_LLP_mh125_pl10000->GetHistogram()->SetMinimum(10000.);
@@ -306,7 +306,7 @@ int main() {
   TCanvas *c1_background = new TCanvas("c1_background","Graph Draw Options",200,10,600,400);
   gr_background->Draw("AL*");
   gr_background->SetLineColor(kBlack);
-  //  gr_background->SetTitle("Rate vs. Background Efficiency for >=1,2,3,4 Cells >=50ADC,3ns near 4 L1 Jets;Added QCD Efficiency;Neutrino Gun Rate (Hz, unnormalized)   ");
+  //  gr_background->SetTitle("Rate vs. Background Efficiency for >=1,2,3,4,5 Cells >=50ADC,3ns near 4 L1 Jets;Added QCD Efficiency;Neutrino Gun Rate (Hz, unnormalized)   ");
   gr_background->SetTitle("Rate vs. Background Efficiency for >=1,2 Delayed Objects;Added QCD Efficiency;Neutrino Gun Rate (Hz, unnormalized)   ");
   gr_background->GetXaxis()->SetLimits(0.,1.);
   gr_background->GetHistogram()->SetMinimum(10000.);

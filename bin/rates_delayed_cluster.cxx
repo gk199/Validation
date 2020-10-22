@@ -988,6 +988,14 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
       if (num_delayed_obj[0] == 3) num_delayed_jet = 3;
       if (num_delayed_obj[0] == 3 && num_delayed_obj[1] > 0) num_delayed_jet = 4;
       if (num_delayed_obj[0] == 3 && num_delayed_obj[1] > 0  && num_delayed_obj[2] > 0) num_delayed_jet = 5;
+      
+      /* // if only want TP veto (no 2x2 veto)
+      if (num_delayed_obj[0] == 1) num_delayed_jet = 1;
+      if (num_delayed_obj[0] >= 2) num_delayed_jet = 2;
+      if (num_delayed_obj[0] >= 2 && num_delayed_obj[1] > 0) num_delayed_jet = 3;
+      if (num_delayed_obj[0] >= 2 && num_delayed_obj[1] > 0  && num_delayed_obj[2] > 0) num_delayed_jet = 4;
+      if (num_delayed_obj[0] >= 2 && num_delayed_obj[1] > 1  && num_delayed_obj[2] > 0) num_delayed_jet = 5;
+      */
 
       if (num_delayed_jet >= 3) HTdistribution_trig_emu->Fill(htSum); // plot HT dist of events passing calo trigger 
       HTdistribution_emu->Fill(htSum);
