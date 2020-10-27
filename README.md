@@ -37,7 +37,7 @@ This makes CMSSW config files (only need default ones for the current studies, n
 cmsRun ntuple_maker_def.py
 mv L1Ntuple.root def_dir/L1Ntuple_def.root
 ```
-To run on another MC sample, can simply edit its name in the `ntuple_maker_def.py' file listed under fileNames. Ntuples are made for various TDC thresholds (standard = 18.7, also testing 18.7*2, 18.7*3). This difference is done by editing `SimCalorimetry/HcalSimProducers/python/hcalSimParameters_cfi.py` in the CMSSW version when the step1 files are processed. Examples are done in `/afs/cern.ch/work/g/gkopp/CondorInfo/LLP_TDC` with the output saved to `/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/TDC_threshold_18pt7x3/` and `/eos/cms/store/user/lowang/LLP_htobbbb/step1_2x/`. 
+To run on another MC sample, can simply edit its name in the `ntuple_maker_def.py` file listed under fileNames. Ntuples are made for various TDC thresholds (standard = 18.7, also testing 18.7*2, 18.7*3). This difference is done by editing `SimCalorimetry/HcalSimProducers/python/hcalSimParameters_cfi.py` in the CMSSW version when the step1 files are processed. Examples are done in `/afs/cern.ch/work/g/gkopp/CondorInfo/LLP_TDC` with the output saved to `/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/TDC_threshold_18pt7x3/` and `/eos/cms/store/user/lowang/LLP_htobbbb/step1_2x/`. 
 
 Then compile and run the rates and plotting macros on this, referencing the correct directory where the L1Ntuple was moved to:
 ```
