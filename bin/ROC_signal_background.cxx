@@ -229,7 +229,7 @@ int main() {
   gr_120timing_mh350_pl10000_timescan->Draw("C*");
   gr_120timing_mh125_pl10000_timescan->SetLineColor(3);
   gr_120timing_mh125_pl10000_timescan->Draw("C*");
-  auto legend_120timing_pl10000 = new TLegend(0.15,0.15,0.55,0.4);
+  auto legend_120timing_pl10000 = new TLegend(0.15,0.15,0.7,0.4);
   legend_120timing_pl10000->AddEntry(gr_120timing_mh125_pl10000_timescan,"mh = 125, 120+timing, delayed objects scanned");
   legend_120timing_pl10000->AddEntry(gr_120timing_mh350_pl10000_timescan,"mh = 350, 120+timing, delayed objects scanned");
   legend_120timing_pl10000->AddEntry(gr_120timing_mh1000_pl10000_timescan,"mh = 1000, 120+timing, delayed objects scanned");
@@ -250,7 +250,7 @@ int main() {
   gr_120timing_mh125_pl1000_timescan->Draw("C*");
   gr_120timing_mh250_pl1000_timescan->SetLineColor(1);
   gr_120timing_mh250_pl1000_timescan->Draw("C*");
-  auto legend_120timing_pl1000 = new TLegend(0.15,0.15,0.55,0.4);
+  auto legend_120timing_pl1000 = new TLegend(0.15,0.15,0.7,0.4);
   legend_120timing_pl1000->AddEntry(gr_120timing_mh125_pl1000_timescan,"mh = 125, 120+timing, delayed objects scanned");
   legend_120timing_pl1000->AddEntry(gr_120timing_mh250_pl1000_timescan,"mh = 250, 120+timing, delayed objects scanned");
   legend_120timing_pl1000->AddEntry(gr_120timing_mh350_pl1000_timescan,"mh = 350, 120+timing, delayed objects scanned");
@@ -270,7 +270,7 @@ int main() {
   gr_120timing_mh350_pl500_timescan->Draw("C*");
   gr_120timing_mh125_pl500_timescan->SetLineColor(3);
   gr_120timing_mh125_pl500_timescan->Draw("C*");
-  auto legend_120timing_pl500 = new TLegend(0.15,0.15,0.55,0.4);
+  auto legend_120timing_pl500 = new TLegend(0.15,0.15,0.7,0.4);
   legend_120timing_pl500->AddEntry(gr_120timing_mh125_pl500_timescan,"mh = 125, 120+timing, delayed objects scanned");
   legend_120timing_pl500->AddEntry(gr_120timing_mh350_pl500_timescan,"mh = 350, 120+timing, delayed objects scanned");
   legend_120timing_pl500->AddEntry(gr_120timing_mh1000_pl500_timescan,"mh = 1000, 120+timing, delayed objects scanned");

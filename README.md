@@ -37,7 +37,9 @@ This makes CMSSW config files (only need default ones for the current studies, n
 cmsRun ntuple_maker_def.py
 mv L1Ntuple.root def_dir/L1Ntuple_def.root
 ```
-To run on another MC sample, can simply edit its name in the `ntuple_maker_def.py' file listed under fileNames. Then compile and run the rates and plotting macros on this, referencing the correct directory where the L1Ntuple was moved to:
+To run on another MC sample, can simply edit its name in the `ntuple_maker_def.py' file listed under fileNames. Ntuples are made for various TDC thresholds (standard = 18.7, also testing 18.7*2, 18.7*3). This difference is done by editing `SimCalorimetry/HcalSimProducers/python/hcalSimParameters_cfi.py` in the CMSSW version when the step1 files are processed. Examples are done in `/afs/cern.ch/work/g/gkopp/CondorInfo/LLP_TDC` with the output saved to `/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/TDC_threshold_18pt7x3/` and `/eos/cms/store/user/lowang/LLP_htobbbb/step1_2x/`. 
+
+Then compile and run the rates and plotting macros on this, referencing the correct directory where the L1Ntuple was moved to:
 ```
 USER_CXXFLAGS="-Wno-error=unused-but-set-variable" scram b
 rates.exe def def_dir/
@@ -52,7 +54,9 @@ With the inclusion of Georgia's upgrade HCAL TPs branch, HCAL timing (TDC) and e
 If `rates.cxx` is edited (changing multiplicity counting, DR values, energy thresholds, multiplicity thresholds), the new rate NTuples (neutrino gun, QCD, LLP ctau = 10000, 1000, 500 mm) and resulting overlay plots can all be made by running
 ```
 ./RunRates.sh
+./RunRates_DelayedCaloObject.sh 4 4 2 1 3 4
 ```
+where `RunRates_DelayedCaloObject.sh` runs `rates_delayed_cluster.exe` and the last arguments are the TDC thresholds in HB, HE; energy thresholds in HB, HE; prompt TP energy veto, prompt TP 2x2 energy veto.
 
 ## TMVA
 TMVA is the [Toolkit for Multivariate Data Analysis with ROOT](https://root.cern.ch/root/html/guides/tmva/TMVAUsersGuide.pdf) and uses ML techniques to optimize signal and background separation. This is run with `mvaAnalysisTemplate_multiplicity.py' with
