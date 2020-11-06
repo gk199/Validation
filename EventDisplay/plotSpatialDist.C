@@ -188,10 +188,10 @@ void plotSpatialDist(int iEvent){
     if (vHcalTPdepth->hcalTPtiming6[j] >= 0) {TDC[5] = vHcalTPdepth->hcalTPtiming6[j]; cellEt[5] = vHcalTPdepth->hcalTPDepth6[j];}
     if (vHcalTPdepth->hcalTPtiming7[j] >= 0) {TDC[6] = vHcalTPdepth->hcalTPtiming7[j]; cellEt[6] = vHcalTPdepth->hcalTPDepth7[j];}
     for (int depth = 0; depth < vHcalTPdepth->hcalTPnDepths[j]; ++ depth) { // loop through HCAL TP depths
-      if (TDC[depth] >= 3 && cellEt[depth] >= 3) h2HcalTPsDelayed->Fill(eta, phi, TDC[depth]);
-      if (TDC[depth] >= 0 && TDC[depth] < 3 && cellEt[depth] >= 3) h2HcalTPs->Fill(eta, phi, TDC[depth]);
+      if (TDC[depth] >= 4 && cellEt[depth] >= 2) h2HcalTPsDelayed->Fill(eta, phi, TDC[depth]);
+      if (TDC[depth] >= 0 && TDC[depth] < 4 && cellEt[depth] >= 2) h2HcalTPs->Fill(eta, phi, TDC[depth]);
       //if (TDC[depth] >= 2 && cellEt[depth] >= 3) h2HcalTPs->Fill(eta, phi, TDC[depth]);
-      if (TDC[depth] >= 3 && cellEt[depth] >= 3) {
+      if (TDC[depth] >= 4 && cellEt[depth] >= 2) {
 	std::cout<<"TDC "<<TDC[depth] << " et " << cellEt[depth] << " at depth " << depth
 		 <<" eta "<<eta
 		 <<" phi "<<phi<<std::endl;
@@ -257,7 +257,7 @@ void plotSpatialDist(int iEvent){
   h2HcalTPs->GetYaxis()->SetAxisColor(17);  
   DrawRegionLines();
   DrawTowerLines();
-  h2HcalTPs->SetFillColor(kMagenta);
+  h2HcalTPs->SetFillColor(kRed); //kMagenta);
   h2HcalTPs->Draw("BOX");
   h2HcalTPsDelayed->SetFillColor(kSpring);
   h2HcalTPsDelayed->Draw("SAME BOX");
@@ -280,9 +280,9 @@ void plotSpatialDist(int iEvent){
   
   float xR=0.8;
   TLegend *l = new TLegend(xR,0.8,xR+0.2,1.0);
-  l->AddEntry(h2HcalTPs,"Cell>=0ns,<3ns, 3GeV","F");
+  l->AddEntry(h2HcalTPs,"Cell <4ns, >2GeV","F");
   //  l->AddEntry(h2HcalTPs,"Cell>=2ns, 3GeV","F");
-  l->AddEntry(h2HcalTPsDelayed,"Cell>=3ns, 3GeV","F");
+  l->AddEntry(h2HcalTPsDelayed,"Cell >=4ns, >2GeV","F");
   l->AddEntry(h2L1Jets,"L1 jets","F");
   l->Draw();
   h2HcalTPs->GetXaxis()->SetTitle("eta");
@@ -302,7 +302,7 @@ void plotSpatialDist(int iEvent){
   h2HcalTPsDelayed->Draw("SAME BOX");
   
   char saveFile[100];
-  sprintf(saveFile,"/afs/cern.ch/work/g/gkopp/HCAL_Trigger/L1Ntuples/HCAL_TP_TimingBitEmulator/CMSSW_10_6_0/src/HcalTrigger/Validation/EventDisplay/Event-%llu-test_trigger.png",event);
+  sprintf(saveFile,"/afs/cern.ch/work/g/gkopp/HCAL_Trigger/L1Ntuples/HCAL_TP_TimingBitEmulator/CMSSW_10_6_0/src/HcalTrigger/Validation/EventDisplay/Event-%llu-test_trigger_4ns.png",event);
   c1->SaveAs(saveFile);
   
   /*

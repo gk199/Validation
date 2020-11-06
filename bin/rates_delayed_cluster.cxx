@@ -576,7 +576,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
   /////////////////////////////////
   for (Long64_t jentry=0; jentry<nentries; jentry++){
     if((jentry%10000)==0) std::cout << "Done " << jentry  << " events of " << nentries << std::endl;
-    //    std::cout << jentry << std::endl;
+    std::cout << jentry << std::endl;
     //lumi break clause
     eventTree->GetEntry(jentry);
     //skip the corresponding event
@@ -794,9 +794,10 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 	int TP_ieta_2x2 = eta_phi_2x2(tpEtaemu,tpPhiemu)[0]; // convert from ieta to 2x2 eta mapping
         int TP_iphi_2x2 = eta_phi_2x2(tpEtaemu,tpPhiemu)[1]; // 2x2 phi mapping
 
-	// each TP has the Timing Bit set with the multiplicity for that tower
+	// each TP has the Timing Bit set with the multiplicity for that tower 
 	//        int TP_TimingBit = l1CaloTPemu_->hcalTPTimingBit[HcalTPIt];
 	//	if (abs(tpEtaemu) <= 16) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] = TP_TimingBit;
+	// instead of using pre-set timing bit (3ns 3GeV), set specifically here based on energy and time values
 	if (abs(tpEtaemu) <= 16) { 
 	  if (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >= TDC_HB_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
           if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming2[HcalTPIt] >= TDC_HB_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
@@ -872,12 +873,15 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
           if (prompt_2x2 > 0) DeltaR_L1_prompt_hit_emu->Fill(min_DR); // DR from L1 jet center to a prompt TP
 	  if (delayed_4x4 >= delayed_4x4_variable) DeltaR_L1_delayed_seed_emu->Fill(min_DR); // DR from L1 jet center to delayed seed
 	  if (prompt_energy_2x2 >= prompt_2x2_energy_variable) DeltaR_L1_prompt_seed_emu->Fill(min_DR); // DR from L1 jet center to prompt seed
+	
 	  if (min_DR<=0.5) { // check if the jet has a delayed or prompt seed
 	    delayed[closestJet] += delayed_2x2; // assign delayed 2x2 hits to the nearest jet
 	    prompt_TP[closestJet] += prompt_2x2;
 	    if (prompt_energy_2x2 >= prompt_2x2_energy_variable) prompt_energy[closestJet] += 1; // how many 2x2 are non delayed but energetic
 	    if (delayed_4x4 >= delayed_4x4_variable) {
 	      delayed_calo_objects[closestJet] += 1; // how many 4x4 are delayed near each jet
+	      std::cout << seed_eta << " = seed eta, seed phi = " << seed_phi << std::endl;
+	      std::cout << seed_ieta_1 << " = seed ieta, seed iphi = " << seed_iphi_1 << std::endl;
 	      // find actual time and energy values contributing to the delayed 4x4 seed
 	      for (int HcalTPIt = 0; HcalTPIt < nCaloTPemu; HcalTPIt++){ // loop over HCAL TPs
 		double tpEtaemu = l1CaloTPemu_->hcalTPieta[HcalTPIt]; // ieta

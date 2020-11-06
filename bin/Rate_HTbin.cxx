@@ -147,7 +147,8 @@ int main() {
   gr_L1HT360->SetMarkerColor(kRed);
   gr_L1HT360->SetMarkerStyle(21);
   //  gr_L1HT360->Draw("P");
-  gr_LLP_mh125_pl500->SetTitle("HT vs. Signal Efficiency for >=2 Cells >=50ADC,3ns near 4 L1 Jets;HT (GeV);LLP Efficiency, mh=125 GeV, c#scale[1.2]{#tau}=0.5m   ");
+  gr_LLP_mh125_pl500->SetTitle("HT vs. Signal Efficiency for Single Delayed Jet Trigger;HT (GeV);LLP Efficiency, mh=125 GeV, c#scale[1.2]{#tau}=0.5m   ");
+  //  gr_LLP_mh125_pl500->SetTitle("HT vs. Signal Efficiency for >=2 Cells >=50ADC,3ns near 4 L1 Jets;HT (GeV);LLP Efficiency, mh=125 GeV, c#scale[1.2]{#tau}=0.5m   ");
   gr_LLP_mh125_pl500->GetHistogram()->SetMinimum(0.);
   gr_LLP_mh125_pl500->GetHistogram()->SetMaximum(1.);
   c1_LLP_pl500->SetGrid();
@@ -164,7 +165,8 @@ int main() {
   gr_L1HT360->SetMarkerColor(kRed);
   gr_L1HT360->SetMarkerStyle(21);
   //  gr_L1HT360->Draw("P");
-  gr_LLP_mh125_pl1000->SetTitle("HT vs. Signal Efficiency for >=2 Cells >=50ADC,3ns near 4 L1 Jets;HT (GeV);LLP Efficiency, mh=125 GeV, c#scale[1.2]{#tau}=1m   ");
+  gr_LLP_mh125_pl1000->SetTitle("HT vs. Signal Efficiency for Single Delayed Jet Trigger;HT (GeV);LLP Efficiency, mh=125 GeV, c#scale[1.2]{#tau}=1m   ");
+  //  gr_LLP_mh125_pl1000->SetTitle("HT vs. Signal Efficiency for >=2 Cells >=50ADC,3ns near 4 L1 Jets;HT (GeV);LLP Efficiency, mh=125 GeV, c#scale[1.2]{#tau}=1m   ");
   gr_LLP_mh125_pl1000->GetHistogram()->SetMinimum(0.);
   gr_LLP_mh125_pl1000->GetHistogram()->SetMaximum(1.);
   c1_LLP_pl1000->SetGrid();
@@ -181,7 +183,8 @@ int main() {
   gr_L1HT360->SetMarkerColor(kRed);
   gr_L1HT360->SetMarkerStyle(21);
   //  gr_L1HT360->Draw("P");
-  gr_LLP_mh125_pl10000->SetTitle("HT vs. Signal Efficiency for >=2 Cells >=50ADC,3ns near 4 L1 Jets;HT (GeV);LLP Efficiency, mh=125 GeV, c#scale[1.2]{#tau}=10m   ");
+  gr_LLP_mh125_pl10000->SetTitle("HT vs. Signal Efficiency for Single Delayed Jet Trigger;HT (GeV);LLP Efficiency, mh=125 GeV, c#scale[1.2]{#tau}=10m   ");
+  //  gr_LLP_mh125_pl10000->SetTitle("HT vs. Signal Efficiency for >=2 Cells >=50ADC,3ns near 4 L1 Jets;HT (GeV);LLP Efficiency, mh=125 GeV, c#scale[1.2]{#tau}=10m   ");
   gr_LLP_mh125_pl10000->GetHistogram()->SetMinimum(0.);
   gr_LLP_mh125_pl10000->GetHistogram()->SetMaximum(1.);
   c1_LLP_pl10000->SetGrid();

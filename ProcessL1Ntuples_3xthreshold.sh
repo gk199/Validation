@@ -9,8 +9,8 @@ cmsRun ntuple_maker_def_QCD_3xthreshold.py
 mv L1Ntuple.root L1Ntuple_QCD_3xthreshold.root
 echo " "
 echo "Neutrino Gun"
-cmsRun ntuple_maker_def_nugun.py
-mv L1Ntuple.root L1Ntuple_NeutrinoGun.root
+#cmsRun ntuple_maker_def_nugun.py
+#mv L1Ntuple.root L1Ntuple_NeutrinoGun.root
 echo " "
 echo "LLP mh=125 GeV, ctau=10 m"
 cmsRun ntuple_maker_def_mh125_pl10000_3xthreshold.py
