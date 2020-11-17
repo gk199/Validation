@@ -1,5 +1,6 @@
 <use name="root"/>
 <use name="rootinteractive"/>
+<use name="DataFormats/HcalDetId"/>
 <environment>
   <bin file="llp_analysis.cxx" name="llp_analysis.exe"/>
   <bin file="draw_rates.cxx" name="draw_rates.exe"/>
@@ -7,6 +8,7 @@
   <bin file="draw_timingbit_delayed_cluster.cxx" name="draw_timingbit_delayed_cluster.exe"/>
   <bin file="draw_1mtimingbit.cxx" name="draw_1mtimingbit.exe"/>
   <bin file="draw_110X_106X_comp.cxx" name="draw_110X_106X_comp.exe"/>
+  <bin file="draw_TDCthreshold.cxx" name="draw_TDCthreshold.exe"/>
   <bin file="rates.cxx" name="rates.exe"/>
   <bin file="rates_delayed_cluster.cxx" name="rates_delayed_cluster.exe"/>
   <bin file="rates_original.cxx" name="rates_original.exe"/>
@@ -19,5 +21,6 @@
   <bin file="Eff_ctau.cxx" name="Eff_ctau.exe"/>
   <bin file="draw_l1analysis.cxx" name="draw_l1analysis.exe"/>
   <bin file="l1jetanalysis.cxx" name="l1jetanalysis.exe"/>
+  <bin file="CaloSamplesAnalysis.cxx" name="CaloSamplesAnalysis.exe"/>
 </environment>
-<flags CXXFLAGS="-Wall -Werror -g"/>
+<flags CXXFLAGS="-Wall -Werror -g -lTreePlayer"/>

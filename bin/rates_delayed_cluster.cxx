@@ -512,6 +512,8 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
   TH1F* hcalTP_hw = new TH1F("hcalTP_hw", ";TP E_{T}; # Entries", nTpBins, tpLo, tpHi);
   TH1F* ecalTP_hw = new TH1F("ecalTP_hw", ";TP E_{T}; # Entries", nTpBins, tpLo, tpHi);
 
+  TH1F* TimingBit_TPenergy = new TH1F("TimingBit_TPenergy", "Threshold Study: Delayed Cells (timing bit) in TP E_{T} Bins;TP E_{T};Delayed Cells (normalized)   ", 20,0,20);
+
   // histograms based on hit multiplicity from the timing bit
   TH1F * Delayed_2x2_MultHB_emu = new TH1F("Delayed_2x2_MultHB_emu","Number of cells in 2x2 region >=50 ADC and >=3ns;Number of cells;Fraction of Entries (normalized)",10,0,10);
   TH1F * Prompt_2x2_MultHB_emu = new TH1F("Prompt_2x2_MultHB_emu","Number of TPs in 2x2 region that are prompt and high energy;Number of TPs;Fraction of Entries (normalized)",10,0,10);
@@ -574,9 +576,12 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
   /////////////////////////////////
   // loop through all the entries//
   /////////////////////////////////
+  std::ofstream DelayedSeed_event_ieta_iphi_depth;
+  DelayedSeed_event_ieta_iphi_depth.open(Form("DelayedSeed_event_ieta_iphi_depth_%s.txt", inputFile.substr(0,7).c_str()),std::ios_base::trunc);
+
   for (Long64_t jentry=0; jentry<nentries; jentry++){
     if((jentry%10000)==0) std::cout << "Done " << jentry  << " events of " << nentries << std::endl;
-    std::cout << jentry << std::endl;
+    //    std::cout << jentry << std::endl;
     //lumi break clause
     eventTree->GetEntry(jentry);
     //skip the corresponding event
@@ -784,6 +789,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
       double timingbit_eta_phi[56][72] = {{0}}; // 32 72 if just HB
       double prompt_TP_10GeV_eta_phi[56][72] = {{0}};
       double prompt_TP_energy_eta_phi[56][72] = {{0}};
+      int timingBit = 0; // count how many delayed cells per event, used for threshold studies
 
       for (int HcalTPIt = 0; HcalTPIt < nCaloTPemu; HcalTPIt++){ // loop over HCAL TPs
 	double tpEtaemu = l1CaloTPemu_->hcalTPieta[HcalTPIt]; // ieta
@@ -795,7 +801,10 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
         int TP_iphi_2x2 = eta_phi_2x2(tpEtaemu,tpPhiemu)[1]; // 2x2 phi mapping
 
 	// each TP has the Timing Bit set with the multiplicity for that tower 
-	//        int TP_TimingBit = l1CaloTPemu_->hcalTPTimingBit[HcalTPIt];
+	int TP_TimingBit = l1CaloTPemu_->hcalTPTimingBit[HcalTPIt];
+	timingBit += TP_TimingBit;
+	TimingBit_TPenergy->Fill(l1CaloTPemu_->hcalTPet[HcalTPIt], l1CaloTPemu_->hcalTPTimingBit[HcalTPIt]); // fill bin TP energy with value TP timing bit
+
 	//	if (abs(tpEtaemu) <= 16) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] = TP_TimingBit;
 	// instead of using pre-set timing bit (3ns 3GeV), set specifically here based on energy and time values
 	if (abs(tpEtaemu) <= 16) { 
@@ -820,6 +829,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 	if (l1CaloTPemu_->hcalTPet[HcalTPIt] >= 0) prompt_TP_energy_eta_phi[TP_ieta_2x2][TP_iphi_2x2] = l1CaloTPemu_->hcalTPet[HcalTPIt];
 	if (l1CaloTPemu_->hcalTPet[HcalTPIt] >= prompt_TP_energy_variable) prompt_TP_10GeV_eta_phi[TP_ieta_2x2][TP_iphi_2x2] = 1; // sum of depths, transverse energy. Track if TP is above energy threshold (1 if above, 0 if not)
       } // closing HCAL TP loop
+      if (jentry<20) std::cout << timingBit << " = Timing bit for entry " << jentry << std::endl;
 
       int delayed_calo_objects[nJetemu] = {0}; // delayed calo objects in each L1 jet
       int delayed[nJetemu] = {0}; // delayed hits in each L1 jet
@@ -880,9 +890,12 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 	    if (prompt_energy_2x2 >= prompt_2x2_energy_variable) prompt_energy[closestJet] += 1; // how many 2x2 are non delayed but energetic
 	    if (delayed_4x4 >= delayed_4x4_variable) {
 	      delayed_calo_objects[closestJet] += 1; // how many 4x4 are delayed near each jet
-	      std::cout << seed_eta << " = seed eta, seed phi = " << seed_phi << std::endl;
-	      std::cout << seed_ieta_1 << " = seed ieta, seed iphi = " << seed_iphi_1 << std::endl;
+	      //	      std::cout << seed_eta << " = seed eta, seed phi = " << seed_phi << std::endl;
+	      //	      std::cout << seed_ieta_1 << " = seed ieta, seed iphi = " << seed_iphi_1 << std::endl;
 	      // find actual time and energy values contributing to the delayed 4x4 seed
+
+	      DelayedSeed_event_ieta_iphi_depth << "Event = " << jentry << std::endl;
+
 	      for (int HcalTPIt = 0; HcalTPIt < nCaloTPemu; HcalTPIt++){ // loop over HCAL TPs
 		double tpEtaemu = l1CaloTPemu_->hcalTPieta[HcalTPIt]; // ieta
 		double tpPhiemu = l1CaloTPemu_->hcalTPCaliphi[HcalTPIt]; // iphi
@@ -892,44 +905,54 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 		      if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming2[HcalTPIt] >= TDC_HE_variable) {
 			delayed4x4seed_TDC_GeV_HE->Fill(l1CaloTPemu_->hcalTPtiming2[HcalTPIt], l1CaloTPemu_->hcalTPDepth2[HcalTPIt]);
                         delayed4x4seed_depth_TDC_HE->Fill(2, l1CaloTPemu_->hcalTPtiming2[HcalTPIt]);
+			DelayedSeed_event_ieta_iphi_depth << "ieta, iphi, depth " << tpEtaemu << ", " << tpPhiemu << ", " << 2 << std::endl;
 		      }
 		      if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming3[HcalTPIt] >= TDC_HE_variable) {
 			delayed4x4seed_TDC_GeV_HE->Fill(l1CaloTPemu_->hcalTPtiming3[HcalTPIt], l1CaloTPemu_->hcalTPDepth3[HcalTPIt]);
                         delayed4x4seed_depth_TDC_HE->Fill(3, l1CaloTPemu_->hcalTPtiming3[HcalTPIt]);
+                        DelayedSeed_event_ieta_iphi_depth << "ieta, iphi, depth " << tpEtaemu << ", " << tpPhiemu << ", " << 3 << std::endl;
 		      }
 		      if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming4[HcalTPIt] >= TDC_HE_variable) {
 			delayed4x4seed_TDC_GeV_HE->Fill(l1CaloTPemu_->hcalTPtiming4[HcalTPIt], l1CaloTPemu_->hcalTPDepth4[HcalTPIt]);
                         delayed4x4seed_depth_TDC_HE->Fill(4, l1CaloTPemu_->hcalTPtiming4[HcalTPIt]);
+                        DelayedSeed_event_ieta_iphi_depth << "ieta, iphi, depth " << tpEtaemu << ", " << tpPhiemu << ", " << 4 << std::endl;
 		      }
 		      if (l1CaloTPemu_->hcalTPDepth5[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming5[HcalTPIt] >= TDC_HE_variable) {
 			delayed4x4seed_TDC_GeV_HE->Fill(l1CaloTPemu_->hcalTPtiming5[HcalTPIt], l1CaloTPemu_->hcalTPDepth5[HcalTPIt]);
                         delayed4x4seed_depth_TDC_HE->Fill(5, l1CaloTPemu_->hcalTPtiming5[HcalTPIt]);
+                        DelayedSeed_event_ieta_iphi_depth << "ieta, iphi, depth " << tpEtaemu << ", " << tpPhiemu << ", " << 5 << std::endl;
 		      }
 		      if (l1CaloTPemu_->hcalTPDepth6[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming6[HcalTPIt] >= TDC_HE_variable) {
 			delayed4x4seed_TDC_GeV_HE->Fill(l1CaloTPemu_->hcalTPtiming6[HcalTPIt], l1CaloTPemu_->hcalTPDepth6[HcalTPIt]);
                         delayed4x4seed_depth_TDC_HE->Fill(6, l1CaloTPemu_->hcalTPtiming6[HcalTPIt]);
+                        DelayedSeed_event_ieta_iphi_depth << "ieta, iphi, depth " << tpEtaemu << ", " << tpPhiemu << ", " << 6 << std::endl;
 		      }
 		      if (l1CaloTPemu_->hcalTPDepth7[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming7[HcalTPIt] >= TDC_HE_variable) {
 			delayed4x4seed_TDC_GeV_HE->Fill(l1CaloTPemu_->hcalTPtiming7[HcalTPIt], l1CaloTPemu_->hcalTPDepth7[HcalTPIt]);
                         delayed4x4seed_depth_TDC_HE->Fill(7, l1CaloTPemu_->hcalTPtiming7[HcalTPIt]);
+                        DelayedSeed_event_ieta_iphi_depth << "ieta, iphi, depth " << tpEtaemu << ", " << tpPhiemu << ", " << 7 << std::endl;
 		      }
 		    } // HE
 		    if (abs(tpEtaemu) <= 16) {
                       if (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >= TDC_HB_variable) {
 			delayed4x4seed_TDC_GeV_HB->Fill(l1CaloTPemu_->hcalTPtiming1[HcalTPIt], l1CaloTPemu_->hcalTPDepth1[HcalTPIt]);
 			delayed4x4seed_depth_TDC_HB->Fill(1, l1CaloTPemu_->hcalTPtiming1[HcalTPIt]);
+                        DelayedSeed_event_ieta_iphi_depth << "ieta, iphi, depth " << tpEtaemu << ", " << tpPhiemu << ", " << 1 << std::endl;
 		      }
 		      if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming2[HcalTPIt] >= TDC_HB_variable) {
 			delayed4x4seed_TDC_GeV_HB->Fill(l1CaloTPemu_->hcalTPtiming2[HcalTPIt], l1CaloTPemu_->hcalTPDepth2[HcalTPIt]);
                         delayed4x4seed_depth_TDC_HB->Fill(2, l1CaloTPemu_->hcalTPtiming2[HcalTPIt]);
+                        DelayedSeed_event_ieta_iphi_depth << "ieta, iphi, depth " << tpEtaemu << ", " << tpPhiemu << ", " << 2 << std::endl;
 		      }
                       if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming3[HcalTPIt] >= TDC_HB_variable) {
 			delayed4x4seed_TDC_GeV_HB->Fill(l1CaloTPemu_->hcalTPtiming3[HcalTPIt], l1CaloTPemu_->hcalTPDepth3[HcalTPIt]);
                         delayed4x4seed_depth_TDC_HB->Fill(3, l1CaloTPemu_->hcalTPtiming3[HcalTPIt]);
+                        DelayedSeed_event_ieta_iphi_depth << "ieta, iphi, depth " << tpEtaemu << ", " << tpPhiemu << ", " << 3 << std::endl;
 		      }
                       if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming4[HcalTPIt] >= TDC_HB_variable) {
 			delayed4x4seed_TDC_GeV_HB->Fill(l1CaloTPemu_->hcalTPtiming4[HcalTPIt], l1CaloTPemu_->hcalTPDepth4[HcalTPIt]);
                         delayed4x4seed_depth_TDC_HB->Fill(4, l1CaloTPemu_->hcalTPtiming4[HcalTPIt]);
+                        DelayedSeed_event_ieta_iphi_depth << "ieta, iphi, depth " << tpEtaemu << ", " << tpPhiemu << ", " << 4 << std::endl;
 		      }
 		    } // HB
 		  } // iphi for 4x4 delayed seed
@@ -1256,6 +1279,8 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
     }// closes if 'hwOn' is true
 
   }// closes loop through events
+  DelayedSeed_event_ieta_iphi_depth.close();
+
 
   //  TFile g( outputFilename.c_str() , "new");
   kk->cd();
@@ -1304,6 +1329,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
     etSumRates_emu->Write();
     metSumRates_emu->Write();
     metHFSumRates_emu->Write();
+    TimingBit_TPenergy->Write();
 
     // write histograms based on timing bit
     Delayed_2x2_MultHB_emu->Write();
