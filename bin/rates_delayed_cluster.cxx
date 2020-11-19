@@ -905,54 +905,54 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 		      if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming2[HcalTPIt] >= TDC_HE_variable) {
 			delayed4x4seed_TDC_GeV_HE->Fill(l1CaloTPemu_->hcalTPtiming2[HcalTPIt], l1CaloTPemu_->hcalTPDepth2[HcalTPIt]);
                         delayed4x4seed_depth_TDC_HE->Fill(2, l1CaloTPemu_->hcalTPtiming2[HcalTPIt]);
-			DelayedSeed_event_ieta_iphi_depth << "ieta, iphi, depth " << tpEtaemu << ", " << tpPhiemu << ", " << 2 << std::endl;
+			DelayedSeed_event_ieta_iphi_depth << "ieta, iphi, depth, ns " << tpEtaemu << ", " << tpPhiemu << ", " << 2 << ", " << l1CaloTPemu_->hcalTPtiming2[HcalTPIt] << std::endl;
 		      }
 		      if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming3[HcalTPIt] >= TDC_HE_variable) {
 			delayed4x4seed_TDC_GeV_HE->Fill(l1CaloTPemu_->hcalTPtiming3[HcalTPIt], l1CaloTPemu_->hcalTPDepth3[HcalTPIt]);
                         delayed4x4seed_depth_TDC_HE->Fill(3, l1CaloTPemu_->hcalTPtiming3[HcalTPIt]);
-                        DelayedSeed_event_ieta_iphi_depth << "ieta, iphi, depth " << tpEtaemu << ", " << tpPhiemu << ", " << 3 << std::endl;
+                        DelayedSeed_event_ieta_iphi_depth << "ieta, iphi, depth, ns " << tpEtaemu << ", " << tpPhiemu << ", " << 3 << ", " << l1CaloTPemu_->hcalTPtiming3[HcalTPIt] << std::endl;
 		      }
 		      if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming4[HcalTPIt] >= TDC_HE_variable) {
 			delayed4x4seed_TDC_GeV_HE->Fill(l1CaloTPemu_->hcalTPtiming4[HcalTPIt], l1CaloTPemu_->hcalTPDepth4[HcalTPIt]);
                         delayed4x4seed_depth_TDC_HE->Fill(4, l1CaloTPemu_->hcalTPtiming4[HcalTPIt]);
-                        DelayedSeed_event_ieta_iphi_depth << "ieta, iphi, depth " << tpEtaemu << ", " << tpPhiemu << ", " << 4 << std::endl;
+                        DelayedSeed_event_ieta_iphi_depth << "ieta, iphi, depth, ns " << tpEtaemu << ", " << tpPhiemu << ", " << 4 << ", " << l1CaloTPemu_->hcalTPtiming4[HcalTPIt] << std::endl;
 		      }
 		      if (l1CaloTPemu_->hcalTPDepth5[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming5[HcalTPIt] >= TDC_HE_variable) {
 			delayed4x4seed_TDC_GeV_HE->Fill(l1CaloTPemu_->hcalTPtiming5[HcalTPIt], l1CaloTPemu_->hcalTPDepth5[HcalTPIt]);
                         delayed4x4seed_depth_TDC_HE->Fill(5, l1CaloTPemu_->hcalTPtiming5[HcalTPIt]);
-                        DelayedSeed_event_ieta_iphi_depth << "ieta, iphi, depth " << tpEtaemu << ", " << tpPhiemu << ", " << 5 << std::endl;
+                        DelayedSeed_event_ieta_iphi_depth << "ieta, iphi, depth, ns " << tpEtaemu << ", " << tpPhiemu << ", " << 5 << ", " << l1CaloTPemu_->hcalTPtiming5[HcalTPIt] << std::endl;
 		      }
 		      if (l1CaloTPemu_->hcalTPDepth6[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming6[HcalTPIt] >= TDC_HE_variable) {
 			delayed4x4seed_TDC_GeV_HE->Fill(l1CaloTPemu_->hcalTPtiming6[HcalTPIt], l1CaloTPemu_->hcalTPDepth6[HcalTPIt]);
                         delayed4x4seed_depth_TDC_HE->Fill(6, l1CaloTPemu_->hcalTPtiming6[HcalTPIt]);
-                        DelayedSeed_event_ieta_iphi_depth << "ieta, iphi, depth " << tpEtaemu << ", " << tpPhiemu << ", " << 6 << std::endl;
+                        DelayedSeed_event_ieta_iphi_depth << "ieta, iphi, depth, ns " << tpEtaemu << ", " << tpPhiemu << ", " << 6 << ", " << l1CaloTPemu_->hcalTPtiming6[HcalTPIt] << std::endl;
 		      }
 		      if (l1CaloTPemu_->hcalTPDepth7[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming7[HcalTPIt] >= TDC_HE_variable) {
 			delayed4x4seed_TDC_GeV_HE->Fill(l1CaloTPemu_->hcalTPtiming7[HcalTPIt], l1CaloTPemu_->hcalTPDepth7[HcalTPIt]);
                         delayed4x4seed_depth_TDC_HE->Fill(7, l1CaloTPemu_->hcalTPtiming7[HcalTPIt]);
-                        DelayedSeed_event_ieta_iphi_depth << "ieta, iphi, depth " << tpEtaemu << ", " << tpPhiemu << ", " << 7 << std::endl;
+                        DelayedSeed_event_ieta_iphi_depth << "ieta, iphi, depth, ns " << tpEtaemu << ", " << tpPhiemu << ", " << 7 << ", " << l1CaloTPemu_->hcalTPtiming7[HcalTPIt] << std::endl;
 		      }
 		    } // HE
 		    if (abs(tpEtaemu) <= 16) {
                       if (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >= TDC_HB_variable) {
 			delayed4x4seed_TDC_GeV_HB->Fill(l1CaloTPemu_->hcalTPtiming1[HcalTPIt], l1CaloTPemu_->hcalTPDepth1[HcalTPIt]);
 			delayed4x4seed_depth_TDC_HB->Fill(1, l1CaloTPemu_->hcalTPtiming1[HcalTPIt]);
-                        DelayedSeed_event_ieta_iphi_depth << "ieta, iphi, depth " << tpEtaemu << ", " << tpPhiemu << ", " << 1 << std::endl;
+                        DelayedSeed_event_ieta_iphi_depth << "ieta, iphi, depth, ns " << tpEtaemu << ", " << tpPhiemu << ", " << 1 << ", " << l1CaloTPemu_->hcalTPtiming1[HcalTPIt] << std::endl;
 		      }
 		      if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming2[HcalTPIt] >= TDC_HB_variable) {
 			delayed4x4seed_TDC_GeV_HB->Fill(l1CaloTPemu_->hcalTPtiming2[HcalTPIt], l1CaloTPemu_->hcalTPDepth2[HcalTPIt]);
                         delayed4x4seed_depth_TDC_HB->Fill(2, l1CaloTPemu_->hcalTPtiming2[HcalTPIt]);
-                        DelayedSeed_event_ieta_iphi_depth << "ieta, iphi, depth " << tpEtaemu << ", " << tpPhiemu << ", " << 2 << std::endl;
+                        DelayedSeed_event_ieta_iphi_depth << "ieta, iphi, depth, ns " << tpEtaemu << ", " << tpPhiemu << ", " << 2 << ", " << l1CaloTPemu_->hcalTPtiming2[HcalTPIt] << std::endl;
 		      }
                       if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming3[HcalTPIt] >= TDC_HB_variable) {
 			delayed4x4seed_TDC_GeV_HB->Fill(l1CaloTPemu_->hcalTPtiming3[HcalTPIt], l1CaloTPemu_->hcalTPDepth3[HcalTPIt]);
                         delayed4x4seed_depth_TDC_HB->Fill(3, l1CaloTPemu_->hcalTPtiming3[HcalTPIt]);
-                        DelayedSeed_event_ieta_iphi_depth << "ieta, iphi, depth " << tpEtaemu << ", " << tpPhiemu << ", " << 3 << std::endl;
+                        DelayedSeed_event_ieta_iphi_depth << "ieta, iphi, depth, ns " << tpEtaemu << ", " << tpPhiemu << ", " << 3 << ", " << l1CaloTPemu_->hcalTPtiming3[HcalTPIt] << std::endl;
 		      }
                       if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming4[HcalTPIt] >= TDC_HB_variable) {
 			delayed4x4seed_TDC_GeV_HB->Fill(l1CaloTPemu_->hcalTPtiming4[HcalTPIt], l1CaloTPemu_->hcalTPDepth4[HcalTPIt]);
                         delayed4x4seed_depth_TDC_HB->Fill(4, l1CaloTPemu_->hcalTPtiming4[HcalTPIt]);
-                        DelayedSeed_event_ieta_iphi_depth << "ieta, iphi, depth " << tpEtaemu << ", " << tpPhiemu << ", " << 4 << std::endl;
+                        DelayedSeed_event_ieta_iphi_depth << "ieta, iphi, depth, ns " << tpEtaemu << ", " << tpPhiemu << ", " << 4 << ", " << l1CaloTPemu_->hcalTPtiming4[HcalTPIt] << std::endl;
 		      }
 		    } // HB
 		  } // iphi for 4x4 delayed seed
