@@ -31,10 +31,10 @@ void CaloSamplesAnalysis() {
   TTreeReaderValue<std::vector<CaloSamples>> AllCaloSamples(myReader, "CaloSampless_mix_HcalSamples_HLT.obj");
   //  TTreeReaderValue<HcalDataFrameContainer<QIE11DataFrame>> FullQIE11DataFrame(myReader, "QIE11DataFrameHcalDataFrameContainer_simHcalUnsuppressedDigis_HBHEQIE11DigiCollection_HLT.obj");
 
-  Int_t event_of_interest = 73;
-  Int_t ieta_of_interest = 19;
-  Int_t iphi_of_interest = 26;
-  Int_t depth_of_interest = 2;
+  Int_t event_of_interest = 4;
+  Int_t ieta_of_interest = -5;
+  Int_t iphi_of_interest = 58;
+  Int_t depth_of_interest = 1;
   double rDepth[4] = {183.60, 190.20, 214.20, 244.80};
   double tofadj[4] = {-3.5, -3.5, -4.5, -5.5};
 

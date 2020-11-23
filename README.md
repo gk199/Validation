@@ -77,5 +77,14 @@ root
 ```
 where `(0)` indicates which event is considered. 
 
+## Plotting CaloSamples and Pulse Shapes
+'bin/CaloSamplesAnalysis.cxx' and 'bin/CaloSamplesAnalysis_eta_phi_depth.cxx' are used to plot the pulse shapes from individual cells, using the CaloSamples. Both of these run as compiled code. A similar (earlier) version was done in 'CaloSamplesAnalysis.C', which runs wiht 'root -l CaloSampleAnalysis.C'.
+
+### 'bin/CaloSamplesAnalysis.cxx'
+This takes a range of events and a TDC (QIE11) value of interest, and finds the event number, ieta, iphi, and depth of a cell with that TDC (from the QIE11 dataframe). Then it overlays the pulse shapes (preciseData from the CaloSamples) for these cells.
+
+'bin/CaloSamplesAnalysis_eta_phi_depth.cxx'
+This takes a specific event, ieta, iphi, and depth. It prints the QIE11 TDC value (0-50, with error codes) for this cell, and also plots the pulse shape (preciseData from the CaloSamples) for this cell. Finally, the TOF = distance + TOFadj is printed as well.
+
 ## Location on lxplus
 `/afs/cern.ch/work/g/gkopp/HCAL_Trigger/L1Ntuples/HCAL_TP_TimingBitEmulator/CMSSW_10_6_0/src/HcalTrigger/Validation/` for the timing bit implementation in CMSSW 106X. This has code for both the inclusive 4 jet delayed trigger, and the delayed jet trigger (based on prompt and delayed seeds).
