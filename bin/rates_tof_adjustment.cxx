@@ -808,22 +808,50 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 	//	if (abs(tpEtaemu) <= 16) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] = TP_TimingBit;
 	// instead of using pre-set timing bit (3ns 3GeV), set specifically here based on energy and time values
 	if (abs(tpEtaemu) <= 16) { 
-	  if (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >= TDC_HB_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
-	  if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming2[HcalTPIt] >= TDC_HB_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
-	  if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming3[HcalTPIt] >= TDC_HB_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
-	  if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming4[HcalTPIt] >= TDC_HB_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
+	  double eta = etaVal(tpEtaemu);
+	  double theta = 2. * atan(exp(-eta));
+	  double distance1 = 183.60 / sin(theta); // for HB
+	  double distance2 = 190.20 / sin(theta); // for HB
+	  double distance3 = 214.20 / sin(theta); // for HB
+	  double distance4 = 244.80 / sin(theta); // for HB
+	  double tof1 = 1e9*distance1/2.99793e10;
+          double tof2 = 1e9*distance2/2.99793e10;
+          double tof3 = 1e9*distance3/2.99793e10;
+          double tof4 = 1e9*distance4/2.99793e10;
+
+	  if (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] >= GeV_HB_variable && ( l1CaloTPemu_->hcalTPtiming1[HcalTPIt] - tof1 ) >= TDC_HB_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
+	  if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= GeV_HB_variable && ( l1CaloTPemu_->hcalTPtiming2[HcalTPIt] - tof2 ) >= TDC_HB_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
+	  if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= GeV_HB_variable && ( l1CaloTPemu_->hcalTPtiming3[HcalTPIt] - tof3 ) >= TDC_HB_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
+	  if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= GeV_HB_variable && ( l1CaloTPemu_->hcalTPtiming4[HcalTPIt] - tof4 ) >= TDC_HB_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
 	}
 
 	if (abs(tpEtaemu) > 16) { // lower energy thresholds in HE, since using transverse energy goes as 1/cosh(eta)
 	  // investigate which depth layers to include, timing bit excludes depth layer 1
 
+	  double eta = etaVal(tpEtaemu);
+          double theta = 2. * atan(exp(-eta));
+	  //          double distance1 = 388.0 / cos(theta);  // for HE
+	  double distance2 = (388.0+10) / cos(theta);  // for HE // note adjustments for depth layers are not fully accurate, first estimation!!!
+	  double distance3 = (388.0+40) / cos(theta);  // for HE
+	  double distance4 = (388.0+70) / cos(theta);  // for HE
+	  double distance5 = (388.0+100) / cos(theta);  // for HE
+	  double distance6 = (388.0+140) / cos(theta);  // for HE
+	  double distance7 = (388.0+140) / cos(theta);  // for HE
+	  //	  double tof1 = 1e9*distance1/2.99793e10;
+	  double tof2 = 1e9*distance2/2.99793e10;
+	  double tof3 = 1e9*distance3/2.99793e10;
+	  double tof4 = 1e9*distance4/2.99793e10;
+	  double tof5 = 1e9*distance5/2.99793e10;
+	  double tof6 = 1e9*distance6/2.99793e10;
+	  double tof7 = 1e9*distance7/2.99793e10;
+
 	  //	  if (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] >= 3 && l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >= 3) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
-          if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming2[HcalTPIt] >= TDC_HE_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
-	  if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming3[HcalTPIt] >= TDC_HE_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
-	  if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming4[HcalTPIt] >= TDC_HE_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
-	  if (l1CaloTPemu_->hcalTPDepth5[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming5[HcalTPIt] >= TDC_HE_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
-	  if (l1CaloTPemu_->hcalTPDepth6[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming6[HcalTPIt] >= TDC_HE_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
-	  if (l1CaloTPemu_->hcalTPDepth7[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming7[HcalTPIt] >= TDC_HE_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
+          if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= GeV_HE_variable && ( l1CaloTPemu_->hcalTPtiming2[HcalTPIt] - tof2 ) >= TDC_HE_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
+	  if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= GeV_HE_variable && ( l1CaloTPemu_->hcalTPtiming3[HcalTPIt] - tof3 ) >= TDC_HE_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
+	  if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= GeV_HE_variable && ( l1CaloTPemu_->hcalTPtiming4[HcalTPIt] - tof4 ) >= TDC_HE_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
+	  if (l1CaloTPemu_->hcalTPDepth5[HcalTPIt] >= GeV_HE_variable && ( l1CaloTPemu_->hcalTPtiming5[HcalTPIt] - tof5 ) >= TDC_HE_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
+	  if (l1CaloTPemu_->hcalTPDepth6[HcalTPIt] >= GeV_HE_variable && ( l1CaloTPemu_->hcalTPtiming6[HcalTPIt] - tof6 ) >= TDC_HE_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
+	  if (l1CaloTPemu_->hcalTPDepth7[HcalTPIt] >= GeV_HE_variable && ( l1CaloTPemu_->hcalTPtiming7[HcalTPIt] - tof7 ) >= TDC_HE_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
 	}
 
 	// prompt veto, counts high energy prompt TPs in region with no delayed hits
