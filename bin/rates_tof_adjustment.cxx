@@ -130,6 +130,54 @@ double deltaR(double eta1, double phi1, double eta2, double phi2) { // calculate
   return sqrt(deta*deta + dphi*dphi);
 }
 
+// calculate TOF based on shortest path from IP to an HCAL cell given ieta, depth
+double TOF_hcal(double ieta, double depth) {
+  double eta = etaVal(ieta);
+  double theta = 2. * atan(exp(-eta));
+  double tof = 0;
+  //  const double rLay[19] = {183.6,190.2,196.2,202.2,208.2,214.2,220.2,226.2,232.2,238.2,244.8,251.4,258.0,264.6,271.2,277.6,286.25,384.7,405.2};
+  if (abs(ieta) < 16 || ( abs(ieta) == 16 && depth <= 3 ) ) { // HB
+    double distance1 = 183.60 / sin(theta); // for HB depth 1, in cm from https://cmssdt.cern.ch/lxr/source/SimG4CMS/Calo/src/HcalTestAnalysis.cc
+    double distance2 = 190.20 / sin(theta); // for HB depth 2
+    double distance3 = 214.20 / sin(theta); // for HB depth 3
+    double distance4 = 244.80 / sin(theta); // for HB depth 4
+    if (depth == 1) tof = 1e9 * distance1 / 2.99793e10 - 3.5; // with TOF_adj = -3.5 found in hcalqie11tdc.py by Chris
+    if (depth == 2) tof = 1e9 * distance2 / 2.99793e10 - 3.5;
+    if (depth == 3) tof = 1e9 * distance3 / 2.99793e10 - 4.5;
+    if (depth == 4) tof = 1e9 * distance4 / 2.99793e10 - 5.5;
+  }
+  if (abs(ieta) >= 16 ) { // HE
+    const double zLay[19] = {403.4,403.2,412.3,421.0,429.7,438.4,447.1,455.8,464.5,473.2,481.9,490.6,499.3,508.0,516.7,525.4,534.1,542.8,551.5}; // in cm, from https://cmssdt.cern.ch/lxr/source/SimG4CMS/Calo/src/HcalTestAnalysis.cc
+    double distance[19] = {0};
+    for (int i = 0; i < 19; i++ ) distance[i] = zLay[i] / cos(theta);
+    if (abs(ieta) == 16 && depth == 4) tof = 1e9 * distance[3] / 2.99793e10; // HE, including last depth layer of ieta = 16
+    if (abs(ieta) == 17 && depth == 2) tof = 1e9 * distance[0] / 2.99793e10;
+    if (abs(ieta) == 17 && depth == 3) tof = 1e9 * distance[7] / 2.99793e10;
+    if (abs(ieta) == 18 && depth == 1) tof = 1e9 * distance[0] /2.99793e10;
+    if (abs(ieta) == 18 && depth == 2) tof = 1e9 * distance[1] /2.99793e10;
+    if (abs(ieta) == 18 && depth == 3) tof = 1e9 * distance[4] /2.99793e10;
+    if (abs(ieta) == 18 && depth == 4) tof = 1e9 * distance[8] /2.99793e10;
+    if (abs(ieta) == 18 && depth == 5) tof = 1e9 * distance[11] /2.99793e10;
+    if ( (abs(ieta) >= 19 && abs(ieta) <= 25 ) && depth == 1) tof = 1e9 * distance[0] /2.99793e10;
+    if ( (abs(ieta) >= 19 && abs(ieta) <= 25 ) && depth == 2) tof = 1e9 * distance[1] /2.99793e10;
+    if ( (abs(ieta) >= 19 && abs(ieta) <= 25 ) && depth == 3) tof = 1e9 * distance[4] /2.99793e10;
+    if ( (abs(ieta) >= 19 && abs(ieta) <= 25 ) && depth == 4) tof = 1e9 * distance[7] /2.99793e10;
+    if ( (abs(ieta) >= 19 && abs(ieta) <= 25 ) && depth == 5) tof = 1e9 * distance[10] /2.99793e10;
+    if ( (abs(ieta) >= 19 && abs(ieta) <= 25 ) && depth == 6) tof = 1e9 * distance[14] /2.99793e10;
+    if ( (abs(ieta) >= 26 && abs(ieta) <= 28 ) && depth == 1) tof = 1e9 * distance[0] /2.99793e10;
+    if ( (abs(ieta) >= 26 && abs(ieta) <= 28 ) && depth == 2) tof = 1e9 * distance[1] /2.99793e10;
+    if ( (abs(ieta) >= 26 && abs(ieta) <= 28 ) && depth == 3) tof = 1e9 * distance[3] /2.99793e10;
+    if ( (abs(ieta) >= 26 && abs(ieta) <= 28 ) && depth == 4) tof = 1e9 * distance[5] /2.99793e10;
+    if ( (abs(ieta) >= 26 && abs(ieta) <= 28 ) && depth == 5) tof = 1e9 * distance[7] /2.99793e10;
+    if ( (abs(ieta) >= 26 && abs(ieta) <= 28 ) && depth == 6) tof = 1e9 * distance[10] /2.99793e10;
+    if ( (abs(ieta) >= 26 && abs(ieta) <= 28 ) && depth == 7) tof = 1e9 * distance[14] /2.99793e10;
+    if (abs(ieta) == 29 && depth == 1) tof = 1e9 * distance[0] /2.99793e10;
+    if (abs(ieta) == 29 && depth == 2) tof = 1e9 * distance[1] /2.99793e10;
+    if (abs(ieta) == 29 && depth == 3) tof = 1e9 * distance[3] /2.99793e10;
+  }
+  return tof;
+}
+
 std::vector<double> eta_phi_2x2(double ieta, double iphi) {
   double TP_eta_2x2 = 1000;
   if (ieta>0) TP_eta_2x2 = ieta+27; //+15; // 16 to 31                                                                                                                    
@@ -559,6 +607,11 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
   TH2F* delayed4x4seed_TDC_GeV_HE = new TH2F("delayed4x4seed_TDC_GeV_HE","TDC and Energy in cells forming delayed 4x4 seed in HE;TDC;GeV",25,0,25,20,0,20);
   TH2F* delayed4x4seed_depth_TDC_HE = new TH2F("delayed4x4seed_depth_TDC_HE","TDC and Depth in cells forming delayed 4x4 seed in HE;Depth;TDC",8,0,8,20,0,20);
 
+  // for cross comparisons with HB multiplicity
+  TH1F* mhit3_emu = new TH1F("mhit3_emu","Multiplicity of 1ns delayed cells above 3 GeV;Multiplicity of Hits;Events",140,-0.5,139.5);
+  TH1F* mhit2_emu = new TH1F("mhit2_emu","Multiplicity of 1ns delayed cells above 2 GeV;Multiplicity of Hits;Events",140,-0.5,139.5);
+  TH1F* mhit1_emu = new TH1F("mhit1_emu","Multiplicity of 1ns delayed cells above 1 GeV;Multiplicity of Hits;Events",140,-0.5,139.5);
+
   // saving rate and efficiencies 
   double passed4JetMult_HBHE_ht120_1(0), passed4JetMult_HBHE_ht120_2(0), passed4JetMult_HBHE_ht120_3(0), passed4JetMult_HBHE_ht120_4(0), passed4JetMult_HBHE_ht120_5(0); //, passed4JetMult_HB_ht120(0),passed4JetMult_HE_ht120(0);
   double passed_calo_cluster_trig(0);
@@ -767,7 +820,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
       double nCaloTPemu = l1CaloTPemu_->nHCALTP; // number of TPs varies from 400-1400 per event, approximately Gaussian                                                  
       // triggerability restrictions
       for (uint jetIt = 0; jetIt < nJetemu; jetIt++) { // loop over jets
-	if (abs(l1emu_->jetEta[jetIt]) > 2.5) continue; // consider HB jets, HB extends to 1.4. HE extends to 3. Use values of 1, 2.5
+	if (abs(l1emu_->jetEta[jetIt]) > 1) continue; // consider HB jets, HB extends to 1.4. HE extends to 3. Use values of 1, 2.5
 	if (closestParton(jetIt, l1emu_, generator_)[0] <= 0.5) { // if closest parton is near a HB L1 jet
 	  numLLPdecayHB += 1; // how many of the partons expected to intersect HB
 	  if (LLPdecayInfo(closestParton(jetIt, l1emu_, generator_)[1], l1emu_, generator_)[4] > 1)  numLLPdecayHB_1ns += 1; // if TOF delay is over 1ns
@@ -791,9 +844,15 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
       double prompt_TP_energy_eta_phi[56][72] = {{0}};
       int timingBit = 0; // count how many delayed cells per event, used for threshold studies
 
+      // for crosss comparisons with HB multiplicity
+      int mhit1_mult = 0;
+      int mhit2_mult = 0;
+      int mhit3_mult = 0;
+
       for (int HcalTPIt = 0; HcalTPIt < nCaloTPemu; HcalTPIt++){ // loop over HCAL TPs
 	double tpEtaemu = l1CaloTPemu_->hcalTPieta[HcalTPIt]; // ieta
 	double tpPhiemu = l1CaloTPemu_->hcalTPCaliphi[HcalTPIt]; // iphi
+
 	if (abs(tpEtaemu) > 28 ) continue; // 16 just HB. don't consider HCAL TPs outside of HB or HE -- note, 29 should be summed with 28 still presumably 
 	// End of HB is eta=1.479m, end of HE is eta=3 from here http://www.hephy.at/user/friedl/diss/html/node8.html.
 	// HB restriction: abs(tpEtaemu) > 16. HEHB restriction: abs(tpEtaemu) > 28
@@ -808,57 +867,43 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 	//	if (abs(tpEtaemu) <= 16) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] = TP_TimingBit;
 	// instead of using pre-set timing bit (3ns 3GeV), set specifically here based on energy and time values
 	if (abs(tpEtaemu) <= 16) { 
-	  double eta = etaVal(tpEtaemu);
-	  double theta = 2. * atan(exp(-eta));
-	  double distance1 = 183.60 / sin(theta); // for HB
-	  double distance2 = 190.20 / sin(theta); // for HB
-	  double distance3 = 214.20 / sin(theta); // for HB
-	  double distance4 = 244.80 / sin(theta); // for HB
-	  double tof1 = 1e9*distance1/2.99793e10;
-          double tof2 = 1e9*distance2/2.99793e10;
-          double tof3 = 1e9*distance3/2.99793e10;
-          double tof4 = 1e9*distance4/2.99793e10;
+	  // make a HB multiplicity histogram to cross check with 
+	  if (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] >= 3 && ( l1CaloTPemu_->hcalTPtiming1[HcalTPIt] - TOF_hcal(tpEtaemu, 1) ) >= 1) mhit3_mult += 1;
+          if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= 3 && ( l1CaloTPemu_->hcalTPtiming2[HcalTPIt] - TOF_hcal(tpEtaemu, 2) ) >= 1) mhit3_mult += 1;
+          if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= 3 && ( l1CaloTPemu_->hcalTPtiming3[HcalTPIt] - TOF_hcal(tpEtaemu, 3) ) >= 1) mhit3_mult += 1;
+          if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= 3 && ( l1CaloTPemu_->hcalTPtiming4[HcalTPIt] - TOF_hcal(tpEtaemu, 4) ) >= 1) mhit3_mult += 1;
+          if (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] >= 2 && ( l1CaloTPemu_->hcalTPtiming1[HcalTPIt] - TOF_hcal(tpEtaemu, 1) ) >= 1) mhit2_mult += 1;
+          if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= 2 && ( l1CaloTPemu_->hcalTPtiming2[HcalTPIt] - TOF_hcal(tpEtaemu, 2) ) >= 1) mhit2_mult += 1;
+          if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= 2 && ( l1CaloTPemu_->hcalTPtiming3[HcalTPIt] - TOF_hcal(tpEtaemu, 3) ) >= 1) mhit2_mult += 1;
+	  if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= 2 && ( l1CaloTPemu_->hcalTPtiming4[HcalTPIt] - TOF_hcal(tpEtaemu, 4) ) >= 1) mhit2_mult += 1;
+          if (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] >= 1 && ( l1CaloTPemu_->hcalTPtiming1[HcalTPIt] - TOF_hcal(tpEtaemu, 1) ) >= 1) mhit1_mult += 1;
+          if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= 1 && ( l1CaloTPemu_->hcalTPtiming2[HcalTPIt] - TOF_hcal(tpEtaemu, 2) ) >= 1) mhit1_mult += 1;
+          if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= 1 && ( l1CaloTPemu_->hcalTPtiming3[HcalTPIt] - TOF_hcal(tpEtaemu, 3) ) >= 1) mhit1_mult += 1;
+          if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= 1 && ( l1CaloTPemu_->hcalTPtiming4[HcalTPIt] - TOF_hcal(tpEtaemu, 4) ) >= 1) mhit1_mult += 1;
 
-	  if (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] >= GeV_HB_variable && ( l1CaloTPemu_->hcalTPtiming1[HcalTPIt] - tof1 ) >= TDC_HB_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
-	  if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= GeV_HB_variable && ( l1CaloTPemu_->hcalTPtiming2[HcalTPIt] - tof2 ) >= TDC_HB_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
-	  if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= GeV_HB_variable && ( l1CaloTPemu_->hcalTPtiming3[HcalTPIt] - tof3 ) >= TDC_HB_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
-	  if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= GeV_HB_variable && ( l1CaloTPemu_->hcalTPtiming4[HcalTPIt] - tof4 ) >= TDC_HB_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
+	  if (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] >= GeV_HB_variable && ( l1CaloTPemu_->hcalTPtiming1[HcalTPIt] - TOF_hcal(tpEtaemu, 1) ) >= TDC_HB_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
+	  if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= GeV_HB_variable && ( l1CaloTPemu_->hcalTPtiming2[HcalTPIt] - TOF_hcal(tpEtaemu, 2) ) >= TDC_HB_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
+	  if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= GeV_HB_variable && ( l1CaloTPemu_->hcalTPtiming3[HcalTPIt] - TOF_hcal(tpEtaemu, 3) ) >= TDC_HB_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
+	  if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= GeV_HB_variable && ( l1CaloTPemu_->hcalTPtiming4[HcalTPIt] - TOF_hcal(tpEtaemu, 4) ) >= TDC_HB_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
 	}
 
 	if (abs(tpEtaemu) > 16) { // lower energy thresholds in HE, since using transverse energy goes as 1/cosh(eta)
 	  // investigate which depth layers to include, timing bit excludes depth layer 1
 
-	  double eta = etaVal(tpEtaemu);
-          double theta = 2. * atan(exp(-eta));
-	  //          double distance1 = 388.0 / cos(theta);  // for HE
-	  double distance2 = (388.0+10) / cos(theta);  // for HE // note adjustments for depth layers are not fully accurate, first estimation!!!
-	  double distance3 = (388.0+40) / cos(theta);  // for HE
-	  double distance4 = (388.0+70) / cos(theta);  // for HE
-	  double distance5 = (388.0+100) / cos(theta);  // for HE
-	  double distance6 = (388.0+140) / cos(theta);  // for HE
-	  double distance7 = (388.0+140) / cos(theta);  // for HE
-	  //	  double tof1 = 1e9*distance1/2.99793e10;
-	  double tof2 = 1e9*distance2/2.99793e10;
-	  double tof3 = 1e9*distance3/2.99793e10;
-	  double tof4 = 1e9*distance4/2.99793e10;
-	  double tof5 = 1e9*distance5/2.99793e10;
-	  double tof6 = 1e9*distance6/2.99793e10;
-	  double tof7 = 1e9*distance7/2.99793e10;
-
 	  //	  if (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] >= 3 && l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >= 3) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
-          if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= GeV_HE_variable && ( l1CaloTPemu_->hcalTPtiming2[HcalTPIt] - tof2 ) >= TDC_HE_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
-	  if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= GeV_HE_variable && ( l1CaloTPemu_->hcalTPtiming3[HcalTPIt] - tof3 ) >= TDC_HE_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
-	  if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= GeV_HE_variable && ( l1CaloTPemu_->hcalTPtiming4[HcalTPIt] - tof4 ) >= TDC_HE_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
-	  if (l1CaloTPemu_->hcalTPDepth5[HcalTPIt] >= GeV_HE_variable && ( l1CaloTPemu_->hcalTPtiming5[HcalTPIt] - tof5 ) >= TDC_HE_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
-	  if (l1CaloTPemu_->hcalTPDepth6[HcalTPIt] >= GeV_HE_variable && ( l1CaloTPemu_->hcalTPtiming6[HcalTPIt] - tof6 ) >= TDC_HE_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
-	  if (l1CaloTPemu_->hcalTPDepth7[HcalTPIt] >= GeV_HE_variable && ( l1CaloTPemu_->hcalTPtiming7[HcalTPIt] - tof7 ) >= TDC_HE_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
+          if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= GeV_HE_variable && ( l1CaloTPemu_->hcalTPtiming2[HcalTPIt] - TOF_hcal(tpEtaemu, 2) ) >= TDC_HE_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
+	  if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= GeV_HE_variable && ( l1CaloTPemu_->hcalTPtiming3[HcalTPIt] - TOF_hcal(tpEtaemu, 3) ) >= TDC_HE_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
+	  if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= GeV_HE_variable && ( l1CaloTPemu_->hcalTPtiming4[HcalTPIt] - TOF_hcal(tpEtaemu, 4) ) >= TDC_HE_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
+	  if (l1CaloTPemu_->hcalTPDepth5[HcalTPIt] >= GeV_HE_variable && ( l1CaloTPemu_->hcalTPtiming5[HcalTPIt] - TOF_hcal(tpEtaemu, 5) ) >= TDC_HE_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
+	  if (l1CaloTPemu_->hcalTPDepth6[HcalTPIt] >= GeV_HE_variable && ( l1CaloTPemu_->hcalTPtiming6[HcalTPIt] - TOF_hcal(tpEtaemu, 6) ) >= TDC_HE_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
+	  if (l1CaloTPemu_->hcalTPDepth7[HcalTPIt] >= GeV_HE_variable && ( l1CaloTPemu_->hcalTPtiming7[HcalTPIt] - TOF_hcal(tpEtaemu, 7) ) >= TDC_HE_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
 	}
 
 	// prompt veto, counts high energy prompt TPs in region with no delayed hits
 	if (l1CaloTPemu_->hcalTPet[HcalTPIt] >= 0) prompt_TP_energy_eta_phi[TP_ieta_2x2][TP_iphi_2x2] = l1CaloTPemu_->hcalTPet[HcalTPIt];
 	if (l1CaloTPemu_->hcalTPet[HcalTPIt] >= prompt_TP_energy_variable) prompt_TP_10GeV_eta_phi[TP_ieta_2x2][TP_iphi_2x2] = 1; // sum of depths, transverse energy. Track if TP is above energy threshold (1 if above, 0 if not)
       } // closing HCAL TP loop
-      if (jentry<20) std::cout << timingBit << " = Timing bit for entry " << jentry << std::endl;
+      //      if (jentry<20) std::cout << timingBit << " = Timing bit for entry " << jentry << std::endl;
 
       int delayed_calo_objects[nJetemu] = {0}; // delayed calo objects in each L1 jet
       int delayed[nJetemu] = {0}; // delayed hits in each L1 jet
@@ -1055,6 +1100,10 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 
       if (num_delayed_jet >= 3) HTdistribution_trig_emu->Fill(htSum); // plot HT dist of events passing calo trigger 
       HTdistribution_emu->Fill(htSum);
+
+      mhit1_emu->Fill(mhit1_mult);
+      mhit2_emu->Fill(mhit2_mult);
+      mhit3_emu->Fill(mhit3_mult);
 
       // saving number of events passed cell multiplicity cuts. These are efficiency values used in rate vs eff plots
       totalEvents += 1; // counting total events for efficiency calculations
@@ -1369,6 +1418,10 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 
     htSumDistribution->Write();
 
+    mhit1_emu->Write();
+    mhit2_emu->Write();
+    mhit3_emu->Write();
+
     prompt_delayed_seed->Write();
     DeltaR_L1_delayed_seed_emu->Write();
     DeltaR_L1_prompt_seed_emu->Write();
@@ -1460,9 +1513,6 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
   std::cout << passedHtSum360 << " passed HT360" << std::endl;
   std::cout << totalEvents << " all events" << std::endl;
   //  std::cout << totalEvents_HBdr05 << " events with LLP decay product within DR<0.5 of L1 jet in HB" << std::endl;
-  //  std::cout << totalEvents_HBdr05_1ns << " events with LLP decay product within DR<0.5 of L1 jet in HB, and TOF delay > 1ns" << std::endl;
-  //  std::cout << totalEvents_HBdr05_2ns << " events with LLP decay product within DR<0.5 of L1 jet in HB, and TOF delay > 2ns" << std::endl;
-  //  std::cout << totalEvents_HBdr05_3ns << " events with LLP decay product within DR<0.5 of L1 jet in HB, and TOF delay > 3ns" << std::endl;
 
   // saving efficiencies and rates in txt files to be read by rate vs eff plotting macros
   // signal efficiencies
