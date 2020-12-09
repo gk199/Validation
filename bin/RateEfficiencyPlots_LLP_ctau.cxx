@@ -38,6 +38,7 @@ int main() {
   mh125_pl30000.close();
   */
 
+  /*
   // mh=1000 pl=10m
   double signal_mh1000_pl10000[6];
   ifstream mh1000_pl10000;
@@ -52,6 +53,7 @@ int main() {
   n=0;
   while (mh1000_pl100000 >> signal_mh1000_pl100000[n]) n++;
   mh1000_pl100000.close();
+  */
 
   /*
   // mh=350 pl=0.5m 
@@ -122,7 +124,7 @@ int main() {
 
   double nugun_rate[5], cuts_background[5];
   double cuts_mh125_pl3000[5];//, cuts_mh125_pl30000[5];
-  double cuts_mh1000_pl10000[5];//, cuts_mh1000_pl100000[5];
+  //  double cuts_mh1000_pl10000[5];//, cuts_mh1000_pl100000[5];
   double cuts_mh250_pl1000[5];//cuts_mh250_pl500[5], cuts_mh250_pl1000[5], cuts_mh250_pl10000[5];
   double cuts_mh350_pl1000[5];//cuts_mh350_pl500[5], cuts_mh350_pl10000[5], cuts_mh350_pl10000[5];
   for (int i=0; i<5; i++) {
@@ -135,7 +137,7 @@ int main() {
     //    cuts_mh350_pl500[i] = signal_mh350_pl500[i];
     cuts_mh350_pl1000[i] = signal_mh350_pl1000[i];
     //    cuts_mh350_pl10000[i] = signal_mh350_pl10000[i];
-    cuts_mh1000_pl10000[i] = signal_mh1000_pl10000[i];
+    //    cuts_mh1000_pl10000[i] = signal_mh1000_pl10000[i];
     //    cuts_mh1000_pl100000[i] = signal_mh1000_pl100000[i];
     cuts_background[i] = background[i];
   }
@@ -160,8 +162,8 @@ int main() {
   //  TGraph *gr_LLP_mh350_pl10000 = new TGraph(5, cuts_mh350_pl10000, nugun_rate);
   //  TMarker *m_mh350_pl10000_ht360 = new TMarker(signal_mh350_pl10000[5], rates[5], 21);
   // mh = 1000 GeV 
-  TGraph *gr_LLP_mh1000_pl10000 = new TGraph(5, cuts_mh1000_pl10000, nugun_rate);
-  TMarker *m_mh1000_pl10000_ht360 = new TMarker(signal_mh1000_pl10000[5], rates[5], 21);
+  //  TGraph *gr_LLP_mh1000_pl10000 = new TGraph(5, cuts_mh1000_pl10000, nugun_rate);
+  //  TMarker *m_mh1000_pl10000_ht360 = new TMarker(signal_mh1000_pl10000[5], rates[5], 21);
   //  TGraph *gr_LLP_mh1000_pl100000 = new TGraph(5, cuts_mh1000_pl100000, nugun_rate);
   //  TMarker *m_mh1000_pl100000_ht360 = new TMarker(signal_mh1000_pl100000[5], rates[5], 21);
   // QCD
@@ -197,6 +199,7 @@ int main() {
   gr_LLP_mh350_pl1000->SetLineColor(kBlue);
   gr_LLP_mh350_pl1000->Draw("C*");
 
+  /*
   m_mh1000_pl10000_ht360->SetMarkerStyle(21);
   m_mh1000_pl10000_ht360->SetMarkerColor(kMagenta-9);
   m_mh1000_pl10000_ht360->Draw();
@@ -205,6 +208,8 @@ int main() {
   l->SetLineColor(kBlack);
   l->SetLineStyle(7);
   l->Draw();
+  */
+
   auto legend1_htSum = new TLegend(0.55,0.15,0.9,0.45);
   legend1_htSum->AddEntry(m_mh125_pl3000_ht360,"m_{H}=125, c#scale[1.2]{#tau}=3m; H_{T}>360 GeV, no timing cuts");
   legend1_htSum->AddEntry(gr_LLP_mh125_pl3000,"m_{H}=125, c#scale[1.2]{#tau}=3m; H_{T}>120 GeV, with timing cuts"); 
@@ -212,8 +217,8 @@ int main() {
   legend1_htSum->AddEntry(gr_LLP_mh250_pl1000,"m_{H}=250, c#scale[1.2]{#tau}=1m; H_{T}>120 GeV, with timing cuts");
   legend1_htSum->AddEntry(m_mh350_pl1000_ht360,"m_{H}=350, c#scale[1.2]{#tau}=1m; H_{T}>360 GeV, no timing cuts");
   legend1_htSum->AddEntry(gr_LLP_mh350_pl1000,"m_{H}=350, c#scale[1.2]{#tau}=1m; H_{T}>120 GeV, with timing cuts");
-  legend1_htSum->AddEntry(m_mh1000_pl10000_ht360,"m_{H}=1000, c#scale[1.2]{#tau}=10m; H_{T}>360 GeV, no timing cuts");
-  legend1_htSum->AddEntry(gr_LLP_mh1000_pl10000,"m_{H}=1000, c#scale[1.2]{#tau}=10m; H_{T}>120 GeV, with timing cuts");
+  //  legend1_htSum->AddEntry(m_mh1000_pl10000_ht360,"m_{H}=1000, c#scale[1.2]{#tau}=10m; H_{T}>360 GeV, no timing cuts");
+  //  legend1_htSum->AddEntry(gr_LLP_mh1000_pl10000,"m_{H}=1000, c#scale[1.2]{#tau}=10m; H_{T}>120 GeV, with timing cuts");
   legend1_htSum->AddEntry(l,"Neutrino gun rate at HT=120GeV with no timing cuts");
   legend1_htSum->Draw();
   c1_LLP_pl3000->SetLogy();

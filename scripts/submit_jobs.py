@@ -108,10 +108,10 @@ for jobtype in COND_LIST:
     crab_submit_script.close()
     
     # concatenate crab submission file with template
-    filename = 'submit_run_' + 'MCrun_' + jobtype + '.py'
-    command = "cat submit_tmp.py ntuple_submit_template.py > " + filename
-    os.system(command)
-    os.remove(tmpfile)
+#    filename = 'submit_run_' + 'MCrun_' + jobtype + '.py'
+#    command = "cat submit_tmp.py ntuple_submit_template.py > " + filename
+#    os.system(command)
+#    os.remove(tmpfile)
 
     # generate cmsDriver commands
     if ARGS.newtag>0:
@@ -120,6 +120,12 @@ for jobtype in COND_LIST:
     else:
         print generate_ntuple_config(jobtype,0, ARGS.caloparams)
         os.system(generate_ntuple_config(jobtype, 0, ARGS.caloparams))  
+
+    # concatenate crab submission file with template 
+    filename = 'submit_run_' + 'MCrun_' + jobtype + '.py'
+    command = "cat submit_tmp.py ntuple_submit_template.py > " + filename
+    os.system(command)
+    os.remove(tmpfile)
 
     if(not ARGS.no_exec):
         crabcmd = "crab submit " + filename

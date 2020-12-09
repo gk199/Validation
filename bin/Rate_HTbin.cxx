@@ -41,13 +41,13 @@ int main() {
   n=0;
   while (mh350_pl1000 >> signal_mh350_pl1000[n]) n++;
   mh350_pl1000.close();
-  // mh=1000 pl=10m
-  double signal_mh1000_pl10000[14];
-  ifstream mh1000_pl10000;
-  mh1000_pl10000.open("Efficiency_HtBins_Signal_MH-1000_MFF-450_CTau-10000mm_.txt");
+  // mh=1000 pl=100m
+  double signal_mh1000_pl100000[14];
+  ifstream mh1000_pl100000;
+  mh1000_pl100000.open("Efficiency_HtBins_Signal_MH-1000_MFF-450_CTau-100000mm.txt");
   n=0;
-  while (mh1000_pl10000 >> signal_mh1000_pl10000[n]) n++;
-  mh1000_pl10000.close();
+  while (mh1000_pl100000 >> signal_mh1000_pl100000[n]) n++;
+  mh1000_pl100000.close();
 
   // ht360
   double L1HT360[14] = {0,0,0,0,0,0,0,0,0,0,0,0,1,1};
@@ -61,8 +61,8 @@ int main() {
   TGraphErrors *gr_LLP_mh250_pl1000 = new TGraphErrors(14, htBin, signal_mh250_pl1000,htBin_er,err_y);
   TGraphErrors *gr_LLP_mh125_pl3000 = new TGraphErrors(14, htBin, signal_mh125_pl3000,htBin_er,err_y);
   TGraphErrors *gr_LLP_mh350_pl1000 = new TGraphErrors(14, htBin, signal_mh350_pl1000,htBin_er,err_y);
-  TGraphErrors *gr_LLP_mh1000_pl10000 = new TGraphErrors(14, htBin, signal_mh1000_pl10000,htBin_er,err_y);
-  for (int i=0; i<14; i++) std::cout << signal_mh1000_pl10000[i] << " and " << htBin[i] << std::endl;
+  TGraphErrors *gr_LLP_mh1000_pl100000 = new TGraphErrors(14, htBin, signal_mh1000_pl100000,htBin_er,err_y);
+  for (int i=0; i<14; i++) std::cout << signal_mh1000_pl100000[i] << " and " << htBin[i] << std::endl;
 
   TCanvas *c1_LLP_mh125_pl3000 = new TCanvas("c1_LLP_mh125_pl3000","Graph Draw Options",200,10,600,400);
   gr_LLP_mh125_pl3000->SetMarkerColor(kBlue);
@@ -111,19 +111,19 @@ int main() {
   legend3_htSum->Draw();
   c1_LLP_mh350_pl1000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/EffHT_LLP_mh350_pl1000.pdf");
 
-  TCanvas *c1_LLP_mh1000_pl10000 = new TCanvas("c1_LLP_mh1000_pl10000","Graph Draw Options",200,10,600,400);
-  gr_LLP_mh1000_pl10000->SetMarkerColor(kBlue);
-  gr_LLP_mh1000_pl10000->SetMarkerStyle(21);
-  gr_LLP_mh1000_pl10000->Draw("AP");
+  TCanvas *c1_LLP_mh1000_pl100000 = new TCanvas("c1_LLP_mh1000_pl100000","Graph Draw Options",200,10,600,400);
+  gr_LLP_mh1000_pl100000->SetMarkerColor(kBlue);
+  gr_LLP_mh1000_pl100000->SetMarkerStyle(21);
+  gr_LLP_mh1000_pl100000->Draw("AP");
   gr_L1HT360->SetMarkerColor(kRed);
   gr_L1HT360->SetMarkerStyle(21);
-  gr_LLP_mh1000_pl10000->SetTitle("HT vs. Signal Efficiency for >=2 Cells >=50ADC,3ns near 4 L1 Jets;HT (GeV);LLP Efficiency, mh=1000 GeV, c#scale[1.2]{#tau}=10m   ");
-  gr_LLP_mh1000_pl10000->GetHistogram()->SetMinimum(0.);
-  gr_LLP_mh1000_pl10000->GetHistogram()->SetMaximum(1.);
-  c1_LLP_mh1000_pl10000->SetGrid();
+  gr_LLP_mh1000_pl100000->SetTitle("HT vs. Signal Efficiency for >=2 Cells >=50ADC,3ns near 4 L1 Jets;HT (GeV);LLP Efficiency, mh=1000 GeV, c#scale[1.2]{#tau}=100m   ");
+  gr_LLP_mh1000_pl100000->GetHistogram()->SetMinimum(0.);
+  gr_LLP_mh1000_pl100000->GetHistogram()->SetMaximum(1.);
+  c1_LLP_mh1000_pl100000->SetGrid();
   auto legend4_htSum = new TLegend(0.15,0.65,0.45,0.8);
-  legend4_htSum->AddEntry(gr_LLP_mh1000_pl10000,"HT>120 with timing cuts");
+  legend4_htSum->AddEntry(gr_LLP_mh1000_pl100000,"HT>120 with timing cuts");
   legend4_htSum->Draw();
-  c1_LLP_mh1000_pl10000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/EffHT_LLP_mh1000_pl10000.pdf");
+  c1_LLP_mh1000_pl100000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/EffHT_LLP_mh1000_pl100000.pdf");
 
 }
