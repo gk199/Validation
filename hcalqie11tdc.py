@@ -45,7 +45,9 @@ gROOT.SetBatch(True)
 #f = TFile.Open("/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/mh2000_mx975_pl10000_ev1000/ppTohToSS1SS2_SS1Tobb_SS2Toveve_1_withISR_step1_TDC.root")
 #f = TFile.Open("/eos/cms/store/user/lowang/LLP_htobbbb/step1/MH-125_MFF-50_CTau-1000mm_step1.root")
 #f = TFile.Open("/eos/cms/store/user/lowang/QCD_Pt-15to7000_TuneCP5_Flat_13TeV_step1.root")
-f = TFile.Open("/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/PionGun/SinglePion211_E10_PU_00_eta1phi0_timeslew-false_step1_CaloSamples_10events.root") #SinglePion211_E10_PU_00_eta1phi0_timeslew-false_step1.root")
+#f = TFile.Open("/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/PionGun/SinglePion211_E10_PU_00_step1.root")
+f = TFile.Open("/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/PionGun/SinglePion211_E10_PU_step1.root")
+#f = TFile.Open("/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/PionGun/SinglePion211_E10_PU_00_eta1phi0_timeslew-false_step1_CaloSamples_10events.root") #SinglePion211_E10_PU_00_eta1phi0_timeslew-false_step1.root")
 #f = TFile.Open("step1tdc.root")
 
 events = f.Events
@@ -99,14 +101,26 @@ adchit1 = TH1D('adchit1','HB ADC',256,-0.5,255.5)
 tdchit1 = TH1D('tdchit1','HB TDC',64,-0.5,63.5)
 tdchit2d = TH2D('tdchit2d','HB TDC versus TOF',46,3.5,49.5,30,3.5,18.5)
 tdchit3 = TH1D('tdchit3','HB TDC',64,-0.5,63.5)
-tdchit4 = TH1D('tdchit4','HB TDC(ns)-TOF (Depth 1)',100,-25.0,25.0)
-tdchit5 = TH1D('tdchit5','HB TDC(ns)-TOF (Depth 2)',100,-25.0,25.0)
-tdchit6 = TH1D('tdchit6','HB TDC(ns)-TOF (Depth 3)',100,-25.0,25.0)
-tdchit7 = TH1D('tdchit7','HB TDC(ns)-TOF (Depth 4)',100,-25.0,25.0)
-tdchit4HE = TH1D('tdchit4HE','HE TDC(ns)-TOF (Depth 1)',100,-25.0,25.0)
-tdchit5HE = TH1D('tdchit5HE','HE TDC(ns)-TOF (Depth 2)',100,-25.0,25.0)
-tdchit6HE = TH1D('tdchit6HE','HE TDC(ns)-TOF (Depth 3)',100,-25.0,25.0)
-tdchit7HE = TH1D('tdchit7HE','HE TDC(ns)-TOF (Depth 4+)',100,-25.0,25.0)
+tdchit4 = TH1D('tdchit4','HB TDC(ns)-TOF (Depth 1), 1k fC',100,-25.0,25.0)
+tdchit5 = TH1D('tdchit5','HB TDC(ns)-TOF (Depth 2), 1k fC',100,-25.0,25.0)
+tdchit6 = TH1D('tdchit6','HB TDC(ns)-TOF (Depth 3), 1k fC',100,-25.0,25.0)
+tdchit7 = TH1D('tdchit7','HB TDC(ns)-TOF (Depth 4), 1k fC',100,-25.0,25.0)
+tdchit4HE = TH1D('tdchit4HE','HE TDC(ns)-TOF (Depth 1), 1k fC',100,-25.0,25.0)
+tdchit5HE = TH1D('tdchit5HE','HE TDC(ns)-TOF (Depth 2), 1k fC',100,-25.0,25.0)
+tdchit6HE = TH1D('tdchit6HE','HE TDC(ns)-TOF (Depth 3), 1k fC',100,-25.0,25.0)
+tdchit7HE = TH1D('tdchit7HE','HE TDC(ns)-TOF (Depth 4), 1k fC',100,-25.0,25.0)
+tdchit8HE = TH1D('tdchit8HE','HE TDC(ns)-TOF (Depth 5), 1k fC',100,-25.0,25.0)
+tdchit9HE = TH1D('tdchit9HE','HE TDC(ns)-TOF (Depth 6+), 1k fC',100,-25.0,25.0)
+tdchit4_3kfC = TH1D('tdchit4_3kfC','HB TDC(ns)-TOF (Depth 1), 3k fC',100,-25.0,25.0)
+tdchit5_3kfC = TH1D('tdchit5_3kfC','HB TDC(ns)-TOF (Depth 2), 3k fC',100,-25.0,25.0)
+tdchit6_3kfC = TH1D('tdchit6_3kfC','HB TDC(ns)-TOF (Depth 3), 3k fC',100,-25.0,25.0)
+tdchit7_3kfC = TH1D('tdchit7_3kfC','HB TDC(ns)-TOF (Depth 4), 3k fC',100,-25.0,25.0)
+tdchit4HE_3kfC = TH1D('tdchit4HE_3kfC','HE TDC(ns)-TOF (Depth 1), 3k fC',100,-25.0,25.0)
+tdchit5HE_3kfC = TH1D('tdchit5HE_3kfC','HE TDC(ns)-TOF (Depth 2), 3k fC',100,-25.0,25.0)
+tdchit6HE_3kfC = TH1D('tdchit6HE_3kfC','HE TDC(ns)-TOF (Depth 3), 3k fC',100,-25.0,25.0)
+tdchit7HE_3kfC = TH1D('tdchit7HE_3kfC','HE TDC(ns)-TOF (Depth 4), 3k fC',100,-25.0,25.0)
+tdchit8HE_3kfC = TH1D('tdchit8HE_3kfC','HE TDC(ns)-TOF (Depth 5), 3k fC',100,-25.0,25.0)
+tdchit9HE_3kfC = TH1D('tdchit9HE_3kfC','HE TDC(ns)-TOF (Depth 6+), 3k fC',100,-25.0,25.0)
 fhit1 = TH1D('fhit1','HB fC',50,-50.0,1500.0)
 vt = TH1D('vt','v t',50,-1.0,1.0)
 vx = TH1D('vx','v x',50,-0.01,0.01)
@@ -164,7 +178,9 @@ events.Draw("(((PCaloHits_g4SimHits_HcalHits_SIM.obj.id())>>10)&0x1FF)>>nhit3","
 #events = Events("/eos/cms/store/user/lowang/mh1000_pl1000_step1.root")
 #events = Events("/eos/cms/store/user/lowang/LLP_htobbbb/step1/MH-125_MFF-50_CTau-1000mm_step1.root")
 #events = Events("/eos/cms/store/user/lowang/QCD_Pt-15to7000_TuneCP5_Flat_13TeV_step1.root")
-events = Events("/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/PionGun/SinglePion211_E10_PU_00_eta1phi0_timeslew-false_step1_CaloSamples_10events.root") #SinglePion211_E10_PU_00_eta1phi0_timeslew-false_step1.root")
+#events = Events("/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/PionGun/SinglePion211_E10_PU_00_eta1phi0_timeslew-false_step1_CaloSamples_10events.root") #SinglePion211_E10_PU_00_eta1phi0_timeslew-false_step1.root")
+#events = Events("/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/PionGun/SinglePion211_E10_PU_00_step1.root")
+events = Events("/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/PionGun/SinglePion211_E10_PU_step1.root")
 #events = Events("step1tdc.root")
 
 handleSim  = Handle ("std::vector<PCaloHit>")
@@ -244,11 +260,14 @@ tofadj[1] = -3.5
 tofadj[2] = -4.5
 tofadj[3] = -5.5
 
-tofadjHE = np.zeros(4)
+tofadjHE = np.zeros(6)
 tofadjHE[0] = -10.5
-tofadjHE[1] = -5.5
-tofadjHE[2] = -7.5
-tofadjHE[3] = -12.5
+tofadjHE[1] = -10.5
+tofadjHE[2] = -11.5
+tofadjHE[3] = -12
+tofadjHE[4] = -13
+tofadjHE[5] = -14
+
 
 for event in events:
     nevents+=1
@@ -505,15 +524,25 @@ for event in events:
                   mult1ns1000fC+=1
               if (delayedtime>2.):
                   mult2ns1000fC+=1
-        
+          if (qie11fCtot > 3000.0):
+              delayedtime = qie11tdc*0.5-tof
+              if (depth == 1):
+                  tdchit4_3kfC.Fill(delayedtime)
+              elif (depth == 2):
+                  tdchit5_3kfC.Fill(delayedtime)
+              elif (depth == 3):
+                  tdchit6_3kfC.Fill(delayedtime)
+              else:
+                  tdchit7_3kfC.Fill(delayedtime)
+
         if (ieta > 15): # HE, to see if need tdc_adjust to shift prompt peak to 0
           phi = phiVal(iphi)
           eta = etaVal(ieta)
           theta = 2.*math.atan(math.exp(-eta))
           distance = zDepth[depth-1] / math.cos(theta)
           tof = 1e9*distance/2.99793e10  # cm/sec
-          if (depth == 1): tof += tofadjHE[depth-1]
-          else: tof += tofadjHE[3]
+          if (depth <= 5): tof += tofadjHE[depth-1]
+          else: tof += tofadjHE[5]
           qie11fCtot = 0.0
           qie11tdc = 0.0
           for j in range(qie11digi[i].size()):
@@ -542,12 +571,30 @@ for event in events:
                   tdchit5HE.Fill(delayedtime)
               elif (depth == 3):
                   tdchit6HE.Fill(delayedtime)
-              else:
+              elif (depth == 4):
                   tdchit7HE.Fill(delayedtime)
+              elif (depth == 5):
+                  tdchit8HE.Fill(delayedtime)
+              else:
+                  tdchit9HE.Fill(delayedtime)
 #              if (delayedtime>1.):
 #                  mult1ns1000fC+=1
 #              if (delayedtime>2.):
 #                  mult2ns1000fC+=1
+          if (qie11fCtot > 3000.0):
+              delayedtime = qie11tdc*0.5-tof
+              if (depth == 1):
+                  tdchit4HE_3kfC.Fill(delayedtime)
+              elif (depth == 2):
+                  tdchit5HE_3kfC.Fill(delayedtime)
+              elif (depth == 3):
+                  tdchit6HE_3kfC.Fill(delayedtime)
+              elif (depth == 4):
+                  tdchit7HE_3kfC.Fill(delayedtime)
+              elif (depth == 5):
+                  tdchit8HE_3kfC.Fill(delayedtime)
+              else:
+                  tdchit9HE_3kfC.Fill(delayedtime)
 
     mhit5.Fill(mult1ns1000fC)
     mhit7.Fill(mult2ns1000fC)
@@ -1013,49 +1060,127 @@ c51 = TCanvas()
 tdchit4.Draw("EHIST")
 tdchit4.GetXaxis().SetTitle("TDC(ns)")
 tdchit4.GetYaxis().SetTitle("# of entries")
-c51.SaveAs("tdchit4.png")
+c51.SaveAs("tdchit4_1kfC.png")
 
 c52 = TCanvas()
 tdchit5.Draw("EHIST")
 tdchit5.GetXaxis().SetTitle("TDC(ns)")
 tdchit5.GetYaxis().SetTitle("# of entries")
-c52.SaveAs("tdchit5.png")
+c52.SaveAs("tdchit5_1kfC.png")
 
 c53 = TCanvas()
 tdchit6.Draw("EHIST")
 tdchit6.GetXaxis().SetTitle("TDC(ns)")
 tdchit6.GetYaxis().SetTitle("# of entries")
-c53.SaveAs("tdchit6.png")
+c53.SaveAs("tdchit6_1kfC.png")
 
 c54 = TCanvas()
 tdchit7.Draw("EHIST")
 tdchit7.GetXaxis().SetTitle("TDC(ns)")
 tdchit7.GetYaxis().SetTitle("# of entries")
-c54.SaveAs("tdchit7.png")
+c54.SaveAs("tdchit7_1kfC.png")
 
 c51HE = TCanvas()
 tdchit4HE.Draw("EHIST")
 tdchit4HE.GetXaxis().SetTitle("TDC(ns)")
 tdchit4HE.GetYaxis().SetTitle("# of entries")
-c51HE.SaveAs("tdchit4HE.png")
+c51HE.SaveAs("tdchit4HE_1kfC.png")
 
 c52HE = TCanvas()
 tdchit5HE.Draw("EHIST")
 tdchit5HE.GetXaxis().SetTitle("TDC(ns)")
 tdchit5HE.GetYaxis().SetTitle("# of entries")
-c52HE.SaveAs("tdchit5HE.png")
+c52HE.SaveAs("tdchit5HE_1kfC.png")
 
 c53HE = TCanvas()
 tdchit6HE.Draw("EHIST")
 tdchit6HE.GetXaxis().SetTitle("TDC(ns)")
 tdchit6HE.GetYaxis().SetTitle("# of entries")
-c53HE.SaveAs("tdchit6HE.png")
+c53HE.SaveAs("tdchit6HE_1kfC.png")
 
 c54HE = TCanvas()
 tdchit7HE.Draw("EHIST")
 tdchit7HE.GetXaxis().SetTitle("TDC(ns)")
 tdchit7HE.GetYaxis().SetTitle("# of entries")
-c54HE.SaveAs("tdchit7HE.png")
+c54HE.SaveAs("tdchit7HE_1kfC.png")
+
+c55HE = TCanvas()
+tdchit8HE.Draw("EHIST")
+tdchit8HE.GetXaxis().SetTitle("TDC(ns)")
+tdchit8HE.GetYaxis().SetTitle("# of entries")
+c55HE.SaveAs("tdchit8HE_1kfC.png")
+
+c56HE = TCanvas()
+tdchit9HE.Draw("EHIST")
+tdchit9HE.GetXaxis().SetTitle("TDC(ns)")
+tdchit9HE.GetYaxis().SetTitle("# of entries")
+c56HE.SaveAs("tdchit9HE_1kfC.png")
+
+c51_3kfC = TCanvas()
+tdchit4_3kfC.Draw("EHIST")
+tdchit4_3kfC.GetXaxis().SetTitle("TDC(ns)")
+tdchit4_3kfC.GetYaxis().SetTitle("# of entries")
+c51_3kfC.SaveAs("tdchit4_3kfC.png")
+
+c52_3kfC = TCanvas()
+tdchit5_3kfC.Draw("EHIST")
+tdchit5_3kfC.GetXaxis().SetTitle("TDC(ns)")
+tdchit5_3kfC.GetYaxis().SetTitle("# of entries")
+c52_3kfC.SaveAs("tdchit5_3kfC.png")
+
+c53_3kfC = TCanvas()
+tdchit6_3kfC.Draw("EHIST")
+tdchit6_3kfC.GetXaxis().SetTitle("TDC(ns)")
+tdchit6_3kfC.GetYaxis().SetTitle("# of entries")
+c53_3kfC.SaveAs("tdchit6_3kfC.png")
+
+c54_3kfC = TCanvas()
+tdchit7_3kfC.Draw("EHIST")
+tdchit7_3kfC.GetXaxis().SetTitle("TDC(ns)")
+tdchit7_3kfC.GetYaxis().SetTitle("# of entries")
+c54_3kfC.SaveAs("tdchit7_3kfC.png")
+
+c51HE_3kfC = TCanvas()
+tdchit4HE_3kfC.Draw("EHIST")
+tdchit4HE_3kfC.GetXaxis().SetTitle("TDC(ns)")
+tdchit4HE_3kfC.GetYaxis().SetTitle("# of entries")
+c51HE_3kfC.SaveAs("tdchit4HE_3kfC.png")
+
+c52HE_3kfC = TCanvas()
+tdchit5HE_3kfC.Draw("EHIST")
+tdchit5HE_3kfC.GetXaxis().SetTitle("TDC(ns)")
+tdchit5HE_3kfC.GetYaxis().SetTitle("# of entries")
+c52HE_3kfC.SaveAs("tdchit5HE_3kfC.png")
+
+c53HE_3kfC = TCanvas()
+tdchit6HE_3kfC.Draw("EHIST")
+tdchit6HE_3kfC.GetXaxis().SetTitle("TDC(ns)")
+tdchit6HE_3kfC.GetYaxis().SetTitle("# of entries")
+c53HE_3kfC.SaveAs("tdchit6HE_3kfC.png")
+
+c54HE_3kfC = TCanvas()
+tdchit7HE_3kfC.Draw("EHIST")
+tdchit7HE_3kfC.GetXaxis().SetTitle("TDC(ns)")
+tdchit7HE_3kfC.GetYaxis().SetTitle("# of entries")
+c54HE_3kfC.SaveAs("tdchit7HE_3kfC.png")
+
+c55HE_3kfC = TCanvas()
+tdchit8HE_3kfC.Draw("EHIST")
+tdchit8HE_3kfC.GetXaxis().SetTitle("TDC(ns)")
+tdchit8HE_3kfC.GetYaxis().SetTitle("# of entries")
+c55HE_3kfC.SaveAs("tdchit8HE_3kfC.png")
+
+c56HE_3kfC = TCanvas()
+tdchit9HE_3kfC.Draw("EHIST")
+tdchit9HE_3kfC.GetXaxis().SetTitle("TDC(ns)")
+tdchit9HE_3kfC.GetYaxis().SetTitle("# of entries")
+c56HE_3kfC.SaveAs("tdchit9HE_3kfC.png")
+
+
+
+
+
+
 
 c55 = TCanvas()
 mhit5.Draw("EHIST")

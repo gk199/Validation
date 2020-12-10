@@ -17,9 +17,10 @@ int main()
   setTDRStyle();
   gROOT->ForceStyle();
 
-  std::vector<std::string> filenames = {"rates_new_cond_LLP_mh1000_pl10000.root", "/afs/cern.ch/work/g/gkopp/HCAL_Trigger/L1Ntuples/HCAL_TP_TimingBitEmulator/CMSSW_11_0_2/src/HcalTrigger/Validation/rates_new_cond_LLP_mh1000_pl10000.root"};
+  std::vector<std::string> filenames = {"rates_new_cond_LLP_mh250_pl1000.root", "/afs/cern.ch/work/g/gkopp/HCAL_Trigger/L1Ntuples/HCAL_TP_TimingBitEmulator/CMSSW_11_0_2/src/HcalTrigger/Validation/rates_new_cond_LLP_mh250_pl1000.root"};
+  //  std::vector<std::string> filenames = {"rates_new_cond_LLP_mh1000_pl10000.root", "/afs/cern.ch/work/g/gkopp/HCAL_Trigger/L1Ntuples/HCAL_TP_TimingBitEmulator/CMSSW_11_0_2/src/HcalTrigger/Validation/rates_new_cond_LLP_mh1000_pl10000.root"};
   //  std::vector<std::string> filenames = {"rates_new_cond_106X_nugun.root", "/afs/cern.ch/work/g/gkopp/HCAL_Trigger/L1Ntuples/HCAL_TP_TimingBitEmulator/CMSSW_11_0_2/src/HcalTrigger/Validation/rates_new_cond_110X_nugun.root"};
-  std::vector<std::string> multTypes = {"htSumDistribution","L1_Jet1_ET","L1_Jet2_ET","L1_Jet3_ET","L1_Jet4_ET"};//ADC50_3ns_4JetMultHB", "ADC50_3ns_4JetMultHE", "ADC50_3ns_4JetMultHBHE"};
+  std::vector<std::string> multTypes = {"htSumDistribution"}; //,"L1_Jet1_ET","L1_Jet2_ET","L1_Jet3_ET","L1_Jet4_ET"};//ADC50_3ns_4JetMultHB", "ADC50_3ns_4JetMultHE", "ADC50_3ns_4JetMultHBHE"};
 
   std::map<std::string, TH1F*> multHists_106X;
   std::map<std::string, TH1F*> multHists_110X;
@@ -79,8 +80,8 @@ int main()
     st->SetTextColor(kRed); 
 
     TLegend *leg = new TLegend(0.6, 0.75, 0.9, 0.9);
-    leg->AddEntry(multHists_106X[hist],"106X, mh=1TeV, pl=10m","L"); //neutrino gun", "L");
-    leg->AddEntry(multHists_110X[hist], "110X, mh=1TeV, pl=10m","L"); //neutrino gun", "L");
+    leg->AddEntry(multHists_106X[hist], "106X, mh=250GeV, pl=1m","L");//"106X, mh=1TeV, pl=10m","L"); //neutrino gun", "L");
+    leg->AddEntry(multHists_110X[hist], "110X, mh=250GeV, pl=1m","L"); //"110X, mh=1TeV, pl=10m","L"); //neutrino gun", "L");
     multHists_110X[hist]->SetTitle(Form("Comparison between 110X and 106X MC distributions -- %s", hist.substr(0).c_str())); 
     multHists_110X[hist]->GetXaxis()->SetLabelSize(0.03);
     multHists_110X[hist]->GetYaxis()->SetLabelSize(0.03);

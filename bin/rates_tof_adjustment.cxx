@@ -150,30 +150,30 @@ double TOF_hcal(double ieta, double depth) {
     const double zLay[19] = {403.4,403.2,412.3,421.0,429.7,438.4,447.1,455.8,464.5,473.2,481.9,490.6,499.3,508.0,516.7,525.4,534.1,542.8,551.5}; // in cm, from https://cmssdt.cern.ch/lxr/source/SimG4CMS/Calo/src/HcalTestAnalysis.cc
     double distance[19] = {0};
     for (int i = 0; i < 19; i++ ) distance[i] = zLay[i] / cos(theta);
-    if (abs(ieta) == 16 && depth == 4) tof = 1e9 * distance[3] / 2.99793e10; // HE, including last depth layer of ieta = 16
-    if (abs(ieta) == 17 && depth == 2) tof = 1e9 * distance[0] / 2.99793e10;
-    if (abs(ieta) == 17 && depth == 3) tof = 1e9 * distance[7] / 2.99793e10;
-    if (abs(ieta) == 18 && depth == 1) tof = 1e9 * distance[0] /2.99793e10;
-    if (abs(ieta) == 18 && depth == 2) tof = 1e9 * distance[1] /2.99793e10;
-    if (abs(ieta) == 18 && depth == 3) tof = 1e9 * distance[4] /2.99793e10;
-    if (abs(ieta) == 18 && depth == 4) tof = 1e9 * distance[8] /2.99793e10;
-    if (abs(ieta) == 18 && depth == 5) tof = 1e9 * distance[11] /2.99793e10;
-    if ( (abs(ieta) >= 19 && abs(ieta) <= 25 ) && depth == 1) tof = 1e9 * distance[0] /2.99793e10;
-    if ( (abs(ieta) >= 19 && abs(ieta) <= 25 ) && depth == 2) tof = 1e9 * distance[1] /2.99793e10;
-    if ( (abs(ieta) >= 19 && abs(ieta) <= 25 ) && depth == 3) tof = 1e9 * distance[4] /2.99793e10;
-    if ( (abs(ieta) >= 19 && abs(ieta) <= 25 ) && depth == 4) tof = 1e9 * distance[7] /2.99793e10;
-    if ( (abs(ieta) >= 19 && abs(ieta) <= 25 ) && depth == 5) tof = 1e9 * distance[10] /2.99793e10;
-    if ( (abs(ieta) >= 19 && abs(ieta) <= 25 ) && depth == 6) tof = 1e9 * distance[14] /2.99793e10;
-    if ( (abs(ieta) >= 26 && abs(ieta) <= 28 ) && depth == 1) tof = 1e9 * distance[0] /2.99793e10;
-    if ( (abs(ieta) >= 26 && abs(ieta) <= 28 ) && depth == 2) tof = 1e9 * distance[1] /2.99793e10;
-    if ( (abs(ieta) >= 26 && abs(ieta) <= 28 ) && depth == 3) tof = 1e9 * distance[3] /2.99793e10;
-    if ( (abs(ieta) >= 26 && abs(ieta) <= 28 ) && depth == 4) tof = 1e9 * distance[5] /2.99793e10;
-    if ( (abs(ieta) >= 26 && abs(ieta) <= 28 ) && depth == 5) tof = 1e9 * distance[7] /2.99793e10;
-    if ( (abs(ieta) >= 26 && abs(ieta) <= 28 ) && depth == 6) tof = 1e9 * distance[10] /2.99793e10;
-    if ( (abs(ieta) >= 26 && abs(ieta) <= 28 ) && depth == 7) tof = 1e9 * distance[14] /2.99793e10;
-    if (abs(ieta) == 29 && depth == 1) tof = 1e9 * distance[0] /2.99793e10;
-    if (abs(ieta) == 29 && depth == 2) tof = 1e9 * distance[1] /2.99793e10;
-    if (abs(ieta) == 29 && depth == 3) tof = 1e9 * distance[3] /2.99793e10;
+    if (abs(ieta) == 16 && depth == 4) tof = 1e9 * distance[3] / 2.99793e10 - 12; // HE, including last depth layer of ieta = 16
+    if (abs(ieta) == 17 && depth == 2) tof = 1e9 * distance[0] / 2.99793e10 - 10.5;
+    if (abs(ieta) == 17 && depth == 3) tof = 1e9 * distance[7] / 2.99793e10 - 11.5;
+    if (abs(ieta) == 18 && depth == 1) tof = 1e9 * distance[0] / 2.99793e10 - 10.5;
+    if (abs(ieta) == 18 && depth == 2) tof = 1e9 * distance[1] / 2.99793e10 - 10.5;
+    if (abs(ieta) == 18 && depth == 3) tof = 1e9 * distance[4] / 2.99793e10 - 11.5;
+    if (abs(ieta) == 18 && depth == 4) tof = 1e9 * distance[8] / 2.99793e10 - 12;
+    if (abs(ieta) == 18 && depth == 5) tof = 1e9 * distance[11] / 2.99793e10 - 13;
+    if ( (abs(ieta) >= 19 && abs(ieta) <= 25 ) && depth == 1) tof = 1e9 * distance[0] / 2.99793e10 - 10.5;
+    if ( (abs(ieta) >= 19 && abs(ieta) <= 25 ) && depth == 2) tof = 1e9 * distance[1] / 2.99793e10 - 10.5;
+    if ( (abs(ieta) >= 19 && abs(ieta) <= 25 ) && depth == 3) tof = 1e9 * distance[4] / 2.99793e10 - 11.5;
+    if ( (abs(ieta) >= 19 && abs(ieta) <= 25 ) && depth == 4) tof = 1e9 * distance[7] / 2.99793e10 - 12;
+    if ( (abs(ieta) >= 19 && abs(ieta) <= 25 ) && depth == 5) tof = 1e9 * distance[10] / 2.99793e10 - 13;
+    if ( (abs(ieta) >= 19 && abs(ieta) <= 25 ) && depth == 6) tof = 1e9 * distance[14] / 2.99793e10 - 13;
+    if ( (abs(ieta) >= 26 && abs(ieta) <= 28 ) && depth == 1) tof = 1e9 * distance[0] / 2.99793e10 - 10.5;
+    if ( (abs(ieta) >= 26 && abs(ieta) <= 28 ) && depth == 2) tof = 1e9 * distance[1] / 2.99793e10 - 10.5;
+    if ( (abs(ieta) >= 26 && abs(ieta) <= 28 ) && depth == 3) tof = 1e9 * distance[3] / 2.99793e10 - 11.5;
+    if ( (abs(ieta) >= 26 && abs(ieta) <= 28 ) && depth == 4) tof = 1e9 * distance[5] / 2.99793e10 - 12;
+    if ( (abs(ieta) >= 26 && abs(ieta) <= 28 ) && depth == 5) tof = 1e9 * distance[7] / 2.99793e10 - 13;
+    if ( (abs(ieta) >= 26 && abs(ieta) <= 28 ) && depth == 6) tof = 1e9 * distance[10] / 2.99793e10 - 14;
+    if ( (abs(ieta) >= 26 && abs(ieta) <= 28 ) && depth == 7) tof = 1e9 * distance[14] / 2.99793e10 - 14;
+    if (abs(ieta) == 29 && depth == 1) tof = 1e9 * distance[0] / 2.99793e10 - 10.5;
+    if (abs(ieta) == 29 && depth == 2) tof = 1e9 * distance[1] / 2.99793e10 - 10.5;
+    if (abs(ieta) == 29 && depth == 3) tof = 1e9 * distance[3] / 2.99793e10 - 11.5;
   }
   return tof;
 }
@@ -820,7 +820,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
       double nCaloTPemu = l1CaloTPemu_->nHCALTP; // number of TPs varies from 400-1400 per event, approximately Gaussian                                                  
       // triggerability restrictions
       for (uint jetIt = 0; jetIt < nJetemu; jetIt++) { // loop over jets
-	if (abs(l1emu_->jetEta[jetIt]) > 1) continue; // consider HB jets, HB extends to 1.4. HE extends to 3. Use values of 1, 2.5
+	if (abs(l1emu_->jetEta[jetIt]) > 2.5) continue; // consider HB jets, HB extends to 1.4. HE extends to 3. Use values of 1, 2.5
 	if (closestParton(jetIt, l1emu_, generator_)[0] <= 0.5) { // if closest parton is near a HB L1 jet
 	  numLLPdecayHB += 1; // how many of the partons expected to intersect HB
 	  if (LLPdecayInfo(closestParton(jetIt, l1emu_, generator_)[1], l1emu_, generator_)[4] > 1)  numLLPdecayHB_1ns += 1; // if TOF delay is over 1ns
