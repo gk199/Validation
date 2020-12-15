@@ -16,6 +16,7 @@
   <bin file="rates.cxx" name="rates.exe"/>
   <bin file="rates_delayed_cluster.cxx" name="rates_delayed_cluster.exe"/>
   <bin file="rates_tof_adjustment.cxx" name="rates_tof_adjustment.exe"/>
+  <bin file="rates_bkgTDCdist.cxx" name="rates_bkgTDCdist.exe"/>
   <bin file="rates_original.cxx" name="rates_original.exe"/>
   <bin file="RateEfficiencyPlots.cxx" name="RateEfficiencyPlots.exe"/>
   <bin file="RateEfficiencyPlots_LLP_ctau.cxx" name="RateEfficiencyPlots_LLP_ctau.exe"/>
