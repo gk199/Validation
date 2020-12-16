@@ -480,12 +480,12 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 
 	if (abs(tpEtaemu) > 16) {
 	  if ( l1CaloTPemu_->hcalTPDepth1[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >= 0) eta_depth_tdc[abs(tpEtaemu)][1][static_cast<int>(l1CaloTPemu_->hcalTPtiming1[HcalTPIt] * 2 + 0.5)] += 1;
-	  if ( l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >= 0) eta_depth_tdc[abs(tpEtaemu)][2][static_cast<int>(l1CaloTPemu_->hcalTPtiming2[HcalTPIt] * 2 + 0.5)] += 1;
-	  if ( l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >= 0) eta_depth_tdc[abs(tpEtaemu)][3][static_cast<int>(l1CaloTPemu_->hcalTPtiming3[HcalTPIt] * 2 + 0.5)] += 1;
-	  if ( l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >= 0) eta_depth_tdc[abs(tpEtaemu)][4][static_cast<int>(l1CaloTPemu_->hcalTPtiming4[HcalTPIt] * 2 + 0.5)] += 1;
-	  if ( l1CaloTPemu_->hcalTPDepth5[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >= 0) eta_depth_tdc[abs(tpEtaemu)][5][static_cast<int>(l1CaloTPemu_->hcalTPtiming5[HcalTPIt] * 2 + 0.5)] += 1;
-	  if ( l1CaloTPemu_->hcalTPDepth6[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >= 0) eta_depth_tdc[abs(tpEtaemu)][6][static_cast<int>(l1CaloTPemu_->hcalTPtiming6[HcalTPIt] * 2 + 0.5)] += 1;
-	  if ( l1CaloTPemu_->hcalTPDepth7[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >= 0) eta_depth_tdc[abs(tpEtaemu)][7][static_cast<int>(l1CaloTPemu_->hcalTPtiming7[HcalTPIt] * 2 + 0.5)] += 1;
+	  if ( l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming2[HcalTPIt] >= 0) eta_depth_tdc[abs(tpEtaemu)][2][static_cast<int>(l1CaloTPemu_->hcalTPtiming2[HcalTPIt] * 2 + 0.5)] += 1;
+	  if ( l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming3[HcalTPIt] >= 0) eta_depth_tdc[abs(tpEtaemu)][3][static_cast<int>(l1CaloTPemu_->hcalTPtiming3[HcalTPIt] * 2 + 0.5)] += 1;
+	  if ( l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming4[HcalTPIt] >= 0) eta_depth_tdc[abs(tpEtaemu)][4][static_cast<int>(l1CaloTPemu_->hcalTPtiming4[HcalTPIt] * 2 + 0.5)] += 1;
+	  if ( l1CaloTPemu_->hcalTPDepth5[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming5[HcalTPIt] >= 0) eta_depth_tdc[abs(tpEtaemu)][5][static_cast<int>(l1CaloTPemu_->hcalTPtiming5[HcalTPIt] * 2 + 0.5)] += 1;
+	  if ( l1CaloTPemu_->hcalTPDepth6[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming6[HcalTPIt] >= 0) eta_depth_tdc[abs(tpEtaemu)][6][static_cast<int>(l1CaloTPemu_->hcalTPtiming6[HcalTPIt] * 2 + 0.5)] += 1;
+	  if ( l1CaloTPemu_->hcalTPDepth7[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming7[HcalTPIt] >= 0) eta_depth_tdc[abs(tpEtaemu)][7][static_cast<int>(l1CaloTPemu_->hcalTPtiming7[HcalTPIt] * 2 + 0.5)] += 1;
 	}
 
 	if (abs(tpEtaemu) <= 16) { 
@@ -648,8 +648,16 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
     for (int eta = 1; eta < 30; eta++) {
       for (int depth = 1; depth < 8; depth++) {
 	TDCdistribution_Background << "ieta = " << eta << ", depth = " << depth << ",      TDC50 = " << bkg50[eta][depth] << ", TDC60 = " << bkg60[eta][depth] << ", TDC70 = " << bkg70[eta][depth] << ", TDC80 = " << bkg80[eta][depth] << ", TDC90 = " << bkg90[eta][depth] << ", TDC95 = " << bkg95[eta][depth] << std::endl; 
-        TDCdistribution_Background95 << "ieta = " << eta << ", depth = " << depth << ", TDC95 = " << bkg95[eta][depth] << std::endl;
+	//        TDCdistribution_Background95 << "ieta = " << eta << ", depth = " << depth << ", TDC95 = " << bkg95[eta][depth] << std::endl;
       }
+      int TDCatdepth1 = bkg95[eta][1];
+      int TDCatdepth2 = bkg95[eta][2];
+      int TDCatdepth3 = bkg95[eta][3];
+      int TDCatdepth4 = bkg95[eta][4];
+      int TDCatdepth5 = bkg95[eta][5];
+      int TDCatdepth6 = bkg95[eta][6];
+      int TDCatdepth7 = bkg95[eta][7];
+      TDCdistribution_Background95 << eta << ", " << TDCatdepth1 << ", " << TDCatdepth2 << ", " << TDCatdepth3 << ", " << TDCatdepth4 << ", " << TDCatdepth5 << ", " << TDCatdepth6 << ", " << TDCatdepth7 << std::endl;
     }
     TDCdistribution_Background.close();
     TDCdistribution_Background95.close();
