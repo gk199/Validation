@@ -25,7 +25,7 @@ int main()
   std::vector<std::string> filenames = {"rates_new_cond_QCD.root", "rates_new_cond_LLP_pl10000.root", "rates_new_cond_LLP_pl100000.root"};
   //  std::vector<std::string> multTypes = {"ADC50_3ns_4JetMultHB", "ADC50_3ns_4JetMultHE", "ADC50_3ns_4JetMultHBHE"};
   //  std::vector<std::string> multTypes = {"Delayed_2x2_MultHB","Delayed_6x6_MultHB","Delayed_full_6x6_MultHB","Delayed_2x2_1GeV_MultHB","Delayed_2x2_2GeV_MultHB","Delayed_2x2_3GeV_MultHB","HTdistribution","HTdistribution_trig"};
-  std::vector<std::string> multTypes = {"Delayed_2x2_MultHB","Prompt_2x2_MultHB","Prompt_Energy_2x2_MultHB","HTdistribution","HTdistribution_trig","DeltaR_L1_delayed_seed","DeltaR_L1_prompt_seed","DeltaR_L1_delayed_hit","DeltaR_L1_prompt_hit","Mult_delayed_hit","Mult_prompt_hit","mhit1","mhit2","mhit3"}; // list the names of the TH1Fs that will be overlaye
+  std::vector<std::string> multTypes = {"Delayed_2x2_MultHB","Prompt_2x2_MultHB","Prompt_Energy_2x2_MultHB","HTdistribution","HTdistribution_trig","DeltaR_L1_delayed_seed","DeltaR_L1_prompt_seed","DeltaR_L1_delayed_hit","DeltaR_L1_prompt_hit","Mult_delayed_hit","Mult_prompt_hit"};//,"mhit1","mhit2","mhit3"}; // list the names of the TH1Fs that will be overlaye
 
   std::map<std::string, TH1F*> multHists_QCD;
   std::map<std::string, TH1F*> multHists_LLPpl10000;

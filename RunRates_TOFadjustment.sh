@@ -12,7 +12,7 @@ rates_tof_adjustment.exe new /eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP
 mv rates_new_cond.root rates_new_cond_LLP_pl30000.root
 echo " "
 echo "QCD"
-rates_tof_adjustment.exe new /eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/TimingTrigger/QCD_Pt-15to3000_TuneCP5_Flat_14TeV_pythia8_HCAL/CRAB3_QCD_TDC_MC/200722_192212/0000 $1 $2 $3 $4 $5 $6
+rates_tof_adjustment.exe new /eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/TimingTrigger/QCD_Pt-15to3000_TuneCP5_Flat_14TeV_pythia8_HCAL/CRAB3_QCD_TDC_MC/200722_192212/0000/QCD $1 $2 $3 $4 $5 $6
 mv rates_new_cond.root rates_new_cond_QCD.root
 echo " "
 echo "Neutrino gun new and old conditions"

@@ -615,7 +615,9 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
       }
     }
   }
-  //  for (int tdc = 0; tdc <= 50; tdc ++) std::cout << eta_depth_tdc[1][1][tdc] << " eta_depth_tdc and partial_sum = " << partial_sum[1][1][tdc] << std::endl;
+  //  for (int tdc = 0; tdc <= 50; tdc ++) std::cout << eta_depth_tdc[1][1][tdc] << " eta_depth_tdc depth1 and partial_sum = " << partial_sum[1][1][tdc] << std::endl;
+  //  for (int tdc = 0; tdc <= 50; tdc ++) std::cout << eta_depth_tdc[1][2][tdc] << " eta_depth_tdc depth2 and partial_sum = " << partial_sum[1][2][tdc] << std::endl;
+
   int bkg50[30][8] = {{0}};
   int bkg60[30][8] = {{0}};
   int bkg70[30][8] = {{0}};
@@ -642,25 +644,40 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
   if (inputFile.substr(71,3) == "QCD" ) {
     std::ofstream TDCdistribution_Background;
     std::ofstream TDCdistribution_Background95;
+    std::ofstream TDCdistribution_Background90;
+    std::ofstream TDCdistribution_Background80;
+    std::ofstream TDCdistribution_Background70;
+    std::ofstream TDCdistribution_Background60;
+    std::ofstream TDCdistribution_Background50;
+
     TDCdistribution_Background.open(Form("TDCdistribution_Background_%s.txt",inputFile.substr(71,3).c_str()));
     TDCdistribution_Background95.open(Form("TDCdistribution_Background95_%s.txt",inputFile.substr(71,3).c_str()));
+    TDCdistribution_Background90.open(Form("TDCdistribution_Background90_%s.txt",inputFile.substr(71,3).c_str()));
+    TDCdistribution_Background80.open(Form("TDCdistribution_Background80_%s.txt",inputFile.substr(71,3).c_str()));
+    TDCdistribution_Background70.open(Form("TDCdistribution_Background70_%s.txt",inputFile.substr(71,3).c_str()));
+    TDCdistribution_Background60.open(Form("TDCdistribution_Background60_%s.txt",inputFile.substr(71,3).c_str()));
+    TDCdistribution_Background50.open(Form("TDCdistribution_Background50_%s.txt",inputFile.substr(71,3).c_str()));
 
     for (int eta = 1; eta < 30; eta++) {
       for (int depth = 1; depth < 8; depth++) {
 	TDCdistribution_Background << "ieta = " << eta << ", depth = " << depth << ",      TDC50 = " << bkg50[eta][depth] << ", TDC60 = " << bkg60[eta][depth] << ", TDC70 = " << bkg70[eta][depth] << ", TDC80 = " << bkg80[eta][depth] << ", TDC90 = " << bkg90[eta][depth] << ", TDC95 = " << bkg95[eta][depth] << std::endl; 
 	//        TDCdistribution_Background95 << "ieta = " << eta << ", depth = " << depth << ", TDC95 = " << bkg95[eta][depth] << std::endl;
       }
-      int TDCatdepth1 = bkg95[eta][1];
-      int TDCatdepth2 = bkg95[eta][2];
-      int TDCatdepth3 = bkg95[eta][3];
-      int TDCatdepth4 = bkg95[eta][4];
-      int TDCatdepth5 = bkg95[eta][5];
-      int TDCatdepth6 = bkg95[eta][6];
-      int TDCatdepth7 = bkg95[eta][7];
-      TDCdistribution_Background95 << eta << ", " << TDCatdepth1 << ", " << TDCatdepth2 << ", " << TDCatdepth3 << ", " << TDCatdepth4 << ", " << TDCatdepth5 << ", " << TDCatdepth6 << ", " << TDCatdepth7 << std::endl;
+
+      TDCdistribution_Background95 << eta << ", " << bkg95[eta][1] << ", " << bkg95[eta][2] << ", " << bkg95[eta][3] << ", " << bkg95[eta][4] << ", " << bkg95[eta][5] << ", " << bkg95[eta][6] << ", " << bkg95[eta][7] << std::endl;
+      TDCdistribution_Background90 << eta << ", " << bkg90[eta][1] << ", " << bkg90[eta][2] << ", " << bkg90[eta][3] << ", " << bkg90[eta][4] << ", " << bkg90[eta][5] << ", " << bkg90[eta][6] << ", " << bkg90[eta][7] << std::endl;
+      TDCdistribution_Background80 << eta << ", " << bkg80[eta][1] << ", " << bkg80[eta][2] << ", " << bkg80[eta][3] << ", " << bkg80[eta][4] << ", " << bkg80[eta][5] << ", " << bkg80[eta][6] << ", " << bkg80[eta][7] << std::endl;
+      TDCdistribution_Background70 << eta << ", " << bkg70[eta][1] << ", " << bkg70[eta][2] << ", " << bkg70[eta][3] << ", " << bkg70[eta][4] << ", " << bkg70[eta][5] << ", " << bkg70[eta][6] << ", " << bkg70[eta][7] << std::endl;
+      TDCdistribution_Background60 << eta << ", " << bkg60[eta][1] << ", " << bkg60[eta][2] << ", " << bkg60[eta][3] << ", " << bkg60[eta][4] << ", " << bkg60[eta][5] << ", " << bkg60[eta][6] << ", " << bkg60[eta][7] << std::endl;
+      TDCdistribution_Background50 << eta << ", " << bkg50[eta][1] << ", " << bkg50[eta][2] << ", " << bkg50[eta][3] << ", " << bkg50[eta][4] << ", " << bkg50[eta][5] << ", " << bkg50[eta][6] << ", " << bkg50[eta][7] << std::endl;
     }
     TDCdistribution_Background.close();
     TDCdistribution_Background95.close();
+    TDCdistribution_Background90.close();
+    TDCdistribution_Background80.close();
+    TDCdistribution_Background70.close();
+    TDCdistribution_Background60.close();
+    TDCdistribution_Background50.close();
   }
 
   else {
