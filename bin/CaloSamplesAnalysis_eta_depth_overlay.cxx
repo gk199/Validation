@@ -47,7 +47,7 @@ int main() {
   TTreeReaderValue<std::vector<CaloSamples>> AllCaloSamples(myReader, "CaloSampless_mix_HcalSamples_HLT.obj");
   TTreeReaderValue<HcalDataFrameContainer<QIE11DataFrame>> FullQIE11DataFrame(myReader, "QIE11DataFrameHcalDataFrameContainer_simHcalUnsuppressedDigis_HBHEQIE11DigiCollection_HLT.obj");
 
-  int events_of_interest[40] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40};
+  //  int events_of_interest[50] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50};
   //  Int_t event_of_interest = 6;
   Int_t ieta_of_interest = 26;
   Int_t depth_of_interest = 1;
@@ -61,16 +61,16 @@ int main() {
 
   int evtCounter = 0;
   while (myReader.Next()){
-    if (std::find(std::begin(events_of_interest), std::end(events_of_interest), evtCounter) == std::end(events_of_interest)) { // if event is not in list of event of interest, skip
+    //    if (std::find(std::begin(events_of_interest), std::end(events_of_interest), evtCounter) == std::end(events_of_interest)) { // if event is not in list of event of interest, skip
       //    if (evtCounter != event_of_interest) { // if event is not in event of interest list, skip
-      evtCounter++;
-      continue;
-    }
+    //      evtCounter++;
+    //      continue;
+    //    }
 
     std::cout << FullQIE11DataFrame->size() << " QIE11 size for event " << evtCounter << std::endl; // 15840 per event
     for (QIE11DataFrame frame:*FullQIE11DataFrame) { // loop over QIE11 data frame in HcalDataFrameContainer, this goes over FullQIE11DataFrame->size()
       HcalDetId QIEdetectorID = HcalDetId(frame.id());
-      if ( (QIEdetectorID.ieta() == ieta_of_interest) && (QIEdetectorID.depth() == depth_of_interest) ) {
+      if ( abs((QIEdetectorID.ieta()) == ieta_of_interest) && (QIEdetectorID.depth() == depth_of_interest) ) {
 	for (int i=0; i<frame.samples(); i++) { // loop over samples in QIE11 data frame
 	  if ( (frame[i].soi() == true) ) {
 	    std::cout << frame[i].tdc() << " = TDC (in QIE11, 0-50) value in cell of interest" << std::endl;

@@ -24,5 +24,6 @@
   <bin file="l1jetanalysis.cxx" name="l1jetanalysis.exe"/>
   <bin file="CaloSamplesAnalysis.cxx" name="CaloSamplesAnalysis.exe"/>
   <bin file="CaloSamplesAnalysis_eta_phi_depth.cxx" name="CaloSamplesAnalysis_eta_phi_depth.exe"/>
+  <bin file="CaloSamplesAnalysis_eta_depth_overlay.cxx" name="CaloSamplesAnalysis_eta_depth_overlay.exe"/>
 </environment>
 <flags CXXFLAGS="-Wall -Werror -g -lTreePlayer"/>

@@ -820,7 +820,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
       double nCaloTPemu = l1CaloTPemu_->nHCALTP; // number of TPs varies from 400-1400 per event, approximately Gaussian                                                  
       // triggerability restrictions
       for (uint jetIt = 0; jetIt < nJetemu; jetIt++) { // loop over jets
-	if (abs(l1emu_->jetEta[jetIt]) > 2.5) continue; // consider HB jets, HB extends to 1.4. HE extends to 3. Use values of 1, 2.5
+	if (abs(l1emu_->jetEta[jetIt]) > 1) continue; // consider HB jets, HB extends to 1.4. HE extends to 3. Use values of 1, 2.5
 	if (closestParton(jetIt, l1emu_, generator_)[0] <= 0.5) { // if closest parton is near a HB L1 jet
 	  numLLPdecayHB += 1; // how many of the partons expected to intersect HB
 	  if (LLPdecayInfo(closestParton(jetIt, l1emu_, generator_)[1], l1emu_, generator_)[4] > 1)  numLLPdecayHB_1ns += 1; // if TOF delay is over 1ns

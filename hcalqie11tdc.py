@@ -46,8 +46,8 @@ gROOT.SetBatch(True)
 #f = TFile.Open("/eos/cms/store/user/lowang/LLP_htobbbb/step1/MH-125_MFF-50_CTau-1000mm_step1.root")
 #f = TFile.Open("/eos/cms/store/user/lowang/QCD_Pt-15to7000_TuneCP5_Flat_13TeV_step1.root")
 #f = TFile.Open("/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/PionGun/SinglePion211_E10_PU_00_step1.root")
-f = TFile.Open("/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/PionGun/SinglePion211_E10_PU_step1.root")
-#f = TFile.Open("/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/PionGun/SinglePion211_E10_PU_00_eta1phi0_timeslew-false_step1_CaloSamples_10events.root") #SinglePion211_E10_PU_00_eta1phi0_timeslew-false_step1.root")
+#f = TFile.Open("/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/PionGun/SinglePion211_E10_PU_step1.root")
+f = TFile.Open("/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/PionGun/SinglePion211_E10_PU_00_eta1phi0_timeslew-false_step1_CaloSamples_10events.root") #SinglePion211_E10_PU_00_eta1phi0_timeslew-false_step1.root")
 #f = TFile.Open("step1tdc.root")
 
 events = f.Events
@@ -80,7 +80,7 @@ thit4 = TH1D('thit4','HBHE SimHit Time',502,-1.0,21.0)
 vhit4 = TH1D('vhit4','HBHE SimHit Vertex Distance',121,0.5,60.5)
 vhit5 = TH1D('vhit5','HBHE SimHit Vertex Distance',121,0.5,60.5)
 chit1 = TH1D('chit1','Cosine(theta) of Gen Momentum and Displaced Vertex Direction',100,-1.0,1.0)
-chit2d = TH2D('chit2d','delayed time versus 1/sin(theta) ',100,1,1.5,502,-1.0,21.0)
+chit2d = TH2D('chit2d','delayed time versus 1/sin(theta) ',100,1,5,502,-1.0,51.0)
 chit3 = TH1D('chit3','Cosine(theta) of Gen Momentum and Displaced Vertex Direction',100,-1.0,1.0)
 qhit1 = TH1D('qhit1','Path Length Difference Time Delay',24,-1.0,5.0)
 qhit2d = TH2D('qhit2d','Delayed Time versis Path Length Difference Time Delay',24,-1.0,5.0,50,-1.0,24.0)
@@ -99,7 +99,7 @@ mhit5 = TH1D('mhit5','Multiplicity of 1ns delayed cells above 1000 fC',140,-0.5,
 mhit7 = TH1D('mhit7','Multiplicity of 2ns delayed cells above 1000 fC',140,-0.5,139.5)
 adchit1 = TH1D('adchit1','HB ADC',256,-0.5,255.5)
 tdchit1 = TH1D('tdchit1','HB TDC',64,-0.5,63.5)
-tdchit2d = TH2D('tdchit2d','HB TDC versus TOF',46,3.5,49.5,30,3.5,18.5)
+tdchit2d = TH2D('tdchit2d','HB TDC versus TOF',46,3.5,49.5,40,-1.5,18.5)
 tdchit3 = TH1D('tdchit3','HB TDC',64,-0.5,63.5)
 tdchit4 = TH1D('tdchit4','HB TDC(ns)-TOF (Depth 1), 1k fC',100,-25.0,25.0)
 tdchit5 = TH1D('tdchit5','HB TDC(ns)-TOF (Depth 2), 1k fC',100,-25.0,25.0)
@@ -178,9 +178,9 @@ events.Draw("(((PCaloHits_g4SimHits_HcalHits_SIM.obj.id())>>10)&0x1FF)>>nhit3","
 #events = Events("/eos/cms/store/user/lowang/mh1000_pl1000_step1.root")
 #events = Events("/eos/cms/store/user/lowang/LLP_htobbbb/step1/MH-125_MFF-50_CTau-1000mm_step1.root")
 #events = Events("/eos/cms/store/user/lowang/QCD_Pt-15to7000_TuneCP5_Flat_13TeV_step1.root")
-#events = Events("/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/PionGun/SinglePion211_E10_PU_00_eta1phi0_timeslew-false_step1_CaloSamples_10events.root") #SinglePion211_E10_PU_00_eta1phi0_timeslew-false_step1.root")
+events = Events("/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/PionGun/SinglePion211_E10_PU_00_eta1phi0_timeslew-false_step1_CaloSamples_10events.root") #SinglePion211_E10_PU_00_eta1phi0_timeslew-false_step1.root")
 #events = Events("/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/PionGun/SinglePion211_E10_PU_00_step1.root")
-events = Events("/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/PionGun/SinglePion211_E10_PU_step1.root")
+#events = Events("/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/PionGun/SinglePion211_E10_PU_step1.root")
 #events = Events("step1tdc.root")
 
 handleSim  = Handle ("std::vector<PCaloHit>")
@@ -255,18 +255,18 @@ zDepth[5] = 516.7
 zDepth[6] = 516.7
 
 tofadj = np.zeros(4)
-tofadj[0] = -3.5
-tofadj[1] = -3.5
-tofadj[2] = -4.5
-tofadj[3] = -5.5
+#tofadj[0] = -3.5
+#tofadj[1] = -3.5
+#tofadj[2] = -4.5
+#tofadj[3] = -5.5
 
 tofadjHE = np.zeros(6)
-tofadjHE[0] = -10.5
-tofadjHE[1] = -10.5
-tofadjHE[2] = -11.5
-tofadjHE[3] = -12
-tofadjHE[4] = -13
-tofadjHE[5] = -14
+#tofadjHE[0] = -10.5
+#tofadjHE[1] = -10.5
+#tofadjHE[2] = -11.5
+#tofadjHE[3] = -12
+#tofadjHE[4] = -13
+#tofadjHE[5] = -14
 
 
 for event in events:
@@ -393,7 +393,8 @@ for event in events:
             eta = etaVal(ieta)
             theta = 2.*math.atan(math.exp(-eta))
             distance = rLay[lay] / math.sin(theta)
-            tof = 1e9*distance/2.99793e10  # cm/sec
+            tof = 0
+#            tof = 1e9*distance/2.99793e10  # cm/sec
 #            delayedtime = simhit.time() - t0[0] - tof
             delayedtime = simhit.time() - tof
             chit2d.Fill(delayedtime,1./math.sin(theta))
@@ -477,7 +478,8 @@ for event in events:
 #            ieta = -ieta 
           theta = 2.*math.atan(math.exp(-eta))
           distance = rDepth[depth-1] / math.sin(theta)
-          tof = 1e9*distance/2.99793e10  # cm/sec
+          tof = 0
+#          tof = 1e9*distance/2.99793e10  # cm/sec
           tof += tofadj[depth-1]
           qie11fCtot = 0.0
           qie11tdc = 0.0
@@ -540,7 +542,8 @@ for event in events:
           eta = etaVal(ieta)
           theta = 2.*math.atan(math.exp(-eta))
           distance = zDepth[depth-1] / math.cos(theta)
-          tof = 1e9*distance/2.99793e10  # cm/sec
+          tof = 0
+#          tof = 1e9*distance/2.99793e10  # cm/sec
           if (depth <= 5): tof += tofadjHE[depth-1]
           else: tof += tofadjHE[5]
           qie11fCtot = 0.0
