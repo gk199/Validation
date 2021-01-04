@@ -67,11 +67,13 @@ If `rates.cxx` is edited (changing multiplicity counting, DR values, energy thre
 ```
 where `RunRates_DelayedCaloObject.sh` runs `rates_delayed_cluster.exe` and the last arguments are the TDC thresholds in HB, HE; energy thresholds in HB, HE; prompt TP energy veto, prompt TP 2x2 energy veto.
 
-''Prompt`` TDC values may be determined from the QCD sample, determining on a per cell basis (ieta, depth) what TDC value will place 95/% (also found for 50, 60, 70, 80, 90, and 95/%) of the background below that value. This is done by `rates_bkgTDCdist.cxx` and run with
+"Prompt" TDC values may be determined from the QCD sample, determining on a per cell basis (ieta, depth) what TDC value will place 95% (also found for 50, 60, 70, 80, 90, and 95%) of the background below that value. This is done by `rates_bkgTDCdist.cxx` and run with
 ```
 rates_bkgTDCdist.exe new /eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/TimingTrigger/QCD_Pt-15to3000_TuneCP5_Flat_14TeV_pythia8_HCAL/CRAB3_QCD_TDC_MC/200722_192212/0000/QCD 2 2
 ```
-where the arguments 2, 2 are the HB and HE cell energies (in GeV). This outputs text files of `TDCdistribution_Background*_QCD.txt` for each percent point. These TDC values are then read into `rates_delayed_cluster.cxx` as the TDC requirement for that cell. `rates_delayed_cluster.cxx` will also output a txt file of `DelayedSeed*` which lists the event, ieta, iphi, depth, tdc value of the delayed cells found as a part of the delayed clusters. This information is used for pion gun samples to understand what the delayed cells look like. 
+where the arguments 2, 2 are the HB and HE cell energies (in GeV). This outputs text files of `TDCdistribution_Background*_QCD.txt` for each percent point. These TDC values are then read into `rates_delayed_cluster.cxx` as the TDC requirement for that cell. When using these "prompt TDC" windows, `./RunRates_DelayedCaloObject.sh x x x x x x' still takes 6 arguments, though the first two are superseeded by the use of the prompt TDC value loaded in from the text file.
+
+`rates_delayed_cluster.cxx` will also output a txt file of `DelayedSeed*.txt` which lists the event, ieta, iphi, depth, tdc value of the delayed cells found as a part of the delayed clusters. This information is used for pion gun samples to understand what the delayed cells look like. 
 
 Pion gun samples in 110X are stored here:
 ```
