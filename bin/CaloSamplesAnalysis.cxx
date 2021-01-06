@@ -14,29 +14,22 @@
 #include <algorithm>
 
 #include "DataFormats/Common/interface/EDProductGetter.h" // mustBeNonZero
-//#include "DataFormats/Common/interface/Ref.h"
 #include "CalibFormats/CaloObjects/interface/CaloSamples.h"
 #include "DataFormats/HcalDetId/interface/HcalTrigTowerDetId.h"
-//#include "DataFormats/HcalDetId/interface/HcalDetId.h"
-//#include "DataFormats/HcalDigi/interface/QIE11DataFrame.h"
 #include "DataFormats/HcalDigi/interface/HcalDigiCollections.h"
 
 int main() {
   //  TH1F *h_preciseData = new TH1F("h_preciseData","preciseData;preciseData;Entries",100,0,10);
-
   //  TFile *f = new TFile("/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/PionGun/SinglePion211_E10_PU_00_eta1phi0_timeslew-false_step1_CaloSamples_10events.root"); // looked at event 29
-  TFile *f = new TFile("/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/PionGun/SinglePion211_E10_PU_00_eta1phi0_step1_threshold1x_CaloSamples_100events.root");
+  //  TFile *f = new TFile("/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/PionGun/SinglePion211_E10_PU_00_eta1phi0_step1_threshold1x_CaloSamples_100events.root");
   //  TFile *f = new TFile("/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/TDC_threshold_18pt7x3/MH-125_MFF-50_CTau-10000mm_step1_CaloSamples.root"); // looked at event 39
+  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/SinglePion211_E10_eta1phi0_PU_00_step1.root");
 
   TTreeReader myReader("Events",f);
   TTreeReaderValue<std::vector<CaloSamples>> AllCaloSamples(myReader, "CaloSampless_mix_HcalSamples_HLT.obj");
   TTreeReaderValue<HcalDataFrameContainer<QIE11DataFrame>> FullQIE11DataFrame(myReader, "QIE11DataFrameHcalDataFrameContainer_simHcalUnsuppressedDigis_HBHEQIE11DigiCollection_HLT.obj");
 
-  //  Int_t event_of_interest = 39;
-  //  Int_t ieta_of_interest = 18;
-  //  Int_t iphi_of_interest = 24;
-  //  Int_t depth_of_interest = 2;
-  int events_of_interest[3] = {49,50,51};
+  int events_of_interest[20] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19};
   Int_t tdc_of_interest = 63;
   std::vector<int> event_withTDC;
   std::vector<int> ieta_withTDC;
@@ -44,6 +37,14 @@ int main() {
   std::vector<int> depth_withTDC;
 
   gROOT->SetBatch(true); // hide plots as they are made
+
+  TGraph *gr = new TGraph();
+  TCanvas *c1 = new TCanvas();
+  int point_index = 0;
+
+  gr->SetTitle(Form("Precise Data for TDC=%i", tdc_of_interest));
+  gr->GetYaxis()->SetTitle("PreciseData pulse shape");
+  gr->GetXaxis()->SetTitle("Time, 0.5 ns steps");
 
   int evtCounter = 0;
   while (myReader.Next()){
@@ -67,20 +68,19 @@ int main() {
     }
     std::cout << ieta_withTDC.size() << " length of ieta, iphi, depth_withTDC vectors" << std::endl;
 
-    TGraph *gr = new TGraph();
-    TCanvas *c1 = new TCanvas();
-    int point_index = 0; // so don't overwrite TGraph each time with the last pulse shape
+    //    TGraph *gr = new TGraph();
+    //    TCanvas *c1 = new TCanvas();
+    //    int point_index = 0; // so don't overwrite TGraph each time with the last pulse shape
 
-    //    gr->SetTitle(Form("Precise Data for ieta=%i, iphi=%i, depth=%i, Event=%i",detectorID.ieta(),detectorID.iphi(),detectorID.depth(),evtCounter));
+    /*
     gr->SetTitle(Form("Precise Data for Event=%i with TDC=%i",evtCounter, tdc_of_interest));
     gr->GetYaxis()->SetTitle("PreciseData pulse shape");
     gr->GetXaxis()->SetTitle("Time, 0.5 ns steps");
+    */
 
     //    std::cout << AllCaloSamples->size() << std::endl; // how many caloSamples do we have? ~6k per event
     for (CaloSamples CaloSample:*AllCaloSamples) { // loop over everything in AllCaloSamples, call it CaloSample
       HcalDetId detectorID = HcalDetId(CaloSample.id()); // convert raw ID to detector ID 
-      //      if ( (detectorID.ieta() == ieta_of_interest) && (detectorID.iphi() == iphi_of_interest) && (detectorID.depth() == depth_of_interest) ) { // for a particular ieta, iphi, depth pulse shape
-      //      std::cout<< "yay" << std::endl;
       for (unsigned int of_interest = 0; of_interest < ieta_withTDC.size(); of_interest++) {
 	if ( (evtCounter == event_withTDC[of_interest]) && (detectorID.ieta() == ieta_withTDC[of_interest]) && (detectorID.iphi() == iphi_withTDC[of_interest]) && (detectorID.depth() == depth_withTDC[of_interest]) ) { // for looking at the pulse shape of a certain TDC value, check looking at right event, ieta, iphi, depth cell
 	  for (int i = 0; i < CaloSample.preciseSize(); i++) { // assume length of precise data is given by precise size
@@ -94,12 +94,17 @@ int main() {
 	}
       }
     }
+    /*
     gr->Draw();
-    //      c1->SaveAs(Form("CaloSamplesAnalysis_event%i_ieta%i_iphi%i_depth%i.png",evtCounter,detectorID.ieta(),detectorID.iphi(),detectorID.depth()));
     c1->SaveAs(Form("CaloSamplesAnalysis_event%i_tdc%i.png",evtCounter, tdc_of_interest));
+    gr_adc->Draw();
+    c1_adc->SaveAs(Form("CaloSamplesAnalysis_event%i_adc%i.png",evtCounter, adc_of_interest));
+    */
 
     evtCounter++; // increment to next event
   }
+  gr->Draw();
+  c1->SaveAs(Form("CaloSamplesAnalysis_tdc%i.png", tdc_of_interest));
 
   f->Close();
   return 0;
