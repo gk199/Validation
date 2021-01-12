@@ -24,14 +24,16 @@ int main() {
   //  TFile *f = new TFile("/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/PionGun/SinglePion211_E10_PU_00_eta1phi0_step1_threshold1x_CaloSamples_100events.root");
   //  TFile *f = new TFile("/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/TDC_threshold_18pt7x3/MH-125_MFF-50_CTau-10000mm_step1_CaloSamples.root"); // looked at event 39
   //  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/SinglePion211_E10_eta1phi0_PU_00_step1.root");
-  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/SinglePion211_E10_eta1phi0_PU00_tdc9pt35_step1.root");
+  //  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/SinglePion211_E10_eta1phi0_PU00_tdc9pt35_step1.root");
   //  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/SinglePion211_E10_injected_step1.root");
+  //  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/Injected_Energy_0pt001_to_1pt2_HB111_tdc9pt35_tof_step1.root");
+  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/Injected_Energy_0pt001_to_1pt3_HB111_tdc18pt7_tof_step1.root"); //SinglePion211_E0pt01_HB111_tdc18pt7_tof_injected_step1.root");
 
   TTreeReader myReader("Events",f);
   TTreeReaderValue<std::vector<CaloSamples>> AllCaloSamples(myReader, "CaloSampless_mix_HcalSamples_HLT.obj");
   TTreeReaderValue<HcalDataFrameContainer<QIE11DataFrame>> FullQIE11DataFrame(myReader, "QIE11DataFrameHcalDataFrameContainer_simHcalUnsuppressedDigis_HBHEQIE11DigiCollection_HLT.obj");
 
-  int events_of_interest[20] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19};
+  //  int events_of_interest[20] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19};
   Int_t tdc_of_interest = 63;
   std::vector<int> event_withTDC;
   std::vector<int> ieta_withTDC;
@@ -50,12 +52,14 @@ int main() {
 
   int evtCounter = 0;
   while (myReader.Next()){
+    /*
     if (std::find(std::begin(events_of_interest), std::end(events_of_interest), evtCounter) == std::end(events_of_interest)) { // if event is not in event of interest list, skip
       evtCounter++;
       continue;
     }
-
     std::cout << FullQIE11DataFrame->size() << " QIE11 size for event " << evtCounter << std::endl; // 15840 per event
+    */
+
     for (QIE11DataFrame frame:*FullQIE11DataFrame) { // loop over QIE11 data frame in HcalDataFrameContainer, this goes over FullQIE11DataFrame->size()
       HcalDetId QIEdetectorID = HcalDetId(frame.id());
       for (int i=0; i<frame.samples(); i++) { // loop over samples in QIE11 data frame
@@ -68,17 +72,7 @@ int main() {
 	}
       }
     }
-    std::cout << ieta_withTDC.size() << " length of ieta, iphi, depth_withTDC vectors" << std::endl;
-
-    //    TGraph *gr = new TGraph();
-    //    TCanvas *c1 = new TCanvas();
-    //    int point_index = 0; // so don't overwrite TGraph each time with the last pulse shape
-
-    /*
-    gr->SetTitle(Form("Precise Data for Event=%i with TDC=%i",evtCounter, tdc_of_interest));
-    gr->GetYaxis()->SetTitle("PreciseData pulse shape");
-    gr->GetXaxis()->SetTitle("Time, 0.5 ns steps");
-    */
+    //    std::cout << ieta_withTDC.size() << " length of ieta, iphi, depth_withTDC vectors" << std::endl;
 
     //    std::cout << AllCaloSamples->size() << std::endl; // how many caloSamples do we have? ~6k per event
     for (CaloSamples CaloSample:*AllCaloSamples) { // loop over everything in AllCaloSamples, call it CaloSample
@@ -96,13 +90,6 @@ int main() {
 	}
       }
     }
-    /*
-    gr->Draw();
-    c1->SaveAs(Form("CaloSamplesAnalysis_event%i_tdc%i.png",evtCounter, tdc_of_interest));
-    gr_adc->Draw();
-    c1_adc->SaveAs(Form("CaloSamplesAnalysis_event%i_adc%i.png",evtCounter, adc_of_interest));
-    */
-
     evtCounter++; // increment to next event
   }
   gr->Draw();

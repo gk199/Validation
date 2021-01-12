@@ -25,7 +25,8 @@ int main() {
   //  TFile *f = new TFile("/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/TDC_threshold_18pt7x3/MH-125_MFF-50_CTau-10000mm_step1_CaloSamples.root"); // looked at event 39
   //  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/SinglePion211_E10_eta1phi0_PU_00_step1.root");
   //  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/SinglePion211_E0pt05_HB111_tdc9pt35_tof_injected_step1.root");
-  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/Injected_Energy_0pt01_to_1pt2_HB111_tdc9pt35_tof_step1.root");
+  //  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/Injected_Energy_0pt001_to_1pt2_HB111_tdc9pt35_tof_step1.root");
+  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/Injected_Energy_0pt001_to_1pt3_HB111_tdc18pt7_tof_step1.root");
 
   TTreeReader myReader("Events",f);
   TTreeReaderValue<std::vector<CaloSamples>> AllCaloSamples(myReader, "CaloSampless_mix_HcalSamples_HLT.obj");
@@ -36,6 +37,7 @@ int main() {
   Int_t adc_of_interest2 = 50;
   Int_t ieta_of_interest = 1;
   Int_t iphi_of_interest = 1;
+  Int_t depth_of_interest = 1;
   std::vector<int> event_withADC;
   std::vector<int> ieta_withADC;
   std::vector<int> iphi_withADC;
@@ -74,7 +76,7 @@ int main() {
     for (QIE11DataFrame frame:*FullQIE11DataFrame) { // loop over QIE11 data frame in HcalDataFrameContainer, this goes over FullQIE11DataFrame->size()
       HcalDetId QIEdetectorID = HcalDetId(frame.id());
       for (int i=0; i<frame.samples(); i++) { // loop over samples in QIE11 data frame
-	if ( (frame[i].tdc() <= 60) && (frame[i].soi() == true) && (abs(QIEdetectorID.ieta()) == ieta_of_interest) && (QIEdetectorID.iphi() == iphi_of_interest) ) {
+	if ( (frame[i].tdc() <= 50) && (frame[i].soi() == true) && (abs(QIEdetectorID.ieta()) == ieta_of_interest) && (QIEdetectorID.iphi() == iphi_of_interest) && (QIEdetectorID.depth() == depth_of_interest) ) {
 	  if ( (frame[i].adc() <= adc_of_interest) ) {
 	    if (frame[i].adc() < 20 ) std::cout << "event, ADC, TDC = " << evtCounter << ", " << frame[i].adc() << ", " << frame[i].tdc() << std::endl;
 	    event_withADC.push_back(evtCounter);
