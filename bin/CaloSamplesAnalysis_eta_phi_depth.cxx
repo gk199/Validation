@@ -44,15 +44,16 @@ int main() {
   //  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/SinglePion211_E10_eta1phi0_PU_step1.root");
   //  TFile *f = new TFile("/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/PionGun/SinglePion211_E10_PU_00_eta1phi0_step1_threshold1x_CaloSamples_100events.root");
   //  TFile *f = new TFile("/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/TDC_threshold_18pt7x3/MH-125_MFF-50_CTau-10000mm_step1_CaloSamples.root");
-  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/Injected_Energy_0pt001_to_1pt2_HB111_tdc9pt35_tof_step1.root");
+  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/Injected_Energy_0pt001_to_1pt3_HB111_tdc2pt34_tof_step1.root");
 
   TTreeReader myReader("Events",f);
   TTreeReaderValue<std::vector<CaloSamples>> AllCaloSamples(myReader, "CaloSampless_mix_HcalSamples_HLT.obj");
   TTreeReaderValue<HcalDataFrameContainer<QIE11DataFrame>> FullQIE11DataFrame(myReader, "QIE11DataFrameHcalDataFrameContainer_simHcalUnsuppressedDigis_HBHEQIE11DigiCollection_HLT.obj");
 
   //  int events_of_interest[40] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40};
-  Int_t event_of_interest = 331;
-  Int_t ieta_of_interest = 1;
+  Int_t event_of_interest = 3957;
+  //  int events_of_interest[3] = {3956, 3957, 3958};
+  Int_t ieta_of_interest = -1;
   Int_t iphi_of_interest = 1;
   Int_t depth_of_interest = 1;
   double rDepth[4] = {183.60, 190.20, 214.20, 244.80};
@@ -74,7 +75,7 @@ int main() {
       if ( (QIEdetectorID.ieta() == ieta_of_interest) && (QIEdetectorID.iphi() == iphi_of_interest) && (QIEdetectorID.depth() == depth_of_interest) ) {
 	for (int i=0; i<frame.samples(); i++) { // loop over samples in QIE11 data frame
 	  if ( (frame[i].soi() == true) ) {
-	    std::cout << frame[i].tdc() << " = TDC (in QIE11, 0-50) value in cell of interest" << std::endl;
+	    std::cout << frame[i].tdc() << " = TDC (in QIE11, 0-50) value in cell of interest, with ADC = " << frame[i].adc() << std::endl;
 	  }
 	}
       }

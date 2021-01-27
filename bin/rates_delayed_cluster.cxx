@@ -777,7 +777,10 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
       }
       //      std::cout << numLLPdecayHB << " = number of LLP decay products incident on HB" <<std::endl;
       if (inputFile.substr(27,2) == "mh" && numLLPdecayHB > 0) totalEvents_HBdr05 += 1;
-      if (inputFile.substr(27,2) == "mh" && numLLPdecayHB_1ns > 0) totalEvents_HBdr05_1ns += 1;
+      if (inputFile.substr(27,2) == "mh" && numLLPdecayHB_1ns > 0) {
+	totalEvents_HBdr05_1ns += 1;
+	std::cout << numLLPdecayHB_1ns << " = decays with LLPdecayInfo TOF delay > 1ns for event = " << jentry << std::endl;
+      }
       if (inputFile.substr(27,2) == "mh" && numLLPdecayHB_2ns > 0) totalEvents_HBdr05_2ns += 1;
       if (inputFile.substr(27,2) == "mh" && numLLPdecayHB_3ns > 0) totalEvents_HBdr05_3ns += 1;
       if (inputFile.substr(27,2) == "mh" && numLLPdecayHB == 0 ) continue; // if no LLPs in HB, skip event

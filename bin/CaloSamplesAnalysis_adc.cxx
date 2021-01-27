@@ -26,14 +26,14 @@ int main() {
   //  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/SinglePion211_E10_eta1phi0_PU_00_step1.root");
   //  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/SinglePion211_E0pt05_HB111_tdc9pt35_tof_injected_step1.root");
   //  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/Injected_Energy_0pt001_to_1pt2_HB111_tdc9pt35_tof_step1.root");
-  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/Injected_Energy_0pt001_to_1pt3_HB111_tdc18pt7_tof_step1.root");
+  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/Injected_Energy_0pt001_to_1pt3_HB111_tdc18pt7_tof_step1_TDCflat.root");
 
   TTreeReader myReader("Events",f);
   TTreeReaderValue<std::vector<CaloSamples>> AllCaloSamples(myReader, "CaloSampless_mix_HcalSamples_HLT.obj");
   TTreeReaderValue<HcalDataFrameContainer<QIE11DataFrame>> FullQIE11DataFrame(myReader, "QIE11DataFrameHcalDataFrameContainer_simHcalUnsuppressedDigis_HBHEQIE11DigiCollection_HLT.obj");
 
   //  int events_of_interest[20] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19};
-  Int_t adc_of_interest = 50;
+  Int_t adc_of_interest = 5;
   Int_t adc_of_interest2 = 50;
   Int_t ieta_of_interest = 1;
   Int_t iphi_of_interest = 1;
@@ -78,7 +78,7 @@ int main() {
       for (int i=0; i<frame.samples(); i++) { // loop over samples in QIE11 data frame
 	if ( (frame[i].tdc() <= 50) && (frame[i].soi() == true) && (abs(QIEdetectorID.ieta()) == ieta_of_interest) && (QIEdetectorID.iphi() == iphi_of_interest) && (QIEdetectorID.depth() == depth_of_interest) ) {
 	  if ( (frame[i].adc() <= adc_of_interest) ) {
-	    if (frame[i].adc() < 20 ) std::cout << "event, ADC, TDC = " << evtCounter << ", " << frame[i].adc() << ", " << frame[i].tdc() << std::endl;
+	    //	    if (frame[i].adc() < 20 ) std::cout << "event, ADC, TDC = " << evtCounter << ", " << frame[i].adc() << ", " << frame[i].tdc() << std::endl;
 	    event_withADC.push_back(evtCounter);
 	    ieta_withADC.push_back(QIEdetectorID.ieta());
 	    iphi_withADC.push_back(QIEdetectorID.iphi());

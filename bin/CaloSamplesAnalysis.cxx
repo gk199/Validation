@@ -27,7 +27,9 @@ int main() {
   //  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/SinglePion211_E10_eta1phi0_PU00_tdc9pt35_step1.root");
   //  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/SinglePion211_E10_injected_step1.root");
   //  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/Injected_Energy_0pt001_to_1pt2_HB111_tdc9pt35_tof_step1.root");
-  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/Injected_Energy_0pt001_to_1pt3_HB111_tdc18pt7_tof_step1.root"); //SinglePion211_E0pt01_HB111_tdc18pt7_tof_injected_step1.root");
+
+  //  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/SinglePion211_E10_eta1phi0_PU00_tdc74pt8_timephase6_TDCflat_step1.root");
+  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/Injected_Energy_0pt001_to_1pt3_HB111_tdc74pt8_tof_step1_TDCflat.root");
 
   TTreeReader myReader("Events",f);
   TTreeReaderValue<std::vector<CaloSamples>> AllCaloSamples(myReader, "CaloSampless_mix_HcalSamples_HLT.obj");
@@ -57,13 +59,19 @@ int main() {
       evtCounter++;
       continue;
     }
-    std::cout << FullQIE11DataFrame->size() << " QIE11 size for event " << evtCounter << std::endl; // 15840 per event
     */
+    if (evtCounter % 10 != 0) { // if not a multiple of 10, don't plot (slow otherwise for injected signal)
+      evtCounter++;
+      continue;
+    }
+    std::cout << FullQIE11DataFrame->size() << " QIE11 size for event " << evtCounter << std::endl; // 15840 per event
+    //    */
 
     for (QIE11DataFrame frame:*FullQIE11DataFrame) { // loop over QIE11 data frame in HcalDataFrameContainer, this goes over FullQIE11DataFrame->size()
       HcalDetId QIEdetectorID = HcalDetId(frame.id());
       for (int i=0; i<frame.samples(); i++) { // loop over samples in QIE11 data frame
 	if ( (frame[i].soi() == true) && (frame[i].tdc() == tdc_of_interest) ) {
+	  //	if ( (i == 1) && (frame[i].tdc() == tdc_of_interest) ) {
 	  //	  std::cout << frame[i].tdc() << " = TDC value in cell of interest" << std::endl;
 	  event_withTDC.push_back(evtCounter);
 	  ieta_withTDC.push_back(QIEdetectorID.ieta());
@@ -92,7 +100,10 @@ int main() {
     }
     evtCounter++; // increment to next event
   }
+  gr->SetMaximum(1);
+  gr->SetMinimum(0);
   gr->Draw();
+  gr->SetMaximum(5.0);
   c1->SaveAs(Form("CaloSamplesAnalysis_tdc%i.png", tdc_of_interest));
 
   f->Close();
