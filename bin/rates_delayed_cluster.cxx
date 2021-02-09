@@ -787,8 +787,8 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 	}
       }
       //      std::cout << numLLPdecayHB << " = number of LLP decay products incident on HB" <<std::endl;
-      if (inputFile.substr(89,2) == "MH" && numLLPdecayHB > 0) totalEvents_HBdr05 += 1;
-      if (inputFile.substr(89,2) == "MH" && numLLPdecayHB == 0 ) continue; // if no LLPs in HB, skip event
+      if (inputFile.substr(0,2) == "mh" && numLLPdecayHB > 0) totalEvents_HBdr05 += 1;
+      if (inputFile.substr(0,2) == "mh" && numLLPdecayHB == 0 ) continue; // if no LLPs in HB, skip event
    
       //////////////////////////////////////
       ////////// HCAL TP Loop //////////
@@ -1457,10 +1457,10 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 
   // saving efficiencies and rates in txt files to be read by rate vs eff plotting macros
   // signal efficiencies
-  if ( (inputFile.substr(89,2) == "MH") ) {
+  if ( (inputFile.substr(0,2) == "mh") ) {
     std::ofstream MultiplicityHits50ADC3ns_ht120_Signal;
-    MultiplicityHits50ADC3ns_ht120_Signal.open(Form("MultiplicityHits50ADC3ns_ht120_Signal_%s.txt", inputFile.substr(89,29).c_str()),std::ios_base::trunc);
-    std::cout << Form("MultiplicityHits50ADC3ns_ht120_Signal_%s.txt", inputFile.substr(89,29).c_str()) << std::endl;
+    MultiplicityHits50ADC3ns_ht120_Signal.open(Form("MultiplicityHits50ADC3ns_ht120_Signal_%s.txt", inputFile.substr(0,15).c_str()),std::ios_base::trunc);
+    std::cout << Form("MultiplicityHits50ADC3ns_ht120_Signal_%s.txt", inputFile.substr(0,15).c_str()) << std::endl;
     MultiplicityHits50ADC3ns_ht120_Signal << passed4JetMult_HBHE_ht120_1 / totalEvents << std::endl; // efficiency at HT 120+timing OR HT 360, delayed seed
     MultiplicityHits50ADC3ns_ht120_Signal << passed4JetMult_HBHE_ht120_2 / totalEvents << std::endl; // prompt TP veto
     MultiplicityHits50ADC3ns_ht120_Signal << passed4JetMult_HBHE_ht120_3 / totalEvents << std::endl; // prompt 2x2 veto
@@ -1485,7 +1485,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
     MultiplicityHits50ADC3ns_ht120_Signal << passed_calo_cluster_trig_120_5 / totalEvents << std::endl;
     MultiplicityHits50ADC3ns_ht120_Signal.close();
     std::ofstream Efficiency_HtBins_Signal;
-    Efficiency_HtBins_Signal.open(Form("Efficiency_HtBins_Signal_%s.txt", inputFile.substr(89,29).c_str()),std::ios_base::trunc);
+    Efficiency_HtBins_Signal.open(Form("Efficiency_HtBins_Signal_%s.txt", inputFile.substr(0,15).c_str()),std::ios_base::trunc);
     if (totalEvent_ht120>0) Efficiency_HtBins_Signal << HBHE4Jet_inBins_ht120 / totalEvent_ht120 << std::endl; 
     else Efficiency_HtBins_Signal << 0 << std::endl;
     if (totalEvent_ht140>0) Efficiency_HtBins_Signal << HBHE4Jet_inBins_ht140 / totalEvent_ht140 << std::endl;
@@ -1519,7 +1519,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
     Efficiency_HtBins_Signal.close();
   }
   // background efficiencies 
-  if (inputFile.substr(71,3) == "QCD" ) {
+  if (inputFile.substr(0,3) == "QCD" ) {
     std::ofstream MultiplicityHits50ADC3ns_ht120_Background;
     MultiplicityHits50ADC3ns_ht120_Background.open("MultiplicityHits50ADC3ns_ht120_Background.txt");
     MultiplicityHits50ADC3ns_ht120_Background << passed4JetMult_HBHE_ht120_1 / totalEvents << std::endl; // efficiency at HT 120+timing OR HT 360  
@@ -1547,7 +1547,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
     MultiplicityHits50ADC3ns_ht120_Background.close();
   }
   // neutrino gun rates
-  if (inputFile.substr(71,8) == "Neutrino" ) {
+  if (inputFile.substr(0,11) == "RelValNuGun" ) {
     std::cout << "htSum_original120 = " << htSumRates_original_emu->GetBinContent(htSumRates_original_emu->GetXaxis()->FindBin(120)) << std::endl;
     std::cout << "htSum_original360 = " << htSumRates_original_emu->GetBinContent(htSumRates_original_emu->GetXaxis()->FindBin(360)) << std::endl;
     std::cout << "htSum_wtiming120 2 hits = " << htSumRates_emu->GetBinContent(htSumRates_emu->GetXaxis()->FindBin(120)) << std::endl;
