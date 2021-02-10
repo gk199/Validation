@@ -23,31 +23,31 @@ int main() {
   // mh=125 pl=3m
   double signal_mh125_pl3000[14];
   ifstream mh125_pl3000;
-  mh125_pl3000.open("Efficiency_HtBins_Signal_MH-125_MFF-50_CTau-3000mm_Tun.txt"); //Efficiency_HtBins_Signal_mh125__mx50__pl500__.txt");
+  mh125_pl3000.open("Efficiency_HtBins_Signal_mh125__pl3000__.txt"); //Efficiency_HtBins_Signal_mh125__mx50__pl500__.txt");
   int n=0;
   while (mh125_pl3000 >> signal_mh125_pl3000[n]) n++;
   mh125_pl3000.close();
   // mh=250 pl=1m
   double signal_mh250_pl1000[14];
   ifstream mh250_pl1000;
-  mh250_pl1000.open("Efficiency_HtBins_Signal_MH-250_MFF-120_CTau-1000mm_Tu.txt"); //Efficiency_HtBins_Signal_mh125__mx50__pl1000_.txt");
+  mh250_pl1000.open("Efficiency_HtBins_Signal_mh250__pl1000__.txt"); //Efficiency_HtBins_Signal_mh125__mx50__pl1000_.txt");
   n=0;
   while (mh250_pl1000 >> signal_mh250_pl1000[n]) n++;
   mh250_pl1000.close();
   // mh=350 pl=1m
   double signal_mh350_pl1000[14];
   ifstream mh350_pl1000;
-  mh350_pl1000.open("Efficiency_HtBins_Signal_MH-350_MFF-160_CTau-1000mm_Tu.txt");
+  mh350_pl1000.open("Efficiency_HtBins_Signal_mh350__pl1000__.txt");
   n=0;
   while (mh350_pl1000 >> signal_mh350_pl1000[n]) n++;
   mh350_pl1000.close();
-  // mh=1000 pl=100m
-  double signal_mh1000_pl100000[14];
-  ifstream mh1000_pl100000;
-  mh1000_pl100000.open("Efficiency_HtBins_Signal_MH-1000_MFF-450_CTau-100000mm.txt");
+  // mh=1000 pl=10m
+  double signal_mh1000_pl10000[14];
+  ifstream mh1000_pl10000;
+  mh1000_pl10000.open("Efficiency_HtBins_Signal_mh1000_pl10000_.txt");
   n=0;
-  while (mh1000_pl100000 >> signal_mh1000_pl100000[n]) n++;
-  mh1000_pl100000.close();
+  while (mh1000_pl10000 >> signal_mh1000_pl10000[n]) n++;
+  mh1000_pl10000.close();
 
   // ht360
   double L1HT360[14] = {0,0,0,0,0,0,0,0,0,0,0,0,1,1};
@@ -61,8 +61,8 @@ int main() {
   TGraphErrors *gr_LLP_mh250_pl1000 = new TGraphErrors(14, htBin, signal_mh250_pl1000,htBin_er,err_y);
   TGraphErrors *gr_LLP_mh125_pl3000 = new TGraphErrors(14, htBin, signal_mh125_pl3000,htBin_er,err_y);
   TGraphErrors *gr_LLP_mh350_pl1000 = new TGraphErrors(14, htBin, signal_mh350_pl1000,htBin_er,err_y);
-  TGraphErrors *gr_LLP_mh1000_pl100000 = new TGraphErrors(14, htBin, signal_mh1000_pl100000,htBin_er,err_y);
-  for (int i=0; i<14; i++) std::cout << signal_mh1000_pl100000[i] << " and " << htBin[i] << std::endl;
+  TGraphErrors *gr_LLP_mh1000_pl10000 = new TGraphErrors(14, htBin, signal_mh1000_pl10000,htBin_er,err_y);
+  for (int i=0; i<14; i++) std::cout << signal_mh1000_pl10000[i] << " and " << htBin[i] << std::endl;
 
   TCanvas *c1_LLP_mh125_pl3000 = new TCanvas("c1_LLP_mh125_pl3000","Graph Draw Options",200,10,600,400);
   gr_LLP_mh125_pl3000->SetMarkerColor(kBlue);
@@ -111,19 +111,19 @@ int main() {
   legend3_htSum->Draw();
   c1_LLP_mh350_pl1000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/EffHT_LLP_mh350_pl1000.pdf");
 
-  TCanvas *c1_LLP_mh1000_pl100000 = new TCanvas("c1_LLP_mh1000_pl100000","Graph Draw Options",200,10,600,400);
-  gr_LLP_mh1000_pl100000->SetMarkerColor(kBlue);
-  gr_LLP_mh1000_pl100000->SetMarkerStyle(21);
-  gr_LLP_mh1000_pl100000->Draw("AP");
+  TCanvas *c1_LLP_mh1000_pl10000 = new TCanvas("c1_LLP_mh1000_pl10000","Graph Draw Options",200,10,600,400);
+  gr_LLP_mh1000_pl10000->SetMarkerColor(kBlue);
+  gr_LLP_mh1000_pl10000->SetMarkerStyle(21);
+  gr_LLP_mh1000_pl10000->Draw("AP");
   gr_L1HT360->SetMarkerColor(kRed);
   gr_L1HT360->SetMarkerStyle(21);
-  gr_LLP_mh1000_pl100000->SetTitle("HT vs. Signal Efficiency for >=2 Cells >=50ADC,3ns near 4 L1 Jets;HT (GeV);LLP Efficiency, mh=1000 GeV, c#scale[1.2]{#tau}=100m   ");
-  gr_LLP_mh1000_pl100000->GetHistogram()->SetMinimum(0.);
-  gr_LLP_mh1000_pl100000->GetHistogram()->SetMaximum(1.);
-  c1_LLP_mh1000_pl100000->SetGrid();
+  gr_LLP_mh1000_pl10000->SetTitle("HT vs. Signal Efficiency for >=2 Cells >=50ADC,3ns near 4 L1 Jets;HT (GeV);LLP Efficiency, mh=1000 GeV, c#scale[1.2]{#tau}=10m   ");
+  gr_LLP_mh1000_pl10000->GetHistogram()->SetMinimum(0.);
+  gr_LLP_mh1000_pl10000->GetHistogram()->SetMaximum(1.);
+  c1_LLP_mh1000_pl10000->SetGrid();
   auto legend4_htSum = new TLegend(0.15,0.65,0.45,0.8);
-  legend4_htSum->AddEntry(gr_LLP_mh1000_pl100000,"HT>120 with timing cuts");
+  legend4_htSum->AddEntry(gr_LLP_mh1000_pl10000,"HT>120 with timing cuts");
   legend4_htSum->Draw();
-  c1_LLP_mh1000_pl100000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/EffHT_LLP_mh1000_pl100000.pdf");
+  c1_LLP_mh1000_pl10000->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/EffHT_LLP_mh1000_pl10000.pdf");
 
 }

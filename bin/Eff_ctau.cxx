@@ -23,14 +23,14 @@ int main() {
   // mh=125 pl=3m
   double signal_mh125_pl3000[15];
   ifstream mh125_pl3000;
-  mh125_pl3000.open("Efficiency_HtBins_Signal_MH-125_MFF-50_CTau-3000mm_Tun.txt");
+  mh125_pl3000.open("Efficiency_HtBins_Signal_mh125__pl3000__.txt");
   int n=0;
   while (mh125_pl3000 >> signal_mh125_pl3000[n]) n++;
   mh125_pl3000.close();
   // mh=125 pl=30m
   double signal_mh125_pl30000[15];
   ifstream mh125_pl30000;
-  mh125_pl3000.open("Efficiency_HtBins_Signal_MH-125_MFF-50_CTau-30000mm_Tu.txt");
+  mh125_pl3000.open("Efficiency_HtBins_Signal_mh125__pl30000_.txt");
   n=0;
   while (mh125_pl30000 >> signal_mh125_pl30000[n]) n++;
   mh125_pl30000.close();
@@ -38,21 +38,21 @@ int main() {
   // mh=250 pl=0.5m
   double signal_mh250_pl500[15];
   ifstream mh250_pl500;
-  mh250_pl500.open("Efficiency_HtBins_Signal_MH-250_MFF-120_CTau-500mm_Tun.txt");
+  mh250_pl500.open("Efficiency_HtBins_Signal_mh250__pl500___.txt");
   n=0;
   while (mh250_pl500 >> signal_mh250_pl500[n]) n++;
   mh250_pl500.close();
   // mh=250 pl=1m
   double signal_mh250_pl1000[15];
   ifstream mh250_pl1000;
-  mh250_pl1000.open("Efficiency_HtBins_Signal_MH-250_MFF-120_CTau-1000mm_Tu.txt");
+  mh250_pl1000.open("Efficiency_HtBins_Signal_mh250__pl1000__.txt");
   n=0;
   while (mh250_pl1000 >> signal_mh250_pl1000[n]) n++;
   mh250_pl1000.close();
   // mh=250 pl=10m
   double signal_mh250_pl10000[15];
   ifstream mh250_pl10000;
-  mh250_pl10000.open("Efficiency_HtBins_Signal_MH-250_MFF-120_CTau-10000mm_T.txt");
+  mh250_pl10000.open("Efficiency_HtBins_Signal_mh250__pl10000_.txt");
   n=0;
   while (mh250_pl10000 >> signal_mh250_pl10000[n]) n++;
   mh250_pl10000.close();
@@ -60,21 +60,21 @@ int main() {
   // mh=350 pl=0.5m
   double signal_mh350_pl500[15];
   ifstream mh350_pl500;
-  mh350_pl500.open("Efficiency_HtBins_Signal_MH-350_MFF-160_CTau-500mm_Tun.txt");
+  mh350_pl500.open("Efficiency_HtBins_Signal_mh350__pl500___.txt");
   n=0;
   while (mh350_pl500 >> signal_mh350_pl500[n]) n++;
   mh350_pl500.close();
   // mh=350 pl=1m 
   double signal_mh350_pl1000[15];
   ifstream mh350_pl1000;
-  mh350_pl1000.open("Efficiency_HtBins_Signal_MH-350_MFF-160_CTau-1000mm_Tu.txt");
+  mh350_pl1000.open("Efficiency_HtBins_Signal_mh350__pl1000__.txt");
   n=0;
   while (mh350_pl1000 >> signal_mh350_pl1000[n]) n++;
   mh350_pl1000.close();
   // mh=350 pl=10m      
   double signal_mh350_pl10000[15];
   ifstream mh350_pl10000;
-  mh350_pl10000.open("Efficiency_HtBins_Signal_MH-350_MFF-160_CTau-10000mm_T.txt");
+  mh350_pl10000.open("Efficiency_HtBins_Signal_mh350__pl10000_.txt");
   n=0;
   while (mh350_pl10000 >> signal_mh350_pl10000[n]) n++;
   mh350_pl10000.close();
@@ -82,14 +82,14 @@ int main() {
   // mh=1000 pl=10m
   double signal_mh1000_pl10000[15];
   ifstream mh1000_pl10000;
-  mh1000_pl10000.open("Efficiency_HtBins_Signal_MH-1000_MFF-450_CTau-10000mm_.txt");
+  mh1000_pl10000.open("Efficiency_HtBins_Signal_mh1000_pl10000_.txt");
   n=0;
   while (mh1000_pl10000 >> signal_mh1000_pl10000[n]) n++;
   mh1000_pl10000.close();
   // mh=1000 pl=100m
   double signal_mh1000_pl100000[15];
   ifstream mh1000_pl100000;
-  mh1000_pl100000.open("Efficiency_HtBins_Signal_MH-1000_MFF-450_CTau-100000mm.txt");
+  mh1000_pl100000.open("Efficiency_HtBins_Signal_mh1000_pl100000.txt");
   n=0;
   while (mh1000_pl100000 >> signal_mh1000_pl100000[n]) n++;
   mh1000_pl100000.close();
@@ -122,9 +122,10 @@ int main() {
   gr_LLP_mh250->SetLineColor(kGreen);
   gr_LLP_mh250->Draw("AC*");
   gr_LLP_mh250->SetTitle("Signal Efficiency vs. c#scale[1.2]{#tau} of LLP; c#scale[1.2]{#tau} of LLP (mm); Trigger Efficiency (events passed HT120+timing / all events)");
+  c1_LLP_mh125->SetLogx();
   gr_LLP_mh250->GetHistogram()->SetMinimum(0.);
   gr_LLP_mh250->GetHistogram()->SetMaximum(1.);
-  gr_LLP_mh250->GetXaxis()->SetRangeUser(0.0,102000.0);
+  gr_LLP_mh250->GetXaxis()->SetRangeUser(1.0,1002000.0);
   gr_LLP_mh250->Draw("AC*");
   c1_LLP_mh125->Update();
   c1_LLP_mh125->SetGrid();
@@ -140,7 +141,7 @@ int main() {
   gr_LLP_mh1000->SetMarkerStyle(21);
   gr_LLP_mh1000->SetLineColor(kMagenta);
   gr_LLP_mh1000->Draw("C*");
-  gr_LLP_mh1000->GetXaxis()->SetRangeUser(0.0,102000.0);
+  gr_LLP_mh1000->GetXaxis()->SetRangeUser(1.0,1002000.0);
   c1_LLP_mh125->Update();
   auto legend_htSum = new TLegend(0.15,0.75,0.3,0.85);
   legend_htSum->AddEntry(gr_LLP_mh125,"m_{H}=125 GeV");
@@ -148,6 +149,7 @@ int main() {
   legend_htSum->AddEntry(gr_LLP_mh350,"m_{H}=350 GeV");
   legend_htSum->AddEntry(gr_LLP_mh1000,"m_{H}=1000 GeV");
   legend_htSum->Draw();
+  gr_LLP_mh1000->GetXaxis()->SetRangeUser(1.0,1002000.0);
   //  c1_LLP_mh125->SetLogx();
   c1_LLP_mh125->SaveAs("/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/Eff_ctau.pdf");
 

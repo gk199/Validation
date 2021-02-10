@@ -99,8 +99,8 @@ mv rates_new_cond.root rates_new_cond_LLP_pl100000.root
 echo " "
 echo "Making overlay plots from draw_timingbit.exe"
 draw_timingbit_delayed_cluster_mh1000.exe
-mv rates_new_cond_LLP_pl1000.root rates_new_cond_LLP_mh1000_pl1000.root
-mv rates_new_cond_LLP_pl10000.root rates_new_cond_LLP_mh1000_pl10000.root
+mv rates_new_cond_LLP_pl10000.root rates_new_cond_LLP_mh1000_pl1000.root
+mv rates_new_cond_LLP_pl100000.root rates_new_cond_LLP_mh1000_pl10000.root
 mv plots/Delayed_2x2_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Delayed_2x2_MultHBOverlay_mh1000.pdf
 mv plots/Prompt_2x2_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Prompt_2x2_MultHBOverlay_mh1000.pdf
 mv plots/Prompt_Energy_2x2_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Prompt_Energy_2x2_MultHBOverlay_mh1000.pdf

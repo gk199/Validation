@@ -23,8 +23,7 @@ int main() {
   // mh=125 pl=3m
   double signal_mh125_pl3000[6];
   ifstream mh125_pl3000;
-  mh125_pl3000.open("MultiplicityHits50ADC3ns_ht120_Signal_MH-125_MFF-50_CTau-3000mm_Tun.txt");
-  //  mh125_pl3000.open("MultiplicityHits50ADC3ns_ht120_Signal_mh125__mx50__pl3000_.txt");
+  mh125_pl3000.open("MultiplicityHits50ADC3ns_ht120_Signal_mh125__pl3000__.txt");
   int n=0;
   while (mh125_pl3000 >> signal_mh125_pl3000[n]) n++;
   mh125_pl3000.close();
@@ -32,7 +31,7 @@ int main() {
   // mh=125 pl=30m      
   double signal_mh125_pl30000[6];
   ifstream mh125_pl30000;
-  mh125_pl30000.open("MultiplicityHits50ADC3ns_ht120_Signal_MH-125_MFF-50_CTau-30000mm_Tu.txt");  //MultiplicityHits50ADC3ns_ht120_Signal_mh125__mx50__pl30000.txt");
+  mh125_pl30000.open("MultiplicityHits50ADC3ns_ht120_Signal_mh125__pl30000_.txt"); 
   n=0;
   while (mh125_pl30000 >> signal_mh125_pl30000[n]) n++;
   mh125_pl30000.close();
@@ -42,14 +41,14 @@ int main() {
   // mh=1000 pl=10m
   double signal_mh1000_pl10000[6];
   ifstream mh1000_pl10000;
-  mh1000_pl10000.open("MultiplicityHits50ADC3ns_ht120_Signal_MH-1000_MFF-450_CTau-10000mm_.txt"); //MultiplicityHits50ADC3ns_ht120_Signal_mh1000_mx450_pl10000.txt");
+  mh1000_pl10000.open("MultiplicityHits50ADC3ns_ht120_Signal_mh1000_pl10000_.txt"); //MultiplicityHits50ADC3ns_ht120_Signal_mh1000_mx450_pl10000.txt");
   n=0;
   while (mh1000_pl10000 >> signal_mh1000_pl10000[n]) n++;
   mh1000_pl10000.close();
   // mh=1000 pl=100m
   double signal_mh1000_pl100000[6];
   ifstream mh1000_pl100000;
-  mh1000_pl100000.open("MultiplicityHits50ADC3ns_ht120_Signal_MH-1000_MFF-450_CTau-100000mm.txt"); //MultiplicityHits50ADC3ns_ht120_Signal_mh1000_mx450_pl100k_.txt");
+  mh1000_pl100000.open("MultiplicityHits50ADC3ns_ht120_Signal_mh1000_pl100000.txt"); //MultiplicityHits50ADC3ns_ht120_Signal_mh1000_mx450_pl100k_.txt");
   n=0;
   while (mh1000_pl100000 >> signal_mh1000_pl100000[n]) n++;
   mh1000_pl100000.close();
@@ -59,7 +58,7 @@ int main() {
   // mh=350 pl=0.5m 
   double signal_mh350_pl500[6];
   ifstream mh350_pl500;
-  mh350_pl500.open("MultiplicityHits50ADC3ns_ht120_Signal_MH-350_MFF-160_CTau-500mm_Tun.txt"); //MultiplicityHits50ADC3ns_ht120_Signal_mh350__mx160_pl500__.txt");
+  mh350_pl500.open("MultiplicityHits50ADC3ns_ht120_Signal_mh350__pl500___.txt"); //MultiplicityHits50ADC3ns_ht120_Signal_mh350__mx160_pl500__.txt");
   n=0;
   while (mh350_pl500 >> signal_mh350_pl500[n]) n++;
   mh350_pl500.close();
@@ -68,14 +67,14 @@ int main() {
   // mh=350 pl=1m 
   double signal_mh350_pl1000[6];
   ifstream mh350_pl1000;
-  mh350_pl1000.open("MultiplicityHits50ADC3ns_ht120_Signal_MH-350_MFF-160_CTau-1000mm_Tu.txt"); //MultiplicityHits50ADC3ns_ht120_Signal_mh350__mx160_pl1000_.txt");
+  mh350_pl1000.open("MultiplicityHits50ADC3ns_ht120_Signal_mh350__pl1000__.txt"); //MultiplicityHits50ADC3ns_ht120_Signal_mh350__mx160_pl1000_.txt");
   n=0;
   while (mh350_pl1000 >> signal_mh350_pl1000[n]) n++;
   mh350_pl1000.close();
   // mh=350 pl=10m      
   double signal_mh350_pl10000[6];
   ifstream mh350_pl10000;
-  mh350_pl10000.open("MultiplicityHits50ADC3ns_ht120_Signal_MH-350_MFF-160_CTau-10000mm_T.txt"); //MultiplicityHits50ADC3ns_ht120_Signal_mh350__mx160_pl10000.txt");
+  mh350_pl10000.open("MultiplicityHits50ADC3ns_ht120_Signal_mh350__pl10000_.txt"); //MultiplicityHits50ADC3ns_ht120_Signal_mh350__mx160_pl10000.txt");
   n=0;
   while (mh350_pl10000 >> signal_mh350_pl10000[n]) n++;
   mh350_pl10000.close();
@@ -84,7 +83,7 @@ int main() {
   // mh=250 pl=0.5m   
   double signal_mh250_pl500[6];
   ifstream mh250_pl500;
-  mh250_pl500.open("MultiplicityHits50ADC3ns_ht120_Signal_MH-250_MFF-120_CTau-500mm_Tun.txt"); //MultiplicityHits50ADC3ns_ht120_Signal_mh250__mx160_pl500__.txt");
+  mh250_pl500.open("MultiplicityHits50ADC3ns_ht120_Signal_mh250__pl500___.txt"); 
   n=0;
   while (mh250_pl500 >> signal_mh250_pl500[n]) n++;
   mh250_pl500.close();
@@ -92,7 +91,7 @@ int main() {
   // mh=250 pl=1m 
   double signal_mh250_pl1000[6];
   ifstream mh250_pl1000;
-  mh250_pl1000.open("MultiplicityHits50ADC3ns_ht120_Signal_MH-250_MFF-120_CTau-1000mm_Tu.txt"); //MultiplicityHits50ADC3ns_ht120_Signal_mh250__mx120_pl1000_.txt");
+  mh250_pl1000.open("MultiplicityHits50ADC3ns_ht120_Signal_mh250__pl1000__.txt");
   n=0;
   while (mh250_pl1000 >> signal_mh250_pl1000[n]) n++;
   mh250_pl1000.close();
@@ -100,7 +99,7 @@ int main() {
   // mh=250 pl=10m
   double signal_mh250_pl10000[6];
   ifstream mh250_pl10000;
-  mh250_pl10000.open("MultiplicityHits50ADC3ns_ht120_Signal_MH-250_MFF-120_CTau-10000mm_Tun.txt"); //MultiplicityHits50ADC3ns_ht120_Signal_mh250__mx160_pl10000.txt");
+  mh250_pl10000.open("MultiplicityHits50ADC3ns_ht120_Signal_mh250__pl10000_.txt");
   n=0;
   while (mh250_pl10000 >> signal_mh250_pl10000[n]) n++;
   mh250_pl10000.close();

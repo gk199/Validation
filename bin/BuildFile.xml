@@ -7,6 +7,8 @@
   <bin file="draw_l1analysis.cxx" name="draw_l1analysis.exe"/>
   <bin file="l1jetanalysis.cxx" name="l1jetanalysis.exe"/>
   <bin file="rates_delayed_cluster.cxx" name="rates_delayed_cluster.exe"/>
+  <bin file="rates_bkgTDCdist.cxx" name="rates_bkgTDCdist.exe"/>
+  <bin file="rates_original.cxx" name="rates_original.exe"/>
   <bin file="draw_timingbit_delayed_cluster_mh125.cxx" name="draw_timingbit_delayed_cluster_mh125.exe"/>
   <bin file="draw_timingbit_delayed_cluster_mh250.cxx" name="draw_timingbit_delayed_cluster_mh250.exe"/>
   <bin file="draw_timingbit_delayed_cluster_mh350.cxx" name="draw_timingbit_delayed_cluster_mh350.exe"/>

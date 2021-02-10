@@ -518,8 +518,8 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
   TH1F * Mult_delayed_hit_emu = new TH1F("Mult_delayed_hit_emu","Number of delayed hits near a seeded jet;Number of cells;Fraction of Entries (normalized)",20,0,20);
   TH1F * Mult_prompt_hit_emu =new TH1F("Mult_prompt_hit_emu","Number of prompt TPs near a seeded jet;Number of TPs;Fraction of Entries (normalized)",20,0,20);
 
-  TH1F * HTdistribution_trig_emu = new TH1F("HTdistribution_trig_emu","HT Distribution of Events Passing Calo Cluster Trigger;HT (GeV);Number of Events",25,0,2000);
-  TH1F * HTdistribution_emu = new TH1F("HTdistribution_emu","HT Distribution of Events;HT (GeV);Number of Events",25,0,2000);
+  TH1F * HTdistribution_trig_emu = new TH1F("HTdistribution_trig_emu","HT Distribution of Events Passing Calo Cluster Trigger;HT (GeV);Number of Events",35,0,1200);
+  TH1F * HTdistribution_emu = new TH1F("HTdistribution_emu","HT Distribution of Events;HT (GeV);Number of Events",35,0,1200);
 
   // HT sum rate distributions to use in rate vs eff plots. Need HT > 360 rate, and HT > 120 + timing cut rate
   TH1F* htSumRates_original_emu = new TH1F("htSumRates_original_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
@@ -568,10 +568,10 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
   /////////////////////////////////
   //////////// eta_depth_tdc //////
   /////////////////////////////////
-  int eta_depth_tdc95[30][8] = {{0}};
-  //  std::ifstream file("TDCdistribution_Background70_QCD.txt");
+  int eta_depth_tdc95[30][8] = {{4}};
+  std::ifstream file("TDCdistribution_Background90_QCD.txt");
   //  std::ifstream file("TDCdistribution_Background_4ns.txt");
-  std::ifstream file("TDCdistribution_Background_2ns.txt");
+  //  std::ifstream file("TDCdistribution_Background_2ns.txt");
   for(int row = 0; row < 30; ++row) {
     std::string line;
     std::getline(file, line);
