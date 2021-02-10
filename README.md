@@ -56,6 +56,12 @@ HCAL timing and energy values are avaliable at each cell, allowing for the forma
 ```
 where the arguments are HB TDC, HE TDC, HB energy (GeV), HE energy (GeV), prompt TP energy veto, and prompt 2x2 energy veto. Currently 2 cells in a 4x4 region make it "delayed" and a jet is rejected if there are greater than or equal to 2 prompt high energy towers in it. These last two parameters are set in `rates_delayed_cluster.cxx`.
 
+In the current format, the first two parameters (TDC values) are set from scanning over the background QCD sample, and determining what TDC value 90/% (for example) of the background is below. This is done in:
+```
+rates_bkgTDCdist.exe new QCD 2 2
+```
+where the last two parameters are the HB and HE energy values. This then makes multiple txt files listing the ieta, and for each depth, what TDC value most of the background is below.
+
 # HCAL Trigger studies for LLPs -- Depth Trigger
 Towards a new L1 seed to trigger on LLP signatures with HCAL using H/E + depth 
 
