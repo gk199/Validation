@@ -1547,7 +1547,8 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
     MultiplicityHits50ADC3ns_ht120_Background.close();
   }
   // neutrino gun rates
-  if (inputFile.substr(0,11) == "RelValNuGun" ) {
+  //  if (inputFile.substr(0,11) == "RelValNuGun" ) {
+  if (inputFile.substr(0,7) == "MinBias" ) {
     std::cout << "htSum_original120 = " << htSumRates_original_emu->GetBinContent(htSumRates_original_emu->GetXaxis()->FindBin(120)) << std::endl;
     std::cout << "htSum_original360 = " << htSumRates_original_emu->GetBinContent(htSumRates_original_emu->GetXaxis()->FindBin(360)) << std::endl;
     std::cout << "htSum_wtiming120 2 hits = " << htSumRates_emu->GetBinContent(htSumRates_emu->GetXaxis()->FindBin(120)) << std::endl;
