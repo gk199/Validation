@@ -16,8 +16,8 @@ rates_delayed_cluster.exe new QCD $1 $2 $3 $4 $5 $6
 mv rates_new_cond.root rates_new_cond_QCD.root
 echo " "
 echo "Neutrino gun new and old conditions"
-rates_delayed_cluster.exe new RelValNuGun $1 $2 $3 $4 $5 $6
-rates_original.exe def RelValNuGun
+rates_delayed_cluster.exe new MinBias $1 $2 $3 $4 $5 $6
+rates_original.exe def MinBias
 echo " "
 echo " "
 echo "Rates plots from draw_rates.exe"
@@ -38,17 +38,18 @@ mv plots/HTdistributionOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X
 mv plots/HTdistribution_trigOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/HTdistribution_trig_Overlay_mh125.pdf
 echo " "
 echo " "
-echo "LLP mh=250 GeV, ctau=10 m"
-rates_delayed_cluster.exe new mh250__pl10000_ $1 $2 $3 $4 $5 $6
-mv rates_new_cond.root rates_new_cond_LLP_pl10000.root
+echo "LLP mh=250 GeV, ctau=0.5 m"
+rates_delayed_cluster.exe new mh250__pl500___ $1 $2 $3 $4 $5 $6
+mv rates_new_cond.root rates_new_cond_LLP_pl500.root
 echo " "
 echo "LLP mh=250 GeV, ctau=1 m"
 rates_delayed_cluster.exe new mh250__pl1000__ $1 $2 $3 $4 $5 $6
 mv rates_new_cond.root rates_new_cond_LLP_pl1000.root
 echo " "
-echo "LLP mh=250 GeV, ctau=0.5 m"
-rates_delayed_cluster.exe new mh250__pl500___ $1 $2 $3 $4 $5 $6
-mv rates_new_cond.root rates_new_cond_LLP_pl500.root
+echo "LLP mh=250 GeV, ctau=10 m"
+rates_delayed_cluster.exe new mh250__pl10000_ $1 $2 $3 $4 $5 $6
+mv rates_new_cond.root rates_new_cond_LLP_pl10000.root
+echo " "
 echo " "
 echo "Making overlay plots from draw_timingbit.exe"
 draw_timingbit_delayed_cluster_mh250.exe
@@ -64,17 +65,18 @@ mv plots/HTdistributionOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X
 mv plots/HTdistribution_trigOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/HTdistribution_trig_Overlay_mh250.pdf
 echo " "
 echo " "
-echo "LLP mh=350 GeV, ctau=10 m"
-rates_delayed_cluster.exe new mh350__pl10000_ $1 $2 $3 $4 $5 $6
-mv rates_new_cond.root rates_new_cond_LLP_pl10000.root
+echo "LLP mh=350 GeV, ctau=0.5 m"
+rates_delayed_cluster.exe new mh350__pl500___ $1 $2 $3 $4 $5 $6
+mv rates_new_cond.root rates_new_cond_LLP_pl500.root
 echo " "
 echo "LLP mh=350 GeV, ctau=1 m"
 rates_delayed_cluster.exe new mh350__pl1000__ $1 $2 $3 $4 $5 $6
 mv rates_new_cond.root rates_new_cond_LLP_pl1000.root
 echo " "
-echo "LLP mh=350 GeV, ctau=0.5 m"
-rates_delayed_cluster.exe new mh350__pl500___ $1 $2 $3 $4 $5 $6
-mv rates_new_cond.root rates_new_cond_LLP_pl500.root
+echo "LLP mh=350 GeV, ctau=10 m"
+rates_delayed_cluster.exe new mh350__pl10000_ $1 $2 $3 $4 $5 $6
+mv rates_new_cond.root rates_new_cond_LLP_pl10000.root
+echo " "
 echo " "
 echo "Making overlay plots from draw_timingbit.exe"
 draw_timingbit_delayed_cluster_mh350.exe

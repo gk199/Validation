@@ -42,7 +42,7 @@ Double_t EMG(Double_t *x, Double_t *par){
 }
 
 void efficiency(){
-  TCanvas *c1 =new TCanvas("c1", " ", 0, 0,700,1000);
+  TCanvas *c1 =new TCanvas("c1", " ", 0, 0,1000,1000);
   c1->Range(0,0,1,1);
   c1->SetFillColor(0);
   c1->SetBorderMode(0);
@@ -52,7 +52,7 @@ void efficiency(){
   c1->SetGrid();
   gStyle->SetOptStat(0);
 
-  TFile *g1 =TFile::Open("../rates_new_cond_LLP_mh125_pl3000.root");
+  TFile *g1 =TFile::Open("../rates_new_cond_LLP_mh1000_pl10000.root");
   TH1F *h1 = (TH1F*)g1->Get("HTdistribution_emu");
   TH1F *h2 = (TH1F*)g1->Get("HTdistribution_trig_emu");
 
@@ -65,6 +65,7 @@ void efficiency(){
   h1->GetYaxis()->SetTitleSize(0.045);
   h1->GetYaxis()->SetTitleOffset(1.1);
   h1->GetYaxis()->SetRangeUser(0.,1.5);
+  h1->GetXaxis()->SetRangeUser(0.,500);
   h1->Draw();
 
   c1->Update();
@@ -88,5 +89,10 @@ void efficiency(){
   legend1->AddEntry(pEff1, "One delayed L1 jet", "l");
 
   legend1->Draw("same");
+
+  char saveFile[100];
+  sprintf(saveFile,"/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/L1efficiency_mh1000_pl10000.pdf");
+  c1->SaveAs(saveFile);
+
 }
 
