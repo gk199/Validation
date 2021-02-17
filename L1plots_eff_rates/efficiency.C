@@ -52,12 +52,12 @@ void efficiency(){
   c1->SetGrid();
   gStyle->SetOptStat(0);
 
-  TFile *g1 =TFile::Open("../rates_new_cond_LLP_mh1000_pl10000.root");
+  TFile *g1 =TFile::Open("../rates_new_cond_QCD.root");
   TH1F *h1 = (TH1F*)g1->Get("HTdistribution_emu");
   TH1F *h2 = (TH1F*)g1->Get("HTdistribution_trig_emu");
 
   h1->SetLineColorAlpha(kWhite, 1.);
-  h1->SetTitle("");
+  h1->SetTitle("Delayed Jet Trigger Efficiency vs Event H_{T} for QCD");
   h1->GetXaxis()->SetTitle("H_{T} [GeV]");
   h1->GetXaxis()->SetTitleSize(0.045);
   h1->GetXaxis()->SetTitleOffset(1.1);
@@ -91,7 +91,7 @@ void efficiency(){
   legend1->Draw("same");
 
   char saveFile[100];
-  sprintf(saveFile,"/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/L1efficiency_mh1000_pl10000.pdf");
+  sprintf(saveFile,"/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/L1efficiency_QCD.pdf");
   c1->SaveAs(saveFile);
 
 }

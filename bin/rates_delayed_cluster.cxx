@@ -154,8 +154,8 @@ std::vector<double> two_two_eta_phi(double eta_2x2, double phi_2x2) {
 
 std::vector<double> intersect(double vx, double vy,double vz, double px, double py, double pz) {
   double lightSpeed = 29979245800; // speed of light in cm/s
-  double radius = 179; //295; //179; // 130 for calorimeters (ECAL + HCAL) in cm
-  double length = 388; //568; //388; // 300 for calorimeters (ECAL + HCAL) in cm
+  double radius = 295; //179; // 130 for calorimeters (ECAL + HCAL) in cm
+  double length = 568; //388; // 300 for calorimeters (ECAL + HCAL) in cm
   double energy = sqrt(px*px + py*py + pz*pz);
   // First work out intersection with cylinder (barrel)        
   double a = (px*px + py*py)*lightSpeed*lightSpeed/(energy*energy);
@@ -521,6 +521,10 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
   TH1F * HTdistribution_trig_emu = new TH1F("HTdistribution_trig_emu","HT Distribution of Events Passing Calo Cluster Trigger;HT (GeV);Number of Events",35,0,1200);
   TH1F * HTdistribution_emu = new TH1F("HTdistribution_emu","HT Distribution of Events;HT (GeV);Number of Events",35,0,1200);
 
+  TH1F * JetPTdistribution_trig_emu = new TH1F("JetPTdistribution_trig_emu","Jet pT Distribution passing Delayed Jet Trigger;Jet pT (GeV);Number of Jets",15,0,200);
+  TH1F * JetPTdistribution_trig120_emu = new TH1F("JetPTdistribution_trig120_emu","Jet pT Distribution passing Delayed Jet Trigger and HT120;Jet pT (GeV);Number of Jets",15,0,200);
+  TH1F * JetPTdistribution_emu = new TH1F("JetPTdistribution_emu","Jet pT Distribution;Jet pT (GeV);Number of Jets",15,0,200);
+
   // HT sum rate distributions to use in rate vs eff plots. Need HT > 360 rate, and HT > 120 + timing cut rate
   TH1F* htSumRates_original_emu = new TH1F("htSumRates_original_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
   // OR of HT360 "OR" HT120+timing trigger
@@ -781,14 +785,18 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
       double nCaloTPemu = l1CaloTPemu_->nHCALTP; // number of TPs varies from 400-1400 per event, approximately Gaussian                                                  
       // triggerability restrictions
 
+      int triggerableJets[nJetemu] = {0};
       for (uint jetIt = 0; jetIt < nJetemu; jetIt++) { // loop over jets
+	if (inputFile.substr(0,3) == "QCD") JetPTdistribution_emu->Fill(l1emu_->jetEt[jetIt]);
 	if (abs(l1emu_->jetEta[jetIt]) > 2.5) continue; // consider HB jets, HB extends to 1.4. HE extends to 3. Use values of 1, 2.5
 	if (closestParton(jetIt, l1emu_, generator_)[0] <= 0.5) { // if closest parton is near a HB L1 jet
 	  numLLPdecayHB += 1; // how many of the partons expected to intersect HB
+	  JetPTdistribution_emu->Fill(l1emu_->jetEt[jetIt]);
+	  triggerableJets[jetIt] = 1; // 1 if triggerable jet, 0 otherwise
 	}
       }
       
-      //      numLLPdecayHB += 1;
+      //      numLLPdecayHB += 1; // for testing without triggerability restrictions
       //      std::cout << numLLPdecayHB << " = number of LLP decay products incident on HB" <<std::endl;
       if (inputFile.substr(0,2) == "mh" && numLLPdecayHB > 0) totalEvents_HBdr05 += 1;
       if (inputFile.substr(0,2) == "mh" && numLLPdecayHB == 0 ) continue; // if no LLPs in HB, skip event
@@ -990,38 +998,13 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 	}
       }
 
-      // investigate delayed QCD hits -- what physics is causing these?? 
-      //      if (inputFile.substr(27,3) == "QCD" ) {
-      for (int partonN = 0; partonN < generator_->nPart; partonN ++) {
-	if (generator_->partParent[partonN] == 6000113) ctau_LLP_trigger->Fill(LLPdecayInfo(partonN,l1emu_,generator_)[3]/100);
-        else {
-	  path_length->Fill(ctau(partonN,generator_)[0]/100); // if not from LLP, plot the creation vertex of parton
-	  path_length_energy->Fill(ctau(partonN,generator_)[0]/100, generator_->partE[partonN]); // creation vertex vs energy
-	}
-
-	// following print outs indicate the daughter particles are not paired correctly :(
-	//	if ( (generator_->partId[partonN] == 9000006) || (generator_->partId[partonN] == 9000007) || (generator_->partId[partonN] == 6000113) ) std::cout << generator_->partId[partonN] << " = parton PDG ID, and daughter PDG ID = " << generator_->dauId[partonN] << std::endl;
-	//	if ( abs(generator_->partId[partonN] == 5) && generator_->partParent[partonN] == 6000113 ) std::cout << generator_->partParent[partonN] << " = parton parent PDG ID, and daughter PDG ID = " << generator_->partId[partonN]<< std::endl;
-	if (generator_->partId[partonN] == 111|| generator_->partId[partonN] == 211 ) {
-	  pion_radius_z->Fill(sqrt(generator_->partVx[partonN]*generator_->partVx[partonN] + generator_->partVy[partonN]*generator_->partVy[partonN]), abs(generator_->partVz[partonN]));
-	}
-      }
-    
-      for (uint jetIt = 0; jetIt < nJetemu; jetIt++) {
-	if (delayed_calo_objects[jetIt] >= 1 && closestQCDParton(jetIt, l1emu_, generator_)[0] <= 0.5 ) { // if a jet had a delayed seed, find parton projected to be nearby
-	  double partonN = closestQCDParton(jetIt, l1emu_, generator_)[1];
-	  int PDG_ID = generator_->partId[partonN];
-	  double vertex = sqrt(generator_->partVx[partonN]*generator_->partVx[partonN] + generator_->partVy[partonN]*generator_->partVy[partonN] + generator_->partVz[partonN]*generator_->partVz[partonN]);
-	  //	    std::cout << PDG_ID << " = PDG ID of particle from QCD process that is near a seeded (by delayed 4x4 region) L1 jet, and this originated at " << vertex << " with delta R = " << closestQCDParton(jetIt, l1emu_, generator_)[0] << std::endl;
-	  PDGid_radius->Fill(abs(PDG_ID),vertex);
-	}
-      }
-
       // how many jets pass the delayed trigger
       int num_delayed_jet = 0;
       int num_delayed_obj[nJetemu] = {0};
 
       for (uint jetIt = 0; jetIt < nJetemu; jetIt++) {
+	//	if (l1emu_->jetEt[jetIt] < 25 ) continue; // for jet pt efficiencies
+	if ((inputFile.substr(0,2) == "mh") && (triggerableJets[jetIt] == 0)) continue;
 	if (delayed_calo_objects[jetIt] >= 1) { // make sure a jet is seeded!	
 	  Mult_delayed_hit_emu->Fill(delayed[jetIt]);
 	  Mult_prompt_hit_emu->Fill(prompt_TP[jetIt]);
@@ -1031,8 +1014,12 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 	// num_delayed_jet is 1 if has delayed seed, 2 if delayed seed and passed prompt TP veto, 3 if delayed seed and passed prompt TP veto and prompt 2x2 veto. Used for ROC curves instead of scanning n_delayed_jets. Progressively add on requirements, in this order
 	if (delayed_calo_objects[jetIt] >= 1) num_delayed_obj[jetIt] += 1;
 	//	if (delayed_calo_objects[jetIt] >= 1 && prompt_TP[jetIt] < prompt_2x2_TP_variable) num_delayed_obj[jetIt] += 1;
-        if (delayed_calo_objects[jetIt] >= 1 && prompt_energy[jetIt] == 0) num_delayed_obj[jetIt] += 2;
+	if (delayed_calo_objects[jetIt] >= 1 && prompt_energy[jetIt] == 0) num_delayed_obj[jetIt] += 2;
 	//	if (delayed_calo_objects[jetIt] >= 1 && prompt_TP[jetIt] < prompt_2x2_TP_variable && prompt_energy[jetIt] == 0) num_delayed_obj[jetIt] += 1;
+
+	// for jet PT efficiencies
+	if (num_delayed_obj[jetIt] >= 3) JetPTdistribution_trig_emu->Fill(l1emu_->jetEt[jetIt]);
+        if (num_delayed_obj[jetIt] >= 3 && htSum > 120) JetPTdistribution_trig120_emu->Fill(l1emu_->jetEt[jetIt]);
       }
       std::sort(num_delayed_obj, num_delayed_obj+nJetemu, std::greater<int>());
       if (num_delayed_obj[0] == 1) num_delayed_jet = 1;
@@ -1041,14 +1028,6 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
       if (num_delayed_obj[0] == 3 && num_delayed_obj[1] > 0) num_delayed_jet = 4;
       if (num_delayed_obj[0] == 3 && num_delayed_obj[1] > 0  && num_delayed_obj[2] > 0) num_delayed_jet = 5;
       
-      /* // if only want TP veto (no 2x2 veto)
-      if (num_delayed_obj[0] == 1) num_delayed_jet = 1;
-      if (num_delayed_obj[0] >= 2) num_delayed_jet = 2;
-      if (num_delayed_obj[0] >= 2 && num_delayed_obj[1] > 0) num_delayed_jet = 3;
-      if (num_delayed_obj[0] >= 2 && num_delayed_obj[1] > 0  && num_delayed_obj[2] > 0) num_delayed_jet = 4;
-      if (num_delayed_obj[0] >= 2 && num_delayed_obj[1] > 1  && num_delayed_obj[2] > 0) num_delayed_jet = 5;
-      */
-
       if (num_delayed_jet >= 3) HTdistribution_trig_emu->Fill(htSum); // plot HT dist of events passing calo trigger 
       HTdistribution_emu->Fill(htSum);
 
@@ -1089,7 +1068,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 	if (htSum > 360 && htSum <=380 ) HBHE4Jet_inBins_ht360 += 1;
 	if (htSum > 380 && htSum <=400 ) HBHE4Jet_inBins_ht380 += 1;
       }
-
+      
       if ( num_delayed_jet >= 1 ) passed_calo_cluster_trig += 1;
       if ( num_delayed_jet >= 1 && htSum > 120 ) passed_calo_cluster_trig_120 += 1;
       if ( num_delayed_jet >= 2 && htSum > 120 ) passed_calo_cluster_trig_120_2 += 1;
@@ -1366,6 +1345,10 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
     HTdistribution_trig_emu->Write();
     HTdistribution_emu->Write();
 
+    JetPTdistribution_emu->Write();
+    JetPTdistribution_trig_emu->Write();
+    JetPTdistribution_trig120_emu->Write();
+
     htSumDistribution->Write();
 
     prompt_delayed_seed->Write();
@@ -1454,7 +1437,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
   //  std::cout << passed4JetMult_HBHE_ht120_2 << " passed calo trig + HT120 OR HT360 (prompt TP veto)" << std::endl;
   std::cout << passed4JetMult_HBHE_ht120_3 << " passed calo trig + HT120 OR HT360 (prompt 2x2 veto)" << std::endl;
   std::cout << (passed4JetMult_HBHE_ht120_1 - passedHtSum360)*100 / totalEvents << " added efficiency HT 360 (delayed object)" << std::endl;
-  //  stad::cout << (passed4JetMult_HBHE_ht120_2 - passedHtSum360)*100 / totalEvents << " added efficiency HT 360 (prompt TP veto)" << std::endl;
+  //  std::cout << (passed4JetMult_HBHE_ht120_2 - passedHtSum360)*100 / totalEvents << " added efficiency HT 360 (prompt TP veto)" << std::endl;
   std::cout << (passed4JetMult_HBHE_ht120_3 - passedHtSum360)*100 / totalEvents << " added efficiency HT 360 (prompt 2x2 veto)" << std::endl;
   std::cout << passedHtSum360/totalEvents * 100 << " % passed HT360" << std::endl;
   std::cout << (passed4JetMult_HBHE_ht120_3 - passedHtSum360) / passedHtSum360 << " integrated luminosity gain" << std::endl;
