@@ -4,6 +4,7 @@ FileList="LLP_mh125_pl3000 LLP_mh125_pl30000 LLP_mh250_pl500 LLP_mh250_pl1000 LL
 for mh_pl in $FileList
 do
     echo $mh_pl
+    sed -i "s/file_type = \".*/file_type = \"${mh_pl}\";/" efficiency.C
     sed -i "s/rates_new_cond_.*/rates_new_cond_${mh_pl}\.root\");/" efficiency.C
     sed -i "s/for .*/for ${mh_pl}\");/" efficiency.C
     sed -i "s/L1efficiency.*/L1efficiency_${mh_pl}\.pdf\");/" efficiency.C

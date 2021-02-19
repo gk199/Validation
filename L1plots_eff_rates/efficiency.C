@@ -52,6 +52,8 @@ void efficiency(){
   c1->SetGrid();
   gStyle->SetOptStat(0);
 
+  string file_type = "QCD";
+
   TFile *g1 =TFile::Open("../rates_new_cond_QCD.root");
   TH1F *h1 = (TH1F*)g1->Get("HTdistribution_emu");
   TH1F *h2 = (TH1F*)g1->Get("HTdistribution_trig_emu");
@@ -65,6 +67,7 @@ void efficiency(){
   h1->GetYaxis()->SetTitleSize(0.045);
   h1->GetYaxis()->SetTitleOffset(1.1);
   h1->GetYaxis()->SetRangeUser(0.,1.5);
+  if (file_type == "QCD" ) h1->GetYaxis()->SetRangeUser(0.,0.5);
   h1->GetXaxis()->SetRangeUser(0.,500);
   h1->Draw();
 

@@ -113,7 +113,7 @@ int main()
       rateHists_def[hist]->Draw("hist same");
       if ( strcmp(iplot.first.c_str(), "HTSum") == 0 ) {
 	rateHists_def[hist]->GetYaxis()->SetRangeUser(1000, 100000000);
-        rateHists_def[hist]->GetXaxis()->SetRangeUser(0, 1000);
+        rateHists_def[hist]->GetXaxis()->SetRangeUser(0, 600);
       }
       if(includeHW) rateHists_hw[hist]->Draw("hist same");
       rateHists_new_cond[hist]->Draw("hist same");
@@ -129,7 +129,7 @@ int main()
     pad2.back()->cd();
     if ( strcmp(iplot.first.c_str(), "HTSum") == 0 ) {
       rateHistsRatio[iplot.second.front()]->GetYaxis()->SetRangeUser(0,0.5);
-      rateHistsRatio[iplot.second.front()]->GetXaxis()->SetRangeUser(0, 1000);
+      rateHistsRatio[iplot.second.front()]->GetXaxis()->SetRangeUser(0, 600);
     } 
     rateHistsRatio[iplot.second.front()]->Draw("hist");
     if(includeHW) rateHistsRatio[iplot.second.front()]->GetYaxis()->SetTitle("Current/HW");

@@ -324,7 +324,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
   // variables used to scan parameters -- energy, time, delayed and prompt seeds
   //  double prompt_2x2_energy_variable = 4; // energy to define energetic 2x2 region (non-delayed)
   //  double prompt_TP_energy_variable = 3; // energy for a prompt TP
-  //  double prompt_2x2_TP_variable = 2; // how many high energy TPs to reject jet based on (if >= this variable)
+  //  double prompt_2x2_TP_variable = 1; // how many high energy TPs to reject jet based on (if >= this variable)
   double delayed_4x4_variable = 2; // how many cells to count as a delayed seed 4x4 region (require >= this variable)
   //  double TDC_HB_variable = 4; // TDC value to be considered delayed
   //  double TDC_HE_variable = 4;
@@ -1003,7 +1003,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
       int num_delayed_obj[nJetemu] = {0};
 
       for (uint jetIt = 0; jetIt < nJetemu; jetIt++) {
-	//	if (l1emu_->jetEt[jetIt] < 25 ) continue; // for jet pt efficiencies
+	if (l1emu_->jetEt[jetIt] < 40 ) continue; // for jet pt efficiencies
 	if ((inputFile.substr(0,2) == "mh") && (triggerableJets[jetIt] == 0)) continue;
 	if (delayed_calo_objects[jetIt] >= 1) { // make sure a jet is seeded!	
 	  Mult_delayed_hit_emu->Fill(delayed[jetIt]);
@@ -1013,7 +1013,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 
 	// num_delayed_jet is 1 if has delayed seed, 2 if delayed seed and passed prompt TP veto, 3 if delayed seed and passed prompt TP veto and prompt 2x2 veto. Used for ROC curves instead of scanning n_delayed_jets. Progressively add on requirements, in this order
 	if (delayed_calo_objects[jetIt] >= 1) num_delayed_obj[jetIt] += 1;
-	//	if (delayed_calo_objects[jetIt] >= 1 && prompt_TP[jetIt] < prompt_2x2_TP_variable) num_delayed_obj[jetIt] += 1;
+	//	if (delayed_calo_objects[jetIt] >= 1 && prompt_TP[jetIt] < prompt_2x2_TP_variable) num_delayed_obj[jetIt] += 2;
 	if (delayed_calo_objects[jetIt] >= 1 && prompt_energy[jetIt] == 0) num_delayed_obj[jetIt] += 2;
 	//	if (delayed_calo_objects[jetIt] >= 1 && prompt_TP[jetIt] < prompt_2x2_TP_variable && prompt_energy[jetIt] == 0) num_delayed_obj[jetIt] += 1;
 
@@ -1440,7 +1440,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
   //  std::cout << (passed4JetMult_HBHE_ht120_2 - passedHtSum360)*100 / totalEvents << " added efficiency HT 360 (prompt TP veto)" << std::endl;
   std::cout << (passed4JetMult_HBHE_ht120_3 - passedHtSum360)*100 / totalEvents << " added efficiency HT 360 (prompt 2x2 veto)" << std::endl;
   std::cout << passedHtSum360/totalEvents * 100 << " % passed HT360" << std::endl;
-  std::cout << (passed4JetMult_HBHE_ht120_3 - passedHtSum360) / passedHtSum360 << " integrated luminosity gain" << std::endl;
+  std::cout << (passed4JetMult_HBHE_ht120_3) / passedHtSum360 << " integrated luminosity gain" << std::endl;
   std::cout << totalEvents << " all events" << std::endl;
 
   // saving efficiencies and rates in txt files to be read by rate vs eff plotting macros
@@ -1535,8 +1535,8 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
     MultiplicityHits50ADC3ns_ht120_Background.close();
   }
   // neutrino gun rates
-  //  if (inputFile.substr(0,11) == "RelValNuGun" ) {
-  if (inputFile.substr(0,7) == "MinBias" ) {
+  if (inputFile.substr(0,11) == "RelValNuGun" ) {
+  //  if (inputFile.substr(0,7) == "MinBias" ) {
     std::cout << "htSum_original120 = " << htSumRates_original_emu->GetBinContent(htSumRates_original_emu->GetXaxis()->FindBin(120)) << std::endl;
     std::cout << "htSum_original360 = " << htSumRates_original_emu->GetBinContent(htSumRates_original_emu->GetXaxis()->FindBin(360)) << std::endl;
     std::cout << "htSum_wtiming120 2 hits = " << htSumRates_emu->GetBinContent(htSumRates_emu->GetXaxis()->FindBin(120)) << std::endl;
