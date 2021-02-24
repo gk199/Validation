@@ -795,7 +795,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 	  triggerableJets[jetIt] = 1; // 1 if triggerable jet, 0 otherwise
 	}
       }
-      
+
       //      numLLPdecayHB += 1; // for testing without triggerability restrictions
       //      std::cout << numLLPdecayHB << " = number of LLP decay products incident on HB" <<std::endl;
       if (inputFile.substr(0,2) == "mh" && numLLPdecayHB > 0) totalEvents_HBdr05 += 1;

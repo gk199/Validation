@@ -12,7 +12,7 @@ rates_delayed_cluster.exe new mh125__pl30000_PU $1 $2 $3 $4 $5 $6
 mv rates_new_cond.root rates_new_cond_LLP_pl30000.root
 echo " "
 echo "QCD"
-rates_delayed_cluster.exe new QCD $1 $2 $3 $4 $5 $6 #add PU
+rates_delayed_cluster.exe new QCD_PU $1 $2 $3 $4 $5 $6
 mv rates_new_cond.root rates_new_cond_QCD.root
 echo " "
 echo "Neutrino gun new and old conditions"
@@ -39,7 +39,7 @@ mv plots/HTdistribution_trigOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit
 echo " "
 echo " "
 echo "LLP mh=250 GeV, ctau=0.5 m"
-rates_delayed_cluster.exe new mh250__pl500___ $1 $2 $3 $4 $5 $6 #add PU
+rates_delayed_cluster.exe new mh250__pl500___PU $1 $2 $3 $4 $5 $6
 mv rates_new_cond.root rates_new_cond_LLP_pl500.root
 echo " "
 echo "LLP mh=250 GeV, ctau=1 m"
@@ -66,7 +66,7 @@ mv plots/HTdistribution_trigOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit
 echo " "
 echo " "
 echo "LLP mh=350 GeV, ctau=0.5 m"
-rates_delayed_cluster.exe new mh350__pl500___ $1 $2 $3 $4 $5 $6 #add PU
+rates_delayed_cluster.exe new mh350__pl500___PU $1 $2 $3 $4 $5 $6
 mv rates_new_cond.root rates_new_cond_LLP_pl500.root
 echo " "
 echo "LLP mh=350 GeV, ctau=1 m"
