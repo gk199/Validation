@@ -21,25 +21,16 @@
 #include "DataFormats/HcalDigi/interface/HcalDigiCollections.h"
 
 int main() {
-  //  TH1F *h_preciseData = new TH1F("h_preciseData","preciseData;preciseData;Entries",100,0,10);
-  //  TFile *f = new TFile("/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/PionGun/SinglePion211_E10_PU_00_eta1phi0_timeslew-false_step1_CaloSamples_10events.root"); // looked at event 29
-  //  TFile *f = new TFile("/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/PionGun/SinglePion211_E10_PU_00_eta1phi0_step1_threshold1x_CaloSamples_100events.root");
-  //  TFile *f = new TFile("/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/TDC_threshold_18pt7x3/MH-125_MFF-50_CTau-10000mm_step1_CaloSamples.root"); // looked at event 39
-  //  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/SinglePion211_E10_eta1phi0_PU_00_step1.root");
   //  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/SinglePion211_E10_eta1phi0_PU00_tdc9pt35_step1.root");
-  //  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/SinglePion211_E10_injected_step1.root");
-  //  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/Injected_Energy_0pt001_to_1pt2_HB111_tdc9pt35_tof_step1.root");
   //  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/SinglePion211_E10_eta1phi0_PU00_tdc74pt8_timephase6_TDCflat_step1.root");
-  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/SinglePion211_E10_eta1phi0_PU00_tdc149pt6_timephase6_TDCflat_step1.root");
-  //  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/Injected_Energy_0pt001_to_1pt3_HB111_tdc74pt8_tof_step1_TDCflat.root");
-  //  TFile *f = new TFile("file:/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/112X_TDC74pt8/HTo2LongLivedTo4b_MH-125_MFF-50_CTau-3000mm_TuneCP5_13TeV_pythia8_cff-digi_noPU.root");
+  //  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/SinglePion211_E10_eta1phi0_PU00_tdc149pt6_timephase6_TDCflat_step1.root");
+  TFile *f = new TFile("/afs/cern.ch/work/g/gkopp/MC_GenProduction/PionGun/CMSSW_11_0_2/src/Injected_Energy_0pt001_to_1pt3_HB111_tdc74pt8_tof_step1_TDCflat.root");
   //  TFile *f = new TFile("file:/eos/cms/store/group/dpg_hcal/comm_hcal/gillian/LLP_Run3/112X_TDC74pt8/QCD_Pt-15to7000_TuneCP5_Flat_13TeV_pythia8-digi_noPU.root");
 
   TTreeReader myReader("Events",f);
   TTreeReaderValue<std::vector<CaloSamples>> AllCaloSamples(myReader, "CaloSampless_mix_HcalSamples_HLT.obj");
   TTreeReaderValue<HcalDataFrameContainer<QIE11DataFrame>> FullQIE11DataFrame(myReader, "QIE11DataFrameHcalDataFrameContainer_simHcalUnsuppressedDigis_HBHEQIE11DigiCollection_HLT.obj");
 
-  //  int events_of_interest[20] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19};
   Int_t tdc_of_interest = 62;
 
   gROOT->SetBatch(true); // hide plots as they are made
@@ -70,19 +61,6 @@ int main() {
   int cells_noise = 0;
   int cells62_noise = 0;
   while (myReader.Next()){
-    /*
-    if (std::find(std::begin(events_of_interest), std::end(events_of_interest), evtCounter) == std::end(events_of_interest)) { // if event is not in event of interest list, skip
-      evtCounter++;
-      continue;
-    }
-    if (evtCounter % 10 != 0) { // if not a multiple of 10, don't plot (slow otherwise for injected signal)
-    //    if (evtCounter < 31 || evtCounter > 61 || evtCounter % 10 != 0 ) {
-      evtCounter++;
-      continue;
-    }
-    std::cout << FullQIE11DataFrame->size() << " QIE11 size for event " << evtCounter << std::endl; // 15840 per event
-    */
-
     for (QIE11DataFrame frame:*FullQIE11DataFrame) { // loop over QIE11 data frame in HcalDataFrameContainer, this goes over FullQIE11DataFrame->size()
       HcalDetId QIEdetectorID = HcalDetId(frame.id());
       for (int i=0; i<frame.samples(); i++) { // loop over samples in QIE11 data frame, frame.samples is 8 in 110X samples
