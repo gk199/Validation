@@ -23,6 +23,7 @@
   <bin file="draw_l1analysis.cxx" name="draw_l1analysis.exe"/>
   <bin file="l1jetanalysis.cxx" name="l1jetanalysis.exe"/>
   <bin file="CaloSamplesAnalysis.cxx" name="CaloSamplesAnalysis.exe"/>
+  <bin file="CaloSamplesAnalysis_TDC62rate.cxx" name="CaloSamplesAnalysis_TDC62rate.exe"/>
   <bin file="CaloSamplesAnalysis_adc.cxx" name="CaloSamplesAnalysis_adc.exe"/>
   <bin file="CaloSamplesAnalysis_eta_phi_depth.cxx" name="CaloSamplesAnalysis_eta_phi_depth.exe"/>
   <bin file="CaloSamplesAnalysis_eta_depth_overlay.cxx" name="CaloSamplesAnalysis_eta_depth_overlay.exe"/>
