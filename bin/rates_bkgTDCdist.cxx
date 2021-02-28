@@ -615,16 +615,16 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
       }
     }
   }
-  //  for (int tdc = 0; tdc <= 50; tdc ++) std::cout << eta_depth_tdc[1][1][tdc] << " eta_depth_tdc depth1 and partial_sum = " << partial_sum[1][1][tdc] << std::endl;
-  //  for (int tdc = 0; tdc <= 50; tdc ++) std::cout << eta_depth_tdc[1][2][tdc] << " eta_depth_tdc depth2 and partial_sum = " << partial_sum[1][2][tdc] << std::endl;
+  std::cout << partial_sum[0][1][50] << std::endl;
 
   int bkg50[30][8] = {{0}};
   int bkg60[30][8] = {{0}};
   int bkg70[30][8] = {{0}};
   int bkg80[30][8] = {{0}};
+  int bkg80_delayed[30][8] = {{0}};
   int bkg90[30][8] = {{0}};
+  int bkg90_delayed[30][8] = {{0}};
   int bkg95[30][8] = {{0}};
-
   for (int eta = 0; eta < 30; eta++) {
     for (int depth = 0; depth < 8; depth++) {
       for (int tdc = 0; tdc<=50; tdc++) {
@@ -633,11 +633,61 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 	if (cumulative_frac[eta][depth][tdc] > 0.6 && bkg60[eta][depth] == 0 ) bkg60[eta][depth] = tdc;
 	if (cumulative_frac[eta][depth][tdc] > 0.7 && bkg70[eta][depth] == 0 ) bkg70[eta][depth] = tdc;
 	if (cumulative_frac[eta][depth][tdc] > 0.8 && bkg80[eta][depth] == 0 ) bkg80[eta][depth] = tdc;
+        if (cumulative_frac[eta][depth][tdc] > 0.8 && bkg80_delayed[eta][depth] == 0 ) bkg80_delayed[eta][depth] = tdc+2;
 	if (cumulative_frac[eta][depth][tdc] > 0.9 && bkg90[eta][depth] == 0 ) bkg90[eta][depth] = tdc;
+        if (cumulative_frac[eta][depth][tdc] > 0.9 && bkg90_delayed[eta][depth] == 0 ) bkg90_delayed[eta][depth] = tdc+2;
+	//        if (eta == 15 && depth == 1) std::cout << cumulative_frac[eta][depth][tdc] << " depth 1 at TDC = " << tdc << " with ps = " << partial_sum[eta][depth][tdc] << std::endl;
+	//        if (eta == 15 && depth == 2) std::cout << cumulative_frac[eta][depth][tdc] << " depth 2 at TDC = " << tdc << " with ps = " << partial_sum[eta][depth][tdc] << std::endl;
+	//        if (eta == 15 && depth == 3) std::cout << cumulative_frac[eta][depth][tdc] << " depth 3 at TDC = " << tdc << " with ps = " << partial_sum[eta][depth][tdc] << std::endl;
+	//	if (eta == 15 && depth == 4) std::cout << cumulative_frac[eta][depth][tdc] << " depth 4 at TDC = " << tdc << " with ps = " << partial_sum[eta][depth][tdc] << std::endl;
 	if (cumulative_frac[eta][depth][tdc] > 0.95 && bkg95[eta][depth] == 0 ) bkg95[eta][depth] = tdc; // tdc value where 95% bkg below
       }
     }
   }
+
+  // for determining avg over HB, HE depths
+  double partialHB_sum[8][51] = {{0}};
+  double partialHB_sum_smoothed[17][8][51] = {{{0}}};
+  double partialHE_sum[8][51] = {{0}};
+  double cumulativeHB_frac[8][51] = {{0}};
+  double cumulativeHB_smoothed_frac[17][8][51] = {{{0}}};
+  double cumulativeHE_frac[8][51] = {{0}};
+  for (int eta = 0; eta < 30; eta++) {
+    for (int depth = 0; depth < 8; depth++) {
+      for (int tdc = 0; tdc<=50; tdc++) {
+        if ( (eta < 16) || (eta == 16 && depth < 4) ) {
+	  if (eta%2 == 1 && (eta < 13 || depth < 4) ) {
+	    partialHB_sum_smoothed[eta][depth][tdc] += partial_sum[eta][depth][tdc] + partial_sum[eta+1][depth][tdc]; // combine depth 4 in 2x2 groups, 13+14+15
+	    partialHB_sum_smoothed[eta+1][depth][tdc] += partial_sum[eta][depth][tdc] + partial_sum[eta+1][depth][tdc];
+	  }
+	  if (eta == 13 && depth == 4) {
+	    partialHB_sum_smoothed[eta][depth][tdc] += partial_sum[eta][depth][tdc] + partial_sum[eta+1][depth][tdc] + partial_sum[eta+2][depth][tdc];
+            partialHB_sum_smoothed[eta+1][depth][tdc] += partial_sum[eta][depth][tdc] + partial_sum[eta+1][depth][tdc] + partial_sum[eta+2][depth][tdc];
+            partialHB_sum_smoothed[eta+2][depth][tdc] += partial_sum[eta][depth][tdc] + partial_sum[eta+1][depth][tdc] + partial_sum[eta+2][depth][tdc];
+	  }
+	  partialHB_sum[depth][tdc] += partial_sum[eta][depth][tdc];
+	}
+        if ( (eta > 16) || (eta == 16 && depth == 4) ) partialHE_sum[depth][tdc] += partial_sum[eta][depth][tdc];
+      }
+    }
+  }
+  int bkg90_depthHE[8] = {{0}};
+  int bkg90_depthHB[8] = {{0}};
+  int bkg90_depthHB_smoothed[17][8] = {{0}};
+  for (int depth = 0; depth < 8; depth++) {
+    for (int tdc = 0; tdc<=50; tdc++) {
+      cumulativeHB_frac[depth][tdc] = (double) ( partialHB_sum[depth][tdc] / partialHB_sum[depth][50] );
+      for (int eta = 1; eta < 17; eta++) cumulativeHB_smoothed_frac[eta][depth][tdc] = (double) ( partialHB_sum_smoothed[eta][depth][tdc] / partialHB_sum_smoothed[eta][depth][50] );
+      cumulativeHE_frac[depth][tdc] = (double) ( partialHE_sum[depth][tdc] / partialHE_sum[depth][50] );
+      if (cumulativeHB_frac[depth][tdc] > 0.9 && bkg90_depthHB[depth] == 0 ) bkg90_depthHB[depth] = tdc;
+      if (cumulativeHE_frac[depth][tdc] > 0.9 && bkg90_depthHE[depth] == 0 ) bkg90_depthHE[depth] = tdc;
+      for (int eta = 1; eta < 17; eta++) if (cumulativeHB_smoothed_frac[eta][depth][tdc] > 0.9 && bkg90_depthHB_smoothed[eta][depth] == 0) bkg90_depthHB_smoothed[eta][depth] = tdc;
+    }
+    std::cout << "Average values per depth, HB and HE: " << std::endl;
+    std::cout << "HE Depth = " << depth << " and TDC value = " << bkg90_depthHE[depth] << std::endl;
+    std::cout << "HB Depth = " << depth << " and TDC value = " << bkg90_depthHB[depth] <<std::endl;
+  }
+
   //  for (int tdc = 0; tdc <= 50; tdc ++) std::cout << partial_sum[1][1][tdc] / partial_sum[1][1][50] << " partial sum tdc / partial sum 50 , and then the bkg95 = " << bkg95[1][1] << std::endl;
 
   // background efficiencies 
@@ -645,7 +695,10 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
     std::ofstream TDCdistribution_Background;
     std::ofstream TDCdistribution_Background95;
     std::ofstream TDCdistribution_Background90;
+    std::ofstream TDCdistribution_Background90_delayed;
+    std::ofstream TDCdistribution_Background90smooth;
     std::ofstream TDCdistribution_Background80;
+    std::ofstream TDCdistribution_Background80_delayed;
     std::ofstream TDCdistribution_Background70;
     std::ofstream TDCdistribution_Background60;
     std::ofstream TDCdistribution_Background50;
@@ -653,10 +706,13 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
     TDCdistribution_Background.open(Form("TDCdistribution_Background_%s.txt",inputFile.substr(0,3).c_str()));
     TDCdistribution_Background95.open(Form("TDCdistribution_Background95_%s.txt",inputFile.substr(0,3).c_str()));
     TDCdistribution_Background90.open(Form("TDCdistribution_Background90_%s.txt",inputFile.substr(0,3).c_str()));
+    TDCdistribution_Background90_delayed.open(Form("TDCdistribution_Background90_delayed_%s.txt",inputFile.substr(0,3).c_str()));
     TDCdistribution_Background80.open(Form("TDCdistribution_Background80_%s.txt",inputFile.substr(0,3).c_str()));
+    TDCdistribution_Background80_delayed.open(Form("TDCdistribution_Background80_delayed_%s.txt",inputFile.substr(0,3).c_str()));
     TDCdistribution_Background70.open(Form("TDCdistribution_Background70_%s.txt",inputFile.substr(0,3).c_str()));
     TDCdistribution_Background60.open(Form("TDCdistribution_Background60_%s.txt",inputFile.substr(0,3).c_str()));
     TDCdistribution_Background50.open(Form("TDCdistribution_Background50_%s.txt",inputFile.substr(0,3).c_str()));
+    TDCdistribution_Background90smooth.open(Form("TDCdistribution_Background90_%s_smoothed.txt",inputFile.substr(0,3).c_str()));
 
     for (int eta = 1; eta < 30; eta++) {
       for (int depth = 1; depth < 8; depth++) {
@@ -666,7 +722,12 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 
       TDCdistribution_Background95 << eta << ", " << bkg95[eta][1] << ", " << bkg95[eta][2] << ", " << bkg95[eta][3] << ", " << bkg95[eta][4] << ", " << bkg95[eta][5] << ", " << bkg95[eta][6] << ", " << bkg95[eta][7] << std::endl;
       TDCdistribution_Background90 << eta << ", " << bkg90[eta][1] << ", " << bkg90[eta][2] << ", " << bkg90[eta][3] << ", " << bkg90[eta][4] << ", " << bkg90[eta][5] << ", " << bkg90[eta][6] << ", " << bkg90[eta][7] << std::endl;
+      TDCdistribution_Background90_delayed << eta << ", " << bkg90_delayed[eta][1] << ", " << bkg90_delayed[eta][2] << ", " << bkg90_delayed[eta][3] << ", " << bkg90_delayed[eta][4] << ", " << bkg90_delayed[eta][5] << ", " << bkg90_delayed[eta][6] << ", " << bkg90_delayed[eta][7] << std::endl;
+      if (eta < 16) TDCdistribution_Background90smooth << eta << ", " << bkg90_depthHB_smoothed[eta][1] << ", " << bkg90_depthHB_smoothed[eta][2] << ", " << bkg90_depthHB_smoothed[eta][3] << ", " << bkg90_depthHB_smoothed[eta][4] << ", " << bkg90_depthHB_smoothed[eta][5] << ", " << bkg90_depthHB_smoothed[eta][6] << ", " << bkg90_depthHB_smoothed[eta][7] << std::endl;
+      if (eta == 16) TDCdistribution_Background90smooth << eta << ", " << bkg90_depthHB_smoothed[eta][1] << ", " << bkg90_depthHB_smoothed[eta][2] << ", " << bkg90_depthHB_smoothed[eta][3] << ", " << bkg90[eta][4] << ", " << bkg90[eta][5] << ", " << bkg90[eta][6] << ", " << bkg90[eta][7] << std::endl;
+      if (eta > 16) TDCdistribution_Background90smooth << eta << ", " << bkg90[eta][1] << ", " << bkg90[eta][2] << ", " << bkg90[eta][3] << ", " << bkg90[eta][4] << ", " << bkg90[eta][5] << ", " << bkg90[eta][6] << ", " << bkg90[eta][7] << std::endl;
       TDCdistribution_Background80 << eta << ", " << bkg80[eta][1] << ", " << bkg80[eta][2] << ", " << bkg80[eta][3] << ", " << bkg80[eta][4] << ", " << bkg80[eta][5] << ", " << bkg80[eta][6] << ", " << bkg80[eta][7] << std::endl;
+      TDCdistribution_Background80_delayed << eta << ", " << bkg80_delayed[eta][1] << ", " << bkg80_delayed[eta][2] << ", " << bkg80_delayed[eta][3] << ", " << bkg80_delayed[eta][4] << ", " << bkg80_delayed[eta][5] << ", " << bkg80_delayed[eta][6] << ", " << bkg80_delayed[eta][7] << std::endl;
       TDCdistribution_Background70 << eta << ", " << bkg70[eta][1] << ", " << bkg70[eta][2] << ", " << bkg70[eta][3] << ", " << bkg70[eta][4] << ", " << bkg70[eta][5] << ", " << bkg70[eta][6] << ", " << bkg70[eta][7] << std::endl;
       TDCdistribution_Background60 << eta << ", " << bkg60[eta][1] << ", " << bkg60[eta][2] << ", " << bkg60[eta][3] << ", " << bkg60[eta][4] << ", " << bkg60[eta][5] << ", " << bkg60[eta][6] << ", " << bkg60[eta][7] << std::endl;
       TDCdistribution_Background50 << eta << ", " << bkg50[eta][1] << ", " << bkg50[eta][2] << ", " << bkg50[eta][3] << ", " << bkg50[eta][4] << ", " << bkg50[eta][5] << ", " << bkg50[eta][6] << ", " << bkg50[eta][7] << std::endl;
@@ -674,7 +735,10 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
     TDCdistribution_Background.close();
     TDCdistribution_Background95.close();
     TDCdistribution_Background90.close();
+    TDCdistribution_Background90_delayed.close();
+    TDCdistribution_Background90smooth.close();
     TDCdistribution_Background80.close();
+    TDCdistribution_Background80_delayed.close();
     TDCdistribution_Background70.close();
     TDCdistribution_Background60.close();
     TDCdistribution_Background50.close();
@@ -682,18 +746,18 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 
   else {
     std::ofstream TDCdistribution_Background;
-    std::ofstream TDCdistribution_Background95;
+    std::ofstream TDCdistribution_Background90;
     TDCdistribution_Background.open(Form("TDCdistribution_Background_%s.txt",inputFile.substr(0,15).c_str()));
-    TDCdistribution_Background95.open(Form("TDCdistribution_Background95_%s.txt",inputFile.substr(0,15).c_str()));
+    TDCdistribution_Background90.open(Form("TDCdistribution_Background90_%s.txt",inputFile.substr(0,15).c_str()));
 
     for (int eta = 1; eta < 30; eta++) {
       for (int depth = 1; depth < 8; depth++) {
         TDCdistribution_Background << "ieta = " << eta << ", depth = " << depth << ",      TDC50 = " << bkg50[eta][depth] << ", TDC60 = " << bkg60[eta][depth] << ", TDC70 = " << bkg70[eta][depth] << ", TDC80 = " << bkg80[eta][depth] << ", TDC90 = " << bkg90[eta][depth] << ", TDC95 = " << bkg95[eta][depth] << std::endl;
-        TDCdistribution_Background95 << "ieta = " << eta << ", depth = " << depth << ", TDC95 = " << bkg95[eta][depth] << std::endl;
+        TDCdistribution_Background90 << "ieta = " << eta << ", depth = " << depth << ", TDC90 = " << bkg90[eta][depth] << std::endl;
       }
     }
     TDCdistribution_Background.close();
-    TDCdistribution_Background95.close();
+    TDCdistribution_Background90.close();
   }
 
   myfile << "using the following ntuple: " << inputFile << std::endl;
