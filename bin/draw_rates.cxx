@@ -128,7 +128,7 @@ int main()
     
     pad2.back()->cd();
     if ( strcmp(iplot.first.c_str(), "HTSum") == 0 ) {
-      rateHistsRatio[iplot.second.front()]->GetYaxis()->SetRangeUser(0,0.5);
+      rateHistsRatio[iplot.second.front()]->GetYaxis()->SetRangeUser(0,0.05);
       rateHistsRatio[iplot.second.front()]->GetXaxis()->SetRangeUser(0, 600);
     } 
     rateHistsRatio[iplot.second.front()]->Draw("hist");
