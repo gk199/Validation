@@ -7,6 +7,10 @@
 #include "TH1F.h"
 #include "TH2F.h"
 #include "TChain.h"
+#include "TCanvas.h"
+#include "TStyle.h"
+#include "TColor.h"
+#include "TLegend.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -290,6 +294,11 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 
   TH1F * htSumDistribution = new TH1F("htSumDistribution","htSum Distribution;L1_HT (GeV);Number of Events",200,0,2000); // x bins, x low, x up
 
+  std::map<int, std::map<int, TH1F*>> depth_by_ieta; // histogram for TDC at each depth and ieta
+  for (int depth = 1; depth <= 7; depth ++) {
+    for (int ieta = 16; ieta < 30; ieta ++) depth_by_ieta[depth][ieta] = new TH1F(Form("depth%d_ieta%d",depth, ieta), Form("HE Depth %d, ieta %d", depth, ieta), 50,0,49);
+  }
+
   int eta_depth_tdc[30][8][51] = {{{0}}}; // increment this array element each time a cell above energy thresholds has this TDC value (=2x simulated TDC in ns to get QIE11 value)                          
 
   /////////////////////////////////
@@ -479,13 +488,34 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 	// End of HB is eta=1.479m, end of HE is eta=3 from here http://www.hephy.at/user/friedl/diss/html/node8.html.
 
 	if (abs(tpEtaemu) > 16) {
-	  if ( l1CaloTPemu_->hcalTPDepth1[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >= 0) eta_depth_tdc[abs(tpEtaemu)][1][static_cast<int>(l1CaloTPemu_->hcalTPtiming1[HcalTPIt] * 2 + 0.5)] += 1;
-	  if ( l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming2[HcalTPIt] >= 0) eta_depth_tdc[abs(tpEtaemu)][2][static_cast<int>(l1CaloTPemu_->hcalTPtiming2[HcalTPIt] * 2 + 0.5)] += 1;
-	  if ( l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming3[HcalTPIt] >= 0) eta_depth_tdc[abs(tpEtaemu)][3][static_cast<int>(l1CaloTPemu_->hcalTPtiming3[HcalTPIt] * 2 + 0.5)] += 1;
-	  if ( l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming4[HcalTPIt] >= 0) eta_depth_tdc[abs(tpEtaemu)][4][static_cast<int>(l1CaloTPemu_->hcalTPtiming4[HcalTPIt] * 2 + 0.5)] += 1;
-	  if ( l1CaloTPemu_->hcalTPDepth5[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming5[HcalTPIt] >= 0) eta_depth_tdc[abs(tpEtaemu)][5][static_cast<int>(l1CaloTPemu_->hcalTPtiming5[HcalTPIt] * 2 + 0.5)] += 1;
-	  if ( l1CaloTPemu_->hcalTPDepth6[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming6[HcalTPIt] >= 0) eta_depth_tdc[abs(tpEtaemu)][6][static_cast<int>(l1CaloTPemu_->hcalTPtiming6[HcalTPIt] * 2 + 0.5)] += 1;
-	  if ( l1CaloTPemu_->hcalTPDepth7[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming7[HcalTPIt] >= 0) eta_depth_tdc[abs(tpEtaemu)][7][static_cast<int>(l1CaloTPemu_->hcalTPtiming7[HcalTPIt] * 2 + 0.5)] += 1;
+	  if ( l1CaloTPemu_->hcalTPDepth1[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >= 0) {
+	    eta_depth_tdc[abs(tpEtaemu)][1][static_cast<int>(l1CaloTPemu_->hcalTPtiming1[HcalTPIt] * 2 + 0.5)] += 1;
+	    depth_by_ieta[1][abs(tpEtaemu)]->Fill(static_cast<int>(l1CaloTPemu_->hcalTPtiming1[HcalTPIt] * 2 + 0.5));
+	  }
+	  if ( l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming2[HcalTPIt] >= 0) {
+	    eta_depth_tdc[abs(tpEtaemu)][2][static_cast<int>(l1CaloTPemu_->hcalTPtiming2[HcalTPIt] * 2 + 0.5)] += 1;
+            depth_by_ieta[2][abs(tpEtaemu)]->Fill(static_cast<int>(l1CaloTPemu_->hcalTPtiming2[HcalTPIt] * 2 + 0.5));
+	  }
+	  if ( l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming3[HcalTPIt] >= 0) {
+	    eta_depth_tdc[abs(tpEtaemu)][3][static_cast<int>(l1CaloTPemu_->hcalTPtiming3[HcalTPIt] * 2 + 0.5)] += 1;
+            depth_by_ieta[3][abs(tpEtaemu)]->Fill(static_cast<int>(l1CaloTPemu_->hcalTPtiming3[HcalTPIt] * 2 + 0.5));
+	  }
+	  if ( l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming4[HcalTPIt] >= 0) {
+	    eta_depth_tdc[abs(tpEtaemu)][4][static_cast<int>(l1CaloTPemu_->hcalTPtiming4[HcalTPIt] * 2 + 0.5)] += 1;
+            depth_by_ieta[4][abs(tpEtaemu)]->Fill(static_cast<int>(l1CaloTPemu_->hcalTPtiming4[HcalTPIt] * 2 + 0.5));
+	  }
+	  if ( l1CaloTPemu_->hcalTPDepth5[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming5[HcalTPIt] >= 0) {
+	    eta_depth_tdc[abs(tpEtaemu)][5][static_cast<int>(l1CaloTPemu_->hcalTPtiming5[HcalTPIt] * 2 + 0.5)] += 1;
+            depth_by_ieta[5][abs(tpEtaemu)]->Fill(static_cast<int>(l1CaloTPemu_->hcalTPtiming5[HcalTPIt] * 2 + 0.5));
+	  }
+	  if ( l1CaloTPemu_->hcalTPDepth6[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming6[HcalTPIt] >= 0) {
+	    eta_depth_tdc[abs(tpEtaemu)][6][static_cast<int>(l1CaloTPemu_->hcalTPtiming6[HcalTPIt] * 2 + 0.5)] += 1;
+            depth_by_ieta[6][abs(tpEtaemu)]->Fill(static_cast<int>(l1CaloTPemu_->hcalTPtiming6[HcalTPIt] * 2 + 0.5));
+	  }
+	  if ( l1CaloTPemu_->hcalTPDepth7[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming7[HcalTPIt] >= 0) {
+	    eta_depth_tdc[abs(tpEtaemu)][7][static_cast<int>(l1CaloTPemu_->hcalTPtiming7[HcalTPIt] * 2 + 0.5)] += 1;
+            depth_by_ieta[7][abs(tpEtaemu)]->Fill(static_cast<int>(l1CaloTPemu_->hcalTPtiming7[HcalTPIt] * 2 + 0.5));
+	  }
 	}
 
 	if (abs(tpEtaemu) <= 16) { 
@@ -600,6 +630,42 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
     etSumRates_hw->Write();
     metSumRates_hw->Write();
     metHFSumRates_hw->Write();
+  }
+
+  // TDC distribution in HE by ieta, depth
+  TCanvas* c2 = new TCanvas("c2","TDC Distribution, Run3 QCD MC",0,0,400,300);
+  gStyle->SetOptStat(0);
+  TLegend* leg2 = new TLegend(0.5,0.6,0.9,0.9);
+  for (int ieta = 16; ieta < 30; ieta++) {
+    if (ieta == 16) depth_by_ieta[4][ieta]->Draw();
+    if (ieta == 17 || ieta == 18) depth_by_ieta[2][ieta]->Draw();
+    if (ieta > 18) depth_by_ieta[1][ieta]->Draw();
+    for (int depth = 1; depth <= 7; depth++)
+      {
+	depth_by_ieta[depth][ieta]->SetLineColor(kRainBow+depth*6);
+	depth_by_ieta[depth][ieta]->Draw("same");
+	leg2->AddEntry(depth_by_ieta[depth][ieta],Form("HE Depth %d, mean = %.2f",depth,depth_by_ieta[depth][ieta]->GetMean()));
+      }
+    leg2->Draw("same");
+    depth_by_ieta[1][ieta]->SetTitle(Form("TDC Distribution at ieta = %d, Run3 QCD MC",ieta));
+    depth_by_ieta[1][ieta]->GetXaxis()->SetTitle("TDC value in SOI, 1/2 ns steps");
+    depth_by_ieta[1][ieta]->GetYaxis()->SetTitle("Entries");
+    if (ieta == 16) {
+      depth_by_ieta[4][ieta]->SetTitle(Form("TDC Distribution at ieta = %d, Run3 QCD MC",ieta));
+      depth_by_ieta[4][ieta]->GetXaxis()->SetTitle("TDC value in SOI, 1/2 ns steps");
+      depth_by_ieta[4][ieta]->GetYaxis()->SetTitle("Entries");
+    }
+    if (ieta == 17 || ieta == 18) {
+      depth_by_ieta[2][ieta]->SetTitle(Form("TDC Distribution at ieta = %d, Run3 QCD MC",ieta));
+      depth_by_ieta[2][ieta]->GetXaxis()->SetTitle("TDC value in SOI, 1/2 ns steps");
+      depth_by_ieta[2][ieta]->GetYaxis()->SetTitle("Entries");    
+    }
+    c2->SaveAs(Form("QCD_MC_TDC_by_depth_ieta%d.pdf",ieta));
+    c2->SetLogy();
+    c2->SaveAs(Form("QCD_MC_TDC_by_depth_ieta%d_log.pdf",ieta));
+    c2->Clear();
+    c2->SetLogy(0);
+    leg2->Clear();
   }
 
   // calculate partial sum / cumulative sum from the TDC distributions
