@@ -206,8 +206,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   float tpLo = 0.;
   float tpHi = 100.;
 
-  std::string axR = ";Threshold E_{T} (GeV);rate (Hz)";
-  std::string axD = ";E_{T} (GeV);events/bin";
+  std::string axR = ";L1 H_{T} (GeV);rate (Hz)";
+  std::string axD = ";L1 H_{T} (GeV);events/bin";
 
   //make histos
   TH1F* singleJetRates_emu = new TH1F("singleJetRates_emu", axR.c_str(), nJetBins, jetLo, jetHi);

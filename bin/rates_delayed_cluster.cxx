@@ -458,8 +458,8 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
   float tpLo = 0.;
   float tpHi = 100.;
 
-  std::string axR = ";Threshold E_{T} (GeV);rate (Hz)";
-  std::string axD = ";E_{T} (GeV);events/bin";
+  std::string axR = ";L1 H_{T} (GeV);rate (Hz)";
+  std::string axD = ";L1 H_{T} (GeV);events/bin";
 
   //make histos
   TH1F* singleJetRates_emu = new TH1F("singleJetRates_emu", axR.c_str(), nJetBins, jetLo, jetHi);
@@ -1005,7 +1005,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
       int num_delayed_obj[nJetemu] = {0};
 
       for (uint jetIt = 0; jetIt < nJetemu; jetIt++) {
-	if (l1emu_->jetEt[jetIt] < 40 ) continue; // for jet pt efficiencies
+	//	if (l1emu_->jetEt[jetIt] < 40 ) continue; // for jet pt efficiencies
 	if ((inputFile.substr(0,2) == "mh") && (triggerableJets[jetIt] == 0)) continue;
 	if (delayed_calo_objects[jetIt] >= 1) { // make sure a jet is seeded!	
 	  Mult_delayed_hit_emu->Fill(delayed[jetIt]);
@@ -1086,7 +1086,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
       if (htSum > 360) passedHtSum360 += 1;
 
       for(int bin=0; bin<nHtSumBins; bin++){
-        if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( num_delayed_jet)>=3 ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV, compare to original rates in plot
+        if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( num_delayed_jet)>=3 && htSum < 360 ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV, compare to original rates in plot
         if( (htSum) >= htSumLo+(bin*htSumBinWidth) ) htSumRates_original_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV, use for ht > 360 original rates in rate vs. eff plots
 
 	//GeV, use for ht > 120 + timing OR ht > 360 rates in rate vs. eff plots
