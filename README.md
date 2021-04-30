@@ -52,15 +52,47 @@ L1Ntuples are made from GEN-SIM-DIGI-RAW MC samples, as made [here](https://gith
 ## Trigger Emulation -- Rates and Efficiencies
 HCAL timing and energy values are avaliable at each cell, allowing for the formation of a delayed jet trigger based on clusters of delayed cells. Delayed jets can be rejected based on multiple prompt towers nearby. `rates_delayed_cluster.cxx` simulates the trigger algorithm (only using events where the LLP is expected to intersect the calorimeter, our triggerability restriction). Then plots are made and output to the [EOS webpage](https://gkopp.web.cern.ch/gkopp/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/). This is all run with 
 ```
-./RunRates_DelayedCaloObject.sh 4 4 2 2 3 4
+./RunRates_DelayedCaloObject.sh 4 4 3 3 2.5 4
+./RunRates_DelayedCaloObject_PU.sh 4 4 3 3 2.5 4
 ```
-where the arguments are HB TDC, HE TDC, HB energy (GeV), HE energy (GeV), prompt TP energy veto, and prompt 2x2 energy veto. Currently 2 cells in a 4x4 region make it "delayed" and a jet is rejected if there are greater than or equal to 2 prompt high energy towers in it. These last two parameters are set in `rates_delayed_cluster.cxx`.
+where the arguments are HB TDC, HE TDC, HB energy (GeV), HE energy (GeV), prompt TP energy veto, and prompt 2x2 energy veto. Currently 2 cells in a 4x4 region make it "delayed" and a jet is rejected if there are any prompt high energy regions in it. These last two parameters are set in `rates_delayed_cluster.cxx`.
 
-In the current format, the first two parameters (TDC values) are set from scanning over the background QCD sample, and determining what TDC value 90/% (for example) of the background is below. This is done in:
+A few things to check in the code:
+* Triggerability restrictions 
+* Jet pT cut
+* 1 bit per tower, or 4 bits per 2x2
+
+In the current format, the first two parameters (TDC values) are set from scanning over the background QCD sample, and determining what TDC value 90% (for example) of the background is below. This is done in:
 ```
 rates_bkgTDCdist.exe new QCD 2 2
 ```
 where the last two parameters are the HB and HE energy values. This then makes multiple txt files listing the ieta, and for each depth, what TDC value most of the background is below.
+
+## Efficiency Plots
+Efficiency plots are in the directory `L1plots_eff_rates`. For running over individual samples, the bash scripts can be used
+```
+./Efficiency_Plots.sh
+./JetEfficiency_Plots.sh
+./LLPEfficiency_Plots.sh
+```
+and for combined samples (`hadd rates_new_cond_*combined.root` for the mh125 3m, mh250 10m, mh350 10m, and mh1000 10m samples), the plotting scripts can be run in ROOT:
+```
+root
+.L efficiency_ctau_combined.C++
+.x efficiency_ctau_combined.C
+.q
+
+root
+.L efficiency_ctau_zoom_combined.C++
+.x efficiency_ctau_zoom_combined.C
+.q
+
+root
+.L efficiency_jetPt_combined.C++
+.x efficiency_jetPt_combined.C
+.q
+```
+Each of these outputs plots to the EOS directory as well.
 
 # HCAL Trigger studies for LLPs -- Depth Trigger
 Towards a new L1 seed to trigger on LLP signatures with HCAL using H/E + depth 
