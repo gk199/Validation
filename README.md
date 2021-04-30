@@ -58,9 +58,12 @@ HCAL timing and energy values are avaliable at each cell, allowing for the forma
 where the arguments are HB TDC, HE TDC, HB energy (GeV), HE energy (GeV), prompt TP energy veto, and prompt 2x2 energy veto. Currently 2 cells in a 4x4 region make it "delayed" and a jet is rejected if there are any prompt high energy regions in it. These last two parameters are set in `rates_delayed_cluster.cxx`.
 
 A few things to check in the code:
-* Triggerability restrictions 
-* Jet pT cut
-* 1 bit per tower, or 4 bits per 2x2
+* Number of cells to form a delayed seed (set by `delayed_4x4_variable`)
+* Delayed seeds required (set by `delayed_calo_objects`)
+* Prompt veto imposed (set by `prompt_energy`)
+* Triggerability restrictions (set by `triggerableJets`)
+* Jet pT cut (set by `l1emu_->jetEt[jetIt] < `)
+* 1 bit per tower, or 4 bits per 2x2 (set by `TPdelayed`)
 
 In the current format, the first two parameters (TDC values) are set from scanning over the background QCD sample, and determining what TDC value 90% (for example) of the background is below. This is done in:
 ```
