@@ -468,16 +468,15 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
   TH1F* TimingBit_TPenergy = new TH1F("TimingBit_TPenergy", "Threshold Study: Delayed Cells (timing bit) in TP E_{T} Bins;TP E_{T};Delayed Cells (normalized)   ", 20,0,20);
 
   // histograms based on hit multiplicity from the timing bit
-  TH1F * Delayed_2x2_MultHB_emu = new TH1F("Delayed_2x2_MultHB_emu","Number of cells in 2x2 region >=50 ADC and >=3ns;Number of cells;Fraction of Entries (normalized)",10,0,10);
-  TH1F * Prompt_2x2_MultHB_emu = new TH1F("Prompt_2x2_MultHB_emu","Number of TPs in 2x2 region that are prompt and high energy;Number of TPs;Fraction of Entries (normalized)",10,0,10);
-  TH1F * Prompt_Energy_2x2_MultHB_emu = new TH1F("Prompt_Energy_2x2_MultHB_emu","Energy of TPs in 2x2 region that are prompt;Energy of TPs;Fraction of Entries (normalized)",20,0,10);
-
   TH1F * DeltaR_L1_delayed_seed_emu = new TH1F("DeltaR_L1_delayed_seed_emu","DeltaR between a Delayed Seed and the Closest L1 jet;Delta R;Fraction of Entries (normalized)",20,0,1);
   TH1F * DeltaR_L1_prompt_seed_emu = new TH1F("DeltaR_L1_prompt_seed_emu","DeltaR between a Prompt Seed and the Closest L1 jet;Delta R;Fraction of Entries (normalized)",20,0,1);
   TH1F * DeltaR_L1_delayed_hit_emu = new TH1F("DeltaR_L1_delayed_hit_emu","DeltaR between a Delayed Hit and the Closest L1 Jet in a Seeded Jet;Delta R;Fraction of Entries (normalized)",30,0,1.5);
   TH1F * DeltaR_L1_prompt_hit_emu = new TH1F("DeltaR_L1_prompt_hit_emu","DeltaR between a Prompt Hit and the Closest L1 Jet in a Seeded Jet;Delta R;Fraction of Entries (normalized)",30,0,1.5);
-  TH1F * Mult_delayed_hit_emu = new TH1F("Mult_delayed_hit_emu","Number of delayed hits near a seeded jet;Number of cells;Fraction of Entries (normalized)",20,0,20);
   TH1F * Mult_prompt_hit_emu =new TH1F("Mult_prompt_hit_emu","Number of prompt TPs near a seeded jet;Number of TPs;Fraction of Entries (normalized)",20,0,20);
+  TH1F * Mult_delayed_hit_emu = new TH1F("Mult_delayed_hit_emu","Number of TTs with a delayed hit near a L1 jet;Number of TTs;Fraction of Entries (normalized)",10,0,10);
+  TH1F * Mult_delayed_hit_jetET_emu = new TH1F("Mult_delayed_hit_jetET_emu","Number of TTs with a delayed hit near a L1 jet, jet ET>40 GeV;Number of TTs;Fraction of Entries (normalized)",10,0,10);
+  TH1F * Mult_delayed_hit_promptV_emu = new TH1F("Mult_delayed_hit_promptV_emu","Number of TTs with a delayed hit near L1 jet, prompt veto applied;Number of TTs;Fraction of Entries (normalized)",10,0,10);
+  TH1F * Mult_delayed_hit_jetETpromptV_emu = new TH1F("Mult_delayed_hit_jetETpromptV_emu","Number of TTs with a delayed hit near L1 jet, jet ET>40 GeV and prompt veto applied;Number of TTs;Fraction of Entries (normalized)",10,0,10);
 
   TH1F * HTdistribution_trig_emu = new TH1F("HTdistribution_trig_emu","HT Distribution of Events Passing Calo Cluster Trigger;HT (GeV);Number of Events",35,0,1200);
   TH1F * HTdistribution_emu = new TH1F("HTdistribution_emu","HT Distribution of Events;HT (GeV);Number of Events",35,0,1200);
@@ -507,16 +506,19 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
   TH2F* TDC_vs_amp = new TH2F("TDC_vs_amp","TDC value and Amplitude Dependence;TDC value (ns);Amplitude (GeV);Number of Events",50,0,25,50,0,10);
   TH2F* amp_vs_TDC = new TH2F("amp_vs_TDC","Amplitude Dependence of TDC value;Amplitude (GeV);TDC value (ns);Number of Events",50,0,10,50,0,25);
 
-  TH1F* ctau_allLLP = new TH1F("ctau_allLLP","ctau of LLP in particle rest frame;ctau (m);Number of Events",100,0,50);
-  TH1F* ctau_LLP = new TH1F("ctau_LLP","ctau of LLP in particle rest frame (triggerable);ctau (m);Number of Events",100,0,50);
-  TH1F* ctau_LLP_trigger = new TH1F("ctau_LLP_trigger","ctau of LLP (passed trigger) in particle rest frame;ctau (m);Number of Events",100,0,50);
-  TH1F* path_length = new TH1F("path_length","Path length of particle in lab frame (triggerable);path length (m);Number of Events",16,0,8); 
-  TH1F* path_length_trigger = new TH1F("path_length_trigger","Path length of particle (passed trigger) in lab frame;path length (m);Number of Events",16,0,8);
-  TH1F* path_length_120trigger = new TH1F("path_length_120trigger","Path length of particle (passed trigger, HT>120) in lab frame;path length (m);Number of Events",16,0,8);
-  TH1F* path_length2 = new TH1F("path_length2","Path length of particle in lab frame (triggerable);path length (m);Number of Events",16,0,0.5);
-  TH1F* path_length2_trigger = new TH1F("path_length2_trigger","Path length of particle (passed trigger) in lab frame;path length (m);Number of Events",16,0,0.5);
-  TH1F* path_length2_120trigger = new TH1F("path_length2_120trigger","Path length of particle (passed trigger, HT>120) in lab frame;path length (m);Number of Events",16,0,0.5);
-  TH1F* beta_LLP = new TH1F("beta_LLP","Beta of LLP particle;Beta;Number of Events",100,0,1);
+  TH1F* ctau_allLLP = new TH1F("ctau_allLLP","ctau of LLP in particle rest frame;ctau (m);Number of LLPs",100,0,50);
+  TH1F* ctau_LLP = new TH1F("ctau_LLP","ctau of LLP in particle rest frame (triggerable);ctau (m);Number of LLPs",100,0,50);
+  TH1F* ctau_LLP_trigger = new TH1F("ctau_LLP_trigger","ctau of LLP (passed trigger) in particle rest frame;ctau (m);Number of LLPs",100,0,50);
+  TH1F* path_length = new TH1F("path_length","Path length of particle in lab frame (triggerable);path length (m);Number of LLPs",16,0,8); 
+  TH1F* path_length_trigger = new TH1F("path_length_trigger","Path length of particle (passed trigger) in lab frame;path length (m);Number of LLPs",16,0,8);
+  TH1F* path_length_120trigger = new TH1F("path_length_120trigger","Path length of particle (passed trigger, HT>120) in lab frame;path length (m);Number of LLPs",16,0,8);
+  TH1F* path_length2 = new TH1F("path_length2","Path length of particle in lab frame (triggerable);path length (m);Number of LLPs",16,0,0.5);
+  TH1F* path_length2_trigger = new TH1F("path_length2_trigger","Path length of particle (passed trigger) in lab frame;path length (m);Number of LLPs",16,0,0.5);
+  TH1F* path_length2_120trigger = new TH1F("path_length2_120trigger","Path length of particle (passed trigger, HT>120) in lab frame;path length (m);Number of LLPs",16,0,0.5);
+  TH1F* TOFdelay = new TH1F("TOFdelay","TOF delay = LLP TOF + b TOF - TOF expected (ns);TOF delay (ns); Number of Jets",30,0,15);
+  TH1F* TOFdelay_trigger = new TH1F("TOFdelay_trigger","TOF delay = LLP TOF + b TOF - TOF expected (ns, triggered);TOF delay (ns); Number of Jets",30,0,15);
+  TH1F* TOFdelay_120trigger = new TH1F("TOFdelay_120trigger","TOF delay = LLP TOF + b TOF - TOF expected (ns, triggered, HT>120);TOF delay (ns); Number of Jets",30,0,15);
+  TH1F* beta_LLP = new TH1F("beta_LLP","Beta of LLP particle;Beta;Number of LLPs",100,0,1);
 
   TH2F* prompt_delayed_seed = new TH2F("prompt_delayed_seed","Prompt TPs and Delayed 2x2 Seeds in a L1 jet;Prompt Seeds;Delayed Seeds",15,0,15,15,0,15);
   TH2F* delayed4x4seed_TDC_GeV_HB = new TH2F("delayed4x4seed_TDC_GeV_HB","TDC and Energy in cells forming delayed 4x4 seed in HB;TDC;GeV",25,0,25,20,0,20);
@@ -740,7 +742,6 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
         if( (metHFSum) >= metHFSumLo+(bin*metHFSumBinWidth) ) metHFSumRates_emu->Fill(metHFSumLo+(bin*metHFSumBinWidth)); //GeV           
       }
 
-      // change lines 688 and 719 to only include HB, or HE+HB!! Jet eta < 1,3; and HCAL TP ieta < 16, 28
       //////////////////////////////////////
       /////////// LLP incident on HB? //////
       //////////////////////////////////////
@@ -750,7 +751,9 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
       // triggerability restrictions
 
       for (int partonN = 0; partonN < generator_->nPart; partonN ++) {
-	if (generator_->partParent[partonN] == 6000113) ctau_allLLP->Fill(LLPdecayInfo(partonN,generator_)[3]/100);
+	if ( (generator_->partVz[partonN] == generator_->partVz[partonN-1] ) && (abs(generator_->partId[partonN]) == abs(generator_->partId[partonN-1])) ) {
+	  if (generator_->partParent[partonN] == 6000113 ) ctau_allLLP->Fill(LLPdecayInfo(partonN,generator_)[3]/100);
+	}
       }
 
       int triggerableJets[nJetemu] = {0};
@@ -768,7 +771,8 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 	  partonZ.push_back(LLPdecayInfo(partonN,generator_)[2]);
 	  ctau_LLP->Fill(LLPdecayInfo(partonN,generator_)[3]/100);
 	  path_length->Fill(LLPdecayInfo(partonN,generator_)[4]/100);
-          path_length2->Fill(LLPdecayInfo(partonN,generator_)[4]/100);
+          path_length2->Fill(LLPdecayInfo(partonN,generator_)[4]/100); // first half meter
+	  TOFdelay->Fill(LLPdecayInfo(partonN,generator_)[5]);
 	}
       }
       //      for (auto i = partonZ.begin(); i != partonZ.end(); ++i) std::cout << *i << ' ';
@@ -821,7 +825,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 	// instead of using pre-set timing bit (3ns 3GeV), set specifically here based on energy and time values
 	if (abs(tpEtaemu) <= 16) { 
 	  if (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming1[HcalTPIt]*2 >= eta_depth_tdc95[static_cast<int>(abs(tpEtaemu))][1] ) {
-            if (TPdelayed == 1) continue;
+	    if (TPdelayed == 1) continue;
 	    timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;//TDC_HB_variable) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
 	    ADCdelayed_eta_phi[TP_ieta_2x2][TP_iphi_2x2] = l1CaloTPemu_->hcalTPDepth1[HcalTPIt];
 	    TPdelayed = 1; 
@@ -833,13 +837,13 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
             TPdelayed = 1;
 	  }
 	  if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming3[HcalTPIt]*2 >= eta_depth_tdc95[static_cast<int>(abs(tpEtaemu))][3]) {
-            if (TPdelayed == 1) continue;
+	    if (TPdelayed == 1) continue;
 	    timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
             ADCdelayed_eta_phi[TP_ieta_2x2][TP_iphi_2x2] = l1CaloTPemu_->hcalTPDepth3[HcalTPIt];
             TPdelayed = 1;
 	  }
 	  if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= GeV_HB_variable && l1CaloTPemu_->hcalTPtiming4[HcalTPIt]*2 >= eta_depth_tdc95[static_cast<int>(abs(tpEtaemu))][4]) {
-            if (TPdelayed == 1) continue;
+	    if (TPdelayed == 1) continue;
 	    timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
             ADCdelayed_eta_phi[TP_ieta_2x2][TP_iphi_2x2] = l1CaloTPemu_->hcalTPDepth4[HcalTPIt];
             TPdelayed = 1;
@@ -851,40 +855,40 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 
 	  //	  if (l1CaloTPemu_->hcalTPDepth1[HcalTPIt] >= 3 && l1CaloTPemu_->hcalTPtiming1[HcalTPIt] >= 3) timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
           if (l1CaloTPemu_->hcalTPDepth2[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming2[HcalTPIt]*2 >= eta_depth_tdc95[static_cast<int>(abs(tpEtaemu))][2] ) {
-            if (TPdelayed == 1) continue;
+	    if (TPdelayed == 1) continue;
 	    timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1; 
             ADCdelayed_eta_phi[TP_ieta_2x2][TP_iphi_2x2] = l1CaloTPemu_->hcalTPDepth2[HcalTPIt];
             TPdelayed = 1;
 	  }
 	  if (l1CaloTPemu_->hcalTPDepth3[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming3[HcalTPIt]*2 >= eta_depth_tdc95[static_cast<int>(abs(tpEtaemu))][3]) {
-            if (TPdelayed == 1) continue;
+	    if (TPdelayed == 1) continue;
 	    timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
             ADCdelayed_eta_phi[TP_ieta_2x2][TP_iphi_2x2] = l1CaloTPemu_->hcalTPDepth3[HcalTPIt];
             TPdelayed = 1;
 	  }
 	  if (l1CaloTPemu_->hcalTPDepth4[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming4[HcalTPIt]*2 >= eta_depth_tdc95[static_cast<int>(abs(tpEtaemu))][4]) {
-            if (TPdelayed == 1) continue;
+	    if (TPdelayed == 1) continue;
 	    timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
             ADCdelayed_eta_phi[TP_ieta_2x2][TP_iphi_2x2] = l1CaloTPemu_->hcalTPDepth4[HcalTPIt];
             TPdelayed = 1;
 	  }
 	  if (l1CaloTPemu_->hcalTPDepth5[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming5[HcalTPIt]*2 >= eta_depth_tdc95[static_cast<int>(abs(tpEtaemu))][5]) {
-            if (TPdelayed == 1) continue;
+	    if (TPdelayed == 1) continue;
 	    timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
             ADCdelayed_eta_phi[TP_ieta_2x2][TP_iphi_2x2] = l1CaloTPemu_->hcalTPDepth5[HcalTPIt];
             TPdelayed = 1;
 	  }
 	  if (l1CaloTPemu_->hcalTPDepth6[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming6[HcalTPIt]*2 >= eta_depth_tdc95[static_cast<int>(abs(tpEtaemu))][6]) {
-            if (TPdelayed == 1) continue;
+	    if (TPdelayed == 1) continue;
 	    timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
             ADCdelayed_eta_phi[TP_ieta_2x2][TP_iphi_2x2] = l1CaloTPemu_->hcalTPDepth6[HcalTPIt];
             TPdelayed = 1;
 	  }
 	  if (l1CaloTPemu_->hcalTPDepth7[HcalTPIt] >= GeV_HE_variable && l1CaloTPemu_->hcalTPtiming7[HcalTPIt]*2 >= eta_depth_tdc95[static_cast<int>(abs(tpEtaemu))][7]) {
-            if (TPdelayed == 1) continue;
+	    if (TPdelayed == 1) continue;
 	    timingbit_eta_phi[TP_ieta_2x2][TP_iphi_2x2] += 1;
             ADCdelayed_eta_phi[TP_ieta_2x2][TP_iphi_2x2] = l1CaloTPemu_->hcalTPDepth7[HcalTPIt];
-            TPdelayed = 1;
+	    TPdelayed = 1;
 	  }
 	}
 
@@ -1040,9 +1044,6 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 		} // ieta for 4x4 delayed seed
 	      } // closing HCAL TP loop
 	    }
-	    Delayed_2x2_MultHB_emu->Fill(delayed_4x4); // number of cells in 2x2 that are delayed
-	    if (delayed_2x2 == 0 && prompt_2x2 > 0) Prompt_2x2_MultHB_emu->Fill(prompt_2x2);
-            if (delayed_2x2 == 0 && prompt_energy_2x2 > 0) Prompt_Energy_2x2_MultHB_emu->Fill(prompt_energy_2x2);
 	  }
 	}
       }
@@ -1052,13 +1053,16 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
       int num_delayed_obj[nJetemu] = {0};
 
       for (uint jetIt = 0; jetIt < nJetemu; jetIt++) {
+        if ((inputFile.substr(0,2) == "mh") && (triggerableJets[jetIt] == 0)) continue;
+        Mult_delayed_hit_emu->Fill(delayed[jetIt]);
+        if (prompt_energy[jetIt] == 0) Mult_delayed_hit_promptV_emu->Fill(delayed[jetIt]);
 	if (l1emu_->jetEt[jetIt] < 40 ) continue; // for jet pt efficiencies
-	if ((inputFile.substr(0,2) == "mh") && (triggerableJets[jetIt] == 0)) continue;
+	Mult_delayed_hit_jetET_emu->Fill(delayed[jetIt]);
+	if (prompt_energy[jetIt] == 0) Mult_delayed_hit_jetETpromptV_emu->Fill(delayed[jetIt]);
 	if (delayed_calo_objects[jetIt] >= 1) { // make sure a jet is seeded!	
-	  Mult_delayed_hit_emu->Fill(delayed[jetIt]);
 	  Mult_prompt_hit_emu->Fill(prompt_TP[jetIt]);
+	  prompt_delayed_seed->Fill(prompt_TP[jetIt], delayed_calo_objects[jetIt]);
 	}
-	if (delayed_calo_objects[jetIt] > 0) prompt_delayed_seed->Fill(prompt_TP[jetIt], delayed_calo_objects[jetIt]);
 
 	// num_delayed_jet is 1 if has delayed seed, 2 if delayed seed and passed prompt TP veto, 3 if delayed seed and passed prompt TP veto and prompt 2x2 veto. Used for ROC curves instead of scanning n_delayed_jets. Progressively add on requirements, in this order
 	if (delayed_calo_objects[jetIt] >= 1) num_delayed_obj[jetIt] += 1;
@@ -1077,8 +1081,10 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 	    ctau_LLP_trigger->Fill(LLPdecayInfo(partonN,generator_)[3]/100);
 	    path_length_trigger->Fill(LLPdecayInfo(partonN,generator_)[4]/100);
             path_length2_trigger->Fill(LLPdecayInfo(partonN,generator_)[4]/100);
+	    TOFdelay_trigger->Fill(LLPdecayInfo(partonN,generator_)[5]);
 	    if (htSum > 120) path_length_120trigger->Fill(LLPdecayInfo(partonN,generator_)[4]/100);
             if (htSum > 120) path_length2_120trigger->Fill(LLPdecayInfo(partonN,generator_)[4]/100);
+	    if (htSum > 120) TOFdelay_120trigger->Fill(LLPdecayInfo(partonN,generator_)[5]);
 	    beta_LLP->Fill(LLPdecayInfo(partonN,generator_)[6]);
 	  }
 	}
@@ -1401,9 +1407,6 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
     TimingBit_TPenergy->Write();
 
     // write histograms based on timing bit
-    Delayed_2x2_MultHB_emu->Write();
-    Prompt_2x2_MultHB_emu->Write();
-    Prompt_Energy_2x2_MultHB_emu->Write();
     HTdistribution_trig_emu->Write();
     HTdistribution_emu->Write();
 
@@ -1420,6 +1423,9 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
     DeltaR_L1_delayed_hit_emu->Write();
     DeltaR_L1_prompt_hit_emu->Write();
     Mult_delayed_hit_emu->Write();
+    Mult_delayed_hit_jetET_emu->Write();
+    Mult_delayed_hit_promptV_emu->Write();
+    Mult_delayed_hit_jetETpromptV_emu->Write();
     Mult_prompt_hit_emu->Write();
 
     ctau_allLLP->Write();
@@ -1431,6 +1437,9 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
     path_length2->Write();
     path_length2_trigger->Write();
     path_length2_120trigger->Write();
+    TOFdelay->Write();
+    TOFdelay_trigger->Write();
+    TOFdelay_120trigger->Write();
     beta_LLP->Write();
     delayed4x4seed_TDC_GeV_HB->Write();
     delayed4x4seed_TDC_GeV_HE->Write();
@@ -1494,20 +1503,19 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
     metHFSumRates_hw->Write();
   }
 
-  std::cout << passed_calo_cluster_trig_120 / totalEvents * 100 << " passed calo trig (delayed object), HT 120 cut / all events" << std::endl;
-  //  std::cout << passed_calo_cluster_trig_120_2 / totalEvents * 100 << " passed calo trig (prompt TP veto), HT 120 cut / all events" << std::endl;
-  std::cout << passed_calo_cluster_trig_120_3 / totalEvents * 100 << " passed calo trig (prompt 2x2 veto), HT 120 cut / all events" << std::endl;
-  std::cout << passed_calo_cluster_trig / totalEvents * 100 << " passed calo trig (delayed object), no HT cut / all events" << std::endl;
-  std::cout << passed_calo_cluster_trig  << " passed calo trig (delayed object), no HT cut" << std::endl;
-  std::cout << passed4JetMult_HBHE_ht120_1 << " passed calo trig + HT120 OR HT360 (delayed object)" << std::endl;
-  //  std::cout << passed4JetMult_HBHE_ht120_2 << " passed calo trig + HT120 OR HT360 (prompt TP veto)" << std::endl;
-  std::cout << passed4JetMult_HBHE_ht120_3 << " passed calo trig + HT120 OR HT360 (prompt 2x2 veto)" << std::endl;
-  std::cout << (passed4JetMult_HBHE_ht120_1 - passedHtSum360)*100 / totalEvents << " added efficiency HT 360 (delayed object)" << std::endl;
-  //  std::cout << (passed4JetMult_HBHE_ht120_2 - passedHtSum360)*100 / totalEvents << " added efficiency HT 360 (prompt TP veto)" << std::endl;
-  std::cout << (passed4JetMult_HBHE_ht120_3 - passedHtSum360)*100 / totalEvents << " added efficiency HT 360 (prompt 2x2 veto)" << std::endl;
+  std::cout << inputFile.substr(0,14) << " triggerable events = " << totalEvents << "; Events with jet>40 and HT>120 that: passed delayed seed = " << passed_calo_cluster_trig_120 << "; passed delayed seed + prompt veto = " << passed_calo_cluster_trig_120_3 << std::endl;
+  std::cout << "relative efficiency = " << passed_calo_cluster_trig_120_3 / totalEvents << std::endl;
+  if (inputFile.substr(0,2) != "mh") std::cout << "background rejection = " << totalEvents / passed_calo_cluster_trig_120_3 << std::endl;
   std::cout << passedHtSum360/totalEvents * 100 << " % passed HT360" << std::endl;
+  std::cout << passed_calo_cluster_trig / totalEvents * 100 << " % passed calo trig (delayed object), no HT cut / all events" << std::endl;
+  std::cout << passed_calo_cluster_trig_120 / totalEvents * 100 << " % passed calo trig (delayed object), HT 120 cut / all events" << std::endl;
+  std::cout << passed_calo_cluster_trig_120_3 / totalEvents * 100 << " % passed calo trig (prompt 2x2 veto), HT 120 cut / all events" << std::endl;
+  std::cout << passed_calo_cluster_trig  << " passed calo trig (delayed object) no HT cut" << std::endl;
+  std::cout << passed4JetMult_HBHE_ht120_1 << " passed calo trig HT120 (delayed object) OR HT360" << std::endl;
+  std::cout << passed4JetMult_HBHE_ht120_3 << " passed calo trig HT120 (prompt 2x2 veto) OR HT360" << std::endl;
+  std::cout << (passed4JetMult_HBHE_ht120_1 - passedHtSum360)*100 / totalEvents << " added efficiency HT 360 (delayed object)" << std::endl;
+  std::cout << (passed4JetMult_HBHE_ht120_3 - passedHtSum360)*100 / totalEvents << " added efficiency HT 360 (prompt 2x2 veto)" << std::endl;
   std::cout << (passed4JetMult_HBHE_ht120_3) / passedHtSum360 << " integrated luminosity gain" << std::endl;
-  std::cout << totalEvents << " all events" << std::endl;
 
   // saving efficiencies and rates in txt files to be read by rate vs eff plotting macros
   // signal efficiencies

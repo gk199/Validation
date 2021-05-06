@@ -13,6 +13,7 @@
   <bin file="draw_timingbit_delayed_cluster_mh250.cxx" name="draw_timingbit_delayed_cluster_mh250.exe"/>
   <bin file="draw_timingbit_delayed_cluster_mh350.cxx" name="draw_timingbit_delayed_cluster_mh350.exe"/>
   <bin file="draw_timingbit_delayed_cluster_mh1000.cxx" name="draw_timingbit_delayed_cluster_mh1000.exe"/>
+  <bin file="draw_timingbit_delayed_cluster_neutrinogun.cxx" name="draw_timingbit_delayed_cluster_neutrinogun.exe"/>
   <bin file="RateEfficiencyPlots_LLP_ctau.cxx" name="RateEfficiencyPlots_LLP_ctau.exe"/>
   <bin file="RateEfficiencyPlots_LLP_ctau_AddedEff.cxx" name="RateEfficiencyPlots_LLP_ctau_AddedEff.exe"/>
   <bin file="Rate_HTbin.cxx" name="Rate_HTbin.exe"/>

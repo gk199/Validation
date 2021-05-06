@@ -29,10 +29,14 @@ echo "Making overlay plots from draw_timingbit.exe"
 draw_timingbit_delayed_cluster_mh125.exe
 mv rates_new_cond_LLP_pl30000.root rates_new_cond_LLP_mh125_pl30000.root
 mv rates_new_cond_LLP_pl3000.root rates_new_cond_LLP_mh125_pl3000.root
-mv plots/Delayed_2x2_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Delayed_2x2_MultHBOverlay_mh125.pdf
-mv plots/Prompt_2x2_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Prompt_2x2_MultHBOverlay_mh125.pdf
-mv plots/Prompt_Energy_2x2_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Prompt_Energy_2x2_MultHBOverlay_mh125.pdf
 mv plots/Mult_delayed_hitOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hitOverlay_mh125.pdf
+mv plots/Mult_delayed_hit_jetETOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hit_jetETOverlay_mh125.pdf
+mv plots/Mult_delayed_hit_promptVOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hit_promptVOverlay_mh125.pdf
+mv plots/Mult_delayed_hit_jetETpromptVOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hit_jetETpromptVOverlay_mh125.pdf
+mv plots/Mult_delayed_hitOverlay_Log.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hitOverlay_Log_mh125.pdf
+mv plots/Mult_delayed_hit_jetETOverlay_Log.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hit_jetETOverlay_Log_mh125.pdf
+mv plots/Mult_delayed_hit_promptVOverlay_Log.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hit_promptVOverlay_Log_mh125.pdf
+mv plots/Mult_delayed_hit_jetETpromptVOverlay_Log.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hit_jetETpromptVOverlay_Log_mh125.pdf
 mv plots/Mult_prompt_hitOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_prompt_hitOverlay_mh125.pdf
 mv plots/HTdistributionOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/HTdistributionOverlay_mh125.pdf
 mv plots/HTdistribution_trigOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/HTdistribution_trig_Overlay_mh125.pdf
@@ -56,10 +60,14 @@ draw_timingbit_delayed_cluster_mh250.exe
 mv rates_new_cond_LLP_pl500.root rates_new_cond_LLP_mh250_pl500.root
 mv rates_new_cond_LLP_pl1000.root rates_new_cond_LLP_mh250_pl1000.root
 mv rates_new_cond_LLP_pl10000.root rates_new_cond_LLP_mh250_pl10000.root
-mv plots/Delayed_2x2_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Delayed_2x2_MultHBOverlay_mh250.pdf
-mv plots/Prompt_2x2_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Prompt_2x2_MultHBOverlay_mh250.pdf
-mv plots/Prompt_Energy_2x2_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Prompt_Energy_2x2_MultHBOverlay_mh250.pdf
 mv plots/Mult_delayed_hitOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hitOverlay_mh250.pdf
+mv plots/Mult_delayed_hit_jetETOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hit_jetETOverlay_mh250.pdf
+mv plots/Mult_delayed_hit_promptVOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hit_promptVOverlay_mh250.pdf
+mv plots/Mult_delayed_hit_jetETpromptVOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hit_jetETpromptVOverlay_mh250.pdf
+mv plots/Mult_delayed_hitOverlay_Log.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hitOverlay_Log_mh250.pdf
+mv plots/Mult_delayed_hit_jetETOverlay_Log.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hit_jetETOverlay_Log_mh250.pdf
+mv plots/Mult_delayed_hit_promptVOverlay_Log.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hit_promptVOverlay_Log_mh250.pdf
+mv plots/Mult_delayed_hit_jetETpromptVOverlay_Log.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hit_jetETpromptVOverlay_Log_mh250.pdf
 mv plots/Mult_prompt_hitOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_prompt_hitOverlay_mh250.pdf
 mv plots/HTdistributionOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/HTdistributionOverlay_mh250.pdf
 mv plots/HTdistribution_trigOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/HTdistribution_trig_Overlay_mh250.pdf
@@ -83,10 +91,14 @@ draw_timingbit_delayed_cluster_mh350.exe
 mv rates_new_cond_LLP_pl500.root rates_new_cond_LLP_mh350_pl500.root
 mv rates_new_cond_LLP_pl1000.root rates_new_cond_LLP_mh350_pl1000.root
 mv rates_new_cond_LLP_pl10000.root rates_new_cond_LLP_mh350_pl10000.root
-mv plots/Delayed_2x2_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Delayed_2x2_MultHBOverlay_mh350.pdf
-mv plots/Prompt_2x2_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Prompt_2x2_MultHBOverlay_mh350.pdf
-mv plots/Prompt_Energy_2x2_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Prompt_Energy_2x2_MultHBOverlay_mh350.pdf
 mv plots/Mult_delayed_hitOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hitOverlay_mh350.pdf
+mv plots/Mult_delayed_hit_jetETOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hit_jetETOverlay_mh350.pdf
+mv plots/Mult_delayed_hit_promptVOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hit_promptVOverlay_mh350.pdf
+mv plots/Mult_delayed_hit_jetETpromptVOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hit_jetETpromptVOverlay_mh350.pdf
+mv plots/Mult_delayed_hitOverlay_Log.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hitOverlay_Log_mh350.pdf
+mv plots/Mult_delayed_hit_jetETOverlay_Log.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hit_jetETOverlay_Log_mh350.pdf
+mv plots/Mult_delayed_hit_promptVOverlay_Log.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hit_promptVOverlay_Log_mh350.pdf
+mv plots/Mult_delayed_hit_jetETpromptVOverlay_Log.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hit_jetETpromptVOverlay_Log_mh350.pdf
 mv plots/Mult_prompt_hitOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_prompt_hitOverlay_mh350.pdf
 mv plots/HTdistributionOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/HTdistributionOverlay_mh350.pdf
 mv plots/HTdistribution_trigOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/HTdistribution_trig_Overlay_mh350.pdf
@@ -103,10 +115,14 @@ echo "Making overlay plots from draw_timingbit.exe"
 draw_timingbit_delayed_cluster_mh1000.exe
 mv rates_new_cond_LLP_pl10000.root rates_new_cond_LLP_mh1000_pl1000.root
 mv rates_new_cond_LLP_pl100000.root rates_new_cond_LLP_mh1000_pl10000.root
-mv plots/Delayed_2x2_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Delayed_2x2_MultHBOverlay_mh1000.pdf
-mv plots/Prompt_2x2_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Prompt_2x2_MultHBOverlay_mh1000.pdf
-mv plots/Prompt_Energy_2x2_MultHBOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Prompt_Energy_2x2_MultHBOverlay_mh1000.pdf
 mv plots/Mult_delayed_hitOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hitOverlay_mh1000.pdf
+mv plots/Mult_delayed_hit_jetETOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hit_jetETOverlay_mh1000.pdf
+mv plots/Mult_delayed_hit_promptVOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hit_promptVOverlay_mh1000.pdf
+mv plots/Mult_delayed_hit_jetETpromptVOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hit_jetETpromptVOverlay_mh1000.pdf
+mv plots/Mult_delayed_hitOverlay_Log.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hitOverlay_Log_mh1000.pdf
+mv plots/Mult_delayed_hit_jetETOverlay_Log.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hit_jetETOverlay_Log_mh1000.pdf
+mv plots/Mult_delayed_hit_promptVOverlay_Log.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hit_promptVOverlay_Log_mh1000.pdf
+mv plots/Mult_delayed_hit_jetETpromptVOverlay_Log.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_delayed_hit_jetETpromptVOverlay_Log_mh1000.pdf
 mv plots/Mult_prompt_hitOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/Mult_prompt_hitOverlay_mh1000.pdf
 mv plots/HTdistributionOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/HTdistributionOverlay_mh1000.pdf
 mv plots/HTdistribution_trigOverlay.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/HTdistribution_trig_Overlay_mh1000.pdf
@@ -117,8 +133,8 @@ RateEfficiencyPlots_LLP_ctau.exe
 RateEfficiencyPlots_LLP_ctau_AddedEff.exe
 Rate_HTbin.exe
 Eff_ctau.exe
-mv /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/EffRate* /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/
-mv /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/Eff_ctau.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/
-mv /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/EffHT_LLP* /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/
+#mv /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/EffRate* /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/
+#mv /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/Eff_ctau.pdf /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/
+#mv /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/OfficialProduction/EffHT_LLP* /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/
 cp MultiplicityHits50ADC3ns_ht120_*.txt /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/
 cp NuGunRates.txt /eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/
