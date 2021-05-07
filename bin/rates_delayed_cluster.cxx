@@ -468,10 +468,10 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
   TH1F* TimingBit_TPenergy = new TH1F("TimingBit_TPenergy", "Threshold Study: Delayed Cells (timing bit) in TP E_{T} Bins;TP E_{T};Delayed Cells (normalized)   ", 20,0,20);
 
   // histograms based on hit multiplicity from the timing bit
-  TH1F * DeltaR_L1_delayed_seed_emu = new TH1F("DeltaR_L1_delayed_seed_emu","DeltaR between a Delayed Seed and the Closest L1 jet;Delta R;Fraction of Entries (normalized)",20,0,1);
-  TH1F * DeltaR_L1_prompt_seed_emu = new TH1F("DeltaR_L1_prompt_seed_emu","DeltaR between a Prompt Seed and the Closest L1 jet;Delta R;Fraction of Entries (normalized)",20,0,1);
-  TH1F * DeltaR_L1_delayed_hit_emu = new TH1F("DeltaR_L1_delayed_hit_emu","DeltaR between a Delayed Hit and the Closest L1 Jet in a Seeded Jet;Delta R;Fraction of Entries (normalized)",30,0,1.5);
-  TH1F * DeltaR_L1_prompt_hit_emu = new TH1F("DeltaR_L1_prompt_hit_emu","DeltaR between a Prompt Hit and the Closest L1 Jet in a Seeded Jet;Delta R;Fraction of Entries (normalized)",30,0,1.5);
+  TH1F * DeltaR_L1_delayed_hit_emu = new TH1F("DeltaR_L1_delayed_hit_emu","DeltaR between a Delayed Seed and the Closest L1 jet;Delta R;Fraction of Entries (normalized)",20,0,1);
+  TH1F * DeltaR_L1_prompt_hit_emu = new TH1F("DeltaR_L1_prompt_hit_emu","DeltaR between a Prompt Seed and the Closest L1 jet;Delta R;Fraction of Entries (normalized)",20,0,1);
+  TH1F * DeltaR_L1_delayed_TP_emu = new TH1F("DeltaR_L1_delayed_TP_emu","DeltaR between a Delayed Hit and the Closest L1 Jet in a Seeded Jet;Delta R;Fraction of Entries (normalized)",30,0,1.5);
+
   TH1F * Mult_prompt_hit_emu =new TH1F("Mult_prompt_hit_emu","Number of prompt TPs near a seeded jet;Number of TPs;Fraction of Entries (normalized)",20,0,20);
   TH1F * Mult_delayed_hit_emu = new TH1F("Mult_delayed_hit_emu","Number of TTs with a delayed hit near a L1 jet;Number of TTs;Fraction of Entries (normalized)",10,0,10);
   TH1F * Mult_delayed_hit_jetET_emu = new TH1F("Mult_delayed_hit_jetET_emu","Number of TTs with a delayed hit near a L1 jet, jet ET>40 GeV;Number of TTs;Fraction of Entries (normalized)",10,0,10);
@@ -947,8 +947,7 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
 
           if (delayed_2x2 > 0) DeltaR_L1_delayed_hit_emu->Fill(min_DR); // DR from L1 jet center to a delayed hit
           if (prompt_2x2 > 0) DeltaR_L1_prompt_hit_emu->Fill(min_DR); // DR from L1 jet center to a prompt TP
-	  if (delayed_4x4 >= delayed_4x4_variable) DeltaR_L1_delayed_seed_emu->Fill(min_DR); // DR from L1 jet center to delayed seed
-	  if (prompt_energy_2x2 >= prompt_2x2_energy_variable) DeltaR_L1_prompt_seed_emu->Fill(min_DR); // DR from L1 jet center to prompt seed
+	  if (delayed_4x4 >= delayed_4x4_variable) DeltaR_L1_delayed_TP_emu->Fill(min_DR); // DR from L1 jet center to delayed seed
 	
 	  if (min_DR<=0.5) { // check if the jet has a delayed or prompt seed
 	    delayed[closestJet] += delayed_2x2; // assign delayed 2x2 hits to the nearest jet
@@ -1418,10 +1417,10 @@ void rates_delayed_cluster(bool newConditions, const std::string& inputFileDirec
     htSumDistribution->Write();
 
     prompt_delayed_seed->Write();
-    DeltaR_L1_delayed_seed_emu->Write();
-    DeltaR_L1_prompt_seed_emu->Write();
     DeltaR_L1_delayed_hit_emu->Write();
     DeltaR_L1_prompt_hit_emu->Write();
+    DeltaR_L1_delayed_TP_emu->Write();
+
     Mult_delayed_hit_emu->Write();
     Mult_delayed_hit_jetET_emu->Write();
     Mult_delayed_hit_promptV_emu->Write();
