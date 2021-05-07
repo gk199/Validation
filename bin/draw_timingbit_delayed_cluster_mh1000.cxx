@@ -23,7 +23,7 @@ int main()
 
   // default, then new conditions
   std::vector<std::string> filenames = {"rates_new_cond_QCD.root", "rates_new_cond_LLP_pl10000.root", "rates_new_cond_LLP_pl100000.root"};
-  std::vector<std::string> multTypes = {"HTdistribution","HTdistribution_trig","DeltaR_L1_delayed_seed","DeltaR_L1_prompt_seed","DeltaR_L1_delayed_hit","DeltaR_L1_prompt_hit","Mult_delayed_hit","Mult_delayed_hit_jetET","Mult_delayed_hit_promptV","Mult_delayed_hit_jetETpromptV","Mult_prompt_hit"};
+  std::vector<std::string> multTypes = {"HTdistribution","HTdistribution_trig","DeltaR_L1_delayed_hit","DeltaR_L1_prompt_hit","DeltaR_L1_delayed_TP","Mult_delayed_hit","Mult_delayed_hit_jetET","Mult_delayed_hit_promptV","Mult_delayed_hit_jetETpromptV","Mult_prompt_hit"};
 
   std::map<std::string, TH1F*> multHists_QCD;
   std::map<std::string, TH1F*> multHists_LLPpl10000;
