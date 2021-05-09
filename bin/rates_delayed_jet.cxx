@@ -795,12 +795,18 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
       } // closing HCAL TP loop
 
       for (uint jetIt = 0; jetIt < nJetemu; jetIt++) {
-        if ((inputFile.substr(0,2) == "mh") && (triggerableJets[jetIt] == 0)) continue;
+        if ((inputFile.substr(0,2) == "mh") && (triggerableJets[jetIt] == 0)) {
+	  LLP_flagged_TTs[jetIt] = 0; // set to 0 if jet is not triggerable
+	  continue;
+	}
         Mult_delayed_hit_emu->Fill(delayed_TTs[jetIt]);
         if (delayed_TTs[jetIt] >= 2) Mult_prompt_hit_emu->Fill(prompt_TTs[jetIt]);
         Mult_delayed_hit_promptV_emu->Fill(LLP_flagged_TTs[jetIt]);
 
-	if (l1emu_->jetEt[jetIt] < 40 ) continue; // for jet pt efficiencies
+	if (l1emu_->jetEt[jetIt] < 40 ) { // require jet ET > 40 GeV for jet to be delayed
+	  LLP_flagged_TTs[jetIt] = 0; // set to 0 if jet is too low energy
+	  continue; 
+	}
 	Mult_delayed_hit_jetET_emu->Fill(delayed_TTs[jetIt]);
 	Mult_delayed_hit_jetETpromptV_emu->Fill(LLP_flagged_TTs[jetIt]);
 
@@ -822,39 +828,32 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
 	    beta_LLP->Fill(LLPdecayInfo(partonN,generator_)[6]);
 	  }
 	}
-	if (l1emu_->jetEt[jetIt] < 40) LLP_flagged_TTs[jetIt] = 0; // require jet ET > 40 GeV for jet to be delayed
-	if (LLP_flagged_TTs[jetIt] > 1 ) std::cout << LLP_flagged_TTs[jetIt]  << std::endl;
       }
-      // how many jts pass the delayed jet trigger
-      int num_delayed_jet = 0;
-      std::sort(LLP_flagged_TTs, LLP_flagged_TTs+nJetemu, std::greater<int>());
-      if (LLP_flagged_TTs[0] == 1) num_delayed_jet = 1;
-      if (LLP_flagged_TTs[0] >= 2) num_delayed_jet = 2;
-      if (LLP_flagged_TTs[0] >= 2 && LLP_flagged_TTs[1] > 0) num_delayed_jet = 3;
-      if (LLP_flagged_TTs[0] >= 2 && LLP_flagged_TTs[1] > 0  && LLP_flagged_TTs[2] > 0) num_delayed_jet = 4;
-      
-      if (LLP_flagged_TTs[0] > 1 ) {
-	std::cout<< "after sorting LLP TPs" << std::endl;
-	std::cout << LLP_flagged_TTs[0] << std::endl;
-      }
-      for (uint jetIt = 0; jetIt < nJetemu; jetIt++) LLP_flagged_TTs[jetIt] = 0;
 
+      // how many jets pass the delayed jet trigger
+      int num_delayed_jet = -1;
+      std::sort(LLP_flagged_TTs, LLP_flagged_TTs+nJetemu, std::greater<int>());
+      if (LLP_flagged_TTs[0] == 1) num_delayed_jet = 0;
+      if (LLP_flagged_TTs[0] >= 2) num_delayed_jet = 1;
+      if (LLP_flagged_TTs[0] >= 2 && LLP_flagged_TTs[1] > 0) num_delayed_jet = 2;
+      if (LLP_flagged_TTs[0] >= 2 && LLP_flagged_TTs[1] > 0  && LLP_flagged_TTs[2] > 0) num_delayed_jet = 3;
+      
       // saving number of events passed cell multiplicity cuts. These are efficiency values used in rate vs eff plots
       totalEvents += 1; // counting total events for efficiency calculations
       htSumDistribution->Fill(htSum);
       HTdistribution_emu->Fill(htSum);
-      if (num_delayed_jet >= 2) HTdistribution_trig_emu->Fill(htSum); // plot HT dist of events passing calo trigger
+      if (num_delayed_jet >= 1) HTdistribution_trig_emu->Fill(htSum); // plot HT dist of events passing calo trigger
 
-      if ( num_delayed_jet >= 1 ) passed_calo_cluster_trig += 1;
-      if ( num_delayed_jet >= 1 && htSum > 120 ) passed_calo_cluster_trig_120 += 1;
-      if ( num_delayed_jet >= 2 && htSum > 120 ) passed_calo_cluster_trig_120_2 += 1;
-      if ( ((htSum > 120) && ( num_delayed_jet >= 1 )) || (htSum >= 360) ) passed4JetMult_HBHE_ht120_1 += 1; // +7
-      if ( ((htSum > 120) && ( num_delayed_jet >= 2 )) || (htSum >= 360) ) passed4JetMult_HBHE_ht120_2 += 1;
+      if ( num_delayed_jet >= 0 ) passed_calo_cluster_trig += 1;
+      if ( num_delayed_jet >= 0 && htSum > 120 ) passed_calo_cluster_trig_120 += 1;
+      if ( num_delayed_jet >= 1 && htSum > 120 ) passed_calo_cluster_trig_120_2 += 1;
+      if ( ((htSum > 120) && ( num_delayed_jet >= 0 )) || (htSum >= 360) ) passed4JetMult_HBHE_ht120_1 += 1; // +7
+      if ( ((htSum > 120) && ( num_delayed_jet >= 1 )) || (htSum >= 360) ) passed4JetMult_HBHE_ht120_2 += 1;
 
       if (htSum > 360) passedHtSum360 += 1;
 
       for(int bin=0; bin<nHtSumBins; bin++){
-        if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( num_delayed_jet)>=2 && htSum < 360 ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV, compare to original rates in plot
+        if( (htSum) >= htSumLo+(bin*htSumBinWidth) && ( num_delayed_jet)>=1 && htSum < 360 ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV, compare to original rates in plot
         if( (htSum) >= htSumLo+(bin*htSumBinWidth) ) htSumRates_original_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV, use for ht > 360 original rates in rate vs. eff plots
       }
     }// closes if 'emuOn' is true
@@ -1136,18 +1135,18 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
     metHFSumRates_hw->Write();
   }
 
-  std::cout << inputFile.substr(0,14) << " triggerable events = " << totalEvents << "; Events with jet>40 and HT>120 that: passed delayed seed = " << passed_calo_cluster_trig_120 << "; passed delayed seed + prompt veto = " << passed_calo_cluster_trig_120_2 << std::endl;
+  std::cout << inputFile.substr(0,14) << " triggerable events = " << totalEvents << "; Events with jet>40 and HT>120 that: passed delayed TT = " << passed_calo_cluster_trig_120 << "; passed 2 delayed TT = " << passed_calo_cluster_trig_120_2 << std::endl;
   std::cout << "relative efficiency = " << passed_calo_cluster_trig_120_2 / totalEvents << std::endl;
   if (inputFile.substr(0,2) != "mh") std::cout << "background rejection = " << totalEvents / passed_calo_cluster_trig_120_2 << std::endl;
   std::cout << passedHtSum360/totalEvents * 100 << " % passed HT360" << std::endl;
-  std::cout << passed_calo_cluster_trig / totalEvents * 100 << " % passed calo trig (delayed object), no HT cut / all events" << std::endl;
-  std::cout << passed_calo_cluster_trig_120 / totalEvents * 100 << " % passed calo trig (delayed object), HT 120 cut / all events" << std::endl;
-  std::cout << passed_calo_cluster_trig_120_2 / totalEvents * 100 << " % passed calo trig (prompt 2x2 veto), HT 120 cut / all events" << std::endl;
-  std::cout << passed_calo_cluster_trig  << " passed calo trig (delayed object) no HT cut" << std::endl;
-  std::cout << passed4JetMult_HBHE_ht120_1 << " passed calo trig HT120 (delayed object) OR HT360" << std::endl;
-  std::cout << passed4JetMult_HBHE_ht120_2 << " passed calo trig HT120 (prompt 2x2 veto) OR HT360" << std::endl;
-  std::cout << (passed4JetMult_HBHE_ht120_1 - passedHtSum360)*100 / totalEvents << " added efficiency HT 360 (delayed object)" << std::endl;
-  std::cout << (passed4JetMult_HBHE_ht120_2 - passedHtSum360)*100 / totalEvents << " added efficiency HT 360 (prompt 2x2 veto)" << std::endl;
+  std::cout << passed_calo_cluster_trig / totalEvents * 100 << " % passed calo trig (delayed TT), no HT cut / all events" << std::endl;
+  std::cout << passed_calo_cluster_trig_120 / totalEvents * 100 << " % passed calo trig (delayed TT), HT 120 cut / all events" << std::endl;
+  std::cout << passed_calo_cluster_trig_120_2 / totalEvents * 100 << " % passed calo trig (2 delayed TT), HT 120 cut / all events" << std::endl;
+  std::cout << passed_calo_cluster_trig  << " passed calo trig (delayed TT) no HT cut" << std::endl;
+  std::cout << passed4JetMult_HBHE_ht120_1 << " passed calo trig HT120 (delayed TT) OR HT360" << std::endl;
+  std::cout << passed4JetMult_HBHE_ht120_2 << " passed calo trig HT120 (2 delayed TT) OR HT360" << std::endl;
+  std::cout << (passed4JetMult_HBHE_ht120_1 - passedHtSum360)*100 / totalEvents << " added efficiency HT 360 (delayed TT)" << std::endl;
+  std::cout << (passed4JetMult_HBHE_ht120_2 - passedHtSum360)*100 / totalEvents << " added efficiency HT 360 (2 delayed TT)" << std::endl;
   std::cout << (passed4JetMult_HBHE_ht120_2) / passedHtSum360 << " integrated luminosity gain" << std::endl;
 
   // neutrino gun rates
