@@ -752,14 +752,14 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
 	      timingbit_eta_phi[TP_ieta_0index][TP_iphi_0index] += 1;
 	      GeVdelayed_eta_phi[TP_ieta_0index][TP_iphi_0index][depth] = EnergyDepth[depth];
 	    }
-	    if (EnergyDepth[depth] >= GeV_HB_variable-1 && TDCdepth[depth]*2 < eta_depth_tdc90[static_cast<int>(abs(TP_ieta))][depth]) promptveto_eta_phi[TP_ieta_0index][TP_iphi_0index] += 1;
+	    if (EnergyDepth[depth] >= GeV_HB_variable && TDCdepth[depth]*2 < eta_depth_tdc90[static_cast<int>(abs(TP_ieta))][depth]) promptveto_eta_phi[TP_ieta_0index][TP_iphi_0index] += 1;
 	  }
 	  if (abs(TP_ieta) > 16) { 
             if (EnergyDepth[depth] >= GeV_HE_variable && TDCdepth[depth]*2 >= eta_depth_tdc90[static_cast<int>(abs(TP_ieta))][depth]) {
 	      timingbit_eta_phi[TP_ieta_0index][TP_iphi_0index] += 1; 
 	      GeVdelayed_eta_phi[TP_ieta_0index][TP_iphi_0index][depth] = EnergyDepth[depth];
 	    }
-            if (EnergyDepth[depth] >= GeV_HE_variable-1 && TDCdepth[depth]*2 < eta_depth_tdc90[static_cast<int>(abs(TP_ieta))][depth]) promptveto_eta_phi[TP_ieta_0index][TP_iphi_0index] += 1;
+            if (EnergyDepth[depth] >= GeV_HE_variable && TDCdepth[depth]*2 < eta_depth_tdc90[static_cast<int>(abs(TP_ieta))][depth]) promptveto_eta_phi[TP_ieta_0index][TP_iphi_0index] += 1;
 	  }
 	} // closing depth loop
 	if (timingbit_eta_phi[TP_ieta_0index][TP_iphi_0index] > 0 && promptveto_eta_phi[TP_ieta_0index][TP_iphi_0index] == 0) TT_LLP_eta_phi[TP_ieta_0index][TP_iphi_0index] = 1;
