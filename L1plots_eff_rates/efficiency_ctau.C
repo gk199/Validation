@@ -52,15 +52,15 @@ void efficiency_ctau(){
   c1->SetGrid();
   gStyle->SetOptStat(0);
 
-  string file_type = "LLP_mh1000_pl10000";
+  string file_type = "LLP_mh1000_pl100000";
 
-  TFile *g1 =TFile::Open("../rates_new_cond_LLP_mh1000_pl10000.root");
+  TFile *g1 =TFile::Open("../rates_new_cond_LLP_mh1000_pl100000.root");
   TH1F *h1 = (TH1F*)g1->Get("path_length");
   TH1F *h2 = (TH1F*)g1->Get("path_length_trigger");
   TH1F *h3 = (TH1F*)g1->Get("path_length_120trigger");
 
   h1->SetLineColorAlpha(kWhite, 1.);
-  h1->SetTitle("Delayed Jet Displacement Efficiency for LLP_mh1000_pl10000");
+  h1->SetTitle("Delayed Jet Displacement Efficiency for LLP_mh1000_pl100000");
   h1->GetXaxis()->SetTitle("LLP Displacement (m)");
   h1->GetXaxis()->SetTitleSize(0.045);
   h1->GetXaxis()->SetTitleOffset(1.1);
@@ -101,7 +101,7 @@ void efficiency_ctau(){
   legend1->Draw("same");
 
   char saveFile[100];
-  sprintf(saveFile,"/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/LLPefficiency_LLP_mh1000_pl10000.pdf");
+  sprintf(saveFile,"/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/LLPefficiency_LLP_mh1000_pl100000.pdf");
   c1->SaveAs(saveFile);
 
 }

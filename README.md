@@ -113,7 +113,9 @@ Each of these outputs plots to the EOS directory as well.
 Full order of how to run:
 ```
 ./RunRates_DelayedJet_PU.sh 4 4 40
-hadd rates_new_cond_4combinedPU_jet40.root rates_new_cond_LLP_mh125_pl3000.root rates_new_cond_LLP_mh250_pl10000.root rates_new_cond_LLP_mh350_pl10000.root rates_new_cond_LLP_mh1000_pl1000.root
+hadd -f rates_new_cond_4combinedPU_jet40.root rates_new_cond_LLP_mh125_pl3000.root rates_new_cond_LLP_mh250_pl10000.root rates_new_cond_LLP_mh350_pl10000.root rates_new_cond_LLP_mh1000_pl10000.root
+
+cd L1plots_eff_rates
 ./Efficiency_Plots.sh
 ./LLPEfficiency_Plots.sh
 ./TOFEfficiency_Plots.sh
@@ -133,9 +135,11 @@ root
 .x efficiency_TOF_combined.C
 .q
 
+cd ..
 ./RunRates_DelayedJet_PU.sh 4 4 0
-hadd rates_new_cond_4combinedPU_jet0.root rates_new_cond_LLP_mh125_pl3000.root rates_new_cond_LLP_mh250_pl10000.root rates_new_cond_LLP_mh350_pl10000.root rates_new_cond_LLP_mh1000_pl1000.root
+hadd -f rates_new_cond_4combinedPU_jet0.root rates_new_cond_LLP_mh125_pl3000.root rates_new_cond_LLP_mh250_pl10000.root rates_new_cond_LLP_mh350_pl10000.root rates_new_cond_LLP_mh1000_pl10000.root
 
+cd L1plots_eff_rates
 ./JetEfficiency_Plots.sh
 root
 .L efficiency_jetPt_combined.C++
