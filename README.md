@@ -71,18 +71,19 @@ rates_bkgTDCdist.exe new QCD 2 2
 ```
 where the last two parameters are the HB and HE energy values. This then makes multiple txt files listing the ieta, and for each depth, what TDC value most of the background is below.
 
-An updated trigger algorithm using a per tower prompt veto is in `rates_delayed_jet.cxx`. This requires 2 LLP flagged TT per jet, where a LLP flagged TT has a delayed cell, and is vetoed by a prompt cell in the tower. The only arguments needed are the HB and HE GeV (per cell) requirements:
+An updated trigger algorithm using a per tower prompt veto is in `rates_delayed_jet.cxx`. This requires 2 LLP flagged TT per jet, where a LLP flagged TT has a delayed cell, and is vetoed by a prompt cell in the tower. The only arguments needed are the HB and HE GeV (per cell), and the triggered jet ET requirements:
 ```
-./RunRates_DelayedJet_PU.sh 4 4
+./RunRates_DelayedJet_PU.sh 4 4 40
 ```
 
 ## Efficiency Plots
 Efficiency plots are in the directory `L1plots_eff_rates`. For running over individual samples, the bash scripts can be used
 ```
 ./Efficiency_Plots.sh
-./JetEfficiency_Plots.sh
 ./LLPEfficiency_Plots.sh
 ./TOFEfficiency_Plots.sh
+# note -- for jet eff plots, need to rerun DelayedJet script with jet energy requirement of 0, details below
+./JetEfficiency_Plots.sh
 ```
 and for combined samples (`hadd rates_new_cond_*combined.root` for the mh125 3m, mh250 10m, mh350 10m, and mh1000 10m samples), the plotting scripts can be run in ROOT:
 ```
@@ -97,16 +98,50 @@ root
 .q
 
 root
+.L efficiency_TOF_combined.C++
+.x efficiency_TOF_combined.C
+.q
+
+# note -- for jet eff plots, need to rerun DelayedJet script with jet energy requirement of 0, details below
+root
 .L efficiency_jetPt_combined.C++
 .x efficiency_jetPt_combined.C
+.q
+```
+Each of these outputs plots to the EOS directory as well.
+
+Full order of how to run:
+```
+./RunRates_DelayedJet_PU.sh 4 4 40
+hadd rates_new_cond_4combinedPU_jet40.root rates_new_cond_LLP_mh125_pl3000.root rates_new_cond_LLP_mh250_pl10000.root rates_new_cond_LLP_mh350_pl10000.root rates_new_cond_LLP_mh1000_pl1000.root
+./Efficiency_Plots.sh
+./LLPEfficiency_Plots.sh
+./TOFEfficiency_Plots.sh
+
+root
+.L efficiency_ctau_combined.C++
+.x efficiency_ctau_combined.C
+.q
+
+root
+.L efficiency_ctau_zoom_combined.C++
+.x efficiency_ctau_zoom_combined.C
 .q
 
 root
 .L efficiency_TOF_combined.C++
 .x efficiency_TOF_combined.C
 .q
+
+./RunRates_DelayedJet_PU.sh 4 4 0
+hadd rates_new_cond_4combinedPU_jet0.root rates_new_cond_LLP_mh125_pl3000.root rates_new_cond_LLP_mh250_pl10000.root rates_new_cond_LLP_mh350_pl10000.root rates_new_cond_LLP_mh1000_pl1000.root
+
+./JetEfficiency_Plots.sh
+root
+.L efficiency_jetPt_combined.C++
+.x efficiency_jetPt_combined.C
+.q
 ```
-Each of these outputs plots to the EOS directory as well.
 
 # HCAL Trigger studies for LLPs -- Depth Trigger
 Towards a new L1 seed to trigger on LLP signatures with HCAL using H/E + depth 

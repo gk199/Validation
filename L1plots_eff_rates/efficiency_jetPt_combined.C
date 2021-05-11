@@ -54,7 +54,7 @@ void efficiency_jetPt_combined(){
 
   string file_type = "combined";
 
-  TFile *g1 =TFile::Open("../rates_new_cond_4combinedPU.root");
+  TFile *g1 =TFile::Open("../rates_new_cond_4combinedPU_jet0.root");
   TH1F *h1 = (TH1F*)g1->Get("JetPTdistribution_emu");
   TH1F *h2 = (TH1F*)g1->Get("JetPTdistribution_trig_emu");
   TH1F *h3 = (TH1F*)g1->Get("JetPTdistribution_trig120_emu");

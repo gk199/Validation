@@ -36,7 +36,7 @@ double numBunch = 2556; //1537; //the number of bunches colliding for the run of
 double runLum = 0.02; // 0.44: 275783  0.58:  276363 //luminosity of the run of interest (*10^34)
 double expectedLum = 1.15; //expected luminosity of 2016 runs (*10^34)
 
-void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory, double GeV_HB_variable, double GeV_HE_variable);
+void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory, double GeV_HB_variable, double GeV_HE_variable, double jetEnergy);
 
 int main(int argc, char *argv[])
 {
@@ -44,11 +44,12 @@ int main(int argc, char *argv[])
   std::string ntuplePath("");
   double GeV_HB;
   double GeV_HE;
+  double jetEt;
 
-  if (argc != 5) {
+  if (argc != 6) {
     std::cout << "Usage: rates.exe [new/def] [path to ntuples]\n"
 	      << "[new/def] indicates new or default (existing) conditions"
-	      << "then HB and HE GeV values" << std::endl;
+	      << "then HB and HE GeV values, and jet energy (GeV)" << std::endl;
     exit(1);
   }
   else {
@@ -63,9 +64,10 @@ int main(int argc, char *argv[])
     ntuplePath = argv[2];
     GeV_HB = atof(argv[3]);
     GeV_HE = atof(argv[4]);
+    jetEt = atof(argv[5]);
   }
 
-  rates_delayed_jet(newConditions, ntuplePath, GeV_HB, GeV_HE);
+  rates_delayed_jet(newConditions, ntuplePath, GeV_HB, GeV_HE, jetEt);
 
   return 0;
 }
@@ -266,7 +268,7 @@ std::vector<double> LLPdecayInfo(int partonN, L1Analysis::L1AnalysisGeneratorDat
 }
 
 
-void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory, double GeV_HB_variable, double GeV_HE_variable){
+void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory, double GeV_HB_variable, double GeV_HE_variable, double jetEnergy){
   
   bool hwOn = true;   //are we using data from hardware? (upgrade trigger had to be running!!!)
   bool emuOn = true;  //are we using data from emulator?
@@ -470,14 +472,14 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
   TH1F * htSumDistribution = new TH1F("htSumDistribution","htSum Distribution;L1_HT (GeV);Number of Events",200,0,2000); // x bins, x low, x up
 
   TH1F* ctau_allLLP = new TH1F("ctau_allLLP","ctau of LLP in particle rest frame;ctau (m);Number of LLPs",100,0,50);
-  TH1F* ctau_LLP = new TH1F("ctau_LLP","ctau of LLP in particle rest frame (triggerable);ctau (m);Number of LLPs",100,0,50);
-  TH1F* ctau_LLP_trigger = new TH1F("ctau_LLP_trigger","ctau of LLP (passed trigger) in particle rest frame;ctau (m);Number of LLPs",100,0,50);
-  TH1F* path_length = new TH1F("path_length","Path length of particle in lab frame (triggerable);path length (m);Number of LLPs",16,0,8); 
-  TH1F* path_length_trigger = new TH1F("path_length_trigger","Path length of particle (passed trigger) in lab frame;path length (m);Number of LLPs",16,0,8);
-  TH1F* path_length_120trigger = new TH1F("path_length_120trigger","Path length of particle (passed trigger, HT>120) in lab frame;path length (m);Number of LLPs",16,0,8);
-  TH1F* path_length2 = new TH1F("path_length2","Path length of particle in lab frame (triggerable);path length (m);Number of LLPs",16,0,0.5);
-  TH1F* path_length2_trigger = new TH1F("path_length2_trigger","Path length of particle (passed trigger) in lab frame;path length (m);Number of LLPs",16,0,0.5);
-  TH1F* path_length2_120trigger = new TH1F("path_length2_120trigger","Path length of particle (passed trigger, HT>120) in lab frame;path length (m);Number of LLPs",16,0,0.5);
+  TH1F* ctau_LLP = new TH1F("ctau_LLP","ctau of LLP in particle rest frame (triggerable, double counted);ctau (m);Number of LLPs",100,0,50);
+  TH1F* ctau_LLP_trigger = new TH1F("ctau_LLP_trigger","ctau of LLP (passed trigger, double counted) in particle rest frame;ctau (m);Number of LLPs",100,0,50);
+  TH1F* path_length = new TH1F("path_length","Path length of particle in lab frame (triggerable, double counted);path length (m);Number of LLPs",16,0,8); 
+  TH1F* path_length_trigger = new TH1F("path_length_trigger","Path length of particle (passed trigger, double counted) in lab frame;path length (m);Number of LLPs",16,0,8);
+  TH1F* path_length_120trigger = new TH1F("path_length_120trigger","Path length of particle (passed trigger, HT>120, double counted) in lab frame;path length (m);Number of LLPs",16,0,8);
+  TH1F* path_length2 = new TH1F("path_length2","Path length of particle in lab frame (triggerable, double counted);path length (m);Number of LLPs",16,0,0.5);
+  TH1F* path_length2_trigger = new TH1F("path_length2_trigger","Path length of particle (passed trigger, double counted) in lab frame;path length (m);Number of LLPs",16,0,0.5);
+  TH1F* path_length2_120trigger = new TH1F("path_length2_120trigger","Path length of particle (passed trigger, HT>120, double counted) in lab frame;path length (m);Number of LLPs",16,0,0.5);
   TH1F* TOFdelay = new TH1F("TOFdelay","TOF delay = LLP TOF + b TOF - TOF expected (ns);TOF delay (ns); Number of Jets",30,0,15);
   TH1F* TOFdelay_trigger = new TH1F("TOFdelay_trigger","TOF delay = LLP TOF + b TOF - TOF expected (ns, triggered);TOF delay (ns); Number of Jets",30,0,15);
   TH1F* TOFdelay_120trigger = new TH1F("TOFdelay_120trigger","TOF delay = LLP TOF + b TOF - TOF expected (ns, triggered, HT>120);TOF delay (ns); Number of Jets",30,0,15);
@@ -682,9 +684,8 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
       int numLLPdecayHB = 0; // count how many LLP decay products are expected to intersect the HB
       double nCaloTPemu = l1CaloTPemu_->nHCALTP; // number of TPs varies from 400-1400 per event, approximately Gaussian                                                  
       // triggerability restrictions
-
       int triggerableJets[nJetemu] = {0};
-      std::vector<double> partonZ; // track which parton is associated with jet to prevent LLP double counting -- save parton Z position (LLP decay) and make sure this isn't duplicated
+      //      std::vector<double> partonZ; // track which parton is associated with jet to prevent LLP double counting -- save parton Z position (LLP decay) and make sure this isn't duplicated
       for (uint jetIt = 0; jetIt < nJetemu; jetIt++) { // loop over jets
 	if (abs(l1emu_->jetEta[jetIt]) > 2.5) continue; // consider HB+HE jets, HB extends to 1.4. HE extends to 3. Use values of 1, 2.5
 	if (inputFile.substr(0,3) == "QCD") JetPTdistribution_emu->Fill(l1emu_->jetEt[jetIt]);
@@ -694,15 +695,17 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
 	  numLLPdecayHB += 1; // how many of the partons expected to intersect HB
 	  JetPTdistribution_emu->Fill(l1emu_->jetEt[jetIt]);
 	  triggerableJets[jetIt] = 1; // 1 if triggerable jet, 0 otherwise
-	  if (std::find(partonZ.begin(), partonZ.end(), LLPdecayInfo(partonN,generator_)[2]) != partonZ.end()) continue; // this LLP has already been included from the other parton 
-	  partonZ.push_back(LLPdecayInfo(partonN,generator_)[2]);
+	  //	  if (std::find(partonZ.begin(), partonZ.end(), LLPdecayInfo(partonN,generator_)[2]) == partonZ.end()) { // this LLP has already been included from the other parton 
+	  //	    partonZ.push_back(LLPdecayInfo(partonN,generator_)[2]); // z creation of parton (z decay of LLP)
 	  ctau_LLP->Fill(LLPdecayInfo(partonN,generator_)[3]/100);
 	  path_length->Fill(LLPdecayInfo(partonN,generator_)[4]/100);
-          path_length2->Fill(LLPdecayInfo(partonN,generator_)[4]/100); // first half meter
-	  TOFdelay->Fill(LLPdecayInfo(partonN,generator_)[5]);
+	  path_length2->Fill(LLPdecayInfo(partonN,generator_)[4]/100); // first half meter
+	  //	  }
+	  TOFdelay->Fill(LLPdecayInfo(partonN,generator_)[5]); // can be twice per LLP
+	  //	  if (LLPdecayInfo(partonN,generator_)[5] >= 11 && LLPdecayInfo(partonN,generator_)[5] < 12) std::cout << "TOFdelay = " << LLPdecayInfo(partonN,generator_)[5] << " for jet = " << jetIt << " at entry = " << jentry << std::endl;
 	}
       }
-      partonZ.clear();
+      //      partonZ.clear();
 
       if (inputFile.substr(0,2) == "mh" && numLLPdecayHB == 0 ) continue; // if no LLPs in HB, skip event
 
@@ -803,13 +806,13 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
         if (delayed_TTs[jetIt] >= 2) Mult_prompt_hit_emu->Fill(prompt_TTs[jetIt]);
         Mult_delayed_hit_promptV_emu->Fill(LLP_flagged_TTs[jetIt]);
 
-	if (l1emu_->jetEt[jetIt] < 40 ) { // require jet ET > 40 GeV for jet to be delayed
+	if (l1emu_->jetEt[jetIt] < jetEnergy ) { // require jet ET > 40 GeV for jet to be delayed
 	  LLP_flagged_TTs[jetIt] = 0; // set to 0 if jet is too low energy
 	  continue; 
 	}
 	Mult_delayed_hit_jetET_emu->Fill(delayed_TTs[jetIt]);
 	Mult_delayed_hit_jetETpromptV_emu->Fill(LLP_flagged_TTs[jetIt]);
-
+      
 	// for jet PT efficiencies
 	if (LLP_flagged_TTs[jetIt] >= 2) {
 	  JetPTdistribution_trig_emu->Fill(l1emu_->jetEt[jetIt]);
@@ -820,8 +823,9 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
 	    double partonN = closestParton(jetIt, l1emu_, generator_)[1];
 	    ctau_LLP_trigger->Fill(LLPdecayInfo(partonN,generator_)[3]/100);
 	    path_length_trigger->Fill(LLPdecayInfo(partonN,generator_)[4]/100);
-            path_length2_trigger->Fill(LLPdecayInfo(partonN,generator_)[4]/100);
+	    path_length2_trigger->Fill(LLPdecayInfo(partonN,generator_)[4]/100);
 	    TOFdelay_trigger->Fill(LLPdecayInfo(partonN,generator_)[5]);
+	    //	    if (LLPdecayInfo(partonN,generator_)[5] >= 11 && LLPdecayInfo(partonN,generator_)[5] < 12) std::cout << "TOFdelay_trigger = " << LLPdecayInfo(partonN,generator_)[5] << " for jet = " << jetIt << " at entry = " << jentry << std::endl;
 	    if (htSum > 120) path_length_120trigger->Fill(LLPdecayInfo(partonN,generator_)[4]/100);
             if (htSum > 120) path_length2_120trigger->Fill(LLPdecayInfo(partonN,generator_)[4]/100);
 	    if (htSum > 120) TOFdelay_120trigger->Fill(LLPdecayInfo(partonN,generator_)[5]);

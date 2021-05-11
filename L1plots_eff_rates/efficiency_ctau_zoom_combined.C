@@ -54,7 +54,7 @@ void efficiency_ctau_zoom_combined(){
 
   string file_type = "combined";
 
-  TFile *g1 =TFile::Open("../rates_new_cond_4combinedPU_LLP.root");
+  TFile *g1 =TFile::Open("../rates_new_cond_4combinedPU_jet40.root");
   TH1F *h1 = (TH1F*)g1->Get("path_length2");
   TH1F *h2 = (TH1F*)g1->Get("path_length2_trigger");
   TH1F *h3 = (TH1F*)g1->Get("path_length2_120trigger");

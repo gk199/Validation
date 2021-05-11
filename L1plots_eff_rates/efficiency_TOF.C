@@ -41,7 +41,7 @@ Double_t EMG(Double_t *x, Double_t *par){
   return func;
 }
 
-void efficiency_ctau_combined(){
+void efficiency_TOF(){
   TCanvas *c1 =new TCanvas("c1", " ", 0, 0,1000,1000);
   c1->Range(0,0,1,1);
   c1->SetFillColor(0);
@@ -52,19 +52,19 @@ void efficiency_ctau_combined(){
   c1->SetGrid();
   gStyle->SetOptStat(0);
 
-  string file_type = "combined";
+  string file_type = "LLP_mh1000_pl10000";
 
-  TFile *g1 =TFile::Open("../rates_new_cond_4combinedPU_jet40.root");
-  TH1F *h1 = (TH1F*)g1->Get("path_length");
-  TH1F *h2 = (TH1F*)g1->Get("path_length_trigger");
-  TH1F *h3 = (TH1F*)g1->Get("path_length_120trigger");
+  TFile *g1 =TFile::Open("../rates_new_cond_LLP_mh1000_pl10000.root");
+  TH1F *h1 = (TH1F*)g1->Get("TOFdelay");
+  TH1F *h2 = (TH1F*)g1->Get("TOFdelay_trigger");
+  TH1F *h3 = (TH1F*)g1->Get("TOFdelay_120trigger");
 
   h1->SetLineColorAlpha(kWhite, 1.);
-  h1->SetTitle("Delayed Jet Displacement Efficiency");
-  h1->GetXaxis()->SetTitle("LLP Displacement (m)");
+  h1->SetTitle("Delayed Jet TOF Delay Efficiency for LLP_mh1000_pl10000");
+  h1->GetXaxis()->SetTitle("LLP TOF + b TOF - TOF expected (ns)");
   h1->GetXaxis()->SetTitleSize(0.045);
   h1->GetXaxis()->SetTitleOffset(1.1);
-  h1->GetYaxis()->SetTitle("Delayed Jet Displacement Efficiency");
+  h1->GetYaxis()->SetTitle("Delayed Jet Efficiency");
   h1->GetYaxis()->SetTitleSize(0.045);
   h1->GetYaxis()->SetTitleOffset(1.1);
   h1->GetYaxis()->SetRangeUser(0.,1.5);
@@ -101,7 +101,7 @@ void efficiency_ctau_combined(){
   legend1->Draw("same");
 
   char saveFile[100];
-  sprintf(saveFile,"/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/LLPefficiency_4combined.pdf");
+  sprintf(saveFile,"/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/TOFefficiency_LLP_mh1000_pl10000.pdf");
   c1->SaveAs(saveFile);
 
 }
