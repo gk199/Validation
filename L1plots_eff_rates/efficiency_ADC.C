@@ -41,7 +41,7 @@ Double_t EMG(Double_t *x, Double_t *par){
   return func;
 }
 
-void efficiency_ctau(){
+void efficiency_ADC(){
   TCanvas *c1 =new TCanvas("c1", " ", 0, 0,1000,1000);
   c1->Range(0,0,1,1);
   c1->SetFillColor(0);
@@ -55,21 +55,21 @@ void efficiency_ctau(){
   string file_type = "LLP_mh1000_pl100000";
 
   TFile *g1 =TFile::Open("../rates_new_cond_LLP_mh1000_pl100000.root");
-  TH1F *h1 = (TH1F*)g1->Get("path_length");
-  TH1F *h2 = (TH1F*)g1->Get("path_length_trigger");
-  TH1F *h3 = (TH1F*)g1->Get("path_length_120trigger");
+  TH1F *h1 = (TH1F*)g1->Get("ADC_nearJet");
+  TH1F *h2 = (TH1F*)g1->Get("ADC_delayed");
+  TH1F *h3 = (TH1F*)g1->Get("ADC_delayed120");
 
   h1->SetLineColorAlpha(kWhite, 1.);
-  h1->SetTitle("Delayed Jet Displacement Efficiency for LLP_mh1000_pl100000");
-  h1->GetXaxis()->SetTitle("LLP Displacement (m)");
+  h1->SetTitle("Delayed Jet ADC Value Efficiency for LLP_mh1000_pl100000");
+  h1->GetXaxis()->SetTitle("ADC Values (50=3 GeV)");
   h1->GetXaxis()->SetTitleSize(0.045);
   h1->GetXaxis()->SetTitleOffset(1.1);
-  h1->GetYaxis()->SetTitle("Delayed Jet Displacement Efficiency");
+  h1->GetYaxis()->SetTitle("Delayed Jet ADC Efficiency");
   h1->GetYaxis()->SetTitleSize(0.045);
   h1->GetYaxis()->SetTitleOffset(1.1);
   h1->GetYaxis()->SetRangeUser(0.,1.5);
   if (file_type == "QCD") h1->GetYaxis()->SetRangeUser(0.,0.2);
-  h1->GetXaxis()->SetRangeUser(0.,200);
+  h1->GetXaxis()->SetRangeUser(0.,300);
   h1->Draw();
 
   c1->Update();
@@ -101,7 +101,7 @@ void efficiency_ctau(){
   legend1->Draw("same");
 
   char saveFile[100];
-  sprintf(saveFile,"/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/DisplacementEffs/LLPefficiency_LLP_mh1000_pl100000.pdf");
+  sprintf(saveFile,"/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/ADCeffs/ADCefficiency_LLP_mh1000_pl100000.pdf");
   c1->SaveAs(saveFile);
 
 }

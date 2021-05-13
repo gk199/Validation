@@ -25,6 +25,7 @@ cd L1plots_eff_rates
 ./Efficiency_Plots.sh
 ./LLPEfficiency_Plots.sh
 ./TOFEfficiency_Plots.sh
+./ADCEfficiency_Plots.sh
 
 root <<EOF
 .L efficiency_ctau_combined.C++
@@ -41,5 +42,11 @@ EOF
 root <<EOF
 .L efficiency_TOF_combined.C++
 .x efficiency_TOF_combined.C
+.q
+EOF
+
+root <<EOF
+.L efficiency_ADC_combined.C++
+.x efficiency_ADC_combined.C
 .q
 EOF

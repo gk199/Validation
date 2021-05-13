@@ -1,4 +1,4 @@
-// 2020: edited by Gillian Kopp for HCAL L1 LLP trigger studies, based on using a timing bit set by TP cell multiplicity
+// 2020, 2021: edited by Gillian Kopp for HCAL L1 LLP trigger studies, based on using a delayed jet defined by a TP with delayed cells
 // Script for calculating rate histograms
 // Originally from Aaron Bundock
 #include "TMath.h"
@@ -483,6 +483,11 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
   TH1F* TOFdelay = new TH1F("TOFdelay","TOF delay = LLP TOF + b TOF - TOF expected (ns);TOF delay (ns); Number of Jets",30,0,15);
   TH1F* TOFdelay_trigger = new TH1F("TOFdelay_trigger","TOF delay = LLP TOF + b TOF - TOF expected (ns, triggered);TOF delay (ns); Number of Jets",30,0,15);
   TH1F* TOFdelay_120trigger = new TH1F("TOFdelay_120trigger","TOF delay = LLP TOF + b TOF - TOF expected (ns, triggered, HT>120);TOF delay (ns); Number of Jets",30,0,15);
+  TH1F* ADC_nearJet = new TH1F("ADC_nearJet","ADC of cells near L1 Jet;ADC value;Number of cells",150,0,300);
+  TH1F* ADC_delayed = new TH1F("ADC_delayed","ADC of delayed cells near L1 Jet;ADC value;Number of cells",150,0,300);
+  TH1F* ADC_delayed120 = new TH1F("ADC_delayed120","ADC of delayed cells near L1 Jet, HT>120;ADC value;Number of cells",150,0,300);
+  TH2F* ADC_vs_TDC = new TH2F("ADC_vs_TDC","ADC vs TDC of cells near a delayed jet;ADC;TDC;Number of cells",200,0,200,50,0,25);
+
   TH1F* beta_LLP = new TH1F("beta_LLP","Beta of LLP particle;Beta;Number of LLPs",100,0,1);
 
   // saving rate and efficiencies 
@@ -689,9 +694,9 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
       for (uint jetIt = 0; jetIt < nJetemu; jetIt++) { // loop over jets
 	if (abs(l1emu_->jetEta[jetIt]) > 2.5) continue; // consider HB+HE jets, HB extends to 1.4. HE extends to 3. Use values of 1, 2.5
 	if (inputFile.substr(0,3) == "QCD") JetPTdistribution_emu->Fill(l1emu_->jetEt[jetIt]);
-	double deltaR = closestParton(jetIt, l1emu_, generator_)[0];
+	double deltaR_parton_jet = closestParton(jetIt, l1emu_, generator_)[0];
 	int partonN = closestParton(jetIt, l1emu_, generator_)[1];
-	if (deltaR <= 0.5) { // if closest parton is near a HB L1 jet
+	if (deltaR_parton_jet <= 0.5) { // if closest parton is near a HB L1 jet
 	  numLLPdecayHB += 1; // how many of the partons expected to intersect HB
 	  JetPTdistribution_emu->Fill(l1emu_->jetEt[jetIt]);
 	  triggerableJets[jetIt] = 1; // 1 if triggerable jet, 0 otherwise
@@ -702,10 +707,8 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
 	  path_length2->Fill(LLPdecayInfo(partonN,generator_)[4]/100); // first half meter
 	  //	  }
 	  TOFdelay->Fill(LLPdecayInfo(partonN,generator_)[5]); // can be twice per LLP
-	  //	  if (LLPdecayInfo(partonN,generator_)[5] >= 11 && LLPdecayInfo(partonN,generator_)[5] < 12) std::cout << "TOFdelay = " << LLPdecayInfo(partonN,generator_)[5] << " for jet = " << jetIt << " at entry = " << jentry << std::endl;
 	}
-      }
-      //      partonZ.clear();
+      } // end jet loop, have determined if a jet is triggerable now
 
       if (inputFile.substr(0,2) == "mh" && numLLPdecayHB == 0 ) continue; // if no LLPs in HB, skip event
 
@@ -717,7 +720,11 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
       double promptveto_eta_phi[56][72] = {{0}}; // Counts prompt hits per tower
       double TT_LLP_eta_phi[56][72] = {{0}}; // 0 if no delayed or if prompt cell found, 1 if delayed cell in this tower
       double GeVdelayed_eta_phi[56][72][8] = {{{0}}}; // energy of delayed cell
+      double ADCdelayed_eta_phi[56][72][8] = {{{0}}}; // ADC of delayed cell
+      double ADC_eta_phi[56][72][8] = {{{0}}};
 
+      std::vector<double> ADC_delayed_jet[nJetemu]; // for each jet, a vector of the energy of delayed cells
+      std::vector<double> ADC_jet[nJetemu]; // for each jet, vector of energy of all cells
       int delayed_TTs[nJetemu] = {0}; // number of delayed TT in a jet (has delayed cell)
       int prompt_TTs[nJetemu] = {0}; // number of prompt TT in a jet (has prompt cell)
       int LLP_flagged_TTs[nJetemu] = {0}; // LLP flagged TTs in each L1 jet (has delayed cell, no prompt cell)
@@ -738,7 +745,14 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
         EnergyDepth[5] = l1CaloTPemu_->hcalTPDepth5[HcalTPIt];
         EnergyDepth[6] = l1CaloTPemu_->hcalTPDepth6[HcalTPIt];
         EnergyDepth[7] = l1CaloTPemu_->hcalTPDepth7[HcalTPIt];
-
+	double ADCDepth[8] = {0};
+	ADCDepth[1] = l1CaloTPemu_->hcalTPADC1[HcalTPIt];
+	ADCDepth[2] = l1CaloTPemu_->hcalTPADC2[HcalTPIt];
+	ADCDepth[3] = l1CaloTPemu_->hcalTPADC3[HcalTPIt];
+	ADCDepth[4] = l1CaloTPemu_->hcalTPADC4[HcalTPIt];
+	ADCDepth[5] = l1CaloTPemu_->hcalTPADC5[HcalTPIt];
+	ADCDepth[6] = l1CaloTPemu_->hcalTPADC6[HcalTPIt];
+	ADCDepth[7] = l1CaloTPemu_->hcalTPADC7[HcalTPIt];
 	double TDCdepth[8] = {0};
 	TDCdepth[1] = l1CaloTPemu_->hcalTPtiming1[HcalTPIt]; // in half ns steps
 	TDCdepth[2] = l1CaloTPemu_->hcalTPtiming2[HcalTPIt];
@@ -750,10 +764,13 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
 
 	for (int depth = 1; depth < 8; depth++) { // HB and HE separated in case want different energy requirements
 	  if (abs(TP_ieta) > 16 && depth == 1) continue; // skip HE depth 1
+	  ADC_vs_TDC->Fill(ADCDepth[depth],TDCdepth[depth]);
+	  ADC_eta_phi[TP_ieta_0index][TP_iphi_0index][depth] = ADCDepth[depth]; // later fill ADC_nearJet if near a jet
 	  if (abs(TP_ieta) <= 16) {
 	    if (EnergyDepth[depth] >= GeV_HB_variable && TDCdepth[depth]*2 >= eta_depth_tdc90[static_cast<int>(abs(TP_ieta))][depth]) {
 	      timingbit_eta_phi[TP_ieta_0index][TP_iphi_0index] += 1;
 	      GeVdelayed_eta_phi[TP_ieta_0index][TP_iphi_0index][depth] = EnergyDepth[depth];
+	      ADCdelayed_eta_phi[TP_ieta_0index][TP_iphi_0index][depth] = ADCDepth[depth];
 	    }
 	    if (EnergyDepth[depth] >= GeV_HB_variable && TDCdepth[depth]*2 < eta_depth_tdc90[static_cast<int>(abs(TP_ieta))][depth]) promptveto_eta_phi[TP_ieta_0index][TP_iphi_0index] += 1;
 	  }
@@ -761,6 +778,7 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
             if (EnergyDepth[depth] >= GeV_HE_variable && TDCdepth[depth]*2 >= eta_depth_tdc90[static_cast<int>(abs(TP_ieta))][depth]) {
 	      timingbit_eta_phi[TP_ieta_0index][TP_iphi_0index] += 1; 
 	      GeVdelayed_eta_phi[TP_ieta_0index][TP_iphi_0index][depth] = EnergyDepth[depth];
+              ADCdelayed_eta_phi[TP_ieta_0index][TP_iphi_0index][depth] = ADCDepth[depth];
 	    }
             if (EnergyDepth[depth] >= GeV_HE_variable && TDCdepth[depth]*2 < eta_depth_tdc90[static_cast<int>(abs(TP_ieta))][depth]) promptveto_eta_phi[TP_ieta_0index][TP_iphi_0index] += 1;
 	  }
@@ -793,6 +811,8 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
 	  }
 	  for (int depth = 1; depth < 8; depth ++ ) {
 	    if (GeVdelayed_eta_phi[TP_ieta_0index][TP_iphi_0index][depth] > 0) DelayedSeedEnergy->Fill(GeVdelayed_eta_phi[TP_ieta_0index][TP_iphi_0index][depth]);
+	    if (ADCdelayed_eta_phi[TP_ieta_0index][TP_iphi_0index][depth] > 0) ADC_delayed_jet[closestJet].push_back(ADCdelayed_eta_phi[TP_ieta_0index][TP_iphi_0index][depth]); // for delayed cells near a jet, save their ADC value
+	    if (ADC_eta_phi[TP_ieta_0index][TP_iphi_0index][depth] > 0) ADC_jet[closestJet].push_back(ADC_eta_phi[TP_ieta_0index][TP_iphi_0index][depth]); // for all cells near a jet, save their ADC value
 	  }
 	}
       } // closing HCAL TP loop
@@ -812,7 +832,15 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
 	}
 	Mult_delayed_hit_jetET_emu->Fill(delayed_TTs[jetIt]);
 	Mult_delayed_hit_jetETpromptV_emu->Fill(LLP_flagged_TTs[jetIt]);
-      
+
+        for (uint numDelay = 0; numDelay < ADC_jet[jetIt].size(); numDelay++) {
+	  ADC_nearJet->Fill(ADC_jet[jetIt][numDelay]); // for triggerable jets over 40 GeV, make histogram of the ADC values of all cells
+	}
+	for (uint numDelay = 0; numDelay < ADC_delayed_jet[jetIt].size(); numDelay++) {
+	  ADC_delayed->Fill(ADC_delayed_jet[jetIt][numDelay]); // for triggerable jets over 40 GeV, make histogram of the ADC values of delayed cells
+	  if (htSum > 120 ) ADC_delayed120->Fill(ADC_delayed_jet[jetIt][numDelay]);
+	}
+
 	// for jet PT efficiencies
 	if (LLP_flagged_TTs[jetIt] >= 2) {
 	  JetPTdistribution_trig_emu->Fill(l1emu_->jetEt[jetIt]);
@@ -832,7 +860,7 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
 	    beta_LLP->Fill(LLPdecayInfo(partonN,generator_)[6]);
 	  }
 	}
-      }
+      } // closing jet loop
 
       // how many jets pass the delayed jet trigger
       int num_delayed_jet = -1;
@@ -1093,6 +1121,10 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
     TOFdelay->Write();
     TOFdelay_trigger->Write();
     TOFdelay_120trigger->Write();
+    ADC_nearJet->Write();
+    ADC_delayed->Write();
+    ADC_delayed120->Write();
+    ADC_vs_TDC->Write();
     beta_LLP->Write();
 
     htSumRates_original_emu->Scale(norm);

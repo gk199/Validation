@@ -101,7 +101,7 @@ void efficiency_TOF(){
   legend1->Draw("same");
 
   char saveFile[100];
-  sprintf(saveFile,"/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/TOFefficiency_LLP_mh1000_pl100000.pdf");
+  sprintf(saveFile,"/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/TOFeffs/TOFefficiency_LLP_mh1000_pl100000.pdf");
   c1->SaveAs(saveFile);
 
 }

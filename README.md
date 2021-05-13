@@ -82,6 +82,7 @@ Efficiency plots are in the directory `L1plots_eff_rates`. For running over indi
 ./Efficiency_Plots.sh
 ./LLPEfficiency_Plots.sh
 ./TOFEfficiency_Plots.sh
+./ADCEfficiency_Plots.sh
 # note -- for jet eff plots, need to rerun DelayedJet script with jet energy requirement of 0, details below
 ./JetEfficiency_Plots.sh
 ```
@@ -102,6 +103,11 @@ root
 .x efficiency_TOF_combined.C
 .q
 
+root
+.L efficiency_ADC_combined.C++
+.x efficiency_ADC_combined.C
+.q
+
 # note -- for jet eff plots, need to rerun DelayedJet script with jet energy requirement of 0, details below
 root
 .L efficiency_jetPt_combined.C++
@@ -112,6 +118,18 @@ Each of these outputs plots to the EOS directory as well.
 
 Full order of how to run:
 ```
+./RunRates_DelayedJet_PU.sh 4 4 0
+hadd -f rates_new_cond_4combinedPU_jet0.root rates_new_cond_LLP_mh125_pl3000.root rates_new_cond_LLP_mh250_pl10000.root rates_new_cond_LLP_mh350_pl10000.root rates_new_cond_LLP_mh1000_pl10000.root
+
+cd L1plots_eff_rates
+./JetEfficiency_Plots.sh
+root
+.L efficiency_jetPt_combined.C++
+.x efficiency_jetPt_combined.C
+.q
+
+cd ..
+
 ./RunRates_DelayedJet_PU.sh 4 4 40
 hadd -f rates_new_cond_4combinedPU_jet40.root rates_new_cond_LLP_mh125_pl3000.root rates_new_cond_LLP_mh250_pl10000.root rates_new_cond_LLP_mh350_pl10000.root rates_new_cond_LLP_mh1000_pl10000.root
 
@@ -119,6 +137,7 @@ cd L1plots_eff_rates
 ./Efficiency_Plots.sh
 ./LLPEfficiency_Plots.sh
 ./TOFEfficiency_Plots.sh
+./ADCEfficiency_Plots.sh
 
 root
 .L efficiency_ctau_combined.C++
@@ -135,17 +154,12 @@ root
 .x efficiency_TOF_combined.C
 .q
 
-cd ..
-./RunRates_DelayedJet_PU.sh 4 4 0
-hadd -f rates_new_cond_4combinedPU_jet0.root rates_new_cond_LLP_mh125_pl3000.root rates_new_cond_LLP_mh250_pl10000.root rates_new_cond_LLP_mh350_pl10000.root rates_new_cond_LLP_mh1000_pl10000.root
-
-cd L1plots_eff_rates
-./JetEfficiency_Plots.sh
 root
-.L efficiency_jetPt_combined.C++
-.x efficiency_jetPt_combined.C
+.L efficiency_ADC_combined.C++
+.x efficiency_ADC_combined.C
 .q
 ```
+All of this is done in the script `FullPlots_DelayedJet.sh`, and this takes about 1 hour to run.
 
 # HCAL Trigger studies for LLPs -- Depth Trigger
 Towards a new L1 seed to trigger on LLP signatures with HCAL using H/E + depth 

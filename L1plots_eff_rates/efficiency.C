@@ -94,7 +94,7 @@ void efficiency(){
   legend1->Draw("same");
 
   char saveFile[100];
-  sprintf(saveFile,"/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/L1efficiency_QCD.pdf");
+  sprintf(saveFile,"/eos/user/g/gkopp/www/HCAL_LLP/TimingBit/112X_TDCsim_DelayedJet/HTeffs/L1efficiency_QCD.pdf");
   c1->SaveAs(saveFile);
 
 }
