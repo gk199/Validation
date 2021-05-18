@@ -76,6 +76,10 @@ An updated trigger algorithm using a per tower prompt veto is in `rates_delayed_
 ./RunRates_DelayedJet_PU.sh 4 4 40
 ./RunRates_DelayedJet_TimingBit.sh 40
 ```
+`rates_delayed_jet.cxx`	if run with files in the `TimingBit` directory (these have the timing bit set to 0 or 1, 1 if the timing flag is passed for that tower), will compare the timing bit to the TT flag found by looping over each depth. Slight differences occur due to the ADC-GeV conversion, but the algorithm performance is otherwise confirmed to be the same.
+
+`rates_LLPflag.cxx` only looks at the timing bit. For files in the `TimingBit` directory, this is just 1 bit per tower (timing), and for files in the `TimingDepthBit` directory, this is 6 bits. These 6 bits send: depth, 10, 10, 01, 01, veto; where the 4th and 5th bit report how many cells pass the later time delay, and the 2nd and 3rd bit report how many cells pass the early time delay. The first bit is the prompt veto, while the 6th is the depth flag.
+
 The timing bit file bases the trigger on the set timing bit (6 bits = depth, 10, 10, 01, 01, veto) in the L1Ntuple. Bit masks are used in `bin/rates_LLPflag.cxx` to access the depth and timing bits. This is set in:
 ```
 ../../SimCalorimetry/HcalTrigPrimAlgos/src/HcalTimingBit.cc
