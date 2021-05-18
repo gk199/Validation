@@ -195,3 +195,17 @@ https://github.com/gk199/Validation/blob/TimingAndDepth/bin/rates.cxx#L1168-L118
 H/E on L1Jets can be applied as here:
 
 https://github.com/gk199/Validation/blob/HoE_RatesWork/bin/rates.cxx#L373-L434
+
+
+# Location on lxplus
+
+These files are stored in 
+```
+/afs/cern.ch/work/g/gkopp/HCAL_Trigger/L1Ntuples/HCAL_TP_TimingBitEmulator/CMSSW_11_2_0/src/HcalTrigger/Validation/
+```
+
+The timing and depth feature bit code that is used here is fully developed in the CMSSW area here:
+```
+/afs/cern.ch/work/g/gkopp/FeatureBitCode/CMSSW_11_3_0_pre5/src
+```
+and saved to the [CMSSW private github branch](https://github.com/gk199/cmssw/tree/HcalTDC_TimingBit). Important changes are the [6 bit depth and timing encoding](https://github.com/gk199/cmssw/commit/21b42362128e2cfe78eee65c6c668871e2bbf5b0) and the [files for depth and timing, in HcalUpgrade TPs](https://github.com/gk199/cmssw/commit/21f40d96995033f3e2337ebebd930df4744e037b) which are taken from Long / Georgia's branch.
