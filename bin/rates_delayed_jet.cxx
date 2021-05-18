@@ -486,9 +486,13 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
   TH1F* ADC_nearJet = new TH1F("ADC_nearJet","ADC of cells near L1 Jet;ADC value;Number of cells",150,0,300);
   TH1F* ADC_delayed = new TH1F("ADC_delayed","ADC of delayed cells near L1 Jet;ADC value;Number of cells",150,0,300);
   TH1F* ADC_delayed120 = new TH1F("ADC_delayed120","ADC of delayed cells near L1 Jet, HT>120;ADC value;Number of cells",150,0,300);
-  TH2F* ADC_vs_TDC = new TH2F("ADC_vs_TDC","ADC vs TDC of cells near a delayed jet;ADC;TDC;Number of cells",200,0,200,50,0,25);
+  TH2F* ADC_vs_TDC = new TH2F("ADC_vs_TDC","ADC vs TDC of all cells;ADC;TDC;Number of cells",200,0,200,50,0,25);
 
   TH1F* beta_LLP = new TH1F("beta_LLP","Beta of LLP particle;Beta;Number of LLPs",100,0,1);
+
+  TH2F* ADC_vs_GeV_lowieta = new TH2F("ADC_vs_GeV_lowieta","ADC vs GeV per cell, for abs(ieta) < 21;ADC;GeV;Number of Cells",200,0,200,100,0,25);
+  TH2F* ADC_vs_GeV_highieta = new TH2F("ADC_vs_GeV_highieta","ADC vs GeV per cell, for abs(ieta) >= 21;ADC;GeV;Number of Cells",200,0,200,100,0,25);
+  TH2F* ADC_vs_GeV_allieta = new TH2F("ADC_vs_GeV_allieta","ADC vs GeV per cell, for all ieta;ADC;GeV;Number of Cells",200,0,200,100,0,25);
 
   // saving rate and efficiencies 
   double passed4JetMult_HBHE_ht120_1(0), passed4JetMult_HBHE_ht120_2(0);
@@ -509,7 +513,7 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
     if ( !file.good() )
       break;
     std::stringstream iss(line);
-    for (int col = 0; col < 8; ++col) { 
+    for (int col = 0; col <= 8; ++col) { 
       std::string val;
       std::getline(iss, val, ',');
       if ( !iss.good() )
@@ -518,6 +522,7 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
       convertor >> eta_depth_tdc90[row+1][col]; // now col = 1 corresponds to depth = 1
     }
   }
+  for (int depth = 1; depth < 8; depth++) std::cout << eta_depth_tdc90[27][depth] << " = tdc for ieta 27 depth " << depth << ", and for ieta 28 = " << eta_depth_tdc90[28][depth] << std::endl;
 
   /////////////////////////////////
   // loop through all the entries//
@@ -693,7 +698,7 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
       //      std::vector<double> partonZ; // track which parton is associated with jet to prevent LLP double counting -- save parton Z position (LLP decay) and make sure this isn't duplicated
       for (uint jetIt = 0; jetIt < nJetemu; jetIt++) { // loop over jets
 	if (abs(l1emu_->jetEta[jetIt]) > 2.5) continue; // consider HB+HE jets, HB extends to 1.4. HE extends to 3. Use values of 1, 2.5
-	if (inputFile.substr(0,3) == "QCD") JetPTdistribution_emu->Fill(l1emu_->jetEt[jetIt]);
+	if (inputFile.substr(0,3) == "QCD" || inputFile.substr(0,13) == "TimingBit/QCD" ) JetPTdistribution_emu->Fill(l1emu_->jetEt[jetIt]);
 	double deltaR_parton_jet = closestParton(jetIt, l1emu_, generator_)[0];
 	int partonN = closestParton(jetIt, l1emu_, generator_)[1];
 	if (deltaR_parton_jet <= 0.5) { // if closest parton is near a HB L1 jet
@@ -710,7 +715,7 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
 	}
       } // end jet loop, have determined if a jet is triggerable now
 
-      if (inputFile.substr(0,2) == "mh" && numLLPdecayHB == 0 ) continue; // if no LLPs in HB, skip event
+      if ( (inputFile.substr(0,2) == "mh" || inputFile.substr(0,12) == "TimingBit/mh") && numLLPdecayHB == 0 ) continue; // if no LLPs in HB, skip event
 
       //////////////////////////////////////
       ////////// HCAL TP Loop //////////
@@ -763,6 +768,10 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
 	TDCdepth[7] = l1CaloTPemu_->hcalTPtiming7[HcalTPIt];
 
 	for (int depth = 1; depth < 8; depth++) { // HB and HE separated in case want different energy requirements
+	  if (abs(TP_ieta) < 21 ) ADC_vs_GeV_lowieta->Fill(ADCDepth[depth],EnergyDepth[depth]);
+	  if (abs(TP_ieta) >= 21 ) ADC_vs_GeV_highieta->Fill(ADCDepth[depth],EnergyDepth[depth]);
+	  ADC_vs_GeV_allieta->Fill(ADCDepth[depth],EnergyDepth[depth]);
+
 	  if (abs(TP_ieta) > 16 && depth == 1) continue; // skip HE depth 1
 	  ADC_vs_TDC->Fill(ADCDepth[depth],TDCdepth[depth]);
 	  ADC_eta_phi[TP_ieta_0index][TP_iphi_0index][depth] = ADCDepth[depth]; // later fill ADC_nearJet if near a jet
@@ -772,7 +781,7 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
 	      GeVdelayed_eta_phi[TP_ieta_0index][TP_iphi_0index][depth] = EnergyDepth[depth];
 	      ADCdelayed_eta_phi[TP_ieta_0index][TP_iphi_0index][depth] = ADCDepth[depth];
 	    }
-	    if (EnergyDepth[depth] >= GeV_HB_variable && TDCdepth[depth]*2 < eta_depth_tdc90[static_cast<int>(abs(TP_ieta))][depth]) promptveto_eta_phi[TP_ieta_0index][TP_iphi_0index] += 1;
+	    if (EnergyDepth[depth] >= GeV_HB_variable && TDCdepth[depth]*2 < eta_depth_tdc90[static_cast<int>(abs(TP_ieta))][depth] && TDCdepth[depth] > -1) promptveto_eta_phi[TP_ieta_0index][TP_iphi_0index] += 1;
 	  }
 	  if (abs(TP_ieta) > 16) { 
             if (EnergyDepth[depth] >= GeV_HE_variable && TDCdepth[depth]*2 >= eta_depth_tdc90[static_cast<int>(abs(TP_ieta))][depth]) {
@@ -780,10 +789,25 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
 	      GeVdelayed_eta_phi[TP_ieta_0index][TP_iphi_0index][depth] = EnergyDepth[depth];
               ADCdelayed_eta_phi[TP_ieta_0index][TP_iphi_0index][depth] = ADCDepth[depth];
 	    }
-            if (EnergyDepth[depth] >= GeV_HE_variable && TDCdepth[depth]*2 < eta_depth_tdc90[static_cast<int>(abs(TP_ieta))][depth]) promptveto_eta_phi[TP_ieta_0index][TP_iphi_0index] += 1;
+            if (EnergyDepth[depth] >= GeV_HE_variable && TDCdepth[depth]*2 < eta_depth_tdc90[static_cast<int>(abs(TP_ieta))][depth] && TDCdepth[depth] > -1) promptveto_eta_phi[TP_ieta_0index][TP_iphi_0index] += 1;
 	  }
 	} // closing depth loop
 	if (timingbit_eta_phi[TP_ieta_0index][TP_iphi_0index] > 0 && promptveto_eta_phi[TP_ieta_0index][TP_iphi_0index] == 0) TT_LLP_eta_phi[TP_ieta_0index][TP_iphi_0index] = 1;
+
+	// confirm that timing bit is set properly
+	if (inputFile.substr(0,9) == "TimingBit") {
+	  if ((l1CaloTPemu_->hcalTPTimingBit[HcalTPIt] == 1 && TT_LLP_eta_phi[TP_ieta_0index][TP_iphi_0index] == 0) || (l1CaloTPemu_->hcalTPTimingBit[HcalTPIt] == 0 && TT_LLP_eta_phi[TP_ieta_0index][TP_iphi_0index] == 1)) {
+	    bool energyFlag = true;
+	    for (int depth = 1; depth < 8; depth ++) {
+	      if (ADCDepth[depth] >= 64 && EnergyDepth[depth] < 4 && abs(TP_ieta) < 21 ) energyFlag = false;
+	      if (ADCDepth[depth] >= 128 && EnergyDepth[depth] < 4 && abs(TP_ieta) >= 21 ) energyFlag = false;
+	    }
+	    if (energyFlag) {
+	      std::cout << "at entry = " << jentry << " timing bit = " << l1CaloTPemu_->hcalTPTimingBit[HcalTPIt]  << " and flagged trigger tower = " << TT_LLP_eta_phi[TP_ieta_0index][TP_iphi_0index] << " at ieta, iphi = " << TP_ieta << ", " << TP_iphi <<  std::endl;
+	      for (int depth = 1; depth < 8; depth ++) std::cout << "TDC = " << TDCdepth[depth] << ", ADC = " << ADCDepth[depth] << ", energy = " << EnergyDepth[depth] << std::endl;
+	    }
+	  }
+	} // end of checking timing bit
 
 	// find closest jet to the TP
 	int closestJet = -1;
@@ -818,7 +842,7 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
       } // closing HCAL TP loop
 
       for (uint jetIt = 0; jetIt < nJetemu; jetIt++) {
-        if ((inputFile.substr(0,2) == "mh") && (triggerableJets[jetIt] == 0)) {
+        if ((inputFile.substr(0,2) == "mh" || inputFile.substr(0,12) == "TimingBit/mh") && (triggerableJets[jetIt] == 0)) {
 	  LLP_flagged_TTs[jetIt] = 0; // set to 0 if jet is not triggerable
 	  continue;
 	}
@@ -847,7 +871,7 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
 	  if (htSum > 120) JetPTdistribution_trig120_emu->Fill(l1emu_->jetEt[jetIt]);
 
 	  // generator quantities for LLP in a jet that was triggered on
-	  if (inputFile.substr(0,11) != "RelValNuGun") {
+	  if (inputFile.substr(0,11) != "RelValNuGun" && inputFile.substr(0,21) != "TimingBit/RelValNuGun") {
 	    double partonN = closestParton(jetIt, l1emu_, generator_)[1];
 	    ctau_LLP_trigger->Fill(LLPdecayInfo(partonN,generator_)[3]/100);
 	    path_length_trigger->Fill(LLPdecayInfo(partonN,generator_)[4]/100);
@@ -1127,6 +1151,10 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
     ADC_vs_TDC->Write();
     beta_LLP->Write();
 
+    ADC_vs_GeV_lowieta->Write();
+    ADC_vs_GeV_highieta->Write();
+    ADC_vs_GeV_allieta->Write();
+
     htSumRates_original_emu->Scale(norm);
   }
 
@@ -1173,7 +1201,7 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
 
   std::cout << inputFile.substr(0,14) << " triggerable events = " << totalEvents << "; Events with jet>40 and HT>120 that: passed delayed TT = " << passed_calo_cluster_trig_120 << "; passed 2 delayed TT = " << passed_calo_cluster_trig_120_2 << std::endl;
   std::cout << "relative efficiency = " << passed_calo_cluster_trig_120_2 / totalEvents << std::endl;
-  if (inputFile.substr(0,2) != "mh") std::cout << "background rejection = " << totalEvents / passed_calo_cluster_trig_120_2 << std::endl;
+  if (inputFile.substr(0,2) != "mh" && inputFile.substr(0,12) != "TimingBit/mh") std::cout << "background rejection = " << totalEvents / passed_calo_cluster_trig_120_2 << std::endl;
   std::cout << passedHtSum360/totalEvents * 100 << " % passed HT360" << std::endl;
   std::cout << passed_calo_cluster_trig / totalEvents * 100 << " % passed calo trig (delayed TT), no HT cut / all events" << std::endl;
   std::cout << passed_calo_cluster_trig_120 / totalEvents * 100 << " % passed calo trig (delayed TT), HT 120 cut / all events" << std::endl;
@@ -1186,7 +1214,7 @@ void rates_delayed_jet(bool newConditions, const std::string& inputFileDirectory
   std::cout << (passed4JetMult_HBHE_ht120_2) / passedHtSum360 << " integrated luminosity gain" << std::endl;
 
   // neutrino gun rates
-  if (inputFile.substr(0,11) == "RelValNuGun" ) {
+  if (inputFile.substr(0,11) == "RelValNuGun" || inputFile.substr(0,21) == "TimingBit/RelValNuGun") {
   //  if (inputFile.substr(0,7) == "MinBias" ) {
     std::cout << "htSum_original120 = " << htSumRates_original_emu->GetBinContent(htSumRates_original_emu->GetXaxis()->FindBin(120)) << std::endl;
     std::cout << "htSum_original360 = " << htSumRates_original_emu->GetBinContent(htSumRates_original_emu->GetXaxis()->FindBin(360)) << std::endl;
