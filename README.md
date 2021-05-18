@@ -74,6 +74,14 @@ where the last two parameters are the HB and HE energy values. This then makes m
 An updated trigger algorithm using a per tower prompt veto is in `rates_delayed_jet.cxx`. This requires 2 LLP flagged TT per jet, where a LLP flagged TT has a delayed cell, and is vetoed by a prompt cell in the tower. The only arguments needed are the HB and HE GeV (per cell), and the triggered jet ET requirements:
 ```
 ./RunRates_DelayedJet_PU.sh 4 4 40
+./RunRates_DelayedJet_TimingBit.sh 40
+```
+The timing bit file bases the trigger on the set timing bit (6 bits = depth, 10, 10, 01, 01, veto) in the L1Ntuple. Bit masks are used in `bin/rates_LLPflag.cxx` to access the depth and timing bits. This is set in:
+```
+../../SimCalorimetry/HcalTrigPrimAlgos/src/HcalTimingBit.cc
+../../SimCalorimetry/HcalTrigPrimAlgos/interface/HcalTimingBit.h
+../../DataFormats/HcalDigi/src/HcalUpgradeTriggerPrimitiveSample.cc
+../../DataFormats/HcalDigi/interface/HcalUpgradeTriggerPrimitiveSample.h 
 ```
 
 ## Efficiency Plots
