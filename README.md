@@ -74,11 +74,14 @@ where the last two parameters are the HB and HE energy values. This then makes m
 An updated trigger algorithm using a per tower prompt veto is in `rates_delayed_jet.cxx`. This requires 2 LLP flagged TT per jet, where a LLP flagged TT has a delayed cell, and is vetoed by a prompt cell in the tower. The only arguments needed are the HB and HE GeV (per cell), and the triggered jet ET requirements:
 ```
 ./RunRates_DelayedJet_PU.sh 4 4 40
-./RunRates_DelayedJet_TimingBit.sh 40
 ```
 `rates_delayed_jet.cxx`	if run with files in the `TimingBit` directory (these have the timing bit set to 0 or 1, 1 if the timing flag is passed for that tower), will compare the timing bit to the TT flag found by looping over each depth. Slight differences occur due to the ADC-GeV conversion, but the algorithm performance is otherwise confirmed to be the same.
 
-`rates_LLPflag.cxx` only looks at the timing bit. For files in the `TimingBit` directory, this is just 1 bit per tower (timing), and for files in the `TimingDepthBit` directory, this is 6 bits. These 6 bits send: depth, 10, 10, 01, 01, veto; where the 4th and 5th bit report how many cells pass the later time delay, and the 2nd and 3rd bit report how many cells pass the early time delay. The first bit is the prompt veto, while the 6th is the depth flag.
+The full 6 bit uHTR output is emulated and used in `rates_LLPflag.cxx`. This is run with:
+```
+./RunRates_DelayedJet_TimingBit.sh 40 1	0.16 1
+```
+The arguments are: jet ET (GeV), timing (1) depth (2) OR (3), deltaR, triggerability restrictions yes (1) no (0). `rates_LLPflag.cxx` only looks at the timing bit. For files in the `TimingDepthBit` directory, this is 6 bits (while for files in the `TimingBit` directory this is just 1 bit of timing information). These 6 bits send: (1) depth flag, (2) delayed cells over 10, (2) delayed cells over 01, (1) prompt veto; where the 4th and 5th bit report how many cells pass the later time delay, and the 2nd and 3rd bit report how many cells pass the early time delay. The first bit is the prompt veto, while the 6th is the depth flag.
 
 The timing bit file bases the trigger on the set timing bit (6 bits = depth, 10, 10, 01, 01, veto) in the L1Ntuple. Bit masks are used in `bin/rates_LLPflag.cxx` to access the depth and timing bits. This is set in:
 ```
