@@ -36,18 +36,21 @@ double numBunch = 2556; //1537; //the number of bunches colliding for the run of
 double runLum = 0.02; // 0.44: 275783  0.58:  276363 //luminosity of the run of interest (*10^34)
 double expectedLum = 1.15; //expected luminosity of 2016 runs (*10^34)
 
-void rates_LLPflag(bool newConditions, const std::string& inputFileDirectory, double jetEnergy);
+void rates_LLPflag(bool newConditions, const std::string& inputFileDirectory, double jetEnergy, double timing_depth_OR_flag, double delta_R_req, double triggerability);
 
 int main(int argc, char *argv[])
 {
   bool newConditions = true;
   std::string ntuplePath("");
   double jetEt;
+  double timing_depth_OR;
+  double delta_R;
+  double triggerability;
 
-  if (argc != 4) {
+  if (argc != 7) {
     std::cout << "Usage: rates.exe [new/def] [path to ntuples]\n"
 	      << "[new/def] indicates new or default (existing) conditions"
-	      << "then jet energy (GeV)" << std::endl;
+	      << "then jet energy (GeV), timing (1) depth (2) OR (3), deltaR, triggerability yes (1) no (0)" << std::endl;
     exit(1);
   }
   else {
@@ -61,9 +64,12 @@ int main(int argc, char *argv[])
     }
     ntuplePath = argv[2];
     jetEt = atof(argv[3]);
+    timing_depth_OR = atof(argv[4]);
+    delta_R = atof(argv[5]);
+    triggerability = atof(argv[6]);
   }
 
-  rates_LLPflag(newConditions, ntuplePath, jetEt);
+  rates_LLPflag(newConditions, ntuplePath, jetEt, timing_depth_OR, delta_R, triggerability);
 
   return 0;
 }
@@ -264,7 +270,7 @@ std::vector<double> LLPdecayInfo(int partonN, L1Analysis::L1AnalysisGeneratorDat
 }
 
 
-void rates_LLPflag(bool newConditions, const std::string& inputFileDirectory, double jetEnergy){
+void rates_LLPflag(bool newConditions, const std::string& inputFileDirectory, double jetEnergy, double timing_depth_OR_flag, double delta_R_req, double triggerability){
   
   bool hwOn = true;   //are we using data from hardware? (upgrade trigger had to be running!!!)
   bool emuOn = true;  //are we using data from emulator?
@@ -679,31 +685,37 @@ void rates_LLPflag(bool newConditions, const std::string& inputFileDirectory, do
       }
 
       uint nJetemu = l1emu_->nJets; // number of jets per event
-      int numLLPdecayHB = 0; // count how many LLP decay products are expected to intersect the HB
       double nCaloTPemu = l1CaloTPemu_->nHCALTP; // number of TPs varies from 400-1400 per event, approximately Gaussian                                                  
+
       // triggerability restrictions
       int triggerableJets[nJetemu] = {0};
-      //      std::vector<double> partonZ; // track which parton is associated with jet to prevent LLP double counting -- save parton Z position (LLP decay) and make sure this isn't duplicated
+      int numLLPdecayHB = 0; // count how many LLP decay products are expected to intersect the HB 
+
       for (uint jetIt = 0; jetIt < nJetemu; jetIt++) { // loop over jets
 	if (abs(l1emu_->jetEta[jetIt]) > 2.5) continue; // consider HB+HE jets, HB extends to 1.4. HE extends to 3. Use values of 1, 2.5
-	if (inputFile.substr(0,3) == "QCD" || inputFile.substr(0,13) == "TimingBit/QCD" ) JetPTdistribution_emu->Fill(l1emu_->jetEt[jetIt]);
+	if (inputFile.substr(0,3) == "QCD" || inputFile.substr(0,13) == "TimingBit/QCD" || inputFile.substr(0,18) == "TimingDepthBit/QCD" ) JetPTdistribution_emu->Fill(l1emu_->jetEt[jetIt]);
 	double deltaR_parton_jet = closestParton(jetIt, l1emu_, generator_)[0];
 	int partonN = closestParton(jetIt, l1emu_, generator_)[1];
 	if (deltaR_parton_jet <= 0.5) { // if closest parton is near a HB L1 jet
-	  numLLPdecayHB += 1; // how many of the partons expected to intersect HB
+	  if (triggerability == 1) {
+	    numLLPdecayHB += 1; // how many of the partons expected to intersect HB
+	    triggerableJets[jetIt] = 1; // 1 if triggerable jet, 0 otherwise
+	  }
 	  JetPTdistribution_emu->Fill(l1emu_->jetEt[jetIt]);
 	  triggerableJets[jetIt] = 1; // 1 if triggerable jet, 0 otherwise
-	  //	  if (std::find(partonZ.begin(), partonZ.end(), LLPdecayInfo(partonN,generator_)[2]) == partonZ.end()) { // this LLP has already been included from the other parton 
-	  //	    partonZ.push_back(LLPdecayInfo(partonN,generator_)[2]); // z creation of parton (z decay of LLP)
 	  ctau_LLP->Fill(LLPdecayInfo(partonN,generator_)[3]/100);
 	  path_length->Fill(LLPdecayInfo(partonN,generator_)[4]/100);
 	  path_length2->Fill(LLPdecayInfo(partonN,generator_)[4]/100); // first half meter
-	  //	  }
 	  TOFdelay->Fill(LLPdecayInfo(partonN,generator_)[5]); // can be twice per LLP
 	}
       } // end jet loop, have determined if a jet is triggerable now
+      
+      if (triggerability == 0) {
+	for (uint jetIt = 0; jetIt < nJetemu; jetIt++) triggerableJets[jetIt] = 1;
+	numLLPdecayHB = 1;
+      }
 
-      if ( (inputFile.substr(0,2) == "mh" || inputFile.substr(0,12) == "TimingBit/mh") && numLLPdecayHB == 0 ) continue; // if no LLPs in HB, skip event
+      if ( (inputFile.substr(0,2) == "mh" || inputFile.substr(0,12) == "TimingBit/mh" || inputFile.substr(0,17) == "TimingDepthBit/mh") && numLLPdecayHB == 0 ) continue; // if no LLPs in HB, skip event
 
       //////////////////////////////////////
       ////////// HCAL TP Loop //////////
@@ -718,15 +730,23 @@ void rates_LLPflag(bool newConditions, const std::string& inputFileDirectory, do
 
 	if (abs(TP_ieta) > 29 ) continue; 
 
-	int Depth1_Timing5 = l1CaloTPemu_->hcalTPTimingBit[HcalTPIt]; // depth, 10, 10, 01, 01, prompt
-	int Ndelayed = (Depth1_Timing5 & 0b000110) / 2;
-        int NveryDelayed = (Depth1_Timing5 & 0b011000) / 8;
-	int TotalDelayed = Ndelayed + NveryDelayed;
-	int PromptVeto = (Depth1_Timing5 & 0b000001);
 	int TimingFlag = 0;
-        if (TotalDelayed > 0 &&PromptVeto == 0) TimingFlag = 1;
 	int DepthFlag = 0;
-	if (Depth1_Timing5 & 0b100000) DepthFlag = 1;
+
+	if (inputFile.substr(0,14) == "TimingDepthBit") {
+	  int Depth1_Timing5 = l1CaloTPemu_->hcalTPTimingBit[HcalTPIt]; // depth, 10, 10, 01, 01, prompt
+	  if (timing_depth_OR_flag != 2) {
+	    int Ndelayed = (Depth1_Timing5 & 0b000110) / 2;
+	    int NveryDelayed = (Depth1_Timing5 & 0b011000) / 8;
+	    int TotalDelayed = Ndelayed + NveryDelayed;
+	    int PromptVeto = (Depth1_Timing5 & 0b000001);
+	    if (TotalDelayed > 0 && PromptVeto == 0) TimingFlag = 1;
+	  }
+	  if (timing_depth_OR_flag != 1) {
+	    if (Depth1_Timing5 & 0b100000) DepthFlag = 1;
+	  }
+	}
+	//	if (inputFile.substr(0,9) == "TimingBit") TimingFlag = l1CaloTPemu_->hcalTPTimingBit[HcalTPIt];
 
 	// find closest jet to the TP
 	int closestJet = -1;
@@ -739,18 +759,16 @@ void rates_LLPflag(bool newConditions, const std::string& inputFileDirectory, do
 	    closestJet = jetIt;
 	  }
 	}
-	if (min_DR<=0.5) {
-          if (TimingFlag == 1) { // LLP flagged TT
+	if (min_DR<=delta_R_req) {
+          if ((timing_depth_OR_flag == 3 && (TimingFlag == 1 || DepthFlag == 1)) || (timing_depth_OR_flag == 1 && TimingFlag == 1) || (timing_depth_OR_flag == 2 && DepthFlag == 1)) { // LLP flagged TT
 	    LLP_flagged_TTs[closestJet] += 1;
 	    DeltaR_L1_delayed_TP_emu->Fill(min_DR);
-	  }
-	  if (DepthFlag == 1) {
 	  }
 	}
       } // closing HCAL TP loop
 
       for (uint jetIt = 0; jetIt < nJetemu; jetIt++) {
-        if ((inputFile.substr(0,2) == "mh" || inputFile.substr(0,12) == "TimingBit/mh") && (triggerableJets[jetIt] == 0)) {
+        if ((inputFile.substr(0,2) == "mh" || inputFile.substr(0,12) == "TimingBit/mh" || inputFile.substr(0,17) == "TimingDepthBit/mh") && (triggerableJets[jetIt] == 0)) {
 	  LLP_flagged_TTs[jetIt] = 0; // set to 0 if jet is not triggerable
 	  continue;
 	}
@@ -766,7 +784,7 @@ void rates_LLPflag(bool newConditions, const std::string& inputFileDirectory, do
 	  if (htSum > 120) JetPTdistribution_trig120_emu->Fill(l1emu_->jetEt[jetIt]);
 
 	  // generator quantities for LLP in a jet that was triggered on
-	  if (inputFile.substr(0,11) != "RelValNuGun" && inputFile.substr(0,21) != "TimingBit/RelValNuGun") {
+	  if (inputFile.substr(0,11) != "RelValNuGun" && inputFile.substr(0,21) != "TimingBit/RelValNuGun" && inputFile.substr(0,26) != "TimingDepthBit/RelValNuGun") {
 	    double partonN = closestParton(jetIt, l1emu_, generator_)[1];
 	    ctau_LLP_trigger->Fill(LLPdecayInfo(partonN,generator_)[3]/100);
 	    path_length_trigger->Fill(LLPdecayInfo(partonN,generator_)[4]/100);
@@ -1088,7 +1106,7 @@ void rates_LLPflag(bool newConditions, const std::string& inputFileDirectory, do
 
   std::cout << inputFile.substr(0,14) << " triggerable events = " << totalEvents << "; Events with jet>40 and HT>120 that: passed delayed TT = " << passed_calo_cluster_trig_120 << "; passed 2 delayed TT = " << passed_calo_cluster_trig_120_2 << std::endl;
   std::cout << "relative efficiency = " << passed_calo_cluster_trig_120_2 / totalEvents << std::endl;
-  if (inputFile.substr(0,2) != "mh" && inputFile.substr(0,12) != "TimingBit/mh") std::cout << "background rejection = " << totalEvents / passed_calo_cluster_trig_120_2 << std::endl;
+  if (inputFile.substr(0,2) != "mh" && inputFile.substr(0,12) != "TimingBit/mh" && inputFile.substr(0,17) != "TimingDepthBit/mh") std::cout << "background rejection = " << totalEvents / passed_calo_cluster_trig_120_2 << std::endl;
   std::cout << passedHtSum360/totalEvents * 100 << " % passed HT360" << std::endl;
   std::cout << passed_calo_cluster_trig / totalEvents * 100 << " % passed calo trig (delayed TT), no HT cut / all events" << std::endl;
   std::cout << passed_calo_cluster_trig_120 / totalEvents * 100 << " % passed calo trig (delayed TT), HT 120 cut / all events" << std::endl;
@@ -1101,7 +1119,7 @@ void rates_LLPflag(bool newConditions, const std::string& inputFileDirectory, do
   std::cout << (passed4JetMult_HBHE_ht120_2) / passedHtSum360 << " integrated luminosity gain" << std::endl;
 
   // neutrino gun rates
-  if (inputFile.substr(0,11) == "RelValNuGun" || inputFile.substr(0,21) == "TimingBit/RelValNuGun") {
+  if (inputFile.substr(0,11) == "RelValNuGun" || inputFile.substr(0,21) == "TimingBit/RelValNuGun" || inputFile.substr(0,26) == "TimingDepthBit/RelValNuGun") {
   //  if (inputFile.substr(0,7) == "MinBias" ) {
     std::cout << "htSum_original120 = " << htSumRates_original_emu->GetBinContent(htSumRates_original_emu->GetXaxis()->FindBin(120)) << std::endl;
     std::cout << "htSum_original360 = " << htSumRates_original_emu->GetBinContent(htSumRates_original_emu->GetXaxis()->FindBin(360)) << std::endl;
