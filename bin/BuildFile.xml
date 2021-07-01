@@ -8,6 +8,7 @@
   <bin file="l1jetanalysis.cxx" name="l1jetanalysis.exe"/>
   <bin file="rates_delayed_cluster.cxx" name="rates_delayed_cluster.exe"/>
   <bin file="rates_delayed_jet.cxx" name="rates_delayed_jet.exe"/>
+  <bin file="rates_FineGrain.cxx" name="rates_FineGrain.exe"/>
   <bin file="rates_LLPflag.cxx" name="rates_LLPflag.exe"/>
   <bin file="rates_bkgTDCdist.cxx" name="rates_bkgTDCdist.exe"/>
   <bin file="rates_original.cxx" name="rates_original.exe"/>

@@ -91,6 +91,19 @@ The timing bit file bases the trigger on the set timing bit (6 bits = depth, 10,
 ../../DataFormats/HcalDigi/interface/HcalUpgradeTriggerPrimitiveSample.h 
 ```
 
+The actual CMSSW feature bit implementation that agrees with the uHTR firmware is to put the timing and depth bits in the finegrain bit slots. This is done in:
+```
+../../SimCalorimetry/HcalTrigPrimAlgos/src/HcalFinegrainBit.cc
+../../SimCalorimetry/HcalTrigPrimAlgos/interface/HcalFinegrainBit.h
+../../SimCalorimetry/HcalTrigPrimAlgos/src/HcalTriggerPrimitiveAlgo.cc
+../../SimCalorimetry/HcalTrigPrimAlgos/interface/HcalTriggerPrimitiveAlgo.h
+```
+The github branch is [here](https://github.com/gk199/cmssw/tree/LLPTimingBitAlgo/SimCalorimetry/HcalTrigPrimAlgos). The 6 bits are: depth, 2 reserved, prompt, delayed (01), delayed (10). Fine grain bits are set according to this and stored in the files in `Time3Depth1` directory. This is run with `rates_FineGrain.cxx`, or with 
+```
+./RunRates_DelayedJet_FineGrain.sh 40 1 0.16 1
+```
+As before, the arguments are: jet ET (GeV), timing (1) depth (2) OR (3), deltaR, triggerability restrictions yes (1) no (0).
+
 ## Efficiency Plots
 Efficiency plots are in the directory `L1plots_eff_rates`. For running over individual samples, the bash scripts can be used
 ```
