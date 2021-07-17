@@ -692,7 +692,7 @@ void rates_LLPflag(bool newConditions, const std::string& inputFileDirectory, do
 
       for (uint jetIt = 0; jetIt < nJetemu; jetIt++) { // loop over jets
 	if (abs(l1emu_->jetEta[jetIt]) > 2.5) continue; // consider HB+HE jets, HB extends to 1.4. HE extends to 3. Use values of 1, 2.5
-	if (inputFile.substr(0,3) == "QCD" || inputFile.substr(0,13) == "TimingBit/QCD" || inputFile.substr(0,18) == "TimingDepthBit/QCD" ) JetPTdistribution_emu->Fill(l1emu_->jetEt[jetIt]);
+	if (inputFile.substr(0,3) == "QCD" || inputFile.substr(0,13) == "TimingBit/QCD" || inputFile.substr(0,18) == "TimingDepthBit/QCD" || inputFile.substr(0,15) == "Time3Depth1/QCD" ) JetPTdistribution_emu->Fill(l1emu_->jetEt[jetIt]);
 	double deltaR_parton_jet = closestParton(jetIt, l1emu_, generator_)[0];
 	int partonN = closestParton(jetIt, l1emu_, generator_)[1];
 	if (deltaR_parton_jet <= 0.5) { // if closest parton is near a HB L1 jet
